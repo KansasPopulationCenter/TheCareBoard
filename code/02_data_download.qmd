@@ -1,0 +1,114 @@
+---
+title: "02_data_download"
+format: html
+editor: visual
+---
+
+## Overview
+
+-   This document provides instructions for downloading the **CPS** and **ASEC** data. Once these files are downloaded, move them into the **data** folder
+
+-   Important Notes:
+
+    -   **ATUS Data**: Download from github
+
+    -   **Sample Definitions**: Before running the following steps, review the following files:
+
+        -   `01_ASECSampleIDs.csv`
+
+        -   `01_CPSSampleIDs.csv`
+
+        You may need to add new rows to define samples for recent time periods.
+
+    -   Use the following link to update the CPS sample IDs: <https://cps.ipums.org/cps-action/samples/sample_ids>.
+
+## Download Setup
+
+```{r Samples}
+if (!requireNamespace("pacman", quietly = TRUE)) install.packages("pacman")
+pacman::p_load(
+  ipumsr, 
+  tidyverse
+)
+
+# List of samples to download
+samples_asec <- read.csv("../01_preliminary-code-and-data/01_ASECSampleIDs.csv")$ASEC_Sample_IDs
+
+samples_cps <- read.csv("../01_preliminary-code-and-data/01_CPSSampleIDs.csv")$CPS_Sample_IDs 
+```
+
+```{r Variables}
+# Variables to extract
+var_common <- c(
+  "PERNUM",
+  "REGION",
+  "STATEFIP",
+  "SEX",
+  "RACE",
+  "HISPAN",
+  "AGE",
+  "EDUC",
+  "MARST",
+  "MOMLOC",
+  "POPLOC",
+  "FAMSIZE",
+  "NCHILD",
+  "YNGCH",
+  "IND1990",
+  "OCC2010",
+  "EMPSTAT",
+  "WKSTAT",
+  "AHRSWORKT",
+  "ABSENT",
+  "WHYABSNT"
+)
+
+var_asec <- c(
+  var_common,
+  "EARNWT",
+  "UHRSWORKT",
+  "INCWAGE",
+  "POVERTY"
+)
+
+var_cps <- c(
+  var_common,
+  "LABFORCE",
+  "SPLOC",
+  "COMPWT",
+  "TELWRKPAY",
+  "CLASSWKR",
+  "DIFFCARE",
+  "NILFACT"  
+)
+```
+
+## Data Download
+
+```{r Download}
+# update the following if you only want to download a specific data set list
+data_sets <- c('asec', 'cps')
+
+for(sel_data_set in data_sets){
+
+  # Create data extract
+  cps_ext_def <- define_extract_cps(
+    description = "Care Variable Extract",
+    samples = get(paste0('samples_', sel_data_set)),
+    variables = get(paste0('var_', sel_data_set))
+  )
+  Sys.sleep(60)
+
+  # Submit data extract request
+  cps_ext_submitted <- submit_extract(cps_ext_def)
+  cps_ext_complete <- wait_for_extract(cps_ext_submitted)
+
+  # Download extract
+  filepath <- download_extract(cps_ext_submitted, overwrite = TRUE)
+  Sys.sleep(60)
+
+  print(paste(sel_data_set, 'data has been downloaded'))
+}
+
+print("API work has finished")
+```
