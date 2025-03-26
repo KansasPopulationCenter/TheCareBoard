@@ -1,0 +1,108 @@
+---
+title: "02_data_processing"
+format: html
+editor: visual
+---
+
+## Setup
+
+```{r}
+source("load_libraries.R")
+
+source("data_prep_functions.R") 
+
+# Load formal occupation codes and their care focus
+df_occ <- fread("./data/Formal_Occupation_Crosswalk.csv")
+
+# Load activity codes and their care focus
+df_act <- fread("./data/ATUSActivityCrossover.csv")
+
+# Define data filepath location
+ddi_cps <- "./data/IPUMS Pulls/cps_00419.xml"
+ddi_asec <- "./data/IPUMS Pulls/cps_00418.xml"
+ddi_atus <- "./data/IPUMS Pulls/atus_00027.xml"
+```
+
+## CPS
+
+```{r}
+# Read data
+micro_cps <- read_ipums_micro(ddi_cps)
+
+# Apply data processing functions to base table to get desired standard output
+micro_cps <- micro_cps %>% 
+  recode_all_common() |> 
+  recode_asec_cps() |> 
+  recode_cps() %>%
+  select(any_of(col_order)) |> 
+  left_join(df_occ, by = c("OCC2010" = "code"))
+
+saveRDS(micro_cps, "./data/micro_data/CPSdata.rds")
+write.csv(micro_cps, "./data/micro_data/CPSdata.csv")
+write_dta(micro_cps, "./data/micro_data/CPSdata.dta")
+```
+
+## ASEC
+
+```{r}
+# Read data
+micro_asec <- read_ipums_micro(ddi_asec)
+
+# Apply data processing functions to base table to get desired standard output
+micro_asec <- micro_asec %>% 
+  recode_all_common() |> 
+  recode_asec_cps() |> 
+  recode_asec() %>%
+  select(any_of(col_order)) |> 
+  left_join(df_occ, by = c("OCC2010" = "code"))
+
+saveRDS(micro_asec, "./data/micro_data/ASECdata.rds")
+write.csv(micro_asec, "./data/micro_data/ASECdata.csv")
+write_dta(micro_asec, "./data/micro_data/ASECdata.dta")
+rm(micro_asec)
+gc()
+```
+
+## ATUS
+
+```{r}
+# Read data
+micro_atus <- read_ipums_micro(ddi_atus)
+
+# Apply data processing functions to base table to get desired standard output
+micro_atus <- micro_atus %>% 
+  recode_all_common() |> 
+  recode_atus() |> 
+  left_join(df_act, by = c("ACTIVITY" = "Code")) %>%
+  select(any_of(col_order)) |> 
+  mutate(
+    act_care_focus = case_when(
+      developmental == 1 ~ 'developmental',
+      daily_living == 1 ~ 'daily_living', 
+      health == 1 ~ 'health', 
+      TRUE ~ 'non-care'
+    )
+  )
+
+# Get occupation care_focus labels from cps data where available
+cps_occ <- micro_cps |> 
+  group_by(CPSIDP) |> 
+  filter(date == max(date)) |> 
+  ungroup() |> 
+  select(CPSIDP, date, care_focus) 
+
+rm(micro_cps)
+gc()
+
+micro_atus <- micro_atus |> 
+  left_join(
+    cps_occ |> rename(occ_care_focus = care_focus,  cps_date = date), 
+    by = c("CPSIDP")
+    )
+
+saveRDS(micro_atus, "./data/micro_data/ATUSdata.rds")
+write.csv(micro_atus, "./data/micro_data/ATUSdata.csv")
+write_dta(micro_atus, "./data/micro_data/ATUSdata.dta")
+```
+
+\
