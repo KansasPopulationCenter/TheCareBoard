@@ -1,0 +1,471 @@
+﻿Code,Label,Health Care,Education,Social Services,Child Care,Death Care,Personal Care,Fooc Care,FOCUS
+310,Food Managers,,,,,,,1,daily_living
+4000,Cooks/Chefs,,,,,,,1,daily_living
+4010,Food Preparation Workers,,,,,,,1,daily_living
+4030,Food Preparation Workers,,,,,,,1,daily_living
+4040,Bartenders,,,,,,,1,daily_living
+4050,Food Preparation Workers,,,,,,,1,daily_living
+4060,Food Preparation Workers,,,,,,,1,daily_living
+4110,Waiters and Waitresses,,,,,,,1,daily_living
+4120,Waiters and Waitresses,,,,,,,1,daily_living
+4130,Food Preparation Workers,,,,,,,1,daily_living
+4140,Dishwashers,,,,,,,1,daily_living
+4150,Waiters and Waitresses,,,,,,,1,daily_living
+4500,"Hairdressers, Hairstylists, and Cosmetologists",,,,,,1,,daily_living
+4510,"Hairdressers, Hairstylists, and Cosmetologists",,,,,,1,,daily_living
+4520,"Hairdressers, Hairstylists, and Cosmetologists",,,,,,1,,daily_living
+4610,Personal Care Aides,,,,,,1,,health
+320,Funeral Service Workers and Embalmers,,,,,1,,,health
+4460,Funeral Service Workers and Embalmers,,,,,1,,,health
+4600,Childcare Workers,,,,1,,,,developmental
+420,Social and Community Service Managers,,,1,,,,,health
+2000,Counselors,,,1,,,,,health
+2010,Social Workers,,,1,,,,,health
+2020,Social Workers,,,1,,,,,health
+2040,Clergy,,,1,,,,,health
+2050,Clergy,,,1,,,,,health
+2060,Clergy,,,1,,,,,health
+230,Education Administrators,,1,,,,,,developmental
+2200,Postsecondary Teachers,,1,,,,,,developmental
+2300,Preschool and Kindergarten Teachers,,1,,,,,,developmental
+2310,Elementary and Middle School Teachers,,1,,,,,,developmental
+2320,Secondary School Teachers,,1,,,,,,developmental
+2330,Special Education Teachers,,1,,,,,,developmental
+2340,Other Teachers and Instructors,,1,,,,,,developmental
+2400,"Archivists, Curators, and Museum Technicians",,1,,,,,,developmental
+2430,Librarians,,1,,,,,,developmental
+2440,Librarians,,1,,,,,,developmental
+2540,Teacher Assistants,,1,,,,,,developmental
+2550,Librarians,,1,,,,,,developmental
+350,Medical and Health Services Managers,1,,,,,,,health
+3000,Chiropractors,1,,,,,,,health
+3010,Dentists,1,,,,,,,health
+3030,Dieticians and Nutritionists,1,,,,,,,health
+3040,Optometrists,1,,,,,,,health
+3050,Pharmacists,1,,,,,,,health
+3060,Physicians and Surgeons,1,,,,,,,health
+3110,Physician Assistants,1,,,,,,,health
+3120,Medical Specialists/Therapists,1,,,,,,,health
+3130,Registered Nurses,1,,,,,,,health
+3140,Medical Specialists/Therapists,1,,,,,,,health
+3150,Medical Specialists/Therapists,1,,,,,,,health
+3160,Medical Specialists/Therapists,1,,,,,,,health
+3200,Medical Specialists/Therapists,1,,,,,,,health
+3210,Medical Specialists/Therapists,1,,,,,,,health
+3220,Medical Specialists/Therapists,1,,,,,,,health
+3230,Medical Specialists/Therapists,1,,,,,,,health
+3240,Medical Specialists/Therapists,1,,,,,,,health
+3250,Veterinarians,1,,,,,,,health
+3260,"Health Diagnosing and Treating Practitioners, nec",1,,,,,,,health
+3300,Clinical Laboratory Technologists and Technicians,1,,,,,,,health
+3310,Dental Hygienists,1,,,,,,,health
+3320,Diagnostic Related Technologists and Technicians,1,,,,,,,health
+3400,Emergency Medical Technicians and Paramedics,1,,,,,,,health
+3410,Health Diagnosing and Treating Practitioner Support Technicians,1,,,,,,,health
+3500,Licensed Practical and Licensed Vocational Nurses,1,,,,,,,health
+3510,Medical Records and Health Information Technicians,1,,,,,,,health
+3520,"Opticians, Dispensing",1,,,,,,,health
+3530,"Health Technologists and Technicians, nec",1,,,,,,,health
+3540,"Healthcare Practitioners and Technical Occupations, nec",1,,,,,,,health
+,HEALTHCARE SUPPORT,1,,,,,,,health
+3600,"Nursing, Psychiatric, and Home Health Aides",1,,,,,,,health
+3610,Occupational Therapy Assistants and Aides,1,,,,,,,health
+3620,Physical Therapist Assistants and Aides,1,,,,,,,health
+3630,Massage Therapists,1,,,,,,,health
+3640,Dental Assistants,1,,,,,,,health
+3650,"Nursing, Psychiatric, and Home Health Aides",1,,,,,,,health
+,"MANAGEMENT, BUSINESS, SCIENCE, AND ARTS",,,,,,,,none
+10,Chief executives and legislators/public administration,,,,,,,,none
+20,Business Managers,,,,,,,,none
+30,Business Managers,,,,,,,,none
+100,Business Managers,,,,,,,,none
+110,Business Managers,,,,,,,,none
+120,Business Managers,,,,,,,,none
+130,Business Managers,,,,,,,,none
+140,Business Managers,,,,,,,,none
+150,Business Managers,,,,,,,,none
+160,Business Managers,,,,,,,,none
+205,Business Managers,,,,,,,,none
+220,Business Managers,,,,,,,,none
+300,Business Managers,,,,,,,,none
+330,Business Managers,,,,,,,,none
+360,Business Managers,,,,,,,,none
+410,Business Managers,,,,,,,,none
+430,Business Managers,,,,,,,,none
+,BUSINESS OPERATIONS SPECIALISTS,,,,,,,,none
+500,Business Operations Specialists,,,,,,,,none
+510,Business Operations Specialists,,,,,,,,none
+520,Business Operations Specialists,,,,,,,,none
+530,Business Operations Specialists,,,,,,,,none
+540,Business Operations Specialists,,,,,,,,none
+560,Business Operations Specialists,,,,,,,,none
+600,Business Operations Specialists,,,,,,,,none
+620,Business Operations Specialists,,,,,,,,none
+700,Business Operations Specialists,,,,,,,,none
+710,Business Operations Specialists,,,,,,,,none
+720,Business Operations Specialists,,,,,,,,none
+730,Business Operations Specialists,,,,,,,,none
+,FINANCIAL SPECIALISTS,,,,,,,,none
+800,Financial Specialists,,,,,,,,none
+810,Financial Specialists,,,,,,,,none
+820,Financial Specialists,,,,,,,,none
+830,Financial Specialists,,,,,,,,none
+840,Financial Specialists,,,,,,,,none
+850,Financial Specialists,,,,,,,,none
+860,Financial Specialists,,,,,,,,none
+900,Financial Specialists,,,,,,,,none
+910,Financial Specialists,,,,,,,,none
+930,Financial Specialists,,,,,,,,none
+940,Financial Specialists,,,,,,,,none
+950,Financial Specialists,,,,,,,,none
+,COMPUTER AND MATHEMATICAL,,,,,,,,none
+1000,Computer and Mathematical Specialists,,,,,,,,none
+1010,Computer and Mathematical Specialists,,,,,,,,none
+1020,Computer and Mathematical Specialists,,,,,,,,none
+1050,Computer and Mathematical Specialists,,,,,,,,none
+1060,Computer and Mathematical Specialists,,,,,,,,none
+1100,Computer and Mathematical Specialists,,,,,,,,none
+1200,Computer and Mathematical Specialists,,,,,,,,none
+1220,Computer and Mathematical Specialists,,,,,,,,none
+1230,Computer and Mathematical Specialists,,,,,,,,none
+1240,Computer and Mathematical Specialists,,,,,,,,none
+,ARCHITECTURE AND ENGINEERING,,,,,,,,none
+1300,Architecture and Egnineers,,,,,,,,none
+1310,Architecture and Egnineers,,,,,,,,none
+1320,Architecture and Egnineers,,,,,,,,none
+1350,Architecture and Egnineers,,,,,,,,none
+1360,Architecture and Egnineers,,,,,,,,none
+1400,Architecture and Egnineers,,,,,,,,none
+1410,Architecture and Egnineers,,,,,,,,none
+1420,Architecture and Egnineers,,,,,,,,none
+1430,Architecture and Egnineers,,,,,,,,none
+1440,Architecture and Egnineers,,,,,,,,none
+1450,Architecture and Egnineers,,,,,,,,none
+1460,Architecture and Egnineers,,,,,,,,none
+1520,Architecture and Egnineers,,,,,,,,none
+1530,Architecture and Egnineers,,,,,,,,none
+1540,Architecture and Egnineers,,,,,,,,none
+,TECHNICIANS,,,,,,,,none
+1550,Architecture and Egnineers,,,,,,,,none
+1560,Architecture and Egnineers,,,,,,,,none
+,"LIFE, PHYSICAL, AND SOCIAL SCIENCE",,,,,,,,none
+1600,"Life, Physical, and Social Scientists",,,,,,,,none
+1610,"Life, Physical, and Social Scientists",,,,,,,,none
+1640,"Life, Physical, and Social Scientists",,,,,,,,none
+1650,"Life, Physical, and Social Scientists",,,,,,,,none
+1700,"Life, Physical, and Social Scientists",,,,,,,,none
+1710,"Life, Physical, and Social Scientists",,,,,,,,none
+1720,"Life, Physical, and Social Scientists",,,,,,,,none
+1740,"Life, Physical, and Social Scientists",,,,,,,,none
+1760,"Life, Physical, and Social Scientists",,,,,,,,none
+1800,"Life, Physical, and Social Scientists",,,,,,,,none
+1820,"Life, Physical, and Social Scientists",,,,,,,,none
+1830,"Life, Physical, and Social Scientists",,,,,,,,none
+1840,"Life, Physical, and Social Scientists",,,,,,,,none
+1900,"Life, Physical, and Social Scientists",,,,,,,,none
+1910,"Life, Physical, and Social Scientists",,,,,,,,none
+1920,"Life, Physical, and Social Scientists",,,,,,,,none
+1930,"Life, Physical, and Social Scientists",,,,,,,,none
+1960,"Life, Physical, and Social Scientists",,,,,,,,none
+1980,"Life, Physical, and Social Scientists",,,,,,,,none
+,COMMUNITY AND SOCIAL SERVICES,,,,,,,,none
+2100,Legal Professions,,,,,,,,none
+2140,Legal Professions,,,,,,,,none
+2150,Legal Professions,,,,,,,,none
+,"EDUCATION, TRAINING, AND LIBRARY",,,,,,,,none
+,"ARTS, DESIGN, ENTERTAINMENT, SPORTS, AND MEDIA",,,,,,,,none
+2600,Artists/Artistic Performers/Designers,,,,,,,,none
+2630,Artists/Artistic Performers/Designers,,,,,,,,none
+2700,Artists/Artistic Performers/Designers,,,,,,,,none
+2720,Athletic Competition Workers,,,,,,,,none
+2740,Artists/Artistic Performers/Designers,,,,,,,,none
+2750,Artists/Artistic Performers/Designers,,,,,,,,none
+2760,Artists/Artistic Performers/Designers,,,,,,,,none
+2800,Athletic Competition Workers,,,,,,,,none
+2810,Media,,,,,,,,none
+2825,Media,,,,,,,,none
+2840,Media,,,,,,,,none
+2850,Media,,,,,,,,none
+2860,Media,,,,,,,,none
+2900,Media,,,,,,,,none
+2910,Editors,,,,,,,,none
+2920,Editors,,,,,,,,none
+3700,Protective Services,,,,,,,,none
+3710,Protective Services,,,,,,,,none
+3720,Protective Services,,,,,,,,none
+3730,Protective Services,,,,,,,,none
+3740,Firefighters,,,,,,,,none
+3750,Firefighters,,,,,,,,none
+3800,Police Officers and Detectives,,,,,,,,none
+3820,Police Officers and Detectives,,,,,,,,none
+3900,Protective Services,,,,,,,,none
+3910,Protective Services,,,,,,,,none
+3930,Protective Services,,,,,,,,none
+3940,Protective Services,,,,,,,,none
+3950,Protective Services,,,,,,,,none
+4200,"Housekeeping, Janatoros, and Groundskeepers",,,,,,1,,daily_living
+4210,"Housekeeping, Janatoros, and Groundskeepers",,,,,,1,,daily_living
+4220,"Housekeeping, Janatoros, and Groundskeepers",,,,,,1,,daily_living
+4230,"Housekeeping, Janatoros, and Groundskeepers",,,,,,1,,daily_living
+4240,"Housekeeping, Janatoros, and Groundskeepers",,,,,,1,,daily_living
+4250,"Housekeeping, Janatoros, and Groundskeepers",,,,,,1,,daily_living
+4300,Gaming/Entertainment Workers,,,,,,,,none
+4320,Gaming/Entertainment Workers,,,,,,,,none
+4340,Animal Caretakers,,,,,,,,none
+4350,Animal Caretakers,,,,,,,,none
+4400,Gaming/Entertainment Workers,,,,,,,,none
+4420,Gaming/Entertainment Workers,,,,,,,,none
+4430,Gaming/Entertainment Workers,,,,,,,,none
+4530,Concierge Services,,,,,,,,none
+4540,Concierge Services,,,,,,,,none
+4620,Recreation and Fitness Workers,,,,,,,,none
+4640,Residential Advisors,,,,,,,,none
+4650,Concierge Services,,,,,,,,none
+4700,Sales and Cashiers,,,,,,,,none
+4720,Sales and Cashiers,,,,,,,,none
+4740,Sales and Cashiers,,,,,,,,none
+4750,Sales and Cashiers,,,,,,,,none
+4760,Sales and Cashiers,,,,,,,,none
+4800,Sales and Cashiers,,,,,,,,none
+4810,Sales and Cashiers,,,,,,,,none
+4820,Sales and Cashiers,,,,,,,,none
+4830,Sales and Cashiers,,,,,,,,none
+4840,Sales and Cashiers,,,,,,,,none
+4850,Sales and Cashiers,,,,,,,,none
+4900,Sales and Cashiers,,,,,,,,none
+4920,Sales and Cashiers,,,,,,,,none
+4930,Sales and Cashiers,,,,,,,,none
+4940,Sales and Cashiers,,,,,,,,none
+4950,Sales and Cashiers,,,,,,,,none
+4965,Sales and Cashiers,,,,,,,,none
+,OFFICE AND ADMINISTRATIVE SUPPORT,,,,,,,,none
+5000,Office and Administrative Support Workers,,,,,,,,none
+5010,Office and Administrative Support Workers,,,,,,,,none
+5020,Office and Administrative Support Workers,,,,,,,,none
+5030,Office and Administrative Support Workers,,,,,,,,none
+5100,Office and Administrative Support Workers,,,,,,,,none
+5110,Office and Administrative Support Workers,,,,,,,,none
+5120,Office and Administrative Support Workers,,,,,,,,none
+5130,Office and Administrative Support Workers,,,,,,,,none
+5140,Office and Administrative Support Workers,,,,,,,,none
+5150,Office and Administrative Support Workers,,,,,,,,none
+5160,Office and Administrative Support Workers,,,,,,,,none
+5165,Office and Administrative Support Workers,,,,,,,,none
+5200,Office and Administrative Support Workers,,,,,,,,none
+5220,Office and Administrative Support Workers,,,,,,,,none
+5230,Office and Administrative Support Workers,,,,,,,,none
+5240,Office and Administrative Support Workers,,,,,,,,none
+5250,Office and Administrative Support Workers,,,,,,,,none
+5260,Office and Administrative Support Workers,,,,,,,,none
+5300,Office and Administrative Support Workers,,,,,,,,none
+5310,Office and Administrative Support Workers,,,,,,,,none
+5320,Office and Administrative Support Workers,,,,,,,,none
+5330,Office and Administrative Support Workers,,,,,,,,none
+5340,Office and Administrative Support Workers,,,,,,,,none
+5350,Office and Administrative Support Workers,,,,,,,,none
+5360,Office and Administrative Support Workers,,,,,,,,none
+5400,Office and Administrative Support Workers,,,,,,,,none
+5410,Office and Administrative Support Workers,,,,,,,,none
+5420,Office and Administrative Support Workers,,,,,,,,none
+5500,Office and Administrative Support Workers,,,,,,,,none
+5510,Office and Administrative Support Workers,,,,,,,,none
+5520,Office and Administrative Support Workers,,,,,,,,none
+5530,Office and Administrative Support Workers,,,,,,,,none
+5540,Post Workers,,,,,,,,none
+5550,Post Workers,,,,,,,,none
+5560,Post Workers,,,,,,,,none
+5600,Post Workers,,,,,,,,none
+5610,Post Workers,,,,,,,,none
+5620,Office and Administrative Support Workers,,,,,,,,none
+5630,Office and Administrative Support Workers,,,,,,,,none
+5700,Office and Administrative Support Workers,,,,,,,,none
+5800,Office and Administrative Support Workers,,,,,,,,none
+5810,Office and Administrative Support Workers,,,,,,,,none
+5820,Office and Administrative Support Workers,,,,,,,,none
+5840,Office and Administrative Support Workers,,,,,,,,none
+5850,Office and Administrative Support Workers,,,,,,,,none
+5860,Office and Administrative Support Workers,,,,,,,,none
+5900,Office and Administrative Support Workers,,,,,,,,none
+5910,Office and Administrative Support Workers,,,,,,,,none
+5920,Office and Administrative Support Workers,,,,,,,,none
+5940,Office and Administrative Support Workers,,,,,,,,none
+6005,"Farming, Fishing, and Forestry",,,,,,,,none
+6010,"Farming, Fishing, and Forestry",,,,,,,,none
+6040,"Farming, Fishing, and Forestry",,,,,,,,none
+6050,"Farming, Fishing, and Forestry",,,,,,,,none
+6100,"Farming, Fishing, and Forestry",,,,,,,,none
+6120,"Farming, Fishing, and Forestry",,,,,,,,none
+6130,"Farming, Fishing, and Forestry",,,,,,,,none
+6200,Construction,,,,,,,,none
+6210,Construction,,,,,,,,none
+6220,Construction,,,,,,,,none
+6230,Construction,,,,,,,,none
+6240,Construction,,,,,,,,none
+6250,Construction,,,,,,,,none
+6260,Construction,,,,,,,,none
+6300,Construction,,,,,,,,none
+6320,Construction,,,,,,,,none
+6330,Construction,,,,,,,,none
+6355,Construction,,,,,,,,none
+6360,Construction,,,,,,,,none
+6400,Construction,,,,,,,,none
+6420,Construction,,,,,,,,none
+6430,Construction,,,,,,,,none
+6440,Construction,,,,,,,,none
+6460,Construction,,,,,,,,none
+6500,Construction,,,,,,,,none
+6515,Construction,,,,,,,,none
+6520,Construction,,,,,,,,none
+6530,Construction,,,,,,,,none
+6600,Construction,,,,,,,,none
+6660,Construction,,,,,,,,none
+6700,Construction,,,,,,,,none
+6710,Construction,,,,,,,,none
+6720,Construction,,,,,,,,none
+6730,Construction,,,,,,,,none
+6740,Construction,,,,,,,,none
+6765,Construction,,,,,,,,none
+6800,Extraction,,,,,,,,none
+6820,Extraction,,,,,,,,none
+6830,Extraction,,,,,,,,none
+6840,Extraction,,,,,,,,none
+6940,Extraction,,,,,,,,none
+7000,Maitanence and Repair,,,,,,,,none
+7010,Maitanence and Repair,,,,,,,,none
+7020,Maitanence and Repair,,,,,,,,none
+7030,Maitanence and Repair,,,,,,,,none
+7040,Maitanence and Repair,,,,,,,,none
+7100,Maitanence and Repair,,,,,,,,none
+7110,Maitanence and Repair,,,,,,,,none
+7120,Maitanence and Repair,,,,,,,,none
+7125,Maitanence and Repair,,,,,,,,none
+7130,Maitanence and Repair,,,,,,,,none
+7140,Maitanence and Repair,,,,,,,,none
+7150,Maitanence and Repair,,,,,,,,none
+7160,Maitanence and Repair,,,,,,,,none
+7200,Maitanence and Repair,,,,,,,,none
+7210,Maitanence and Repair,,,,,,,,none
+7220,Maitanence and Repair,,,,,,,,none
+7240,Maitanence and Repair,,,,,,,,none
+7260,Maitanence and Repair,,,,,,,,none
+7300,Maitanence and Repair,,,,,,,,none
+7315,Maitanence and Repair,,,,,,,,none
+7320,Maitanence and Repair,,,,,,,,none
+7330,Maitanence and Repair,,,,,,,,none
+7340,Maitanence and Repair,,,,,,,,none
+7350,Maitanence and Repair,,,,,,,,none
+7360,Maitanence and Repair,,,,,,,,none
+7410,Maitanence and Repair,,,,,,,,none
+7420,Maitanence and Repair,,,,,,,,none
+7430,Maitanence and Repair,,,,,,,,none
+7510,Maitanence and Repair,,,,,,,,none
+7540,Maitanence and Repair,,,,,,,,none
+7550,Maitanence and Repair,,,,,,,,none
+7560,Maitanence and Repair,,,,,,,,none
+7610,Maitanence and Repair,,,,,,,,none
+7630,Maitanence and Repair,,,,,,,,none
+7700,Maitanence and Repair,,,,,,,,none
+7710,Maitanence and Repair,,,,,,,,none
+7720,Maitanence and Repair,,,,,,,,none
+7730,Maitanence and Repair,,,,,,,,none
+7740,Maitanence and Repair,,,,,,,,none
+7750,Maitanence and Repair,,,,,,,,none
+7800,Maitanence and Repair,,,,,,,,none
+7810,Maitanence and Repair,,,,,,,,none
+7830,Maitanence and Repair,,,,,,,,none
+7840,Maitanence and Repair,,,,,,,,none
+7850,Maitanence and Repair,,,,,,,,none
+7855,Maitanence and Repair,,,,,,,,none
+7900,Maitanence and Repair,,,,,,,,none
+7920,Maitanence and Repair,,,,,,,,none
+7930,Maitanence and Repair,,,,,,,,none
+7940,Maitanence and Repair,,,,,,,,none
+7950,Maitanence and Repair,,,,,,,,none
+7960,Maitanence and Repair,,,,,,,,none
+8000,Maitanence and Repair,,,,,,,,none
+8010,Maitanence and Repair,,,,,,,,none
+8030,Maitanence and Repair,,,,,,,,none
+8040,Maitanence and Repair,,,,,,,,none
+8060,Maitanence and Repair,,,,,,,,none
+8100,Maitanence and Repair,,,,,,,,none
+8130,Maitanence and Repair,,,,,,,,none
+8140,Maitanence and Repair,,,,,,,,none
+8150,Maitanence and Repair,,,,,,,,none
+8200,Maitanence and Repair,,,,,,,,none
+8210,Maitanence and Repair,,,,,,,,none
+8220,Maitanence and Repair,,,,,,,,none
+8230,Maitanence and Repair,,,,,,,,none
+8250,Maitanence and Repair,,,,,,,,none
+8300,Maitanence and Repair,,,,,,,,none
+8310,Maitanence and Repair,,,,,,,,none
+8320,Maitanence and Repair,,,,,,,,none
+8330,Maitanence and Repair,,,,,,,,none
+8340,Maitanence and Repair,,,,,,,,none
+8350,Maitanence and Repair,,,,,,,,none
+8400,Maitanence and Repair,,,,,,,,none
+8410,Maitanence and Repair,,,,,,,,none
+8420,Maitanence and Repair,,,,,,,,none
+8450,Maitanence and Repair,,,,,,,,none
+8460,Maitanence and Repair,,,,,,,,none
+8500,Maitanence and Repair,,,,,,,,none
+8510,Maitanence and Repair,,,,,,,,none
+8530,Maitanence and Repair,,,,,,,,none
+8540,Maitanence and Repair,,,,,,,,none
+8550,Maitanence and Repair,,,,,,,,none
+8600,Maitanence and Repair,,,,,,,,none
+8610,Maitanence and Repair,,,,,,,,none
+8620,Maitanence and Repair,,,,,,,,none
+8630,Maitanence and Repair,,,,,,,,none
+8640,Maitanence and Repair,,,,,,,,none
+8650,Maitanence and Repair,,,,,,,,none
+8710,Maitanence and Repair,,,,,,,,none
+8720,Maitanence and Repair,,,,,,,,none
+8730,Maitanence and Repair,,,,,,,,none
+8740,Maitanence and Repair,,,,,,,,none
+8750,Maitanence and Repair,,,,,,,,none
+8760,Maitanence and Repair,,,,,,,,none
+8800,Maitanence and Repair,,,,,,,,none
+8810,Maitanence and Repair,,,,,,,,none
+8830,Maitanence and Repair,,,,,,,,none
+8850,Maitanence and Repair,,,,,,,,none
+8860,Maitanence and Repair,,,,,,,,none
+8910,Maitanence and Repair,,,,,,,,none
+8920,Maitanence and Repair,,,,,,,,none
+8930,Maitanence and Repair,,,,,,,,none
+8940,Maitanence and Repair,,,,,,,,none
+8950,Maitanence and Repair,,,,,,,,none
+8965,Maitanence and Repair,,,,,,,,none
+9000,Transportation,,,,,,,,none
+9030,Transportation,,,,,,,,none
+9040,Transportation,,,,,,,,none
+9050,Transportation,,,,,,,,none
+9100,Transportation,,,,,,,,none
+9130,Transportation,,,,,,,,none
+9140,Transportation,,,,,,,,none
+9150,Transportation,,,,,,,,none
+9200,Transportation,,,,,,,,none
+9230,Transportation,,,,,,,,none
+9240,Transportation,,,,,,,,none
+9260,Transportation,,,,,,,,none
+9300,Transportation,,,,,,,,none
+9310,Transportation,,,,,,,,none
+9350,Transportation,,,,,,,,none
+9360,Transportation,,,,,,,,none
+9410,Transportation,,,,,,,,none
+9420,Transportation,,,,,,,,none
+9510,Transportation,,,,,,,,none
+9520,Transportation,,,,,,,,none
+9560,Transportation,,,,,,,,none
+9600,Transportation,,,,,,,,none
+9610,Transportation,,,,,,,,none
+9620,Transportation,,,,,,,,none
+9630,Transportation,,,,,,,,none
+9640,Transportation,,,,,,,,none
+9650,Transportation,,,,,,,,none
+9720,Transportation,,,,,,,,none
+9750,Transportation,,,,,,,,none
+9800,Military,,,,,,,,none
+9810,Military,,,,,,,,none
+9820,Military,,,,,,,,none
+9830,Military,,,,,,,,none
+9999,NULL,,,,,,,,none
