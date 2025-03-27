@@ -4,8 +4,8 @@ options(scipen = 999)
 
 # set the filepaths for the recently downloaded IPUMS data
 ipums_atus <- "./data/IPUMS Pulls/atus_00027.xml"
-ipums_cps <- "./data/IPUMS Pulls/cps_00419.xml"
-ipums_asec <- "./data/IPUMS Pulls/cps_00418.xml"
+ipums_cps <- "./data/IPUMS Pulls/cps_00421.xml"
+ipums_asec <- "./data/IPUMS Pulls/cps_00420.xml"
 
 
 ## ----message=FALSE-------------------------------------------------------------------------------

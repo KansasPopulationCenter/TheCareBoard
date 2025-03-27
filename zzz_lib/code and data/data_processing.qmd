@@ -12,15 +12,15 @@ source("load_libraries.R")
 source("data_prep_functions.R") 
 
 # Load formal occupation codes and their care focus
-df_occ <- fread("./data/Formal_Occupation_Crosswalk.csv")
+df_occ <- fread("./data/CSV/FormalOccs_Crossover.csv")
 
 # Load activity codes and their care focus
-df_act <- fread("./data/ATUSActivityCrossover.csv") |> 
+df_act <- fread("./data/CSV/ATUSActivityCrossover.csv") |> 
   clean_names()
 
 # Define data filepath location
-ddi_cps <- "./data/IPUMS Pulls/cps_00419.xml"
-ddi_asec <- "./data/IPUMS Pulls/cps_00418.xml"
+ddi_cps <- "./data/IPUMS Pulls/cps_00421.xml"
+ddi_asec <- "./data/IPUMS Pulls/cps_00420.xml"
 ddi_atus <- "./data/IPUMS Pulls/atus_00027.xml"
 ```
 
@@ -36,9 +36,9 @@ micro_cps <- micro_cps |>
   recode_asec_cps() |> 
   recode_cps() |>
   select(any_of(col_order)) |> 
-  left_join(df_occ, by = c("OCC2010" = "code")) 
+  left_join(df_occ, by = c("OCC2010" = "Code")) 
 
-write.csv(micro_cps, "data/micro_Data/CPSdata.csv")
+write.csv(micro_cps, "data/CSV/CPSdata.csv")
 ```
 
 ## ASEC
@@ -53,11 +53,9 @@ micro_asec <- micro_asec |>
   recode_asec_cps() |> 
   recode_asec() |>
   select(any_of(col_order)) |> 
-  left_join(df_occ, by = c("OCC2010" = "code")) 
+  left_join(df_occ, by = c("OCC2010" = "Code")) 
 
-saveRDS(micro_asec, "ASECdata.rds")
-write.csv(micro_asec, "ASECdata.csv")
-write_dta(micro_asec, "ASECdata.dta")
+write.csv(micro_asec, "data/CSV/ASECdata.csv")
 
 rm(micro_asec)
 gc()
@@ -90,7 +88,7 @@ cps_occ <- micro_cps |>
   group_by(CPSIDP) |> 
   filter(date == max(date)) |> 
   ungroup() |> 
-  select(CPSIDP, date, care_focus) 
+  select(CPSIDP, date, FOCUS) 
 
 rm(micro_cps)
 gc()
@@ -114,9 +112,7 @@ micro_atus <- micro_atus |>
       volunteering, education), 
       ~replace_na(., 0)))
 
-saveRDS(micro_atus, "ATUSdata.rds")
-write.csv(micro_atus, "ATUSdata.csv")
-write_dta(micro_atus, "ATUSdata.dta")
+write.csv(micro_atus, "data/CSV/ATUSdata.csv")
 ```
 
 \
