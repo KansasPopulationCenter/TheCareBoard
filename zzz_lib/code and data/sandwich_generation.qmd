@@ -1,0 +1,87 @@
+---
+title: "sandwich_generation"
+format: html
+editor: visual
+---
+
+## Sandwich Generation
+
+## Data Setup
+
+### Load Data
+
+```{r}
+source("load_defaults.R")
+
+atus <- read.csv("./data/CSV/ATUSdata.csv") |> 
+  filter(YEAR >= 2011 & YEAR != 2020) |>
+  select(YEAR, date, CASEID, WT06, YNGCH, AGE, 
+         child_care, elder_care, DURATION,
+         SCC_ALL_LN, SEC_ALL_LN) |> 
+  data.frame() |> 
+  clean_names() 
+
+yr_range <- atus_yr_range(atus)
+```
+
+### Summarise Time and Flag Sandwich Demo by CaseID
+
+```{r}
+case_time <- atus |> 
+  group_by(year, date, caseid, wt06, yngch, age) |> 
+  summarise(
+    time_child_care = sum(child_care*duration + scc_all_ln),
+    time_elder_care = sum(elder_care*duration + sec_all_ln),
+    time_child_elder = sum(time_child_care + time_elder_care)
+  ) |> 
+  ungroup() 
+  
+case_time <- case_time |> 
+  mutate(
+    sandwich_all = ifelse(
+      time_elder_care > 0 & yngch <= 10 & age >= 18,
+      "sandwich", "other")
+  )
+```
+
+## Calc Sandwich Stats
+
+### Loop Method
+
+```{r}
+sandwich_stats_5yr <- list()
+i = 1
+
+for(sel_year in yr_range$year) {
+  year_min <- yr_range$yr_start[i]
+  
+  sandwich_stats_5yr[[sel_year]] <- case_time |>
+    filter(year >= year_min & year <= sel_year) |>
+    group_by(sandwich_all) |>
+    summarise(
+      sandwich_population = sum(wt06/365)/5,
+      sandwich_time_total = sum(wt06/365*time_child_elder)/5,
+      sandwich_time_median = wtd.quantile(
+        time_child_elder, 
+        weights = wt06, 
+        probs = 0.5
+        )
+    ) |>
+    ungroup() |> 
+    mutate(
+      sandwich_population_proportion = sandwich_population / 
+        sum(sandwich_population), 
+      date = as.Date(paste0(as.character(sel_year), "-01-01"))
+      ) |> 
+    filter(sandwich_all == "sandwich")
+  
+  i = i + 1
+}
+
+sandwich_stats_5yr <- bind_rows(sandwich_stats_5yr) |> 
+  select(date, sandwich_population, sandwich_population_proportion,
+         sandwich_time_total, sandwich_time_median)
+
+write.csv(sandwich_stats_5yr, "./data/CSV/sanwhichstats.csv", row.names = FALSE)
+write_dta(sandwich_stats_5yr, "./data/Dta/sanwhichstats.dta")
+```
