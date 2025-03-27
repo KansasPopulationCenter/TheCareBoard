@@ -13,13 +13,13 @@ editor: visual
 ```{r}
 source("load_defaults.R")
 
-atus <- readRDS("./data/micro_data/ATUSdata.rds") |> 
+atus <- read.csv("./data/CSV/ATUSdata.csv") |> 
   filter(YEAR >= 2011 & YEAR != 2020) |>
   select(YEAR, date, CASEID, WT06, YNGCH, AGE, sex, gender_parent, 
          nchild, empstat, marst, race, 
-         PaidWork, ChildCare, ElderCare, 
-         Householdcare, Education, Leisure,
-         Selfcare, Sleeping, DURATION,
+         paid_work, child_care, elder_care, 
+         householdcare, education, leisure,
+         selfcare, sleeping, DURATION,
          SCC_ALL_LN, SEC_ALL_LN) |> 
   data.frame() |> 
   clean_names() 
@@ -258,5 +258,6 @@ get_sw_demo <- function(df){
 sw_demo_final <- get_sw_demo(sw_only) |> 
   bind_rows()
 
-write.csv(sw_demo_final, paste0("sandwich_gen_demographics_", date, ".csv"), row.names = FALSE)
+write.csv(sw_demo_final, paste0("data/CSV/sandwich_gen_NYT_rep_", date, ".csv"), row.names = FALSE)
+write_dta(sw_demo_final, paste0("data/Dta/sandwich_gen_NYT_rep_", date, ".dta"))
 ```
