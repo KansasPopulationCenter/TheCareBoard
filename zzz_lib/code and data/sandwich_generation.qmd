@@ -82,6 +82,6 @@ sandwich_stats_5yr <- bind_rows(sandwich_stats_5yr) |>
   select(date, sandwich_population, sandwich_population_proportion,
          sandwich_time_total, sandwich_time_median)
 
-write.csv(sandwich_stats_5yr, "./data/CSV/sanwhichstats.csv", row.names = FALSE)
-write_dta(sandwich_stats_5yr, "./data/Dta/sanwhichstats.dta")
+write.csv(sandwich_stats_5yr, "./data/CSV/sandwichstats.csv", row.names = FALSE)
+write_dta(sandwich_stats_5yr, "./data/Dta/sandwichstats.dta")
 ```
