@@ -8,12 +8,12 @@
 |Table 5: Care Gini Coefficients                                 |GINI Index coefficients calculated for care ineqaulity measures                            |
 |Table 6: Labor Force Participation by Gender and Parental Status|Replication of BLS Labor Force Participation statistics broken out by gender and parenthood|
 |Table 7: Care Force Participation by Gender and Parental Status |Number and proportion of individuals providing formal and informal care work to others     |
-|Table 8: Sandwich Generation                                    |Data related to individuals engaged in caring for children and engaged in elder care       |
+|Table 8: Sandwich Generation                                    |Data related to individuals engaged in caring for children and engaged in elder care       |https://bit.ly/SandwichCSV|https://bit.ly/SandwichXLSX|https://bit.ly/SandwichDTA|NOTES HERE|https://timeuse.ipums.org/|
 |Table 9: Value of Care                                          |Estimates of the value of care activities in the economy                                   |
 
 # Data Crosswalks
-|Name                                                            | Description                                                                               | .csv file | .xlsx file    | .dta file | Notes | Data Sources|
------------------------------------------------------------------|-------------------------------------------------------------------------------------------|-----------|---------------|-----------|--------|-------------|
+|Name| Description| .csv file | .xlsx file    | .dta file | Notes | Data Sources|
+|-----------------------------------------------------------------|-------------------------------------------------------------------------------------------|-----------|---------------|-----------|--------|-------------|
 |Table 10: Crosswalk-Formal Jobs to Care Focus                   |Links between care focus and OCC2010 codes                                                 |
 |Table 11: Crosswalk-Informal Care Activities to Care Focus      |Links between care focus and ATUS activities                                               |https://bit.ly/ATUSActivityCrossoverCSV|https://bit.ly/ATUSActivityCrossoverXLSX| ATUS ACTIVITY DTA FILE HERE | ATUS ACTIVITY NOTES HERE | https://timeuse.ipums.org/ |
 |Table 12: Crosswalk-Formal Jobs to Informal Activities          |Links between OCC2010 codes and ATUS activities                                            |https://bit.ly/FormalOccs_CrossoverCSV|https://bit.ly/FormalOccs_CrossoverXLXS | FORMAL OCCS DTA HERE | FORMA OCCUS NOTES HERE |https://www.bls.gov/soc/2010/2010_major_groups.htm|
@@ -24,5 +24,6 @@
 |Table 15: Care Economy ATUS Microdata                           |ATUS Yearly microdata files                                                                |
 
 # Replication Data
-|Name     | Description    |  .csv file   | .xlsx file   | .dta file    | Notes   | Data Sources  |
------------------------------------------------------------------|-------------------------------------------------------------------------------------------|-----------|---------------|-----------|--------|-------------|
+|Name                         | Description|.csv file| .xlsx file| .dta file| Notes|Data Sources|
+|-----------------------------|------------|---------|-----------|----------|------|------------|
+|NYT Sandwhich Generation 2025|Replication data for the article published in NYT mm.dd.yyyy|CSV LINK|XL LINK|DTA LINK|NOTES|https://timeuse.ipums.org/|
