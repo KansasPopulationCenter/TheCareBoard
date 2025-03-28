@@ -48,6 +48,12 @@ case_time <- atus |>
     sandwich_flag = ifelse(
       elder_care > 0 & yngch <= 10 & age >= 18,
       "sandwich", "non-sandwich")
+  )  |>
+  mutate(
+    eldercare_flag = ifelse(
+      elder_care > 0 & age >= 18,
+      "eldercare", "non-eldercare"
+    )
   )
 ```
 
@@ -113,6 +119,9 @@ calc_sandwich_stats <- function(df){
 criteria_sw <- 'sandwich_flag == "sandwich"'
 criteria_nsw <- 'sandwich_flag != "sandwich"'
 
+criteria_eld <- 'eldercare_flag == "eldercare"'
+criteria_neld <- 'eldercare_flag != "eldercare"'
+
 criteria_employed <- 'empstat == "Employed"'
 criteria_nilf <- 'empstat == "NILF"'
 criteria_1hr <- 'paid_work > 60'
@@ -162,7 +171,10 @@ demo_list = list(
   "nsw-childlessmen" = paste(criteria_nsw, criteria_childlessmen, sep = " & "),
   
   "sw-childlesswomen" = paste(criteria_sw, criteria_childlesswomen, sep = " & "),
-  "nsw-childlesswomen" = paste(criteria_nsw, criteria_childlesswomen, sep = " & ")
+  "nsw-childlesswomen" = paste(criteria_nsw, criteria_childlesswomen, sep = " & "),
+  
+  "nsw-eldercare-childlesswomen" = paste(criteria_nsw, criteria_eld, criteria_childlesswomen, sep = " & "),
+  "nsw-eldercare-childlessmen" = paste(criteria_nsw, criteria_eld, criteria_childlessmen, sep = " & ")
 )
 ```
 
