@@ -9,21 +9,26 @@ editor: visual
 ```{r}
 source("load_defaults.R")
 min_year <- 2003
+min_year_all <- 1990
 
-us_gdp <- read.csv("../../01_preliminary-code-and-data/01_USGDP.csv") |>
+us_gdp <- read.csv("./app_data/FYGDP.csv") |>
   clean_names() |>
   mutate(
-    date = as.Date(paste0(
-      substr(
-        observation_date,
-        nchar(observation_date) - 3,
-        nchar(observation_date)
-      ), "-01-01"
-    )),
+    date = as.Date(paste0(year(as.Date(observation_date)), "-01-01")),
     fygdp = fygdp * 1e9,
     gdp_daily = fygdp / 365
   ) |>
   filter(year(date) >= min_year) |>
+  select(date, gdp_daily)
+
+us_gdp_all <- read.csv("./app_data/FYGDP.csv") |>
+  clean_names() |>
+  mutate(
+    date = as.Date(paste0(year(as.Date(observation_date)), "-01-01")),
+    fygdp = fygdp * 1e9,
+    gdp_daily = fygdp / 365
+  ) |>
+  filter(year(date) >= min_year_all) |>
   select(date, gdp_daily)
 ```
 
@@ -34,7 +39,7 @@ us_gdp <- read.csv("../../01_preliminary-code-and-data/01_USGDP.csv") |>
 #### Base Table
 
 ```{r}
-asec <- readRDS("../../02_data-prep-and-cleaning/03_ASECdata.rds") |>
+asec <- read.csv("./data/CSV/ASECdata.csv") |>
   # incorporate HFLAG clause due to survey redesign in 2014
   # https://blog.popdata.org/2014sample/
   filter(HFLAG == 1 | is.na(HFLAG)) |> 
@@ -45,13 +50,17 @@ asec <- readRDS("../../02_data-prep-and-cleaning/03_ASECdata.rds") |>
          UHRSWORKT,
          INCWAGE,
          empstat,
-         occ_care_focus,
+         race_ethnicity,
+         educ,
+         statefip,
+         FOCUS,
+         marst,
          gender_parent) |>
   clean_names() |>
   mutate(
     date = as.Date(paste0(year, "-01-01")),
     uhrsworkt = ifelse(uhrsworkt == 999, 0, uhrsworkt),
-    occ_type = ifelse(occ_care_focus == "none", "non-care", "care"),
+    occ_type = ifelse(focus == "none", "non-care", "care"),
     overall = "overall"
   ) 
 ```
@@ -82,6 +91,8 @@ formal_lfp <- bind_rows(
   get_formal_lfp(asec, "overall"),
   get_formal_lfp(asec, "gender_parent")
   )
+
+
 ```
 
 #### Hours
@@ -228,7 +239,7 @@ plt_trend(formal_checks, "median_wage", "Median wage")
 
 ```{r}
 source("load_defaults.R")
-atus <- readRDS("../../02_data-prep-and-cleaning/03_ATUSdata.rds") |> 
+atus <- read.csv("./data/CSV/ATUSdata.csv") |> 
   filter(YEAR != 2020) |> 
   #filter(AGE >= 18 & AGE <= 65) |>
   select(YEAR, CASEID, WT06, ACTIVITY, DURATION, SCC_ALL_LN, SEC_ALL_LN,
