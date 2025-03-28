@@ -1,0 +1,1883 @@
+"","date","category_id","subcategory_id","sector","care_force_minutes","care_force_proportion"
+"1",2007-01-01,"overall","overall","informal",114090390.252239,0.494732412322016
+"2",2008-01-01,"overall","overall","informal",114296176.083414,0.489944431988968
+"3",2009-01-01,"overall","overall","informal",114504763.558605,0.485925544553645
+"4",2010-01-01,"overall","overall","informal",114593931.597575,0.481608906931071
+"5",2011-01-01,"overall","overall","informal",114804932.750521,0.478263076012117
+"6",2012-01-01,"overall","overall","informal",113793401.253904,0.469372939658957
+"7",2013-01-01,"overall","overall","informal",115024641.481207,0.470126547050474
+"8",2014-01-01,"overall","overall","informal",115417464.373905,0.467078344552312
+"9",2015-01-01,"overall","overall","informal",116503706.30252,0.466523987468661
+"10",2016-01-01,"overall","overall","informal",118279771.232838,0.468087487854516
+"11",2017-01-01,"overall","overall","informal",119898348.323739,0.470345441714548
+"12",2018-01-01,"overall","overall","informal",119802627.661788,0.465555932536785
+"13",2019-01-01,"overall","overall","informal",120431380.153035,0.463933676815737
+"14",2021-01-01,"overall","overall","informal",120995030.618879,0.4623270727447
+"15",2022-01-01,"overall","overall","informal",120814465.208785,0.458165730559697
+"16",2023-01-01,"overall","overall","informal",121701397.802327,0.457320919203654
+"17",2007-01-01,"gender_parent","Childless Women","informal",34627851.3391272,0.561515339619917
+"18",2007-01-01,"gender_parent","Mothers","informal",31375339.5026521,0.7741495173412
+"19",2007-01-01,"gender_parent","Fathers","informal",14809514.3299141,0.432264343069687
+"20",2007-01-01,"gender_parent","Childless Men","informal",20853987.5317344,0.329778165098602
+"21",2007-01-01,"gender_parent","Other","informal",12423697.5488112,0.401850607822385
+"22",2008-01-01,"gender_parent","Mothers","informal",31175812.971273,0.771236332727127
+"23",2008-01-01,"gender_parent","Fathers","informal",14775308.0207401,0.43038493436553
+"24",2008-01-01,"gender_parent","Other","informal",12553513.8160961,0.398436022874428
+"25",2008-01-01,"gender_parent","Childless Women","informal",34839577.827258,0.557049182568507
+"26",2008-01-01,"gender_parent","Childless Men","informal",20951963.4480466,0.324935996794137
+"27",2009-01-01,"gender_parent","Childless Women","informal",35279171.2676467,0.554801110612404
+"28",2009-01-01,"gender_parent","Mothers","informal",30921003.1387819,0.766831386966079
+"29",2009-01-01,"gender_parent","Childless Men","informal",21074472.1902415,0.321792556324849
+"30",2009-01-01,"gender_parent","Fathers","informal",14561551.9114074,0.424110563839265
+"31",2009-01-01,"gender_parent","Other","informal",12668565.0505271,0.397065544028357
+"32",2010-01-01,"gender_parent","Mothers","informal",30549097.9219838,0.762200400851884
+"33",2010-01-01,"gender_parent","Childless Women","informal",35102026.5474723,0.545774034698259
+"34",2010-01-01,"gender_parent","Childless Men","informal",21015252.9165039,0.317796692734416
+"35",2010-01-01,"gender_parent","Fathers","informal",14730666.7134769,0.42783308148733
+"36",2010-01-01,"gender_parent","Other","informal",13196887.498138,0.400090268640253
+"37",2011-01-01,"gender_parent","Fathers","informal",14750860.4151067,0.433130437545801
+"38",2011-01-01,"gender_parent","Childless Women","informal",35117845.0904712,0.539782486906123
+"39",2011-01-01,"gender_parent","Mothers","informal",30386299.9821797,0.760729191257456
+"40",2011-01-01,"gender_parent","Childless Men","informal",21091239.5156191,0.314625761029248
+"41",2011-01-01,"gender_parent","Other","informal",13458687.7471445,0.396423039636806
+"42",2012-01-01,"gender_parent","Childless Women","informal",34853747.2537389,0.526536486200164
+"43",2012-01-01,"gender_parent","Mothers","informal",30074270.8754642,0.755713215535857
+"44",2012-01-01,"gender_parent","Childless Men","informal",21018985.6052739,0.309784440849349
+"45",2012-01-01,"gender_parent","Fathers","informal",14453081.3893094,0.42533749418274
+"46",2012-01-01,"gender_parent","Other","informal",13393316.1301179,0.386908844883463
+"47",2013-01-01,"gender_parent","Childless Women","informal",35188887.7435464,0.525333445754921
+"48",2013-01-01,"gender_parent","Mothers","informal",30113024.2178408,0.75599932137952
+"49",2013-01-01,"gender_parent","Other","informal",13871489.756876,0.39484410831811
+"50",2013-01-01,"gender_parent","Childless Men","informal",21246710.9027286,0.308616766141393
+"51",2013-01-01,"gender_parent","Fathers","informal",14604528.8602152,0.431131419058256
+"52",2014-01-01,"gender_parent","Mothers","informal",30196228.8378362,0.756128741000222
+"53",2014-01-01,"gender_parent","Fathers","informal",14482857.9260616,0.429683229640113
+"54",2014-01-01,"gender_parent","Childless Women","informal",35254002.2132174,0.518434139960625
+"55",2014-01-01,"gender_parent","Childless Men","informal",21521679.8480248,0.308042184980649
+"56",2014-01-01,"gender_parent","Other","informal",13962695.5487653,0.392243473662646
+"57",2015-01-01,"gender_parent","Other","informal",14017839.6049389,0.392191038830793
+"58",2015-01-01,"gender_parent","Fathers","informal",14136640.6534076,0.419973473168821
+"59",2015-01-01,"gender_parent","Mothers","informal",30471468.4086723,0.76008107784796
+"60",2015-01-01,"gender_parent","Childless Men","informal",21929861.2135987,0.308951411621784
+"61",2015-01-01,"gender_parent","Childless Women","informal",35947896.4219022,0.519083452151933
+"62",2016-01-01,"gender_parent","Other","informal",14100529.1973404,0.394381775058522
+"63",2016-01-01,"gender_parent","Mothers","informal",30496766.8653644,0.760178853984562
+"64",2016-01-01,"gender_parent","Childless Women","informal",36885406.4717173,0.521097982957681
+"65",2016-01-01,"gender_parent","Fathers","informal",14147693.2603505,0.420199803898626
+"66",2016-01-01,"gender_parent","Childless Men","informal",22649375.4380651,0.31299684230019
+"67",2017-01-01,"gender_parent","Fathers","informal",14336860.0280638,0.42490032168865
+"68",2017-01-01,"gender_parent","Childless Women","informal",37984200.8926429,0.526396145990867
+"69",2017-01-01,"gender_parent","Childless Men","informal",23089343.4525236,0.314244227573689
+"70",2017-01-01,"gender_parent","Other","informal",14077171.0953348,0.395240285949743
+"71",2017-01-01,"gender_parent","Mothers","informal",30410772.8551734,0.761748820680559
+"72",2018-01-01,"gender_parent","Other","informal",14184720.8168392,0.395704052507073
+"73",2018-01-01,"gender_parent","Mothers","informal",30120577.4767389,0.757609950248085
+"74",2018-01-01,"gender_parent","Childless Women","informal",38030906.8053566,0.519321323883426
+"75",2018-01-01,"gender_parent","Fathers","informal",14078361.5751916,0.419230255094639
+"76",2018-01-01,"gender_parent","Childless Men","informal",23388060.9876621,0.312195245270121
+"77",2019-01-01,"gender_parent","Other","informal",14168803.8015831,0.391690827756846
+"78",2019-01-01,"gender_parent","Childless Women","informal",38656421.4472117,0.519247412503598
+"79",2019-01-01,"gender_parent","Mothers","informal",29710103.6153615,0.756397399945157
+"80",2019-01-01,"gender_parent","Fathers","informal",14077228.2790226,0.419544520223962
+"81",2019-01-01,"gender_parent","Childless Men","informal",23818823.0098563,0.312849815330043
+"82",2021-01-01,"gender_parent","Other","informal",14034271.1705208,0.385840004439809
+"83",2021-01-01,"gender_parent","Childless Men","informal",24374873.8366969,0.313416258882179
+"84",2021-01-01,"gender_parent","Mothers","informal",29199301.0707331,0.752151337467014
+"85",2021-01-01,"gender_parent","Childless Women","informal",39189206.0095177,0.518811814755188
+"86",2021-01-01,"gender_parent","Fathers","informal",14197378.5314106,0.427549881496335
+"87",2022-01-01,"gender_parent","Mothers","informal",28302479.2219559,0.741558764912136
+"88",2022-01-01,"gender_parent","Childless Men","informal",24642508.7528402,0.31203484833987
+"89",2022-01-01,"gender_parent","Childless Women","informal",39590115.8746956,0.516958116082766
+"90",2022-01-01,"gender_parent","Fathers","informal",14230115.6771044,0.428297507569769
+"91",2022-01-01,"gender_parent","Other","informal",14049245.6821894,0.382352994357684
+"92",2023-01-01,"gender_parent","Childless Women","informal",40175366.1847671,0.517475488411221
+"93",2023-01-01,"gender_parent","Mothers","informal",27830460.975453,0.738623046795971
+"94",2023-01-01,"gender_parent","Other","informal",14187698.7151674,0.381709157368472
+"95",2023-01-01,"gender_parent","Fathers","informal",14460762.9473496,0.432865267864154
+"96",2023-01-01,"gender_parent","Childless Men","informal",25047108.9795902,0.312206383851452
+"97",2007-01-01,"race_ethnicity","White","informal",82899554.5761607,0.508542838688491
+"98",2007-01-01,"race_ethnicity","Black","informal",11416799.9082254,0.433394777373475
+"99",2007-01-01,"race_ethnicity","Asian/Pacific Island","informal",3401429.43675277,0.478635950823836
+"100",2007-01-01,"race_ethnicity","Hispanic","informal",14319918.5742282,0.477497614135063
+"101",2007-01-01,"race_ethnicity","American Indian","informal",605197.835205435,0.500532697384429
+"102",2007-01-01,"race_ethnicity","Two or More Races","informal",1447489.9216664,0.490916473202608
+"103",2008-01-01,"race_ethnicity","White","informal",82346558.1588078,0.502577605944375
+"104",2008-01-01,"race_ethnicity","Black","informal",11668955.1466333,0.43585361131837
+"105",2008-01-01,"race_ethnicity","Hispanic","informal",14640245.3403091,0.47310565739397
+"106",2008-01-01,"race_ethnicity","Two or More Races","informal",1454050.41303598,0.473245556738155
+"107",2008-01-01,"race_ethnicity","Asian/Pacific Island","informal",3564979.18679527,0.482733719453095
+"108",2008-01-01,"race_ethnicity","American Indian","informal",621387.837832464,0.493008969882533
+"109",2009-01-01,"race_ethnicity","Black","informal",11648613.6153146,0.429058467809274
+"110",2009-01-01,"race_ethnicity","White","informal",82072710.5893613,0.498265941835195
+"111",2009-01-01,"race_ethnicity","Hispanic","informal",15207989.9269696,0.476633460093783
+"112",2009-01-01,"race_ethnicity","Two or More Races","informal",1362942.46059787,0.461851565094726
+"113",2009-01-01,"race_ethnicity","Asian/Pacific Island","informal",3606439.14695804,0.471599422090259
+"114",2009-01-01,"race_ethnicity","American Indian","informal",606067.819403088,0.476731127067721
+"115",2010-01-01,"race_ethnicity","White","informal",81107928.0535825,0.490776559917614
+"116",2010-01-01,"race_ethnicity","Black","informal",11887984.711455,0.432000235906061
+"117",2010-01-01,"race_ethnicity","Hispanic","informal",15763520.7477218,0.48004952494363
+"118",2010-01-01,"race_ethnicity","Two or More Races","informal",1385445.24303468,0.473593040012968
+"119",2010-01-01,"race_ethnicity","Asian/Pacific Island","informal",3836886.65146451,0.471900641074364
+"120",2010-01-01,"race_ethnicity","American Indian","informal",612166.190316388,0.484503915551755
+"121",2011-01-01,"race_ethnicity","Black","informal",11812164.8708907,0.423987402128182
+"122",2011-01-01,"race_ethnicity","White","informal",80817598.810417,0.487720717264529
+"123",2011-01-01,"race_ethnicity","Hispanic","informal",16256320.9439575,0.482096331141612
+"124",2011-01-01,"race_ethnicity","Asian/Pacific Island","informal",3933663.55173527,0.459017551983486
+"125",2011-01-01,"race_ethnicity","American Indian","informal",658683.251637726,0.496154547901631
+"126",2011-01-01,"race_ethnicity","Two or More Races","informal",1326501.32188303,0.463195161199993
+"127",2012-01-01,"race_ethnicity","White","informal",79403207.2217214,0.478350423051889
+"128",2012-01-01,"race_ethnicity","Black","informal",11751654.4430137,0.416738992562373
+"129",2012-01-01,"race_ethnicity","Hispanic","informal",16691857.2010926,0.479125994193155
+"130",2012-01-01,"race_ethnicity","Asian/Pacific Island","informal",4137419.38651363,0.438025083843094
+"131",2012-01-01,"race_ethnicity","Two or More Races","informal",1197234.76950503,0.450451849586061
+"132",2012-01-01,"race_ethnicity","American Indian","informal",612028.23205799,0.469859089652393
+"133",2013-01-01,"race_ethnicity","White","informal",79779541.3461019,0.479542583028526
+"134",2013-01-01,"race_ethnicity","Black","informal",11664785.0362743,0.408838209465628
+"135",2013-01-01,"race_ethnicity","Asian/Pacific Island","informal",4427075.59178891,0.446215499493172
+"136",2013-01-01,"race_ethnicity","Hispanic","informal",17319528.1252748,0.482261009224433
+"137",2013-01-01,"race_ethnicity","American Indian","informal",583275.939316839,0.435920496904199
+"138",2013-01-01,"race_ethnicity","Two or More Races","informal",1250435.44245031,0.481428770741187
+"139",2014-01-01,"race_ethnicity","White","informal",79593820.3755598,0.478513069144895
+"140",2014-01-01,"race_ethnicity","Hispanic","informal",17680987.1934309,0.477289635776896
+"141",2014-01-01,"race_ethnicity","Two or More Races","informal",1249074.6640106,0.452878521589704
+"142",2014-01-01,"race_ethnicity","Black","informal",11510954.7207797,0.398524136544046
+"143",2014-01-01,"race_ethnicity","Asian/Pacific Island","informal",4799979.99932322,0.44478809515995
+"144",2014-01-01,"race_ethnicity","American Indian","informal",582647.42080102,0.451242568752953
+"145",2015-01-01,"race_ethnicity","Black","informal",11410478.2252192,0.389241945712326
+"146",2015-01-01,"race_ethnicity","White","informal",80131195.1654938,0.480861345860604
+"147",2015-01-01,"race_ethnicity","Hispanic","informal",18115494.3575476,0.473526636923249
+"148",2015-01-01,"race_ethnicity","Asian/Pacific Island","informal",5033500.59638751,0.443313014932026
+"149",2015-01-01,"race_ethnicity","Two or More Races","informal",1262829.85738809,0.438534978814205
+"150",2015-01-01,"race_ethnicity","American Indian","informal",550208.100483357,0.429483483910325
+"151",2016-01-01,"race_ethnicity","Black","informal",11695251.0454892,0.392751000095028
+"152",2016-01-01,"race_ethnicity","White","informal",80538078.2010466,0.480590701987335
+"153",2016-01-01,"race_ethnicity","Asian/Pacific Island","informal",5329402.11836828,0.457538483358575
+"154",2016-01-01,"race_ethnicity","Hispanic","informal",18933876.028537,0.478639794711468
+"155",2016-01-01,"race_ethnicity","American Indian","informal",558172.00222025,0.416671251293007
+"156",2016-01-01,"race_ethnicity","Two or More Races","informal",1224991.83717647,0.440192917947969
+"157",2017-01-01,"race_ethnicity","White","informal",81474701.3866129,0.483867645559719
+"158",2017-01-01,"race_ethnicity","Hispanic","informal",19200318.7921131,0.474330861684112
+"159",2017-01-01,"race_ethnicity","Asian/Pacific Island","informal",5550511.19259547,0.475721492113744
+"160",2017-01-01,"race_ethnicity","Black","informal",11790778.0466463,0.390551105182554
+"161",2017-01-01,"race_ethnicity","Two or More Races","informal",1252448.00566223,0.443541428214993
+"162",2017-01-01,"race_ethnicity","American Indian","informal",629590.900108661,0.458502709991735
+"163",2018-01-01,"race_ethnicity","Hispanic","informal",19471140.7264531,0.46879353278799
+"164",2018-01-01,"race_ethnicity","Black","informal",11961165.0940817,0.390565400445469
+"165",2018-01-01,"race_ethnicity","White","informal",80788358.3050354,0.478915030278401
+"166",2018-01-01,"race_ethnicity","Asian/Pacific Island","informal",5748183.43409927,0.464245619108231
+"167",2018-01-01,"race_ethnicity","American Indian","informal",619601.093883775,0.467333700699791
+"168",2018-01-01,"race_ethnicity","Two or More Races","informal",1214179.00823507,0.437605078483187
+"169",2019-01-01,"race_ethnicity","Hispanic","informal",19574739.2323505,0.459779213149808
+"170",2019-01-01,"race_ethnicity","White","informal",80808246.5309031,0.477252355425576
+"171",2019-01-01,"race_ethnicity","Black","informal",12382346.7766334,0.399381773232767
+"172",2019-01-01,"race_ethnicity","Asian/Pacific Island","informal",5823294.14359269,0.462307381510194
+"173",2019-01-01,"race_ethnicity","Two or More Races","informal",1248805.30290362,0.461334917753675
+"174",2019-01-01,"race_ethnicity","American Indian","informal",593948.166652001,0.428330726608162
+"175",2021-01-01,"race_ethnicity","White","informal",80187379.4612124,0.473931297488664
+"176",2021-01-01,"race_ethnicity","Black","informal",12617331.3975553,0.402340205409679
+"177",2021-01-01,"race_ethnicity","Hispanic","informal",20014774.5130528,0.458452749833336
+"178",2021-01-01,"race_ethnicity","Asian/Pacific Island","informal",6291433.90369565,0.469796312937291
+"179",2021-01-01,"race_ethnicity","Two or More Races","informal",1275547.33562383,0.466104117762559
+"180",2021-01-01,"race_ethnicity","American Indian","informal",608564.007739124,0.4451856038205
+"181",2022-01-01,"race_ethnicity","White","informal",79739027.7941531,0.473296457864686
+"182",2022-01-01,"race_ethnicity","Black","informal",12566325.9932968,0.396480730538204
+"183",2022-01-01,"race_ethnicity","Hispanic","informal",20115720.952813,0.449409639119607
+"184",2022-01-01,"race_ethnicity","Asian/Pacific Island","informal",6567310.7871879,0.447275632183885
+"185",2022-01-01,"race_ethnicity","Two or More Races","informal",1264194.71152558,0.458141253650578
+"186",2022-01-01,"race_ethnicity","American Indian","informal",561884.969809069,0.426169807497389
+"187",2023-01-01,"race_ethnicity","Black","informal",12899855.7241239,0.401671772687224
+"188",2023-01-01,"race_ethnicity","White","informal",79312530.9453058,0.472085407770868
+"189",2023-01-01,"race_ethnicity","Hispanic","informal",20697751.439365,0.449738711101614
+"190",2023-01-01,"race_ethnicity","Asian/Pacific Island","informal",6884983.12944126,0.44113112369613
+"191",2023-01-01,"race_ethnicity","Two or More Races","informal",1383345.54622745,0.447734052833202
+"192",2023-01-01,"race_ethnicity","American Indian","informal",522931.017863915,0.408807064960607
+"193",2007-01-01,"educ","Some College","informal",29266534.1448126,0.510255971796862
+"194",2007-01-01,"educ","High School","informal",36895605.839417,0.522422401996685
+"195",2007-01-01,"educ","Graduate Degree","informal",10373248.77406,0.513069017733203
+"196",2007-01-01,"educ","Bachelor's Degree","informal",19627847.4376509,0.520466354397407
+"197",2007-01-01,"educ","No HS Diploma","informal",17927154.0562984,0.40105883078266
+"198",2008-01-01,"educ","No HS Diploma","informal",17766130.6457279,0.398075250910053
+"199",2008-01-01,"educ","Some College","informal",29285977.0151452,0.504877242922982
+"200",2008-01-01,"educ","Bachelor's Degree","informal",20068203.6385733,0.513883332617739
+"201",2008-01-01,"educ","High School","informal",36428419.4148901,0.515350620690861
+"202",2008-01-01,"educ","Graduate Degree","informal",10747445.3690774,0.51401023066174
+"203",2009-01-01,"educ","High School","informal",36132518.1452925,0.509133372037005
+"204",2009-01-01,"educ","Bachelor's Degree","informal",20203363.1151232,0.505128463930429
+"205",2009-01-01,"educ","Some College","informal",29608152.7505373,0.50234504634932
+"206",2009-01-01,"educ","No HS Diploma","informal",17509217.5492933,0.395877363684442
+"207",2009-01-01,"educ","Graduate Degree","informal",11051511.9983583,0.513816136434158
+"208",2010-01-01,"educ","No HS Diploma","informal",17494860.5260582,0.396371893281946
+"209",2010-01-01,"educ","High School","informal",35971247.1832841,0.507805386032794
+"210",2010-01-01,"educ","Bachelor's Degree","informal",20557386.972812,0.497158362260716
+"211",2010-01-01,"educ","Some College","informal",29320076.6610293,0.492902613457247
+"212",2010-01-01,"educ","Graduate Degree","informal",11250360.2543913,0.508345154444287
+"213",2011-01-01,"educ","High School","informal",36216908.5391564,0.508707998251382
+"214",2011-01-01,"educ","Some College","informal",29256602.1408534,0.486545091826316
+"215",2011-01-01,"educ","No HS Diploma","informal",16753240.6593299,0.386644873409145
+"216",2011-01-01,"educ","Bachelor's Degree","informal",20805886.7790729,0.488949043783982
+"217",2011-01-01,"educ","Graduate Degree","informal",11772294.6321085,0.515463050110401
+"218",2012-01-01,"educ","No HS Diploma","informal",16519678.4172531,0.385386173363417
+"219",2012-01-01,"educ","Some College","informal",29193598.3735579,0.477803613750287
+"220",2012-01-01,"educ","High School","informal",35273903.2944245,0.495101175321242
+"221",2012-01-01,"educ","Graduate Degree","informal",12094117.3868338,0.508745034244836
+"222",2012-01-01,"educ","Bachelor's Degree","informal",20712103.7818351,0.47664507033037
+"223",2013-01-01,"educ","Bachelor's Degree","informal",21366479.9758603,0.477377815017842
+"224",2013-01-01,"educ","Some College","informal",29423904.5194733,0.477800064420095
+"225",2013-01-01,"educ","High School","informal",35326003.4154569,0.492417324427708
+"226",2013-01-01,"educ","Graduate Degree","informal",12564733.7284539,0.511040627345877
+"227",2013-01-01,"educ","No HS Diploma","informal",16343519.8419626,0.38912384874554
+"228",2014-01-01,"educ","High School","informal",35575583.7778939,0.494253374717873
+"229",2014-01-01,"educ","No HS Diploma","informal",16016670.3420271,0.386785389583758
+"230",2014-01-01,"educ","Some College","informal",29329425.3137512,0.469134550131414
+"231",2014-01-01,"educ","Bachelor's Degree","informal",21539530.8461564,0.474040289463128
+"232",2014-01-01,"educ","Graduate Degree","informal",12956254.0940767,0.502947112239482
+"233",2015-01-01,"educ","No HS Diploma","informal",15481815.1265493,0.37819799390873
+"234",2015-01-01,"educ","High School","informal",35520212.9956375,0.492934039849317
+"235",2015-01-01,"educ","Some College","informal",29795554.9853224,0.468651509612108
+"236",2015-01-01,"educ","Graduate Degree","informal",13566147.0944846,0.508026061661845
+"237",2015-01-01,"educ","Bachelor's Degree","informal",22139976.1005259,0.476622540244823
+"238",2016-01-01,"educ","No HS Diploma","informal",15301453.9366497,0.375730143646103
+"239",2016-01-01,"educ","Some College","informal",30401031.6157562,0.474805690624678
+"240",2016-01-01,"educ","Bachelor's Degree","informal",23050054.2923812,0.480761281675893
+"241",2016-01-01,"educ","High School","informal",35496322.2371743,0.492690638868284
+"242",2016-01-01,"educ","Graduate Degree","informal",14030909.1508764,0.502115309754214
+"243",2017-01-01,"educ","Bachelor's Degree","informal",24008441.6843611,0.482962976983762
+"244",2017-01-01,"educ","Some College","informal",30541491.126977,0.478076085900619
+"245",2017-01-01,"educ","No HS Diploma","informal",15100209.1819604,0.376171263850896
+"246",2017-01-01,"educ","High School","informal",35587569.0554551,0.493362669895451
+"247",2017-01-01,"educ","Graduate Degree","informal",14660637.274985,0.50473693304739
+"248",2018-01-01,"educ","No HS Diploma","informal",14509254.3655833,0.369495851679608
+"249",2018-01-01,"educ","High School","informal",35369620.3369475,0.487118253024433
+"250",2018-01-01,"educ","Some College","informal",30514322.939692,0.473833851079159
+"251",2018-01-01,"educ","Graduate Degree","informal",14881034.0200439,0.490580814914347
+"252",2018-01-01,"educ","Bachelor's Degree","informal",24528395.9995218,0.483580290559416
+"253",2019-01-01,"educ","High School","informal",34742923.0521085,0.479773443528133
+"254",2019-01-01,"educ","Some College","informal",30505274.8447213,0.475744354041438
+"255",2019-01-01,"educ","Graduate Degree","informal",15738061.1630627,0.497222235552979
+"256",2019-01-01,"educ","Bachelor's Degree","informal",25467063.5062165,0.485729253853614
+"257",2019-01-01,"educ","No HS Diploma","informal",13978057.5869262,0.358701131908158
+"258",2021-01-01,"educ","High School","informal",34671822.4811563,0.474234113041033
+"259",2021-01-01,"educ","No HS Diploma","informal",13438492.7425395,0.356800413625316
+"260",2021-01-01,"educ","Some College","informal",30264820.1545852,0.478271366624117
+"261",2021-01-01,"educ","Bachelor's Degree","informal",26046286.4565219,0.482122010671807
+"262",2021-01-01,"educ","Graduate Degree","informal",16573608.784076,0.492825383160522
+"263",2022-01-01,"educ","Some College","informal",29596579.5729072,0.475866291012967
+"264",2022-01-01,"educ","Bachelor's Degree","informal",26537546.5686496,0.478115527271123
+"265",2022-01-01,"educ","Graduate Degree","informal",17671664.9511025,0.497205096692852
+"266",2022-01-01,"educ","High School","informal",33955073.2505917,0.461814862891754
+"267",2022-01-01,"educ","No HS Diploma","informal",13053600.8655344,0.353519452711941
+"268",2023-01-01,"educ","No HS Diploma","informal",12681744.5730449,0.350960553570361
+"269",2023-01-01,"educ","Some College","informal",28983972.2164771,0.471494466474436
+"270",2023-01-01,"educ","High School","informal",34010858.730068,0.457516790627404
+"271",2023-01-01,"educ","Graduate Degree","informal",18523889.5718922,0.500833812018603
+"272",2023-01-01,"educ","Bachelor's Degree","informal",27500932.7108451,0.480893510975606
+"273",2007-01-01,"marst","Married","informal",72264346.0406234,0.568904074683095
+"274",2007-01-01,"marst","Separated, Widowed, or Divorced","informal",20444071.3879523,0.54008944018252
+"275",2007-01-01,"marst","Single-Never-Married","informal",21381972.8236633,0.325283239346005
+"276",2008-01-01,"marst","Single-Never-Married","informal",21815384.2019754,0.327179737982039
+"277",2008-01-01,"marst","Married","informal",71976452.2239369,0.56253939288367
+"278",2008-01-01,"marst","Separated, Widowed, or Divorced","informal",20504339.6575015,0.530407410290574
+"279",2009-01-01,"marst","Married","informal",71534825.6758381,0.557881174167437
+"280",2009-01-01,"marst","Single-Never-Married","informal",22370359.3389045,0.328250976415639
+"281",2009-01-01,"marst","Separated, Widowed, or Divorced","informal",20599578.543862,0.524609175888447
+"282",2010-01-01,"marst","Single-Never-Married","informal",22592917.387561,0.323574650236807
+"283",2010-01-01,"marst","Married","informal",71326222.6222341,0.555252729475856
+"284",2010-01-01,"marst","Separated, Widowed, or Divorced","informal",20674791.5877799,0.52130481730008
+"285",2011-01-01,"marst","Separated, Widowed, or Divorced","informal",20963927.8665632,0.516804360200963
+"286",2011-01-01,"marst","Single-Never-Married","informal",22948106.9518856,0.320452840920414
+"287",2011-01-01,"marst","Married","informal",70892897.9320724,0.554415828917708
+"288",2012-01-01,"marst","Single-Never-Married","informal",22825373.0949299,0.311427874944445
+"289",2012-01-01,"marst","Married","informal",70056202.2792516,0.548970213677436
+"290",2012-01-01,"marst","Separated, Widowed, or Divorced","informal",20911825.8797229,0.503528430392077
+"291",2013-01-01,"marst","Separated, Widowed, or Divorced","informal",21245463.9565144,0.506529229433882
+"292",2013-01-01,"marst","Married","informal",70443600.3647888,0.551091052288434
+"293",2013-01-01,"marst","Single-Never-Married","informal",23335577.1599039,0.311562728625387
+"294",2014-01-01,"marst","Single-Never-Married","informal",23547894.0600433,0.309180142436834
+"295",2014-01-01,"marst","Married","informal",70588423.7557936,0.550067544577656
+"296",2014-01-01,"marst","Separated, Widowed, or Divorced","informal",21281146.5580684,0.499370512067786
+"297",2015-01-01,"marst","Single-Never-Married","informal",23680470.9213307,0.307098155768868
+"298",2015-01-01,"marst","Married","informal",70890909.6968952,0.548349804517913
+"299",2015-01-01,"marst","Separated, Widowed, or Divorced","informal",21932325.6842937,0.506096289768427
+"300",2016-01-01,"marst","Single-Never-Married","informal",24055013.7652211,0.307371083691011
+"301",2016-01-01,"marst","Separated, Widowed, or Divorced","informal",22078456.7985334,0.507966311390587
+"302",2016-01-01,"marst","Married","informal",72146300.6690833,0.550893204571011
+"303",2017-01-01,"marst","Married","informal",73154302.9570086,0.55160553094977
+"304",2017-01-01,"marst","Separated, Widowed, or Divorced","informal",22167390.2536892,0.509696229229058
+"305",2017-01-01,"marst","Single-Never-Married","informal",24576655.1130408,0.311872830698515
+"306",2018-01-01,"marst","Separated, Widowed, or Divorced","informal",22134210.2020362,0.506737597047777
+"307",2018-01-01,"marst","Single-Never-Married","informal",24430241.0187372,0.305298355903785
+"308",2018-01-01,"marst","Married","informal",73238176.441015,0.548059880528848
+"309",2019-01-01,"marst","Married","informal",73305031.3997528,0.546417972611089
+"310",2019-01-01,"marst","Separated, Widowed, or Divorced","informal",22792437.1149376,0.512646537820781
+"311",2019-01-01,"marst","Single-Never-Married","informal",24333911.6383448,0.300524191606796
+"312",2021-01-01,"marst","Married","informal",74052596.3040741,0.549144199455465
+"313",2021-01-01,"marst","Single-Never-Married","informal",24390775.2451037,0.296161975969228
+"314",2021-01-01,"marst","Separated, Widowed, or Divorced","informal",22551659.0697012,0.506760456795356
+"315",2022-01-01,"marst","Married","informal",73695005.7825949,0.543910391505808
+"316",2022-01-01,"marst","Single-Never-Married","informal",24659413.4303513,0.295119925744032
+"317",2022-01-01,"marst","Separated, Widowed, or Divorced","informal",22460045.9958393,0.503100256801064
+"318",2023-01-01,"marst","Separated, Widowed, or Divorced","informal",22523265.5229642,0.501766066562745
+"319",2023-01-01,"marst","Single-Never-Married","informal",25270554.5823177,0.296064085483367
+"320",2023-01-01,"marst","Married","informal",73907577.6970455,0.543937391167252
+"321",2003-01-01,"overall","overall","formal",35070544.39,0.194286312480099
+"322",2004-01-01,"overall","overall","formal",35575737.85,0.194965452788153
+"323",2005-01-01,"overall","overall","formal",36081620.17,0.195505857454022
+"324",2006-01-01,"overall","overall","formal",36911786.31,0.197669494644048
+"325",2007-01-01,"overall","overall","formal",38216311.03,0.20202333092774
+"326",2008-01-01,"overall","overall","formal",38497883.45,0.201927289027562
+"327",2009-01-01,"overall","overall","formal",39082607,0.203634420442189
+"328",2010-01-01,"overall","overall","formal",39240983.78,0.202663000875348
+"329",2011-01-01,"overall","overall","formal",39721940.26,0.203716811335274
+"330",2012-01-01,"overall","overall","formal",40158095.19,0.204336304012915
+"331",2013-01-01,"overall","overall","formal",40629494.76,0.206094336139883
+"332",2014-01-01,"overall","overall","formal",41446645.07,0.209605855053371
+"333",2015-01-01,"overall","overall","formal",41648633.44,0.208505499770673
+"334",2016-01-01,"overall","overall","formal",43103686.31,0.214553392019677
+"335",2017-01-01,"overall","overall","formal",43736426.62,0.218031321020693
+"336",2018-01-01,"overall","overall","formal",43883754.45,0.217367382316893
+"337",2019-01-01,"overall","overall","formal",44011009.64,0.218592399414434
+"338",2020-01-01,"overall","overall","formal",43179531.9785,0.212120614901037
+"339",2021-01-01,"overall","overall","formal",41023352.6796,0.201622639687437
+"340",2022-01-01,"overall","overall","formal",43080771.02,0.212028390757049
+"341",2023-01-01,"overall","overall","formal",44174909.42,0.216287490202706
+"342",2024-01-01,"overall","overall","formal",44694087.28,0.218670682691891
+"343",2003-01-01,"gender_parent","Childless Men","formal",6957051.76,0.131919043675608
+"344",2003-01-01,"gender_parent","Childless Women","formal",11409335.63,0.250560520821313
+"345",2003-01-01,"gender_parent","Fathers","formal",3830049.33,0.123278308070776
+"346",2003-01-01,"gender_parent","Mothers","formal",10325946.42,0.267228833233288
+"347",2003-01-01,"gender_parent","Other","formal",2548161.25,0.203398681779614
+"348",2004-01-01,"gender_parent","Childless Men","formal",7133751.96,0.132354036468268
+"349",2004-01-01,"gender_parent","Childless Women","formal",11217087.1,0.242387150912334
+"350",2004-01-01,"gender_parent","Fathers","formal",4030427.71,0.129552652924208
+"351",2004-01-01,"gender_parent","Mothers","formal",10687535.98,0.275106902649525
+"352",2004-01-01,"gender_parent","Other","formal",2506935.1,0.203214137458155
+"353",2005-01-01,"gender_parent","Childless Men","formal",7091912.02,0.130722286264976
+"354",2005-01-01,"gender_parent","Childless Women","formal",11390270.51,0.242865767984509
+"355",2005-01-01,"gender_parent","Fathers","formal",4074959.41,0.130275186902637
+"356",2005-01-01,"gender_parent","Mothers","formal",10758543.15,0.275528981195599
+"357",2005-01-01,"gender_parent","Other","formal",2765935.08,0.211503332797257
+"358",2006-01-01,"gender_parent","Childless Men","formal",7438320.6,0.133892437042944
+"359",2006-01-01,"gender_parent","Childless Women","formal",11645182,0.245240137177182
+"360",2006-01-01,"gender_parent","Fathers","formal",4129995.13,0.131856051488244
+"361",2006-01-01,"gender_parent","Mothers","formal",10908885.17,0.278617641558894
+"362",2006-01-01,"gender_parent","Other","formal",2789403.41,0.210998775727508
+"363",2007-01-01,"gender_parent","Childless Men","formal",7413620.92,0.13169213928041
+"364",2007-01-01,"gender_parent","Childless Women","formal",12053367.95,0.251781893622708
+"365",2007-01-01,"gender_parent","Fathers","formal",4332389.91,0.136486684609965
+"366",2007-01-01,"gender_parent","Mothers","formal",11436018.7,0.288447482786256
+"367",2007-01-01,"gender_parent","Other","formal",2980913.55,0.21900048778649
+"368",2008-01-01,"gender_parent","Childless Men","formal",7798271.17,0.135257742634513
+"369",2008-01-01,"gender_parent","Childless Women","formal",12230240.96,0.248164809805564
+"370",2008-01-01,"gender_parent","Fathers","formal",4248484.21,0.137389290350051
+"371",2008-01-01,"gender_parent","Mothers","formal",11201577.82,0.290237369227559
+"372",2008-01-01,"gender_parent","Other","formal",3019309.29,0.212671307600556
+"373",2009-01-01,"gender_parent","Childless Men","formal",7586710.89,0.130258401483873
+"374",2009-01-01,"gender_parent","Childless Women","formal",12806711.64,0.258703271512557
+"375",2009-01-01,"gender_parent","Fathers","formal",4132083.59,0.134008121600285
+"376",2009-01-01,"gender_parent","Mothers","formal",11481063.8,0.295531189578111
+"377",2009-01-01,"gender_parent","Other","formal",3076037.08,0.212215957978397
+"378",2010-01-01,"gender_parent","Childless Men","formal",7641936.97,0.132372529800825
+"379",2010-01-01,"gender_parent","Childless Women","formal",12739430.94,0.254131238972569
+"380",2010-01-01,"gender_parent","Fathers","formal",4128263.17,0.133903130103259
+"381",2010-01-01,"gender_parent","Mothers","formal",11301292.87,0.289333478918501
+"382",2010-01-01,"gender_parent","Other","formal",3430059.83,0.21604044252393
+"383",2011-01-01,"gender_parent","Childless Men","formal",7849230.65,0.133742279693709
+"384",2011-01-01,"gender_parent","Childless Women","formal",12886160.85,0.251932434014484
+"385",2011-01-01,"gender_parent","Fathers","formal",4126297.46,0.135535259061466
+"386",2011-01-01,"gender_parent","Mothers","formal",11436258.79,0.295050478106432
+"387",2011-01-01,"gender_parent","Other","formal",3423992.51,0.214767762066024
+"388",2012-01-01,"gender_parent","Childless Men","formal",8071612.26,0.134680102276264
+"389",2012-01-01,"gender_parent","Childless Women","formal",12947705.69,0.250126892248991
+"390",2012-01-01,"gender_parent","Fathers","formal",4154977.77,0.138437484594999
+"391",2012-01-01,"gender_parent","Mothers","formal",11413902.37,0.29701967469403
+"392",2012-01-01,"gender_parent","Other","formal",3569897.1,0.217787585467223
+"393",2013-01-01,"gender_parent","Childless Men","formal",8417786.81,0.140816474540129
+"394",2013-01-01,"gender_parent","Childless Women","formal",12947462.32,0.248988676063788
+"395",2013-01-01,"gender_parent","Fathers","formal",4363305.08,0.144583186296997
+"396",2013-01-01,"gender_parent","Mothers","formal",11298187.83,0.295537148566775
+"397",2013-01-01,"gender_parent","Other","formal",3602752.72,0.212504045831555
+"398",2014-01-01,"gender_parent","Childless Men","formal",8599167.92,0.143397881461025
+"399",2014-01-01,"gender_parent","Childless Women","formal",12941495.83,0.251815736521049
+"400",2014-01-01,"gender_parent","Fathers","formal",4368642.99,0.142465044991597
+"401",2014-01-01,"gender_parent","Mothers","formal",12003181.08,0.307117491711877
+"402",2014-01-01,"gender_parent","Other","formal",3534157.25,0.212540290552346
+"403",2015-01-01,"gender_parent","Childless Men","formal",7921474.81,0.13050751874535
+"404",2015-01-01,"gender_parent","Childless Women","formal",13529941.52,0.256225195233246
+"405",2015-01-01,"gender_parent","Fathers","formal",4438053.51,0.145875034605419
+"406",2015-01-01,"gender_parent","Mothers","formal",12051394.33,0.313403064421935
+"407",2015-01-01,"gender_parent","Other","formal",3707769.27,0.213470266587964
+"408",2016-01-01,"gender_parent","Childless Men","formal",8667441.4,0.140380312222256
+"409",2016-01-01,"gender_parent","Childless Women","formal",14196657.37,0.264238604705269
+"410",2016-01-01,"gender_parent","Fathers","formal",4475452.97,0.148310274963462
+"411",2016-01-01,"gender_parent","Mothers","formal",12057397.38,0.317562439865093
+"412",2016-01-01,"gender_parent","Other","formal",3706737.19,0.214442270390876
+"413",2017-01-01,"gender_parent","Childless Men","formal",8843440.16,0.143696763800159
+"414",2017-01-01,"gender_parent","Childless Women","formal",14522844.22,0.267696689910831
+"415",2017-01-01,"gender_parent","Fathers","formal",4522373.46,0.15087630549422
+"416",2017-01-01,"gender_parent","Mothers","formal",11969053.35,0.320397400425881
+"417",2017-01-01,"gender_parent","Other","formal",3878715.43,0.221989060392633
+"418",2018-01-01,"gender_parent","Childless Men","formal",8854653.92,0.142414769463662
+"419",2018-01-01,"gender_parent","Childless Women","formal",14775369.98,0.269331892610701
+"420",2018-01-01,"gender_parent","Fathers","formal",4366113.94,0.145010438051225
+"421",2018-01-01,"gender_parent","Mothers","formal",12109338.84,0.32379388901916
+"422",2018-01-01,"gender_parent","Other","formal",3778277.77,0.2178211540744
+"423",2019-01-01,"gender_parent","Childless Men","formal",8613508.16,0.138190647445689
+"424",2019-01-01,"gender_parent","Childless Women","formal",15052483.04,0.272684623027204
+"425",2019-01-01,"gender_parent","Fathers","formal",4464320.01,0.15004807178466
+"426",2019-01-01,"gender_parent","Mothers","formal",12161925.98,0.329986618991007
+"427",2019-01-01,"gender_parent","Other","formal",3718772.45,0.216231046242878
+"428",2020-01-01,"gender_parent","Childless Men","formal",8559399.0731,0.134176173546145
+"429",2020-01-01,"gender_parent","Childless Women","formal",14765287.0268,0.264775494312955
+"430",2020-01-01,"gender_parent","Fathers","formal",4386321.2022,0.147301179361342
+"431",2020-01-01,"gender_parent","Mothers","formal",11682815.9762,0.32007990209566
+"432",2020-01-01,"gender_parent","Other","formal",3785708.7002,0.213567204638862
+"433",2021-01-01,"gender_parent","Childless Men","formal",7763505.5835,0.120413272349334
+"434",2021-01-01,"gender_parent","Childless Women","formal",14026198.4508,0.25290772656165
+"435",2021-01-01,"gender_parent","Fathers","formal",4291954.9525,0.14550366945048
+"436",2021-01-01,"gender_parent","Mothers","formal",11232742.2584,0.30877434698074
+"437",2021-01-01,"gender_parent","Other","formal",3708951.4344,0.210059038887685
+"438",2022-01-01,"gender_parent","Childless Men","formal",8474921.54,0.132326806509634
+"439",2022-01-01,"gender_parent","Childless Women","formal",14613627.97,0.262569007030732
+"440",2022-01-01,"gender_parent","Fathers","formal",4325066.97,0.145086884514108
+"441",2022-01-01,"gender_parent","Mothers","formal",11824691.21,0.324067006401974
+"442",2022-01-01,"gender_parent","Other","formal",3842463.33,0.22361153613712
+"443",2023-01-01,"gender_parent","Childless Men","formal",8854242.74,0.135509946306519
+"444",2023-01-01,"gender_parent","Childless Women","formal",15051317.39,0.268715713514763
+"445",2023-01-01,"gender_parent","Fathers","formal",4435674.83,0.149888504598576
+"446",2023-01-01,"gender_parent","Mothers","formal",11928655.04,0.331272121949037
+"447",2023-01-01,"gender_parent","Other","formal",3905019.42,0.225885291653204
+"448",2024-01-01,"gender_parent","Childless Men","formal",8951282.84,0.138290687074136
+"449",2024-01-01,"gender_parent","Childless Women","formal",15418137.75,0.274181930688556
+"450",2024-01-01,"gender_parent","Fathers","formal",4385468.61,0.149100215340161
+"451",2024-01-01,"gender_parent","Mothers","formal",11810351.67,0.330900476415339
+"452",2024-01-01,"gender_parent","Other","formal",4128846.41,0.22532166549136
+"453",2003-01-01,"race_ethnicity","American Indian","formal",172952.85,0.174987975908736
+"454",2003-01-01,"race_ethnicity","Asian/Pacific Island","formal",1747642.74,0.210908474932204
+"455",2003-01-01,"race_ethnicity","Black","formal",4400272.74,0.209933481651623
+"456",2003-01-01,"race_ethnicity","Hispanic","formal",4815297.73,0.199684714800874
+"457",2003-01-01,"race_ethnicity","Two or More Races","formal",335137.61,0.169179947085179
+"458",2003-01-01,"race_ethnicity","White","formal",23599240.72,0.19004182849408
+"459",2004-01-01,"race_ethnicity","American Indian","formal",143384.83,0.14730206776762
+"460",2004-01-01,"race_ethnicity","Asian/Pacific Island","formal",1815325.97,0.214527932171221
+"461",2004-01-01,"race_ethnicity","Black","formal",4674797.81,0.219866681197089
+"462",2004-01-01,"race_ethnicity","Hispanic","formal",4960249.3,0.201017091552504
+"463",2004-01-01,"race_ethnicity","Two or More Races","formal",387110.16,0.18784736413926
+"464",2004-01-01,"race_ethnicity","White","formal",23594869.78,0.188701364017363
+"465",2005-01-01,"race_ethnicity","American Indian","formal",167192.75,0.161856944822724
+"466",2005-01-01,"race_ethnicity","Asian/Pacific Island","formal",1770169.27,0.202880375540639
+"467",2005-01-01,"race_ethnicity","Black","formal",4579649.2,0.21094195427705
+"468",2005-01-01,"race_ethnicity","Hispanic","formal",5135287.11,0.201433412990597
+"469",2005-01-01,"race_ethnicity","Two or More Races","formal",417089.5,0.186418507158501
+"470",2005-01-01,"race_ethnicity","White","formal",24012232.34,0.191553142817536
+"471",2006-01-01,"race_ethnicity","American Indian","formal",203319.08,0.19078783364164
+"472",2006-01-01,"race_ethnicity","Asian/Pacific Island","formal",2003680.05,0.223890347376456
+"473",2006-01-01,"race_ethnicity","Black","formal",4809929.22,0.2179335836217
+"474",2006-01-01,"race_ethnicity","Hispanic","formal",5403206.34,0.20631379764256
+"475",2006-01-01,"race_ethnicity","Two or More Races","formal",382555.42,0.171886103371004
+"476",2006-01-01,"race_ethnicity","White","formal",24109096.2,0.190986910014357
+"477",2007-01-01,"race_ethnicity","American Indian","formal",206956.62,0.177029625496932
+"478",2007-01-01,"race_ethnicity","Asian/Pacific Island","formal",2111633.16,0.224170442548595
+"479",2007-01-01,"race_ethnicity","Black","formal",4913643.77,0.22020959222996
+"480",2007-01-01,"race_ethnicity","Hispanic","formal",5707481.44,0.208299779076846
+"481",2007-01-01,"race_ethnicity","Two or More Races","formal",373638.6,0.180105815214087
+"482",2007-01-01,"race_ethnicity","White","formal",24902957.44,0.196410074564297
+"483",2008-01-01,"race_ethnicity","American Indian","formal",212548.31,0.17927501736759
+"484",2008-01-01,"race_ethnicity","Asian/Pacific Island","formal",2102331.76,0.223744284743835
+"485",2008-01-01,"race_ethnicity","Black","formal",5038491.65,0.222656899598286
+"486",2008-01-01,"race_ethnicity","Hispanic","formal",5687710.18,0.203823807483461
+"487",2008-01-01,"race_ethnicity","Two or More Races","formal",376157,0.171633414366615
+"488",2008-01-01,"race_ethnicity","White","formal",25080644.55,0.196950584909841
+"489",2009-01-01,"race_ethnicity","American Indian","formal",222216.28,0.182006678434969
+"490",2009-01-01,"race_ethnicity","Asian/Pacific Island","formal",2087474.07,0.223163450338765
+"491",2009-01-01,"race_ethnicity","Black","formal",4974911.68,0.21636860419986
+"492",2009-01-01,"race_ethnicity","Hispanic","formal",5922943.98,0.20749118293646
+"493",2009-01-01,"race_ethnicity","Two or More Races","formal",405140.45,0.1839284168866
+"494",2009-01-01,"race_ethnicity","White","formal",25469920.54,0.199592792601686
+"495",2010-01-01,"race_ethnicity","American Indian","formal",264684.7,0.185607461438925
+"496",2010-01-01,"race_ethnicity","Asian/Pacific Island","formal",2429701.13,0.227351413297678
+"497",2010-01-01,"race_ethnicity","Black","formal",4948516.69,0.214404233447722
+"498",2010-01-01,"race_ethnicity","Hispanic","formal",6303127.24,0.20875215038484
+"499",2010-01-01,"race_ethnicity","Two or More Races","formal",471615.67,0.193034553387691
+"500",2010-01-01,"race_ethnicity","White","formal",24823338.35,0.197330176104362
+"501",2011-01-01,"race_ethnicity","American Indian","formal",235457.19,0.170805564010134
+"502",2011-01-01,"race_ethnicity","Asian/Pacific Island","formal",2350671.79,0.211242066178889
+"503",2011-01-01,"race_ethnicity","Black","formal",5040226.17,0.21580314066174
+"504",2011-01-01,"race_ethnicity","Hispanic","formal",6343296.98,0.204932086358486
+"505",2011-01-01,"race_ethnicity","Two or More Races","formal",515878.81,0.202480394478939
+"506",2011-01-01,"race_ethnicity","White","formal",25236409.32,0.200889924300393
+"507",2012-01-01,"race_ethnicity","American Indian","formal",230441.37,0.177399039461198
+"508",2012-01-01,"race_ethnicity","Asian/Pacific Island","formal",2412541.53,0.215897960081202
+"509",2012-01-01,"race_ethnicity","Black","formal",5109118.46,0.216123669348453
+"510",2012-01-01,"race_ethnicity","Hispanic","formal",6973929.03,0.218734174925974
+"511",2012-01-01,"race_ethnicity","Two or More Races","formal",564330.53,0.199720738058548
+"512",2012-01-01,"race_ethnicity","White","formal",24867734.27,0.197822275647942
+"513",2013-01-01,"race_ethnicity","American Indian","formal",227791.88,0.164291759533346
+"514",2013-01-01,"race_ethnicity","Asian/Pacific Island","formal",2657699.61,0.228714940268366
+"515",2013-01-01,"race_ethnicity","Black","formal",5144320.31,0.214572932972723
+"516",2013-01-01,"race_ethnicity","Hispanic","formal",7077898.48,0.217721866114088
+"517",2013-01-01,"race_ethnicity","Two or More Races","formal",501661.41,0.183534995467815
+"518",2013-01-01,"race_ethnicity","White","formal",25020123.07,0.200294448586612
+"519",2014-01-01,"race_ethnicity","American Indian","formal",177679.24,0.139273106967581
+"520",2014-01-01,"race_ethnicity","Asian/Pacific Island","formal",2766188.39,0.226141940289085
+"521",2014-01-01,"race_ethnicity","Black","formal",5278928.9,0.216557027571307
+"522",2014-01-01,"race_ethnicity","Hispanic","formal",7267061.7,0.219793038619251
+"523",2014-01-01,"race_ethnicity","Two or More Races","formal",602937.92,0.212254099385736
+"524",2014-01-01,"race_ethnicity","White","formal",25353848.92,0.204552656250958
+"525",2015-01-01,"race_ethnicity","American Indian","formal",318678.17,0.209326659767369
+"526",2015-01-01,"race_ethnicity","Asian/Pacific Island","formal",2724967.6,0.21673807016945
+"527",2015-01-01,"race_ethnicity","Black","formal",5388825.9,0.217901662837534
+"528",2015-01-01,"race_ethnicity","Hispanic","formal",7334889.32,0.214184883952617
+"529",2015-01-01,"race_ethnicity","Two or More Races","formal",571670.9,0.20907013705993
+"530",2015-01-01,"race_ethnicity","White","formal",25309601.55,0.204203797914814
+"531",2016-01-01,"race_ethnicity","American Indian","formal",333572.02,0.213109254262998
+"532",2016-01-01,"race_ethnicity","Asian/Pacific Island","formal",2835724.79,0.221243373817126
+"533",2016-01-01,"race_ethnicity","Black","formal",5812260.33,0.230995529052471
+"534",2016-01-01,"race_ethnicity","Hispanic","formal",7786566.99,0.222359995516685
+"535",2016-01-01,"race_ethnicity","Two or More Races","formal",561702.3,0.203706672340305
+"536",2016-01-01,"race_ethnicity","White","formal",25773859.88,0.208560017189284
+"537",2017-01-01,"race_ethnicity","American Indian","formal",308029.5,0.200890197477674
+"538",2017-01-01,"race_ethnicity","Asian/Pacific Island","formal",2949710.63,0.221457925145556
+"539",2017-01-01,"race_ethnicity","Black","formal",6005648.68,0.240115516441203
+"540",2017-01-01,"race_ethnicity","Hispanic","formal",7861078.03,0.221614606572571
+"541",2017-01-01,"race_ethnicity","Two or More Races","formal",665356.81,0.231411169439044
+"542",2017-01-01,"race_ethnicity","White","formal",25946602.97,0.212006982793411
+"543",2018-01-01,"race_ethnicity","American Indian","formal",307802.58,0.187537062706671
+"544",2018-01-01,"race_ethnicity","Asian/Pacific Island","formal",2898531.23,0.214021631979195
+"545",2018-01-01,"race_ethnicity","Black","formal",6184209.66,0.243397991709549
+"546",2018-01-01,"race_ethnicity","Hispanic","formal",8003430.56,0.21939623734735
+"547",2018-01-01,"race_ethnicity","Two or More Races","formal",718333.81,0.241371694019505
+"548",2018-01-01,"race_ethnicity","White","formal",25771446.61,0.211519066524221
+"549",2019-01-01,"race_ethnicity","American Indian","formal",344667.53,0.209855357252887
+"550",2019-01-01,"race_ethnicity","Asian/Pacific Island","formal",3093738.53,0.224449783755299
+"551",2019-01-01,"race_ethnicity","Black","formal",6081740.36,0.241263423912432
+"552",2019-01-01,"race_ethnicity","Hispanic","formal",8326649.07,0.225032886056114
+"553",2019-01-01,"race_ethnicity","Two or More Races","formal",691583.34,0.220341649231533
+"554",2019-01-01,"race_ethnicity","White","formal",25472630.81,0.211279454079905
+"555",2020-01-01,"race_ethnicity","American Indian","formal",339647.8671,0.22801408222177
+"556",2020-01-01,"race_ethnicity","Asian/Pacific Island","formal",2957520.7327,0.212262783313392
+"557",2020-01-01,"race_ethnicity","Black","formal",5742754.752,0.223019544556591
+"558",2020-01-01,"race_ethnicity","Hispanic","formal",8164586.3438,0.215420140209646
+"559",2020-01-01,"race_ethnicity","Two or More Races","formal",743801.6539,0.22301483429347
+"560",2020-01-01,"race_ethnicity","White","formal",25231220.629,0.208260250980224
+"561",2021-01-01,"race_ethnicity","American Indian","formal",287092.9911,0.172010978579524
+"562",2021-01-01,"race_ethnicity","Asian/Pacific Island","formal",2780130.3761,0.200411715414099
+"563",2021-01-01,"race_ethnicity","Black","formal",5469290.9,0.212224219115183
+"564",2021-01-01,"race_ethnicity","Hispanic","formal",7621099.1747,0.198315566586519
+"565",2021-01-01,"race_ethnicity","Two or More Races","formal",663363.5341,0.203343878697159
+"566",2021-01-01,"race_ethnicity","White","formal",24202375.7036,0.20091268728142
+"567",2022-01-01,"race_ethnicity","American Indian","formal",275407.65,0.161767819406577
+"568",2022-01-01,"race_ethnicity","Asian/Pacific Island","formal",3074615.31,0.218621652988736
+"569",2022-01-01,"race_ethnicity","Black","formal",5983057.58,0.232520207009485
+"570",2022-01-01,"race_ethnicity","Hispanic","formal",8428176.53,0.215998106674269
+"571",2022-01-01,"race_ethnicity","Two or More Races","formal",641185.13,0.204298652301789
+"572",2022-01-01,"race_ethnicity","White","formal",24678328.82,0.206464215557498
+"573",2023-01-01,"race_ethnicity","American Indian","formal",308116.28,0.191598735517648
+"574",2023-01-01,"race_ethnicity","Asian/Pacific Island","formal",3227223.36,0.217381837158771
+"575",2023-01-01,"race_ethnicity","Black","formal",6012003.57,0.232166544409544
+"576",2023-01-01,"race_ethnicity","Hispanic","formal",9016153.26,0.224662799901537
+"577",2023-01-01,"race_ethnicity","Two or More Races","formal",721281.44,0.206295748235327
+"578",2023-01-01,"race_ethnicity","White","formal",24890131.51,0.21046223966174
+"579",2024-01-01,"race_ethnicity","American Indian","formal",299967.78,0.193427917234834
+"580",2024-01-01,"race_ethnicity","Asian/Pacific Island","formal",3319512.42,0.221833831400268
+"581",2024-01-01,"race_ethnicity","Black","formal",6181293.64,0.237539804602691
+"582",2024-01-01,"race_ethnicity","Hispanic","formal",9406400.62,0.228615233512158
+"583",2024-01-01,"race_ethnicity","Two or More Races","formal",787808.98,0.207323277881243
+"584",2024-01-01,"race_ethnicity","White","formal",24699103.84,0.211269545203655
+"585",2003-01-01,"educ","Bachelor's Degree","formal",7340716.93,0.229459970697591
+"586",2003-01-01,"educ","Graduate Degree","formal",5951615.76,0.393332952730054
+"587",2003-01-01,"educ","High School","formal",8436510.19,0.150865186955948
+"588",2003-01-01,"educ","No HS Diploma","formal",4123047.7,0.16187744095906
+"589",2003-01-01,"educ","Some College","formal",9218653.81,0.177295278752409
+"590",2004-01-01,"educ","Bachelor's Degree","formal",7355875.72,0.225995577972183
+"591",2004-01-01,"educ","Graduate Degree","formal",6325223.64,0.404596978222996
+"592",2004-01-01,"educ","High School","formal",8571674.96,0.151402946836385
+"593",2004-01-01,"educ","No HS Diploma","formal",4060296.98,0.162285002772498
+"594",2004-01-01,"educ","Some College","formal",9262666.55,0.175911281133279
+"595",2005-01-01,"educ","Bachelor's Degree","formal",7286496.71,0.222199077164931
+"596",2005-01-01,"educ","Graduate Degree","formal",6439532.02,0.406717085557328
+"597",2005-01-01,"educ","High School","formal",8710478.26,0.151962317586141
+"598",2005-01-01,"educ","No HS Diploma","formal",4174147.26,0.163817384550874
+"599",2005-01-01,"educ","Some College","formal",9470965.92,0.17826322588108
+"600",2006-01-01,"educ","Bachelor's Degree","formal",7565805.73,0.22580574256894
+"601",2006-01-01,"educ","Graduate Degree","formal",6469373.5,0.399440703175247
+"602",2006-01-01,"educ","High School","formal",9013240.02,0.157321044986358
+"603",2006-01-01,"educ","No HS Diploma","formal",4091691.25,0.161065959924765
+"604",2006-01-01,"educ","Some College","formal",9771675.81,0.179834235860308
+"605",2007-01-01,"educ","Bachelor's Degree","formal",8195518.3,0.232687082026239
+"606",2007-01-01,"educ","Graduate Degree","formal",6876772.49,0.409961677598654
+"607",2007-01-01,"educ","High School","formal",8965926.03,0.155852298690636
+"608",2007-01-01,"educ","No HS Diploma","formal",4136553.78,0.161897002668743
+"609",2007-01-01,"educ","Some College","formal",10041540.43,0.185632875249262
+"610",2008-01-01,"educ","Bachelor's Degree","formal",8182827.78,0.226754255425854
+"611",2008-01-01,"educ","Graduate Degree","formal",7065881.33,0.401777356066335
+"612",2008-01-01,"educ","High School","formal",8810510.94,0.15492944225396
+"613",2008-01-01,"educ","No HS Diploma","formal",3974887.95,0.164915196815085
+"614",2008-01-01,"educ","Some College","formal",10463775.45,0.186825204335748
+"615",2009-01-01,"educ","Bachelor's Degree","formal",8218118.76,0.229195658321312
+"616",2009-01-01,"educ","Graduate Degree","formal",7300393.62,0.40310386670577
+"617",2009-01-01,"educ","High School","formal",8739520.33,0.152710068407097
+"618",2009-01-01,"educ","No HS Diploma","formal",4014092.44,0.165832596732079
+"619",2009-01-01,"educ","Some College","formal",10810481.85,0.191256877465026
+"620",2010-01-01,"educ","Bachelor's Degree","formal",8340314.1,0.227834170335777
+"621",2010-01-01,"educ","Graduate Degree","formal",7189386.52,0.397985613964995
+"622",2010-01-01,"educ","High School","formal",8868229.35,0.152695456886712
+"623",2010-01-01,"educ","No HS Diploma","formal",3896752.75,0.161394500565144
+"624",2010-01-01,"educ","Some College","formal",10946301.06,0.192943374967123
+"625",2011-01-01,"educ","Bachelor's Degree","formal",8327539.25,0.223240061612487
+"626",2011-01-01,"educ","Graduate Degree","formal",7477213.38,0.40134165378455
+"627",2011-01-01,"educ","High School","formal",8752440.58,0.153636102267229
+"628",2011-01-01,"educ","No HS Diploma","formal",3785446.37,0.158226864629972
+"629",2011-01-01,"educ","Some College","formal",11379300.68,0.195656305517031
+"630",2012-01-01,"educ","Bachelor's Degree","formal",8425015.96,0.220975444203918
+"631",2012-01-01,"educ","Graduate Degree","formal",7394855.63,0.389515787385181
+"632",2012-01-01,"educ","High School","formal",9145609.2,0.16118934720458
+"633",2012-01-01,"educ","No HS Diploma","formal",3963532.09,0.168908568802611
+"634",2012-01-01,"educ","Some College","formal",11229082.31,0.189634464250435
+"635",2013-01-01,"educ","Bachelor's Degree","formal",8532969.01,0.220094642097349
+"636",2013-01-01,"educ","Graduate Degree","formal",7626668.08,0.384462888080204
+"637",2013-01-01,"educ","High School","formal",9047030.73,0.161637475383482
+"638",2013-01-01,"educ","No HS Diploma","formal",3808858.68,0.168434877507304
+"639",2013-01-01,"educ","Some College","formal",11613968.26,0.193730265851031
+"640",2014-01-01,"educ","Bachelor's Degree","formal",8462831.01,0.214749954351274
+"641",2014-01-01,"educ","Graduate Degree","formal",8241119.68,0.400242790035118
+"642",2014-01-01,"educ","High School","formal",9409843.89,0.168763364191908
+"643",2014-01-01,"educ","No HS Diploma","formal",3605374.01,0.161226951202146
+"644",2014-01-01,"educ","Some College","formal",11727476.48,0.196709542021788
+"645",2015-01-01,"educ","Bachelor's Degree","formal",8872570.11,0.221551484160054
+"646",2015-01-01,"educ","Graduate Degree","formal",8221811.23,0.392627746446329
+"647",2015-01-01,"educ","High School","formal",8996844.03,0.158364525244705
+"648",2015-01-01,"educ","No HS Diploma","formal",3855551.3,0.168912710930851
+"649",2015-01-01,"educ","Some College","formal",11701856.77,0.197921358982449
+"650",2016-01-01,"educ","Bachelor's Degree","formal",9087796.66,0.222559591003825
+"651",2016-01-01,"educ","Graduate Degree","formal",8868339.03,0.399325680612275
+"652",2016-01-01,"educ","High School","formal",9314005.15,0.166125649584262
+"653",2016-01-01,"educ","No HS Diploma","formal",3937823.6,0.178209331069462
+"654",2016-01-01,"educ","Some College","formal",11895721.87,0.199273162155607
+"655",2017-01-01,"educ","Bachelor's Degree","formal",9422964.92,0.226421369868098
+"656",2017-01-01,"educ","Graduate Degree","formal",8730929.94,0.388881532723845
+"657",2017-01-01,"educ","High School","formal",9944915.74,0.176735434797883
+"658",2017-01-01,"educ","No HS Diploma","formal",3571791.8,0.17245391410115
+"659",2017-01-01,"educ","Some College","formal",12065824.22,0.202626851765801
+"660",2018-01-01,"educ","Bachelor's Degree","formal",9849237.4,0.225497435770976
+"661",2018-01-01,"educ","Graduate Degree","formal",8822894.53,0.38397993319773
+"662",2018-01-01,"educ","High School","formal",9477908.48,0.169503212704924
+"663",2018-01-01,"educ","No HS Diploma","formal",3555769.59,0.172271194736679
+"664",2018-01-01,"educ","Some College","formal",12177944.45,0.20754616603593
+"665",2019-01-01,"educ","Bachelor's Degree","formal",9942786.09,0.222360945144529
+"666",2019-01-01,"educ","Graduate Degree","formal",9131921.28,0.387968185780522
+"667",2019-01-01,"educ","High School","formal",9658722.54,0.174047963752271
+"668",2019-01-01,"educ","No HS Diploma","formal",3580296.03,0.175382907276746
+"669",2019-01-01,"educ","Some College","formal",11697283.7,0.204580086624852
+"670",2020-01-01,"educ","Bachelor's Degree","formal",10158512.0609,0.216653381277891
+"671",2020-01-01,"educ","Graduate Degree","formal",9383620.9026,0.378113061578756
+"672",2020-01-01,"educ","High School","formal",9226473.3047,0.166208592429164
+"673",2020-01-01,"educ","No HS Diploma","formal",3118242.6442,0.163396812354238
+"674",2020-01-01,"educ","Some College","formal",11292683.0661,0.197215374052104
+"675",2021-01-01,"educ","Bachelor's Degree","formal",9630211.1467,0.205127791663447
+"676",2021-01-01,"educ","Graduate Degree","formal",9637980.6536,0.382774263181774
+"677",2021-01-01,"educ","High School","formal",8357574.1137,0.148243625515272
+"678",2021-01-01,"educ","No HS Diploma","formal",2860353.6279,0.150913470107287
+"679",2021-01-01,"educ","Some College","formal",10537233.1377,0.188136467611626
+"680",2022-01-01,"educ","Bachelor's Degree","formal",9870272.22,0.211739339595787
+"681",2022-01-01,"educ","Graduate Degree","formal",9823219.32,0.388551557660822
+"682",2022-01-01,"educ","High School","formal",9457608.18,0.162347505142897
+"683",2022-01-01,"educ","No HS Diploma","formal",3143067.78,0.167974711192084
+"684",2022-01-01,"educ","Some College","formal",10786603.52,0.198574272607522
+"685",2023-01-01,"educ","Bachelor's Degree","formal",10304844.79,0.217402702414437
+"686",2023-01-01,"educ","Graduate Degree","formal",9999310.98,0.381861969336922
+"687",2023-01-01,"educ","High School","formal",9563912.48,0.16552195129882
+"688",2023-01-01,"educ","No HS Diploma","formal",3287989.99,0.176959511670173
+"689",2023-01-01,"educ","Some College","formal",11018851.18,0.202942747598001
+"690",2024-01-01,"educ","Bachelor's Degree","formal",10632163.84,0.222242734393971
+"691",2024-01-01,"educ","Graduate Degree","formal",9769831.01,0.371197782794937
+"692",2024-01-01,"educ","High School","formal",9918445.06,0.171806512086486
+"693",2024-01-01,"educ","No HS Diploma","formal",3324753.91,0.180584691159558
+"694",2024-01-01,"educ","Some College","formal",11048893.46,0.20427435510163
+"695",2003-01-01,"marst","Married","formal",19482092.23,0.18954945149786
+"696",2003-01-01,"marst","Separated, Widowed, or Divorced","formal",5388645.55,0.19998048798344
+"697",2003-01-01,"marst","Single-Never-Married","formal",10199806.61,0.200852036479368
+"698",2004-01-01,"marst","Married","formal",19869892.4,0.19200363846836
+"699",2004-01-01,"marst","Separated, Widowed, or Divorced","formal",5464925.73,0.2031154284909
+"700",2004-01-01,"marst","Single-Never-Married","formal",10240919.72,0.196640397152122
+"701",2005-01-01,"marst","Married","formal",20016031.07,0.192431014647779
+"702",2005-01-01,"marst","Separated, Widowed, or Divorced","formal",5601058.91,0.202403007010258
+"703",2005-01-01,"marst","Single-Never-Married","formal",10464530.19,0.197945460823446
+"704",2006-01-01,"marst","Married","formal",20413228.61,0.195499411793698
+"705",2006-01-01,"marst","Separated, Widowed, or Divorced","formal",5646350.36,0.200961015027306
+"706",2006-01-01,"marst","Single-Never-Married","formal",10852207.34,0.200142829537037
+"707",2007-01-01,"marst","Married","formal",21394890.07,0.201672539641093
+"708",2007-01-01,"marst","Separated, Widowed, or Divorced","formal",5629351.47,0.200085673760311
+"709",2007-01-01,"marst","Single-Never-Married","formal",11192069.49,0.203692791649914
+"710",2008-01-01,"marst","Married","formal",20934917.55,0.199456989731079
+"711",2008-01-01,"marst","Separated, Widowed, or Divorced","formal",5883542.4,0.204839143686623
+"712",2008-01-01,"marst","Single-Never-Married","formal",11679423.5,0.205010409249445
+"713",2009-01-01,"marst","Married","formal",21539367.85,0.203781409502103
+"714",2009-01-01,"marst","Separated, Widowed, or Divorced","formal",5766214.61,0.2021711897304
+"715",2009-01-01,"marst","Single-Never-Married","formal",11777024.54,0.204088396998725
+"716",2010-01-01,"marst","Married","formal",21575413.84,0.20537302127062
+"717",2010-01-01,"marst","Separated, Widowed, or Divorced","formal",5845731.23,0.200115100708038
+"718",2010-01-01,"marst","Single-Never-Married","formal",11819838.71,0.199120698355575
+"719",2011-01-01,"marst","Married","formal",21309279.72,0.204380390531097
+"720",2011-01-01,"marst","Separated, Widowed, or Divorced","formal",5931287.05,0.200789401601544
+"721",2011-01-01,"marst","Single-Never-Married","formal",12481373.49,0.20399938097316
+"722",2012-01-01,"marst","Married","formal",21187937.92,0.204225559557231
+"723",2012-01-01,"marst","Separated, Widowed, or Divorced","formal",5958156.85,0.199719918389939
+"724",2012-01-01,"marst","Single-Never-Married","formal",13012000.42,0.206706600455221
+"725",2013-01-01,"marst","Married","formal",21251979.17,0.205615261625126
+"726",2013-01-01,"marst","Separated, Widowed, or Divorced","formal",6085640.39,0.203994453456585
+"727",2013-01-01,"marst","Single-Never-Married","formal",13291875.2,0.20784821938861
+"728",2014-01-01,"marst","Married","formal",21525319.35,0.209393679799005
+"729",2014-01-01,"marst","Separated, Widowed, or Divorced","formal",5974008.31,0.208042057213952
+"730",2014-01-01,"marst","Single-Never-Married","formal",13947317.41,0.210613313704082
+"731",2015-01-01,"marst","Married","formal",22021029.43,0.212003585575527
+"732",2015-01-01,"marst","Separated, Widowed, or Divorced","formal",5941463.29,0.202384577990998
+"733",2015-01-01,"marst","Single-Never-Married","formal",13686140.72,0.205744587021894
+"734",2016-01-01,"marst","Married","formal",22318806.08,0.215103691610414
+"735",2016-01-01,"marst","Separated, Widowed, or Divorced","formal",6183732.49,0.21384586717357
+"736",2016-01-01,"marst","Single-Never-Married","formal",14601147.74,0.214016358033581
+"737",2017-01-01,"marst","Married","formal",22506227.94,0.215850982086112
+"738",2017-01-01,"marst","Separated, Widowed, or Divorced","formal",6139345.58,0.215538973424957
+"739",2017-01-01,"marst","Single-Never-Married","formal",15090853.1,0.222428488130411
+"740",2018-01-01,"marst","Married","formal",22167662.57,0.212976878381339
+"741",2018-01-01,"marst","Separated, Widowed, or Divorced","formal",6071094.05,0.213024363844339
+"742",2018-01-01,"marst","Single-Never-Married","formal",15644997.83,0.225747362880049
+"743",2019-01-01,"marst","Married","formal",22617421.47,0.217116436812133
+"744",2019-01-01,"marst","Separated, Widowed, or Divorced","formal",5891296.74,0.21648017743828
+"745",2019-01-01,"marst","Single-Never-Married","formal",15502291.43,0.221612108813981
+"746",2020-01-01,"marst","Married","formal",22332362.0932,0.214769844852261
+"747",2020-01-01,"marst","Separated, Widowed, or Divorced","formal",5628707.2419,0.207924259449242
+"748",2020-01-01,"marst","Single-Never-Married","formal",15218462.6434,0.209888088582087
+"749",2021-01-01,"marst","Married","formal",21089016.2135,0.207193997597552
+"750",2021-01-01,"marst","Separated, Widowed, or Divorced","formal",5428385.5478,0.199919616008528
+"751",2021-01-01,"marst","Single-Never-Married","formal",14505950.9183,0.194634340384472
+"752",2022-01-01,"marst","Married","formal",22004432.77,0.216321511199858
+"753",2022-01-01,"marst","Separated, Widowed, or Divorced","formal",5651523.67,0.214033147086608
+"754",2022-01-01,"marst","Single-Never-Married","formal",15424814.58,0.205504968574934
+"755",2023-01-01,"marst","Married","formal",22377330.22,0.21895797658352
+"756",2023-01-01,"marst","Separated, Widowed, or Divorced","formal",5605742.74,0.214502123171225
+"757",2023-01-01,"marst","Single-Never-Married","formal",16191836.46,0.213306760849466
+"758",2024-01-01,"marst","Married","formal",22238580.09,0.216821003929663
+"759",2024-01-01,"marst","Separated, Widowed, or Divorced","formal",5615455.58,0.215439889632274
+"760",2024-01-01,"marst","Single-Never-Married","formal",16840051.61,0.22228646984039
+"761",2003-01-01,"statefip","Alabama","formal",480571.5,0.175780770135372
+"762",2003-01-01,"statefip","Alaska","formal",78440.75,0.197250831505897
+"763",2003-01-01,"statefip","Arizona","formal",653545.25,0.199093613757312
+"764",2003-01-01,"statefip","Arkansas","formal",273423.27,0.165533950397112
+"765",2003-01-01,"statefip","California","formal",4089358.03,0.182963934638894
+"766",2003-01-01,"statefip","Colorado","formal",558671.82,0.191343667008483
+"767",2003-01-01,"statefip","Connecticut","formal",407227.29,0.200555001726938
+"768",2003-01-01,"statefip","Delaware","formal",95395.35,0.187040383202861
+"769",2003-01-01,"statefip","District of Columbia","formal",74549.87,0.192076341138998
+"770",2003-01-01,"statefip","Florida","formal",1880010.16,0.188670036174875
+"771",2003-01-01,"statefip","Georgia","formal",972909.77,0.178013802465027
+"772",2003-01-01,"statefip","Hawaii","formal",154648.03,0.209148690018732
+"773",2003-01-01,"statefip","Idaho","formal",157032.26,0.197631330157257
+"774",2003-01-01,"statefip","Illinois","formal",1390101.76,0.177309268861226
+"775",2003-01-01,"statefip","Indiana","formal",633028.46,0.166648805596149
+"776",2003-01-01,"statefip","Iowa","formal",363545.31,0.19917783391829
+"777",2003-01-01,"statefip","Kansas","formal",378418.41,0.229651590759049
+"778",2003-01-01,"statefip","Kentucky","formal",541569.08,0.208766460774023
+"779",2003-01-01,"statefip","Louisiana","formal",535632.24,0.193454073601587
+"780",2003-01-01,"statefip","Maine","formal",178573.64,0.220921641011643
+"781",2003-01-01,"statefip","Maryland","formal",728712.83,0.209171899127622
+"782",2003-01-01,"statefip","Massachusetts","formal",896711.7,0.214960110341394
+"783",2003-01-01,"statefip","Michigan","formal",1204287.46,0.190103358565893
+"784",2003-01-01,"statefip","Minnesota","formal",747990.29,0.225893221630141
+"785",2003-01-01,"statefip","Mississippi","formal",342140.73,0.197529483799011
+"786",2003-01-01,"statefip","Missouri","formal",804878.95,0.224936508759381
+"787",2003-01-01,"statefip","Montana","formal",114062.26,0.201760171378479
+"788",2003-01-01,"statefip","Nebraska","formal",236326.2,0.221468948917782
+"789",2003-01-01,"statefip","Nevada","formal",279937.97,0.213059657738039
+"790",2003-01-01,"statefip","New Hampshire","formal",170161.34,0.207945145538886
+"791",2003-01-01,"statefip","New Jersey","formal",970304.3,0.180749410260393
+"792",2003-01-01,"statefip","New Mexico","formal",229313.85,0.207022660218278
+"793",2003-01-01,"statefip","New York","formal",2673585.84,0.216652440982117
+"794",2003-01-01,"statefip","North Carolina","formal",1034181.4,0.199369719331642
+"795",2003-01-01,"statefip","North Dakota","formal",86709.15,0.21450184741558
+"796",2003-01-01,"statefip","Ohio","formal",1319836.71,0.187207983774322
+"797",2003-01-01,"statefip","Oklahoma","formal",443186.43,0.204293313019294
+"798",2003-01-01,"statefip","Oregon","formal",426593.98,0.185906416126243
+"799",2003-01-01,"statefip","Pennsylvania","formal",1543108.17,0.202034604829181
+"800",2003-01-01,"statefip","Rhode Island","formal",147967.58,0.21606569404022
+"801",2003-01-01,"statefip","South Carolina","formal",473746.72,0.189645454617328
+"802",2003-01-01,"statefip","South Dakota","formal",103218.67,0.224520826641434
+"803",2003-01-01,"statefip","Tennessee","formal",597321.59,0.160254077855399
+"804",2003-01-01,"statefip","Texas","formal",2710984.91,0.201147266104329
+"805",2003-01-01,"statefip","Utah","formal",250806.9,0.180318927524735
+"806",2003-01-01,"statefip","Vermont","formal",97020.79,0.236964563852466
+"807",2003-01-01,"statefip","Virginia","formal",887424.27,0.193491764377154
+"808",2003-01-01,"statefip","Washington","formal",669589.93,0.172085095118254
+"809",2003-01-01,"statefip","West Virginia","formal",194973.55,0.177363250415985
+"810",2003-01-01,"statefip","Wisconsin","formal",723720.1,0.205299396457813
+"811",2003-01-01,"statefip","Wyoming","formal",65087.57,0.208714651023226
+"812",2004-01-01,"statefip","Alabama","formal",547222.37,0.194699434219173
+"813",2004-01-01,"statefip","Alaska","formal",78882.85,0.192749183337924
+"814",2004-01-01,"statefip","Arizona","formal",729383.23,0.213143292072375
+"815",2004-01-01,"statefip","Arkansas","formal",273399.18,0.166599584844045
+"816",2004-01-01,"statefip","California","formal",3853333.38,0.17209847053587
+"817",2004-01-01,"statefip","Colorado","formal",547953.23,0.18620363154647
+"818",2004-01-01,"statefip","Connecticut","formal",459765.74,0.215939806224812
+"819",2004-01-01,"statefip","Delaware","formal",102702.36,0.193619080124257
+"820",2004-01-01,"statefip","District of Columbia","formal",69070.41,0.179454310403554
+"821",2004-01-01,"statefip","Florida","formal",2004843.68,0.194910070571405
+"822",2004-01-01,"statefip","Georgia","formal",1022183.56,0.18589116098246
+"823",2004-01-01,"statefip","Hawaii","formal",169230.53,0.217146369205515
+"824",2004-01-01,"statefip","Idaho","formal",166275.48,0.195104400881964
+"825",2004-01-01,"statefip","Illinois","formal",1514430.05,0.18922364037984
+"826",2004-01-01,"statefip","Indiana","formal",739073.19,0.190197057398358
+"827",2004-01-01,"statefip","Iowa","formal",376433.44,0.205366669828181
+"828",2004-01-01,"statefip","Kansas","formal",355234.37,0.209522774650202
+"829",2004-01-01,"statefip","Kentucky","formal",528992.32,0.204448032888027
+"830",2004-01-01,"statefip","Louisiana","formal",541076.64,0.196995378757096
+"831",2004-01-01,"statefip","Maine","formal",186091.1,0.229333324854619
+"832",2004-01-01,"statefip","Maryland","formal",734097.7,0.210189900885631
+"833",2004-01-01,"statefip","Massachusetts","formal",915094.98,0.223692397706037
+"834",2004-01-01,"statefip","Michigan","formal",1158245.11,0.183987458675639
+"835",2004-01-01,"statefip","Minnesota","formal",698997.26,0.207879750603634
+"836",2004-01-01,"statefip","Mississippi","formal",362400.24,0.202577692098949
+"837",2004-01-01,"statefip","Missouri","formal",742139.06,0.213835518446735
+"838",2004-01-01,"statefip","Montana","formal",128147.08,0.214634392756994
+"839",2004-01-01,"statefip","Nebraska","formal",226370.77,0.20792299940467
+"840",2004-01-01,"statefip","Nevada","formal",291099.82,0.204785657346784
+"841",2004-01-01,"statefip","New Hampshire","formal",171251.75,0.207814933912735
+"842",2004-01-01,"statefip","New Jersey","formal",1050811.35,0.19258047528216
+"843",2004-01-01,"statefip","New Mexico","formal",256068.77,0.220053602520443
+"844",2004-01-01,"statefip","New York","formal",2475316.1,0.203531619070664
+"845",2004-01-01,"statefip","North Carolina","formal",991682.05,0.187614514063247
+"846",2004-01-01,"statefip","North Dakota","formal",98174.26,0.238569309177536
+"847",2004-01-01,"statefip","Ohio","formal",1545240.81,0.214815372398193
+"848",2004-01-01,"statefip","Oklahoma","formal",467899.99,0.219496908290517
+"849",2004-01-01,"statefip","Oregon","formal",426629.07,0.184001145922111
+"850",2004-01-01,"statefip","Pennsylvania","formal",1541361.37,0.204030344136311
+"851",2004-01-01,"statefip","Rhode Island","formal",147098.9,0.220771860817534
+"852",2004-01-01,"statefip","South Carolina","formal",467280.79,0.184738503205459
+"853",2004-01-01,"statefip","South Dakota","formal",114370.69,0.252341753529189
+"854",2004-01-01,"statefip","Tennessee","formal",668919.53,0.171827969760023
+"855",2004-01-01,"statefip","Texas","formal",2638821.53,0.193831009993426
+"856",2004-01-01,"statefip","Utah","formal",272283.92,0.19139509516149
+"857",2004-01-01,"statefip","Vermont","formal",102511.24,0.258609797047878
+"858",2004-01-01,"statefip","Virginia","formal",899251.01,0.188599671172307
+"859",2004-01-01,"statefip","Washington","formal",803097.04,0.198517490831015
+"860",2004-01-01,"statefip","West Virginia","formal",201265.17,0.177099121739918
+"861",2004-01-01,"statefip","Wisconsin","formal",651732.31,0.187177931774502
+"862",2004-01-01,"statefip","Wyoming","formal",62501.07,0.197966265605493
+"863",2005-01-01,"statefip","Alabama","formal",521603.63,0.176745273817338
+"864",2005-01-01,"statefip","Alaska","formal",87385.01,0.204032423651816
+"865",2005-01-01,"statefip","Arizona","formal",674206.62,0.192705788246241
+"866",2005-01-01,"statefip","Arkansas","formal",317367.91,0.188316393538058
+"867",2005-01-01,"statefip","California","formal",4079683.49,0.180350217730369
+"868",2005-01-01,"statefip","Colorado","formal",478451.36,0.160683013270831
+"869",2005-01-01,"statefip","Connecticut","formal",436710.12,0.195911272616057
+"870",2005-01-01,"statefip","Delaware","formal",102024.43,0.191520072664088
+"871",2005-01-01,"statefip","District of Columbia","formal",78573.68,0.210389290050667
+"872",2005-01-01,"statefip","Florida","formal",2104657.29,0.195980495810006
+"873",2005-01-01,"statefip","Georgia","formal",1058458.09,0.187052719203802
+"874",2005-01-01,"statefip","Hawaii","formal",180587.89,0.227569935254658
+"875",2005-01-01,"statefip","Idaho","formal",180680.95,0.207369002626565
+"876",2005-01-01,"statefip","Illinois","formal",1545581.24,0.195867009441135
+"877",2005-01-01,"statefip","Indiana","formal",727750.88,0.18548976128469
+"878",2005-01-01,"statefip","Iowa","formal",411164.33,0.220475036551117
+"879",2005-01-01,"statefip","Kansas","formal",351057.55,0.208989121446786
+"880",2005-01-01,"statefip","Kentucky","formal",506979.54,0.194753745443332
+"881",2005-01-01,"statefip","Louisiana","formal",456737.97,0.166358580429561
+"882",2005-01-01,"statefip","Maine","formal",191372.27,0.227698566036001
+"883",2005-01-01,"statefip","Maryland","formal",689862.74,0.193741324629558
+"884",2005-01-01,"statefip","Massachusetts","formal",958986.96,0.229090163188039
+"885",2005-01-01,"statefip","Michigan","formal",1235235.28,0.196553348660312
+"886",2005-01-01,"statefip","Minnesota","formal",748561.86,0.223799967813138
+"887",2005-01-01,"statefip","Mississippi","formal",354250.64,0.200493062061192
+"888",2005-01-01,"statefip","Missouri","formal",649512.8,0.184287261060315
+"889",2005-01-01,"statefip","Montana","formal",142333.11,0.24589497136681
+"890",2005-01-01,"statefip","Nebraska","formal",237797.08,0.220307375364482
+"891",2005-01-01,"statefip","Nevada","formal",319201.47,0.212384396501638
+"892",2005-01-01,"statefip","New Hampshire","formal",184235.5,0.216908192295316
+"893",2005-01-01,"statefip","New Jersey","formal",1054327.44,0.192110305959341
+"894",2005-01-01,"statefip","New Mexico","formal",241088.16,0.204189555483508
+"895",2005-01-01,"statefip","New York","formal",2548223.92,0.209727694461673
+"896",2005-01-01,"statefip","North Carolina","formal",1104910.75,0.204733677855743
+"897",2005-01-01,"statefip","North Dakota","formal",99297.98,0.246259195878673
+"898",2005-01-01,"statefip","Ohio","formal",1455289.52,0.20235338134963
+"899",2005-01-01,"statefip","Oklahoma","formal",396787.42,0.185540672162501
+"900",2005-01-01,"statefip","Oregon","formal",413387.23,0.180360538153484
+"901",2005-01-01,"statefip","Pennsylvania","formal",1545859.72,0.202014494930106
+"902",2005-01-01,"statefip","Rhode Island","formal",150156.85,0.221537656437695
+"903",2005-01-01,"statefip","South Carolina","formal",521470.67,0.201501738785394
+"904",2005-01-01,"statefip","South Dakota","formal",114336.75,0.244040422814505
+"905",2005-01-01,"statefip","Tennessee","formal",655681.36,0.175633020279714
+"906",2005-01-01,"statefip","Texas","formal",2734088.6,0.194684322949515
+"907",2005-01-01,"statefip","Utah","formal",245362.75,0.168906730123926
+"908",2005-01-01,"statefip","Vermont","formal",100622.58,0.251027008935454
+"909",2005-01-01,"statefip","Virginia","formal",904664.53,0.188166345471364
+"910",2005-01-01,"statefip","Washington","formal",821784.32,0.207489705241489
+"911",2005-01-01,"statefip","West Virginia","formal",215512.35,0.189234026314579
+"912",2005-01-01,"statefip","Wisconsin","formal",684850.05,0.196847378726919
+"913",2005-01-01,"statefip","Wyoming","formal",62905.53,0.193798661446496
+"914",2006-01-01,"statefip","Alabama","formal",466821.55,0.160518976256406
+"915",2006-01-01,"statefip","Alaska","formal",85464.69,0.197538010805702
+"916",2006-01-01,"statefip","Arizona","formal",698603.06,0.187940025840268
+"917",2006-01-01,"statefip","Arkansas","formal",331226.7,0.188681189595058
+"918",2006-01-01,"statefip","California","formal",4273946.85,0.189175154933214
+"919",2006-01-01,"statefip","Colorado","formal",603676.67,0.19635534586005
+"920",2006-01-01,"statefip","Connecticut","formal",482496.49,0.215732444788792
+"921",2006-01-01,"statefip","Delaware","formal",111459.37,0.204929725860908
+"922",2006-01-01,"statefip","District of Columbia","formal",75335.97,0.203171757927777
+"923",2006-01-01,"statefip","Florida","formal",2214489.7,0.197996447064417
+"924",2006-01-01,"statefip","Georgia","formal",1130536.07,0.190202803169444
+"925",2006-01-01,"statefip","Hawaii","formal",196276.42,0.243817226811187
+"926",2006-01-01,"statefip","Idaho","formal",189028.72,0.208832871654489
+"927",2006-01-01,"statefip","Illinois","formal",1464141.55,0.184671997274424
+"928",2006-01-01,"statefip","Indiana","formal",726064.29,0.183694025559287
+"929",2006-01-01,"statefip","Iowa","formal",436517.38,0.231131437536566
+"930",2006-01-01,"statefip","Kansas","formal",370718.18,0.221823058694351
+"931",2006-01-01,"statefip","Kentucky","formal",449179.4,0.171521056742803
+"932",2006-01-01,"statefip","Louisiana","formal",490243.52,0.195433730685291
+"933",2006-01-01,"statefip","Maine","formal",200878.15,0.228078479248437
+"934",2006-01-01,"statefip","Maryland","formal",787181.02,0.21970364350744
+"935",2006-01-01,"statefip","Massachusetts","formal",943941.01,0.229741206424025
+"936",2006-01-01,"statefip","Michigan","formal",1228033.29,0.192405399457963
+"937",2006-01-01,"statefip","Minnesota","formal",725835.22,0.220395584988008
+"938",2006-01-01,"statefip","Mississippi","formal",301995.14,0.17133799911612
+"939",2006-01-01,"statefip","Missouri","formal",751012.5,0.20451581540908
+"940",2006-01-01,"statefip","Montana","formal",118765.23,0.200713871771623
+"941",2006-01-01,"statefip","Nebraska","formal",222448.6,0.198695145715291
+"942",2006-01-01,"statefip","Nevada","formal",297724.2,0.196166498678026
+"943",2006-01-01,"statefip","New Hampshire","formal",192803.58,0.228970435739037
+"944",2006-01-01,"statefip","New Jersey","formal",1189894.9,0.213837883060652
+"945",2006-01-01,"statefip","New Mexico","formal",227224.29,0.188623731623365
+"946",2006-01-01,"statefip","New York","formal",2611160.99,0.214904267150518
+"947",2006-01-01,"statefip","North Carolina","formal",1045848.73,0.192939428522072
+"948",2006-01-01,"statefip","North Dakota","formal",97742.69,0.240184043637492
+"949",2006-01-01,"statefip","Ohio","formal",1407167.25,0.19329437498382
+"950",2006-01-01,"statefip","Oklahoma","formal",400776.45,0.182512220680806
+"951",2006-01-01,"statefip","Oregon","formal",426376.81,0.184745257876378
+"952",2006-01-01,"statefip","Pennsylvania","formal",1669301.86,0.21389344811284
+"953",2006-01-01,"statefip","Rhode Island","formal",152978.6,0.220693915454327
+"954",2006-01-01,"statefip","South Carolina","formal",531118.35,0.197812949665796
+"955",2006-01-01,"statefip","South Dakota","formal",109455.39,0.226821393859384
+"956",2006-01-01,"statefip","Tennessee","formal",666198.61,0.177730006965873
+"957",2006-01-01,"statefip","Texas","formal",2677471.2,0.190629108755608
+"958",2006-01-01,"statefip","Utah","formal",302548.14,0.19110065526989
+"959",2006-01-01,"statefip","Vermont","formal",106476.6,0.254523427074236
+"960",2006-01-01,"statefip","Virginia","formal",886021.11,0.181614515849036
+"961",2006-01-01,"statefip","Washington","formal",801205.2,0.196756688898162
+"962",2006-01-01,"statefip","West Virginia","formal",244735.18,0.209971574347406
+"963",2006-01-01,"statefip","Wisconsin","formal",723403.52,0.206547187932394
+"964",2006-01-01,"statefip","Wyoming","formal",67835.92,0.203747497455406
+"965",2007-01-01,"statefip","Alabama","formal",466807.77,0.163098552158631
+"966",2007-01-01,"statefip","Alaska","formal",85850.07,0.197361105999242
+"967",2007-01-01,"statefip","Arizona","formal",712587.42,0.180992603974702
+"968",2007-01-01,"statefip","Arkansas","formal",371652.1,0.212710893589322
+"969",2007-01-01,"statefip","California","formal",4323750.75,0.186923589194136
+"970",2007-01-01,"statefip","Colorado","formal",609041.03,0.193027590516037
+"971",2007-01-01,"statefip","Connecticut","formal",491601.81,0.221725193084565
+"972",2007-01-01,"statefip","Delaware","formal",116693.61,0.212517654773683
+"973",2007-01-01,"statefip","District of Columbia","formal",82976.41,0.20929602086533
+"974",2007-01-01,"statefip","Florida","formal",2349329.82,0.207944245074798
+"975",2007-01-01,"statefip","Georgia","formal",1263041.83,0.205610618315753
+"976",2007-01-01,"statefip","Hawaii","formal",184144.54,0.229979072470334
+"977",2007-01-01,"statefip","Idaho","formal",189512.95,0.208677166033559
+"978",2007-01-01,"statefip","Illinois","formal",1516445.63,0.186741146787848
+"979",2007-01-01,"statefip","Indiana","formal",760139.44,0.185414738651216
+"980",2007-01-01,"statefip","Iowa","formal",450570.66,0.244635698143066
+"981",2007-01-01,"statefip","Kansas","formal",406318.74,0.240917204382446
+"982",2007-01-01,"statefip","Kentucky","formal",502713.66,0.189904704502634
+"983",2007-01-01,"statefip","Louisiana","formal",537152.69,0.205966274944662
+"984",2007-01-01,"statefip","Maine","formal",196558.38,0.2294514151535
+"985",2007-01-01,"statefip","Maryland","formal",743021.17,0.205041042914447
+"986",2007-01-01,"statefip","Massachusetts","formal",959426.52,0.235036683952083
+"987",2007-01-01,"statefip","Michigan","formal",1306014.6,0.205711553664977
+"988",2007-01-01,"statefip","Minnesota","formal",739019.43,0.224827491951988
+"989",2007-01-01,"statefip","Mississippi","formal",387559.68,0.212119402480233
+"990",2007-01-01,"statefip","Missouri","formal",695898.78,0.188905709220746
+"991",2007-01-01,"statefip","Montana","formal",142864.64,0.234394129475827
+"992",2007-01-01,"statefip","Nebraska","formal",232536.63,0.208501033289393
+"993",2007-01-01,"statefip","Nevada","formal",317808.51,0.199081436039807
+"994",2007-01-01,"statefip","New Hampshire","formal",194476.9,0.227545130454833
+"995",2007-01-01,"statefip","New Jersey","formal",1075213.73,0.193226197460218
+"996",2007-01-01,"statefip","New Mexico","formal",237941.14,0.200587282759762
+"997",2007-01-01,"statefip","New York","formal",2792534,0.229600204625433
+"998",2007-01-01,"statefip","North Carolina","formal",1215326.34,0.214175469216024
+"999",2007-01-01,"statefip","North Dakota","formal",92653.56,0.229870768220671
+"1000",2007-01-01,"statefip","Ohio","formal",1484933.96,0.205782933028256
+"1001",2007-01-01,"statefip","Oklahoma","formal",456168.32,0.212365316728322
+"1002",2007-01-01,"statefip","Oregon","formal",460535.93,0.190656039385628
+"1003",2007-01-01,"statefip","Pennsylvania","formal",1718586.63,0.217350750107607
+"1004",2007-01-01,"statefip","Rhode Island","formal",152422.1,0.220298245200218
+"1005",2007-01-01,"statefip","South Carolina","formal",515621.4,0.192390112986927
+"1006",2007-01-01,"statefip","South Dakota","formal",114476.1,0.241232243127903
+"1007",2007-01-01,"statefip","Tennessee","formal",722994.21,0.195701387045095
+"1008",2007-01-01,"statefip","Texas","formal",2666207.42,0.186863455068545
+"1009",2007-01-01,"statefip","Utah","formal",285092.86,0.184877527891445
+"1010",2007-01-01,"statefip","Vermont","formal",116095.49,0.277719451503588
+"1011",2007-01-01,"statefip","Virginia","formal",934128.26,0.186955751516188
+"1012",2007-01-01,"statefip","Washington","formal",785005.44,0.189085858731306
+"1013",2007-01-01,"statefip","West Virginia","formal",221321.02,0.185176399662778
+"1014",2007-01-01,"statefip","Wisconsin","formal",759285.01,0.211839634236543
+"1015",2007-01-01,"statefip","Wyoming","formal",74251.94,0.228625442147743
+"1016",2008-01-01,"statefip","Alabama","formal",546804.21,0.188878960154304
+"1017",2008-01-01,"statefip","Alaska","formal",92465.23,0.205061108013832
+"1018",2008-01-01,"statefip","Arizona","formal",685309.89,0.170192510978482
+"1019",2008-01-01,"statefip","Arkansas","formal",376971.24,0.211274711863759
+"1020",2008-01-01,"statefip","California","formal",4463418.09,0.192438087154075
+"1021",2008-01-01,"statefip","Colorado","formal",615549.19,0.189705236906326
+"1022",2008-01-01,"statefip","Connecticut","formal",457510.88,0.204983939386234
+"1023",2008-01-01,"statefip","Delaware","formal",112367.37,0.203975393206398
+"1024",2008-01-01,"statefip","District of Columbia","formal",75898.62,0.185631594122812
+"1025",2008-01-01,"statefip","Florida","formal",2254506.14,0.200748421378862
+"1026",2008-01-01,"statefip","Georgia","formal",1174589,0.190304519635009
+"1027",2008-01-01,"statefip","Hawaii","formal",198787.13,0.248106325685597
+"1028",2008-01-01,"statefip","Idaho","formal",169453.11,0.187267620288753
+"1029",2008-01-01,"statefip","Illinois","formal",1647493.64,0.199566545120541
+"1030",2008-01-01,"statefip","Indiana","formal",768024.04,0.194286172925502
+"1031",2008-01-01,"statefip","Iowa","formal",426316.89,0.226276215765308
+"1032",2008-01-01,"statefip","Kansas","formal",384261.83,0.226237680869102
+"1033",2008-01-01,"statefip","Kentucky","formal",519387.56,0.193843730227601
+"1034",2008-01-01,"statefip","Louisiana","formal",489326.57,0.188198527704363
+"1035",2008-01-01,"statefip","Maine","formal",191467.04,0.226561913067393
+"1036",2008-01-01,"statefip","Maryland","formal",732386.42,0.204950702313654
+"1037",2008-01-01,"statefip","Massachusetts","formal",921421.76,0.223853479691375
+"1038",2008-01-01,"statefip","Michigan","formal",1256231.68,0.201708798456722
+"1039",2008-01-01,"statefip","Minnesota","formal",780561.9,0.231237560616874
+"1040",2008-01-01,"statefip","Mississippi","formal",387817.9,0.213402129067266
+"1041",2008-01-01,"statefip","Missouri","formal",750747.99,0.205613552867865
+"1042",2008-01-01,"statefip","Montana","formal",139804.29,0.230253885328618
+"1043",2008-01-01,"statefip","Nebraska","formal",265082.3,0.236835236117178
+"1044",2008-01-01,"statefip","Nevada","formal",359499.05,0.221938726389492
+"1045",2008-01-01,"statefip","New Hampshire","formal",196180.23,0.223943995939288
+"1046",2008-01-01,"statefip","New Jersey","formal",1071959.08,0.197001982893297
+"1047",2008-01-01,"statefip","New Mexico","formal",225227.93,0.181353520684093
+"1048",2008-01-01,"statefip","New York","formal",2772952.61,0.225285579375055
+"1049",2008-01-01,"statefip","North Carolina","formal",1156139.51,0.196272575871553
+"1050",2008-01-01,"statefip","North Dakota","formal",102559.15,0.259225795121561
+"1051",2008-01-01,"statefip","Ohio","formal",1492412.23,0.205771260785907
+"1052",2008-01-01,"statefip","Oklahoma","formal",424044.33,0.193103138017815
+"1053",2008-01-01,"statefip","Oregon","formal",487842.03,0.197436413933756
+"1054",2008-01-01,"statefip","Pennsylvania","formal",1620461.53,0.20875996359887
+"1055",2008-01-01,"statefip","Rhode Island","formal",150623.98,0.220163969734174
+"1056",2008-01-01,"statefip","South Carolina","formal",543729.54,0.19619898806659
+"1057",2008-01-01,"statefip","South Dakota","formal",119419.28,0.24753714908905
+"1058",2008-01-01,"statefip","Tennessee","formal",750694.53,0.193020513033595
+"1059",2008-01-01,"statefip","Texas","formal",2849178.44,0.193980592996229
+"1060",2008-01-01,"statefip","Utah","formal",300833.36,0.185113692676699
+"1061",2008-01-01,"statefip","Vermont","formal",103316.44,0.254470480210125
+"1062",2008-01-01,"statefip","Virginia","formal",990091.99,0.19791300299269
+"1063",2008-01-01,"statefip","Washington","formal",801375.84,0.186485992423772
+"1064",2008-01-01,"statefip","West Virginia","formal",240875.86,0.205201429391209
+"1065",2008-01-01,"statefip","Wisconsin","formal",785065.21,0.221424895879149
+"1066",2008-01-01,"statefip","Wyoming","formal",69439.39,0.209691707299573
+"1067",2009-01-01,"statefip","Alabama","formal",551510.28,0.187366925249267
+"1068",2009-01-01,"statefip","Alaska","formal",81651.03,0.18413649698321
+"1069",2009-01-01,"statefip","Arizona","formal",762593.63,0.185042335751893
+"1070",2009-01-01,"statefip","Arkansas","formal",343349.62,0.192074891154225
+"1071",2009-01-01,"statefip","California","formal",4631513.61,0.196978673556587
+"1072",2009-01-01,"statefip","Colorado","formal",629758.67,0.194673338446672
+"1073",2009-01-01,"statefip","Connecticut","formal",485876.74,0.221137610446263
+"1074",2009-01-01,"statefip","Delaware","formal",114683.16,0.212361962509703
+"1075",2009-01-01,"statefip","District of Columbia","formal",81153.01,0.192222604231891
+"1076",2009-01-01,"statefip","Florida","formal",2229832.77,0.199491353908042
+"1077",2009-01-01,"statefip","Georgia","formal",1068610.26,0.171505216066965
+"1078",2009-01-01,"statefip","Hawaii","formal",162783.72,0.209211603357334
+"1079",2009-01-01,"statefip","Idaho","formal",188299.04,0.204830163545917
+"1080",2009-01-01,"statefip","Illinois","formal",1671896.2,0.20356609897088
+"1081",2009-01-01,"statefip","Indiana","formal",777586.33,0.198939291594816
+"1082",2009-01-01,"statefip","Iowa","formal",425846.88,0.220255730129148
+"1083",2009-01-01,"statefip","Kansas","formal",424546.79,0.245853537694694
+"1084",2009-01-01,"statefip","Kentucky","formal",514205.11,0.190250255259139
+"1085",2009-01-01,"statefip","Louisiana","formal",558782.55,0.208547302686883
+"1086",2009-01-01,"statefip","Maine","formal",171180.28,0.202468352248228
+"1087",2009-01-01,"statefip","Maryland","formal",757396.07,0.210487721590542
+"1088",2009-01-01,"statefip","Massachusetts","formal",879885.25,0.21235030530713
+"1089",2009-01-01,"statefip","Michigan","formal",1302270.19,0.207545246764078
+"1090",2009-01-01,"statefip","Minnesota","formal",722986.44,0.219946700286916
+"1091",2009-01-01,"statefip","Mississippi","formal",361170.37,0.20381439804221
+"1092",2009-01-01,"statefip","Missouri","formal",730076.5,0.196178592099828
+"1093",2009-01-01,"statefip","Montana","formal",149487.34,0.239617116163665
+"1094",2009-01-01,"statefip","Nebraska","formal",258135.31,0.229834711614299
+"1095",2009-01-01,"statefip","Nevada","formal",340097.43,0.20631070075509
+"1096",2009-01-01,"statefip","New Hampshire","formal",176514.56,0.20473490623039
+"1097",2009-01-01,"statefip","New Jersey","formal",1149863.85,0.211154122912211
+"1098",2009-01-01,"statefip","New Mexico","formal",244583.85,0.196814347042752
+"1099",2009-01-01,"statefip","New York","formal",2850159.69,0.225422815646937
+"1100",2009-01-01,"statefip","North Carolina","formal",1205668.83,0.206185691673889
+"1101",2009-01-01,"statefip","North Dakota","formal",108837.6,0.268389884111901
+"1102",2009-01-01,"statefip","Ohio","formal",1526484.12,0.210953306277511
+"1103",2009-01-01,"statefip","Oklahoma","formal",416516.77,0.191653001644625
+"1104",2009-01-01,"statefip","Oregon","formal",508653.21,0.206658050937725
+"1105",2009-01-01,"statefip","Pennsylvania","formal",1695592.73,0.220334874632375
+"1106",2009-01-01,"statefip","Rhode Island","formal",152560.46,0.224785341034182
+"1107",2009-01-01,"statefip","South Carolina","formal",500904.27,0.179364629438323
+"1108",2009-01-01,"statefip","South Dakota","formal",115784.93,0.236026041096952
+"1109",2009-01-01,"statefip","Tennessee","formal",845342.73,0.21487301063621
+"1110",2009-01-01,"statefip","Texas","formal",2840712.49,0.188132208230984
+"1111",2009-01-01,"statefip","Utah","formal",295397.41,0.176297666645905
+"1112",2009-01-01,"statefip","Vermont","formal",105019.88,0.261700508021521
+"1113",2009-01-01,"statefip","Virginia","formal",1040750.32,0.207167156525524
+"1114",2009-01-01,"statefip","Washington","formal",870623.99,0.203254409847227
+"1115",2009-01-01,"statefip","West Virginia","formal",215847.01,0.189758967958546
+"1116",2009-01-01,"statefip","Wisconsin","formal",772855.47,0.217805500256055
+"1117",2009-01-01,"statefip","Wyoming","formal",66768.25,0.198839659619988
+"1118",2010-01-01,"statefip","Alabama","formal",596056.25,0.199937691743033
+"1119",2010-01-01,"statefip","Alaska","formal",88857.6,0.201393592455573
+"1120",2010-01-01,"statefip","Arizona","formal",692171.99,0.174828871361452
+"1121",2010-01-01,"statefip","Arkansas","formal",313886.4,0.178844926121396
+"1122",2010-01-01,"statefip","California","formal",4589051.65,0.194408297539468
+"1123",2010-01-01,"statefip","Colorado","formal",603768,0.188920024310083
+"1124",2010-01-01,"statefip","Connecticut","formal",505503.38,0.225228681996052
+"1125",2010-01-01,"statefip","Delaware","formal",100764.58,0.181470006285788
+"1126",2010-01-01,"statefip","District of Columbia","formal",79505.69,0.183831368547862
+"1127",2010-01-01,"statefip","Florida","formal",2444340.91,0.210200906342106
+"1128",2010-01-01,"statefip","Georgia","formal",1128359.47,0.182101422612758
+"1129",2010-01-01,"statefip","Hawaii","formal",173784.46,0.216301947479083
+"1130",2010-01-01,"statefip","Idaho","formal",186270.97,0.198048344575064
+"1131",2010-01-01,"statefip","Illinois","formal",1611464.92,0.197581848618813
+"1132",2010-01-01,"statefip","Indiana","formal",756238.24,0.189643609216175
+"1133",2010-01-01,"statefip","Iowa","formal",444388.94,0.228552865572927
+"1134",2010-01-01,"statefip","Kansas","formal",399861.69,0.234598593505649
+"1135",2010-01-01,"statefip","Kentucky","formal",518416.99,0.189054610959768
+"1136",2010-01-01,"statefip","Louisiana","formal",548535.83,0.1970567301986
+"1137",2010-01-01,"statefip","Maine","formal",187457.82,0.222914311864578
+"1138",2010-01-01,"statefip","Maryland","formal",760311.32,0.202956613401746
+"1139",2010-01-01,"statefip","Massachusetts","formal",899546.1,0.215915660593857
+"1140",2010-01-01,"statefip","Michigan","formal",1215163.64,0.195738751661793
+"1141",2010-01-01,"statefip","Minnesota","formal",748571.29,0.225934939379068
+"1142",2010-01-01,"statefip","Mississippi","formal",303515.96,0.178936498999839
+"1143",2010-01-01,"statefip","Missouri","formal",730584.51,0.191357800940141
+"1144",2010-01-01,"statefip","Montana","formal",132187.05,0.21454294759082
+"1145",2010-01-01,"statefip","Nebraska","formal",259545.4,0.232887607893119
+"1146",2010-01-01,"statefip","Nevada","formal",373975.19,0.216816737669679
+"1147",2010-01-01,"statefip","New Hampshire","formal",188465.63,0.219929082633136
+"1148",2010-01-01,"statefip","New Jersey","formal",1160893.79,0.205707288798958
+"1149",2010-01-01,"statefip","New Mexico","formal",247180.23,0.200633184689753
+"1150",2010-01-01,"statefip","New York","formal",2715954.4,0.222423074613512
+"1151",2010-01-01,"statefip","North Carolina","formal",1342583.13,0.224534162855614
+"1152",2010-01-01,"statefip","North Dakota","formal",109216.31,0.255923875985344
+"1153",2010-01-01,"statefip","Ohio","formal",1490248,0.204741054658975
+"1154",2010-01-01,"statefip","Oklahoma","formal",479614.6,0.212726328923041
+"1155",2010-01-01,"statefip","Oregon","formal",511644.72,0.208886923244403
+"1156",2010-01-01,"statefip","Pennsylvania","formal",1619644.72,0.205912830649247
+"1157",2010-01-01,"statefip","Rhode Island","formal",164558.02,0.242361350216394
+"1158",2010-01-01,"statefip","South Carolina","formal",519198.33,0.183551237021945
+"1159",2010-01-01,"statefip","South Dakota","formal",115839.76,0.236122264296536
+"1160",2010-01-01,"statefip","Tennessee","formal",791272.4,0.200224307123757
+"1161",2010-01-01,"statefip","Texas","formal",3026551.89,0.194114309525538
+"1162",2010-01-01,"statefip","Utah","formal",321280.52,0.195657594745277
+"1163",2010-01-01,"statefip","Vermont","formal",97120.61,0.232303336500296
+"1164",2010-01-01,"statefip","Virginia","formal",958207.55,0.188859559211609
+"1165",2010-01-01,"statefip","Washington","formal",918952.78,0.206138639135705
+"1166",2010-01-01,"statefip","West Virginia","formal",217782.63,0.19140725567822
+"1167",2010-01-01,"statefip","Wisconsin","formal",774486.51,0.220587767983026
+"1168",2010-01-01,"statefip","Wyoming","formal",78201.01,0.226242618640589
+"1169",2011-01-01,"statefip","Alabama","formal",547978.58,0.185841327810053
+"1170",2011-01-01,"statefip","Alaska","formal",93891.41,0.206138555478486
+"1171",2011-01-01,"statefip","Arizona","formal",794612.07,0.196388399044389
+"1172",2011-01-01,"statefip","Arkansas","formal",365091.82,0.206526279352335
+"1173",2011-01-01,"statefip","California","formal",4402383.92,0.184035833415921
+"1174",2011-01-01,"statefip","Colorado","formal",679872.77,0.207848167090792
+"1175",2011-01-01,"statefip","Connecticut","formal",490983.58,0.215938307977407
+"1176",2011-01-01,"statefip","Delaware","formal",116662.51,0.207719329470221
+"1177",2011-01-01,"statefip","District of Columbia","formal",83724.37,0.19384199460688
+"1178",2011-01-01,"statefip","Florida","formal",2503944.93,0.213051463530763
+"1179",2011-01-01,"statefip","Georgia","formal",1064157.63,0.169224777320022
+"1180",2011-01-01,"statefip","Hawaii","formal",187471.89,0.226497735154218
+"1181",2011-01-01,"statefip","Idaho","formal",176258.55,0.186517063076006
+"1182",2011-01-01,"statefip","Illinois","formal",1687802.11,0.204132938668265
+"1183",2011-01-01,"statefip","Indiana","formal",775950.22,0.195197723301139
+"1184",2011-01-01,"statefip","Iowa","formal",418410.33,0.21858948596216
+"1185",2011-01-01,"statefip","Kansas","formal",412948.79,0.244170615679948
+"1186",2011-01-01,"statefip","Kentucky","formal",525736.88,0.191660046619959
+"1187",2011-01-01,"statefip","Louisiana","formal",532690.9,0.191915570348106
+"1188",2011-01-01,"statefip","Maine","formal",191939.79,0.232883080893411
+"1189",2011-01-01,"statefip","Maryland","formal",787082,0.20804366810378
+"1190",2011-01-01,"statefip","Massachusetts","formal",938922.91,0.22309348211407
+"1191",2011-01-01,"statefip","Michigan","formal",1261026.06,0.205592715503362
+"1192",2011-01-01,"statefip","Minnesota","formal",729154.08,0.222601819063861
+"1193",2011-01-01,"statefip","Mississippi","formal",355856.67,0.197217190958155
+"1194",2011-01-01,"statefip","Missouri","formal",761901.22,0.200422277145338
+"1195",2011-01-01,"statefip","Montana","formal",140682.24,0.232152439148456
+"1196",2011-01-01,"statefip","Nebraska","formal",284628.31,0.251818765039223
+"1197",2011-01-01,"statefip","Nevada","formal",353366.76,0.202041261529828
+"1198",2011-01-01,"statefip","New Hampshire","formal",189162.94,0.222473409777644
+"1199",2011-01-01,"statefip","New Jersey","formal",1135163.21,0.201951488527489
+"1200",2011-01-01,"statefip","New Mexico","formal",242134.61,0.193889466354728
+"1201",2011-01-01,"statefip","New York","formal",2782124.98,0.223320415023005
+"1202",2011-01-01,"statefip","North Carolina","formal",1187298.06,0.20097334565024
+"1203",2011-01-01,"statefip","North Dakota","formal",109685.31,0.261648545535425
+"1204",2011-01-01,"statefip","Ohio","formal",1526670.75,0.211337924471346
+"1205",2011-01-01,"statefip","Oklahoma","formal",483364.42,0.214232710928792
+"1206",2011-01-01,"statefip","Oregon","formal",516445.26,0.2128860856196
+"1207",2011-01-01,"statefip","Pennsylvania","formal",1701779.84,0.216922440369551
+"1208",2011-01-01,"statefip","Rhode Island","formal",157922.72,0.233657412496163
+"1209",2011-01-01,"statefip","South Carolina","formal",551257.43,0.191083570459504
+"1210",2011-01-01,"statefip","South Dakota","formal",115142.12,0.231741756603985
+"1211",2011-01-01,"statefip","Tennessee","formal",875295.68,0.213962533965834
+"1212",2011-01-01,"statefip","Texas","formal",3136782.18,0.197387866596321
+"1213",2011-01-01,"statefip","Utah","formal",294566.61,0.18222907493309
+"1214",2011-01-01,"statefip","Vermont","formal",102302.91,0.24095295099969
+"1215",2011-01-01,"statefip","Virginia","formal",938738.72,0.183197222455137
+"1216",2011-01-01,"statefip","Washington","formal",884407.77,0.205377227860647
+"1217",2011-01-01,"statefip","West Virginia","formal",235064.75,0.197835313349369
+"1218",2011-01-01,"statefip","Wisconsin","formal",814309.3,0.232801601450886
+"1219",2011-01-01,"statefip","Wyoming","formal",77187.39,0.216220334037677
+"1220",2012-01-01,"statefip","Alabama","formal",565458.94,0.187633865786876
+"1221",2012-01-01,"statefip","Alaska","formal",97111.99,0.206384093648641
+"1222",2012-01-01,"statefip","Arizona","formal",863738.74,0.209298058107908
+"1223",2012-01-01,"statefip","Arkansas","formal",366746.28,0.204990805111943
+"1224",2012-01-01,"statefip","California","formal",4567750.32,0.188029714199765
+"1225",2012-01-01,"statefip","Colorado","formal",652094.01,0.203558955582191
+"1226",2012-01-01,"statefip","Connecticut","formal",500773.19,0.222274624179202
+"1227",2012-01-01,"statefip","Delaware","formal",117286.82,0.203870158113251
+"1228",2012-01-01,"statefip","District of Columbia","formal",78589.04,0.17874111090993
+"1229",2012-01-01,"statefip","Florida","formal",2545413.01,0.213413973957659
+"1230",2012-01-01,"statefip","Georgia","formal",1161725.04,0.185730445438133
+"1231",2012-01-01,"statefip","Hawaii","formal",177744.67,0.208491641199231
+"1232",2012-01-01,"statefip","Idaho","formal",191072.5,0.201207458518735
+"1233",2012-01-01,"statefip","Illinois","formal",1640815.9,0.203834775239206
+"1234",2012-01-01,"statefip","Indiana","formal",717703.79,0.182850006317935
+"1235",2012-01-01,"statefip","Iowa","formal",436212.48,0.225088062023702
+"1236",2012-01-01,"statefip","Kansas","formal",394253.92,0.229603652768231
+"1237",2012-01-01,"statefip","Kentucky","formal",534258.05,0.193000738687682
+"1238",2012-01-01,"statefip","Louisiana","formal",549791.06,0.19329946838934
+"1239",2012-01-01,"statefip","Maine","formal",189440.4,0.216426014333715
+"1240",2012-01-01,"statefip","Maryland","formal",824877.21,0.219760964331679
+"1241",2012-01-01,"statefip","Massachusetts","formal",888650.98,0.209365981630365
+"1242",2012-01-01,"statefip","Michigan","formal",1213717.64,0.198464980633839
+"1243",2012-01-01,"statefip","Minnesota","formal",721775.39,0.215673442803698
+"1244",2012-01-01,"statefip","Mississippi","formal",355676.21,0.194775328333517
+"1245",2012-01-01,"statefip","Missouri","formal",769125.98,0.207819810212098
+"1246",2012-01-01,"statefip","Montana","formal",128389.52,0.212067370581889
+"1247",2012-01-01,"statefip","Nebraska","formal",256317.72,0.223312854936057
+"1248",2012-01-01,"statefip","Nevada","formal",347506.25,0.205318480162456
+"1249",2012-01-01,"statefip","New Hampshire","formal",187155.81,0.21902070532776
+"1250",2012-01-01,"statefip","New Jersey","formal",1059533.25,0.192942398036202
+"1251",2012-01-01,"statefip","New Mexico","formal",259566.69,0.211799055888182
+"1252",2012-01-01,"statefip","New York","formal",2823680.21,0.223784491752676
+"1253",2012-01-01,"statefip","North Carolina","formal",1203881.49,0.200819815505956
+"1254",2012-01-01,"statefip","North Dakota","formal",102874.39,0.235387201715455
+"1255",2012-01-01,"statefip","Ohio","formal",1667402.6,0.234070266119411
+"1256",2012-01-01,"statefip","Oklahoma","formal",484961.98,0.208526890124115
+"1257",2012-01-01,"statefip","Oregon","formal",564601.61,0.229590315792609
+"1258",2012-01-01,"statefip","Pennsylvania","formal",1812107.02,0.221488758011349
+"1259",2012-01-01,"statefip","Rhode Island","formal",156345.58,0.237196974952915
+"1260",2012-01-01,"statefip","South Carolina","formal",610750.8,0.206952324407189
+"1261",2012-01-01,"statefip","South Dakota","formal",121248.46,0.239868223329985
+"1262",2012-01-01,"statefip","Tennessee","formal",800109.05,0.195282913903849
+"1263",2012-01-01,"statefip","Texas","formal",3015825.06,0.186948459399454
+"1264",2012-01-01,"statefip","Utah","formal",313043.28,0.188199930295093
+"1265",2012-01-01,"statefip","Vermont","formal",98686.22,0.241826027235765
+"1266",2012-01-01,"statefip","Virginia","formal",1035654.96,0.202379063587598
+"1267",2012-01-01,"statefip","Washington","formal",860235.01,0.195680103721065
+"1268",2012-01-01,"statefip","West Virginia","formal",225899.09,0.18576036852111
+"1269",2012-01-01,"statefip","Wisconsin","formal",811538.89,0.225039663593056
+"1270",2012-01-01,"statefip","Wyoming","formal",88976.69,0.242167364776761
+"1271",2013-01-01,"statefip","Alabama","formal",613285.47,0.198917486990454
+"1272",2013-01-01,"statefip","Alaska","formal",101924.39,0.225149513536079
+"1273",2013-01-01,"statefip","Arizona","formal",781179.32,0.190391548415343
+"1274",2013-01-01,"statefip","Arkansas","formal",336716.47,0.190096825968483
+"1275",2013-01-01,"statefip","California","formal",4927830.89,0.200152661771375
+"1276",2013-01-01,"statefip","Colorado","formal",664499.48,0.201289500016877
+"1277",2013-01-01,"statefip","Connecticut","formal",527406.69,0.234419224315826
+"1278",2013-01-01,"statefip","Delaware","formal",108493.29,0.195258938544198
+"1279",2013-01-01,"statefip","District of Columbia","formal",81373.71,0.180471841045113
+"1280",2013-01-01,"statefip","Florida","formal",2498601.94,0.207849991458492
+"1281",2013-01-01,"statefip","Georgia","formal",1176916.93,0.193792800347503
+"1282",2013-01-01,"statefip","Hawaii","formal",179807.37,0.212673989141226
+"1283",2013-01-01,"statefip","Idaho","formal",202484.02,0.216164184413127
+"1284",2013-01-01,"statefip","Illinois","formal",1658390.13,0.204971037515197
+"1285",2013-01-01,"statefip","Indiana","formal",796798.43,0.206249947421432
+"1286",2013-01-01,"statefip","Iowa","formal",457108.44,0.243099936990894
+"1287",2013-01-01,"statefip","Kansas","formal",400787.09,0.233270167735907
+"1288",2013-01-01,"statefip","Kentucky","formal",594791.07,0.21049323914089
+"1289",2013-01-01,"statefip","Louisiana","formal",495797.69,0.179390864229827
+"1290",2013-01-01,"statefip","Maine","formal",206864.3,0.235506139887216
+"1291",2013-01-01,"statefip","Maryland","formal",773562.04,0.200079819625916
+"1292",2013-01-01,"statefip","Massachusetts","formal",932271.23,0.220793260466498
+"1293",2013-01-01,"statefip","Michigan","formal",1263054.64,0.207138976237185
+"1294",2013-01-01,"statefip","Minnesota","formal",759330.26,0.225742380034873
+"1295",2013-01-01,"statefip","Mississippi","formal",315276.65,0.180285254812224
+"1296",2013-01-01,"statefip","Missouri","formal",760648.82,0.205091386952143
+"1297",2013-01-01,"statefip","Montana","formal",145758.79,0.237739858731181
+"1298",2013-01-01,"statefip","Nebraska","formal",252855.24,0.219476897182651
+"1299",2013-01-01,"statefip","Nevada","formal",322600.57,0.186450639765574
+"1300",2013-01-01,"statefip","New Hampshire","formal",191560.5,0.220936252641445
+"1301",2013-01-01,"statefip","New Jersey","formal",1100495.72,0.199154751373726
+"1302",2013-01-01,"statefip","New Mexico","formal",284990.81,0.223681944408504
+"1303",2013-01-01,"statefip","New York","formal",2634901.61,0.211422734485141
+"1304",2013-01-01,"statefip","North Carolina","formal",1228879.8,0.206696817862882
+"1305",2013-01-01,"statefip","North Dakota","formal",116667.85,0.25316303937258
+"1306",2013-01-01,"statefip","Ohio","formal",1642801.75,0.2318098357404
+"1307",2013-01-01,"statefip","Oklahoma","formal",446236.13,0.195324599216701
+"1308",2013-01-01,"statefip","Oregon","formal",451797.47,0.180275656988744
+"1309",2013-01-01,"statefip","Pennsylvania","formal",1758247.52,0.213897182503044
+"1310",2013-01-01,"statefip","Rhode Island","formal",163113.66,0.246324682171499
+"1311",2013-01-01,"statefip","South Carolina","formal",587962.86,0.196943200883757
+"1312",2013-01-01,"statefip","South Dakota","formal",126965.06,0.245821710543461
+"1313",2013-01-01,"statefip","Tennessee","formal",769068.85,0.191640116690857
+"1314",2013-01-01,"statefip","Texas","formal",3299753.08,0.199291394327382
+"1315",2013-01-01,"statefip","Utah","formal",325228.59,0.190112436301346
+"1316",2013-01-01,"statefip","Vermont","formal",108929.63,0.275339364565748
+"1317",2013-01-01,"statefip","Virginia","formal",1013777.82,0.197992609050355
+"1318",2013-01-01,"statefip","Washington","formal",911264.39,0.204934237456152
+"1319",2013-01-01,"statefip","West Virginia","formal",224962.67,0.196269948556264
+"1320",2013-01-01,"statefip","Wisconsin","formal",826778.89,0.229937272328164
+"1321",2013-01-01,"statefip","Wyoming","formal",78694.74,0.213171937394883
+"1322",2014-01-01,"statefip","Alabama","formal",623974.68,0.213110876805624
+"1323",2014-01-01,"statefip","Alaska","formal",96651.6,0.218131695604052
+"1324",2014-01-01,"statefip","Arizona","formal",836960.17,0.206646157421582
+"1325",2014-01-01,"statefip","Arkansas","formal",329583.43,0.193549090854039
+"1326",2014-01-01,"statefip","California","formal",4923394.21,0.199428360538784
+"1327",2014-01-01,"statefip","Colorado","formal",658618.63,0.190822036631939
+"1328",2014-01-01,"statefip","Connecticut","formal",525539.51,0.220558277444374
+"1329",2014-01-01,"statefip","Delaware","formal",115726.85,0.205314899942676
+"1330",2014-01-01,"statefip","District of Columbia","formal",89602.81,0.195608922613293
+"1331",2014-01-01,"statefip","Florida","formal",2850741.81,0.234040466869328
+"1332",2014-01-01,"statefip","Georgia","formal",1211250.69,0.197340031886807
+"1333",2014-01-01,"statefip","Hawaii","formal",189501.18,0.226491751741678
+"1334",2014-01-01,"statefip","Idaho","formal",192250.28,0.204588383457645
+"1335",2014-01-01,"statefip","Illinois","formal",1687186.35,0.215842141820232
+"1336",2014-01-01,"statefip","Indiana","formal",664945.13,0.16340696002658
+"1337",2014-01-01,"statefip","Iowa","formal",428993.3,0.224701316479054
+"1338",2014-01-01,"statefip","Kansas","formal",416876.82,0.242661375760794
+"1339",2014-01-01,"statefip","Kentucky","formal",570366.15,0.195879471985713
+"1340",2014-01-01,"statefip","Louisiana","formal",527930.9,0.192644629452338
+"1341",2014-01-01,"statefip","Maine","formal",189667.2,0.220099905503137
+"1342",2014-01-01,"statefip","Maryland","formal",768638.82,0.201185852440677
+"1343",2014-01-01,"statefip","Massachusetts","formal",881841.38,0.210053408015337
+"1344",2014-01-01,"statefip","Michigan","formal",1389267.47,0.21723407339354
+"1345",2014-01-01,"statefip","Minnesota","formal",722805.97,0.212054458244896
+"1346",2014-01-01,"statefip","Mississippi","formal",331886.76,0.191185615913075
+"1347",2014-01-01,"statefip","Missouri","formal",826354.16,0.232017065745663
+"1348",2014-01-01,"statefip","Montana","formal",151220.02,0.266157455646297
+"1349",2014-01-01,"statefip","Nebraska","formal",268616.16,0.230878735205827
+"1350",2014-01-01,"statefip","Nevada","formal",367883.68,0.210872496172815
+"1351",2014-01-01,"statefip","New Hampshire","formal",197163.53,0.230272507146192
+"1352",2014-01-01,"statefip","New Jersey","formal",1272943.57,0.232799913210979
+"1353",2014-01-01,"statefip","New Mexico","formal",296425.1,0.22560865491819
+"1354",2014-01-01,"statefip","New York","formal",2660040.47,0.212082511831399
+"1355",2014-01-01,"statefip","North Carolina","formal",1173961.01,0.196956606968255
+"1356",2014-01-01,"statefip","North Dakota","formal",109421.84,0.224497634977087
+"1357",2014-01-01,"statefip","Ohio","formal",1507407.67,0.212317446517797
+"1358",2014-01-01,"statefip","Oklahoma","formal",393139.26,0.177009850364126
+"1359",2014-01-01,"statefip","Oregon","formal",534010.2,0.213902428540499
+"1360",2014-01-01,"statefip","Pennsylvania","formal",1916996.69,0.238727760061056
+"1361",2014-01-01,"statefip","Rhode Island","formal",153350.08,0.234336862020327
+"1362",2014-01-01,"statefip","South Carolina","formal",517855.23,0.173735755023928
+"1363",2014-01-01,"statefip","South Dakota","formal",107341.19,0.219980072083969
+"1364",2014-01-01,"statefip","Tennessee","formal",835078.7,0.216105696770396
+"1365",2014-01-01,"statefip","Texas","formal",3367961.44,0.202320472747717
+"1366",2014-01-01,"statefip","Utah","formal",381894.94,0.215651599659427
+"1367",2014-01-01,"statefip","Vermont","formal",108767.8,0.259981158693276
+"1368",2014-01-01,"statefip","Virginia","formal",1116285.56,0.208706618743108
+"1369",2014-01-01,"statefip","Washington","formal",843844.78,0.183525541524076
+"1370",2014-01-01,"statefip","West Virginia","formal",250331.03,0.22121634040167
+"1371",2014-01-01,"statefip","Wisconsin","formal",786018.74,0.219576600201399
+"1372",2014-01-01,"statefip","Wyoming","formal",78130.12,0.198606119168928
+"1373",2015-01-01,"statefip","Alabama","formal",536812,0.180529817543958
+"1374",2015-01-01,"statefip","Alaska","formal",93706.2,0.208608821049228
+"1375",2015-01-01,"statefip","Arizona","formal",766108.28,0.185004587127206
+"1376",2015-01-01,"statefip","Arkansas","formal",390713.45,0.220923106760653
+"1377",2015-01-01,"statefip","California","formal",4876125.63,0.194647194519316
+"1378",2015-01-01,"statefip","Colorado","formal",706797.09,0.206849907368437
+"1379",2015-01-01,"statefip","Connecticut","formal",553459.16,0.238745185219759
+"1380",2015-01-01,"statefip","Delaware","formal",130592.27,0.224805111179593
+"1381",2015-01-01,"statefip","District of Columbia","formal",94520.95,0.201811110542227
+"1382",2015-01-01,"statefip","Florida","formal",2576335.9,0.20946155548839
+"1383",2015-01-01,"statefip","Georgia","formal",1196889.55,0.190321480657121
+"1384",2015-01-01,"statefip","Hawaii","formal",185721.64,0.222063444037057
+"1385",2015-01-01,"statefip","Idaho","formal",223685.91,0.229322085010449
+"1386",2015-01-01,"statefip","Illinois","formal",1661877.88,0.205669420164608
+"1387",2015-01-01,"statefip","Indiana","formal",777669.93,0.195813920170535
+"1388",2015-01-01,"statefip","Iowa","formal",445422.62,0.236803537033594
+"1389",2015-01-01,"statefip","Kansas","formal",430196.01,0.241095631429935
+"1390",2015-01-01,"statefip","Kentucky","formal",526351.47,0.195396873831
+"1391",2015-01-01,"statefip","Louisiana","formal",621138.37,0.210418243315667
+"1392",2015-01-01,"statefip","Maine","formal",191060.11,0.234559514402911
+"1393",2015-01-01,"statefip","Maryland","formal",790792.64,0.208054657403812
+"1394",2015-01-01,"statefip","Massachusetts","formal",1106013.14,0.25593891383671
+"1395",2015-01-01,"statefip","Michigan","formal",1332529.59,0.20842200006604
+"1396",2015-01-01,"statefip","Minnesota","formal",769149.65,0.228256495640039
+"1397",2015-01-01,"statefip","Mississippi","formal",336345.6,0.178658818458615
+"1398",2015-01-01,"statefip","Missouri","formal",848649.67,0.231780692232855
+"1399",2015-01-01,"statefip","Montana","formal",145849.05,0.229828364131244
+"1400",2015-01-01,"statefip","Nebraska","formal",282285.28,0.24172084347385
+"1401",2015-01-01,"statefip","Nevada","formal",408349.96,0.227163438377293
+"1402",2015-01-01,"statefip","New Hampshire","formal",194822.81,0.223539652645365
+"1403",2015-01-01,"statefip","New Jersey","formal",1257512.17,0.218285605232496
+"1404",2015-01-01,"statefip","New Mexico","formal",274961.53,0.225815352234429
+"1405",2015-01-01,"statefip","New York","formal",2855063.83,0.225863494848523
+"1406",2015-01-01,"statefip","North Carolina","formal",1276557.15,0.205334871681898
+"1407",2015-01-01,"statefip","North Dakota","formal",108624.91,0.230289121686208
+"1408",2015-01-01,"statefip","Ohio","formal",1538528.39,0.215000208512117
+"1409",2015-01-01,"statefip","Oklahoma","formal",490672.22,0.217547045283387
+"1410",2015-01-01,"statefip","Oregon","formal",504141.65,0.209297890740092
+"1411",2015-01-01,"statefip","Pennsylvania","formal",1704849.92,0.215714323785296
+"1412",2015-01-01,"statefip","Rhode Island","formal",152806.98,0.22042775427369
+"1413",2015-01-01,"statefip","South Carolina","formal",658630.65,0.220532291089841
+"1414",2015-01-01,"statefip","South Dakota","formal",124081.32,0.240599509894239
+"1415",2015-01-01,"statefip","Tennessee","formal",849639.79,0.208583391323642
+"1416",2015-01-01,"statefip","Texas","formal",3306216.31,0.198227105849758
+"1417",2015-01-01,"statefip","Utah","formal",328527.86,0.19035739998339
+"1418",2015-01-01,"statefip","Vermont","formal",101779.96,0.251785960475625
+"1419",2015-01-01,"statefip","Virginia","formal",973960.56,0.182846156410176
+"1420",2015-01-01,"statefip","Washington","formal",875816.02,0.194691620438534
+"1421",2015-01-01,"statefip","West Virginia","formal",223084.6,0.190779048842209
+"1422",2015-01-01,"statefip","Wisconsin","formal",758466.72,0.208892223501605
+"1423",2015-01-01,"statefip","Wyoming","formal",84739.09,0.23066775111254
+"1424",2016-01-01,"statefip","Alabama","formal",553755.63,0.18024468193839
+"1425",2016-01-01,"statefip","Alaska","formal",88999.73,0.198533940628936
+"1426",2016-01-01,"statefip","Arizona","formal",779386.9,0.186786485172946
+"1427",2016-01-01,"statefip","Arkansas","formal",408338.34,0.2272573118267
+"1428",2016-01-01,"statefip","California","formal",5190256.3,0.20534408933276
+"1429",2016-01-01,"statefip","Colorado","formal",729784.93,0.209642071143267
+"1430",2016-01-01,"statefip","Connecticut","formal",543727.56,0.237372090181019
+"1431",2016-01-01,"statefip","Delaware","formal",154055.04,0.252340717324269
+"1432",2016-01-01,"statefip","District of Columbia","formal",100674.57,0.212199047034091
+"1433",2016-01-01,"statefip","Florida","formal",2619289.81,0.211483240518571
+"1434",2016-01-01,"statefip","Georgia","formal",1141097.82,0.176965343547102
+"1435",2016-01-01,"statefip","Hawaii","formal",198997.02,0.23266573674586
+"1436",2016-01-01,"statefip","Idaho","formal",204160.33,0.203990208285996
+"1437",2016-01-01,"statefip","Illinois","formal",1655850.6,0.206712317858032
+"1438",2016-01-01,"statefip","Indiana","formal",863885.1,0.217513044436181
+"1439",2016-01-01,"statefip","Iowa","formal",435095.99,0.225690020919754
+"1440",2016-01-01,"statefip","Kansas","formal",374398.87,0.216639345280593
+"1441",2016-01-01,"statefip","Kentucky","formal",621471.04,0.230917255069888
+"1442",2016-01-01,"statefip","Louisiana","formal",607686.11,0.207022959813895
+"1443",2016-01-01,"statefip","Maine","formal",188891.3,0.2263942636698
+"1444",2016-01-01,"statefip","Maryland","formal",877054.77,0.229509391063411
+"1445",2016-01-01,"statefip","Massachusetts","formal",1136894.33,0.255689724097874
+"1446",2016-01-01,"statefip","Michigan","formal",1403721.91,0.226657194308139
+"1447",2016-01-01,"statefip","Minnesota","formal",787836.97,0.236951414042115
+"1448",2016-01-01,"statefip","Mississippi","formal",340086.44,0.186485434712166
+"1449",2016-01-01,"statefip","Missouri","formal",840682.88,0.226511270824942
+"1450",2016-01-01,"statefip","Montana","formal",154056.98,0.247871881802793
+"1451",2016-01-01,"statefip","Nebraska","formal",300814.39,0.266420051556899
+"1452",2016-01-01,"statefip","Nevada","formal",413971.4,0.228235713960271
+"1453",2016-01-01,"statefip","New Hampshire","formal",210560.44,0.251327577622353
+"1454",2016-01-01,"statefip","New Jersey","formal",1173420.92,0.205129188204592
+"1455",2016-01-01,"statefip","New Mexico","formal",267399.34,0.220278910034856
+"1456",2016-01-01,"statefip","New York","formal",2778146.79,0.221373181579448
+"1457",2016-01-01,"statefip","North Carolina","formal",1302001.22,0.207203782545748
+"1458",2016-01-01,"statefip","North Dakota","formal",119927.21,0.24885803398949
+"1459",2016-01-01,"statefip","Ohio","formal",1578899.21,0.21906569686414
+"1460",2016-01-01,"statefip","Oklahoma","formal",498351.56,0.20662692324502
+"1461",2016-01-01,"statefip","Oregon","formal",617471.21,0.239370281588248
+"1462",2016-01-01,"statefip","Pennsylvania","formal",1768547.75,0.224087232167347
+"1463",2016-01-01,"statefip","Rhode Island","formal",157889.91,0.233061697499324
+"1464",2016-01-01,"statefip","South Carolina","formal",682213.47,0.229328315299487
+"1465",2016-01-01,"statefip","South Dakota","formal",124510.82,0.242654956318108
+"1466",2016-01-01,"statefip","Tennessee","formal",890269.2,0.213960173268025
+"1467",2016-01-01,"statefip","Texas","formal",3510110.24,0.204952093255057
+"1468",2016-01-01,"statefip","Utah","formal",393226.35,0.22112592214985
+"1469",2016-01-01,"statefip","Vermont","formal",107215.07,0.270626071293232
+"1470",2016-01-01,"statefip","Virginia","formal",1216762.93,0.231622775954327
+"1471",2016-01-01,"statefip","Washington","formal",946428.72,0.211001015650124
+"1472",2016-01-01,"statefip","West Virginia","formal",218357.85,0.198380881360351
+"1473",2016-01-01,"statefip","Wisconsin","formal",742380.89,0.20590675254379
+"1474",2016-01-01,"statefip","Wyoming","formal",84672.15,0.240140432215143
+"1475",2017-01-01,"statefip","Alabama","formal",588112.17,0.194130954783981
+"1476",2017-01-01,"statefip","Alaska","formal",86450.84,0.194082483692852
+"1477",2017-01-01,"statefip","Arizona","formal",897049.93,0.21300176049572
+"1478",2017-01-01,"statefip","Arkansas","formal",366541.49,0.204038278191351
+"1479",2017-01-01,"statefip","California","formal",5143214.63,0.205114573657162
+"1480",2017-01-01,"statefip","Colorado","formal",766981.96,0.217882455263951
+"1481",2017-01-01,"statefip","Connecticut","formal",605392.55,0.263481483924218
+"1482",2017-01-01,"statefip","Delaware","formal",132219.56,0.222847146893922
+"1483",2017-01-01,"statefip","District of Columbia","formal",90193.07,0.189651507503638
+"1484",2017-01-01,"statefip","Florida","formal",2917499.66,0.230694084006367
+"1485",2017-01-01,"statefip","Georgia","formal",1293564.42,0.196726564253256
+"1486",2017-01-01,"statefip","Hawaii","formal",214907.13,0.249568336005894
+"1487",2017-01-01,"statefip","Idaho","formal",208304.91,0.207508928575965
+"1488",2017-01-01,"statefip","Illinois","formal",1708974.7,0.216737741908947
+"1489",2017-01-01,"statefip","Indiana","formal",924947.86,0.230090449027221
+"1490",2017-01-01,"statefip","Iowa","formal",452037.11,0.234559358509158
+"1491",2017-01-01,"statefip","Kansas","formal",404421.9,0.229424573684406
+"1492",2017-01-01,"statefip","Kentucky","formal",596440.11,0.221670043828958
+"1493",2017-01-01,"statefip","Louisiana","formal",584585.18,0.203571695703247
+"1494",2017-01-01,"statefip","Maine","formal",192921.02,0.230853818240579
+"1495",2017-01-01,"statefip","Maryland","formal",955214.63,0.252552897361864
+"1496",2017-01-01,"statefip","Massachusetts","formal",1075149.69,0.240702904444342
+"1497",2017-01-01,"statefip","Michigan","formal",1333391.44,0.213227124072818
+"1498",2017-01-01,"statefip","Minnesota","formal",839225.02,0.253494271460034
+"1499",2017-01-01,"statefip","Mississippi","formal",367492.4,0.202405890784248
+"1500",2017-01-01,"statefip","Missouri","formal",748815.37,0.21258728639767
+"1501",2017-01-01,"statefip","Montana","formal",140473.28,0.224742346683446
+"1502",2017-01-01,"statefip","Nebraska","formal",259583.6,0.234379326184583
+"1503",2017-01-01,"statefip","Nevada","formal",368504.95,0.202201533036861
+"1504",2017-01-01,"statefip","New Hampshire","formal",201033.86,0.238213989859007
+"1505",2017-01-01,"statefip","New Jersey","formal",1175735.05,0.211036908080996
+"1506",2017-01-01,"statefip","New Mexico","formal",274375.82,0.21812200279402
+"1507",2017-01-01,"statefip","New York","formal",2846818.26,0.230612042655035
+"1508",2017-01-01,"statefip","North Carolina","formal",1338820.54,0.213901789334191
+"1509",2017-01-01,"statefip","North Dakota","formal",116775.58,0.248723401930527
+"1510",2017-01-01,"statefip","Ohio","formal",1607091.91,0.224152834568361
+"1511",2017-01-01,"statefip","Oklahoma","formal",498807.24,0.208074628394661
+"1512",2017-01-01,"statefip","Oregon","formal",559615.65,0.217225173288418
+"1513",2017-01-01,"statefip","Pennsylvania","formal",1810292.13,0.232744926710023
+"1514",2017-01-01,"statefip","Rhode Island","formal",181690.12,0.264281473998729
+"1515",2017-01-01,"statefip","South Carolina","formal",621941.84,0.205449540707801
+"1516",2017-01-01,"statefip","South Dakota","formal",107333.35,0.216218099458511
+"1517",2017-01-01,"statefip","Tennessee","formal",861245.09,0.207037510122058
+"1518",2017-01-01,"statefip","Texas","formal",3507066.43,0.203312683387994
+"1519",2017-01-01,"statefip","Utah","formal",388082.1,0.211032726682237
+"1520",2017-01-01,"statefip","Vermont","formal",105233.79,0.266494134200022
+"1521",2017-01-01,"statefip","Virginia","formal",1238153.36,0.23961901224262
+"1522",2017-01-01,"statefip","Washington","formal",988310.89,0.213136927960122
+"1523",2017-01-01,"statefip","West Virginia","formal",235745.92,0.210259942332392
+"1524",2017-01-01,"statefip","Wisconsin","formal",733529.43,0.205509148912838
+"1525",2017-01-01,"statefip","Wyoming","formal",76117.68,0.217280584380412
+"1526",2018-01-01,"statefip","Alabama","formal",578608.24,0.190581870575725
+"1527",2018-01-01,"statefip","Alaska","formal",100916.52,0.221636607794041
+"1528",2018-01-01,"statefip","Arizona","formal",856993.61,0.202714539654071
+"1529",2018-01-01,"statefip","Arkansas","formal",366001.45,0.207470007381595
+"1530",2018-01-01,"statefip","California","formal",4933185.65,0.197004206006108
+"1531",2018-01-01,"statefip","Colorado","formal",840811.61,0.233905767416491
+"1532",2018-01-01,"statefip","Connecticut","formal",512134.22,0.232409526126268
+"1533",2018-01-01,"statefip","Delaware","formal",146705.81,0.237701323184035
+"1534",2018-01-01,"statefip","District of Columbia","formal",94655.31,0.196241846701982
+"1535",2018-01-01,"statefip","Florida","formal",2801233.97,0.219042704844518
+"1536",2018-01-01,"statefip","Georgia","formal",1208233.72,0.184675895046632
+"1537",2018-01-01,"statefip","Hawaii","formal",218830.46,0.24997087981877
+"1538",2018-01-01,"statefip","Idaho","formal",193111.78,0.185806226626683
+"1539",2018-01-01,"statefip","Illinois","formal",1826994.66,0.230587420343125
+"1540",2018-01-01,"statefip","Indiana","formal",896286.17,0.221167524437131
+"1541",2018-01-01,"statefip","Iowa","formal",446098.02,0.239982805083072
+"1542",2018-01-01,"statefip","Kansas","formal",378864.67,0.220581139191999
+"1543",2018-01-01,"statefip","Kentucky","formal",555573.33,0.206366048935565
+"1544",2018-01-01,"statefip","Louisiana","formal",605746.53,0.215908524179384
+"1545",2018-01-01,"statefip","Maine","formal",207659.95,0.251155513993282
+"1546",2018-01-01,"statefip","Maryland","formal",1022006.76,0.271122569338906
+"1547",2018-01-01,"statefip","Massachusetts","formal",1167039.12,0.258729835079736
+"1548",2018-01-01,"statefip","Michigan","formal",1336071.15,0.217946161910661
+"1549",2018-01-01,"statefip","Minnesota","formal",856043.97,0.24573139556523
+"1550",2018-01-01,"statefip","Mississippi","formal",388572.72,0.215013424010222
+"1551",2018-01-01,"statefip","Missouri","formal",799306.76,0.218675593509076
+"1552",2018-01-01,"statefip","Montana","formal",146815.13,0.237058451071802
+"1553",2018-01-01,"statefip","Nebraska","formal",251367.75,0.225460074248487
+"1554",2018-01-01,"statefip","Nevada","formal",400112.14,0.215253265919986
+"1555",2018-01-01,"statefip","New Hampshire","formal",210927.19,0.243544323873535
+"1556",2018-01-01,"statefip","New Jersey","formal",1225574.78,0.218973289658079
+"1557",2018-01-01,"statefip","New Mexico","formal",273561.43,0.218940415880572
+"1558",2018-01-01,"statefip","New York","formal",3071060.82,0.244286673431404
+"1559",2018-01-01,"statefip","North Carolina","formal",1413064.31,0.216515098515732
+"1560",2018-01-01,"statefip","North Dakota","formal",107716.83,0.229266485499947
+"1561",2018-01-01,"statefip","Ohio","formal",1560268.29,0.217793098841906
+"1562",2018-01-01,"statefip","Oklahoma","formal",463700.78,0.199478889916342
+"1563",2018-01-01,"statefip","Oregon","formal",557726.15,0.212731742238843
+"1564",2018-01-01,"statefip","Pennsylvania","formal",1734698.63,0.223836727563144
+"1565",2018-01-01,"statefip","Rhode Island","formal",163097.3,0.233705000170446
+"1566",2018-01-01,"statefip","South Carolina","formal",628179.45,0.208048991927432
+"1567",2018-01-01,"statefip","South Dakota","formal",113671.01,0.221291666833765
+"1568",2018-01-01,"statefip","Tennessee","formal",848577.98,0.202913342580214
+"1569",2018-01-01,"statefip","Texas","formal",3678002.72,0.211016774914712
+"1570",2018-01-01,"statefip","Utah","formal",397316.27,0.212392132415218
+"1571",2018-01-01,"statefip","Vermont","formal",103191.93,0.266549869775556
+"1572",2018-01-01,"statefip","Virginia","formal",1171178.94,0.222526692463634
+"1573",2018-01-01,"statefip","Washington","formal",1017553.91,0.210779560678379
+"1574",2018-01-01,"statefip","West Virginia","formal",221349.35,0.199259248530179
+"1575",2018-01-01,"statefip","Wisconsin","formal",709519.56,0.196796872079419
+"1576",2018-01-01,"statefip","Wyoming","formal",77835.64,0.225121879639295
+"1577",2019-01-01,"statefip","Alabama","formal",630582.59,0.20745249822653
+"1578",2019-01-01,"statefip","Alaska","formal",97055.59,0.212933411911219
+"1579",2019-01-01,"statefip","Arizona","formal",903915.18,0.206233328825663
+"1580",2019-01-01,"statefip","Arkansas","formal",434321.35,0.25152437241123
+"1581",2019-01-01,"statefip","California","formal",5152616.13,0.208180203241948
+"1582",2019-01-01,"statefip","Colorado","formal",799292.28,0.2198269401543
+"1583",2019-01-01,"statefip","Connecticut","formal",525779.46,0.247444425860549
+"1584",2019-01-01,"statefip","Delaware","formal",152369.18,0.254410468897698
+"1585",2019-01-01,"statefip","District of Columbia","formal",94577.37,0.198153388690021
+"1586",2019-01-01,"statefip","Florida","formal",2764280.8,0.217250724549127
+"1587",2019-01-01,"statefip","Georgia","formal",1387249.95,0.212995480803057
+"1588",2019-01-01,"statefip","Hawaii","formal",199265.26,0.240983283559332
+"1589",2019-01-01,"statefip","Idaho","formal",213593.27,0.200436595815728
+"1590",2019-01-01,"statefip","Illinois","formal",1725865.24,0.219062003404954
+"1591",2019-01-01,"statefip","Indiana","formal",887598.09,0.220930581174552
+"1592",2019-01-01,"statefip","Iowa","formal",454717.58,0.237517981549834
+"1593",2019-01-01,"statefip","Kansas","formal",367906.75,0.222088442398097
+"1594",2019-01-01,"statefip","Kentucky","formal",517045.49,0.190098079147766
+"1595",2019-01-01,"statefip","Louisiana","formal",634728.03,0.231871618365537
+"1596",2019-01-01,"statefip","Maine","formal",211287.27,0.263646657853292
+"1597",2019-01-01,"statefip","Maryland","formal",973142.58,0.248658459940566
+"1598",2019-01-01,"statefip","Massachusetts","formal",1188520.36,0.262520217934831
+"1599",2019-01-01,"statefip","Michigan","formal",1381932.3,0.221757892506925
+"1600",2019-01-01,"statefip","Minnesota","formal",840677.56,0.233320936399556
+"1601",2019-01-01,"statefip","Mississippi","formal",354211.53,0.200859945185846
+"1602",2019-01-01,"statefip","Missouri","formal",725758.14,0.197610392061346
+"1603",2019-01-01,"statefip","Montana","formal",151867.96,0.246522692039285
+"1604",2019-01-01,"statefip","Nebraska","formal",274616.47,0.237751732470714
+"1605",2019-01-01,"statefip","Nevada","formal",405783.01,0.21996268229432
+"1606",2019-01-01,"statefip","New Hampshire","formal",199462.14,0.227842096908865
+"1607",2019-01-01,"statefip","New Jersey","formal",1141330.92,0.210097351998493
+"1608",2019-01-01,"statefip","New Mexico","formal",278830.56,0.224999797256086
+"1609",2019-01-01,"statefip","New York","formal",2918475.77,0.236865961126779
+"1610",2019-01-01,"statefip","North Carolina","formal",1447743.29,0.223524549643306
+"1611",2019-01-01,"statefip","North Dakota","formal",110646.48,0.238070784256792
+"1612",2019-01-01,"statefip","Ohio","formal",1525945.31,0.216144441492867
+"1613",2019-01-01,"statefip","Oklahoma","formal",495308.6,0.216682086495983
+"1614",2019-01-01,"statefip","Oregon","formal",548776.12,0.213823674798067
+"1615",2019-01-01,"statefip","Pennsylvania","formal",1715294.01,0.220369904477709
+"1616",2019-01-01,"statefip","Rhode Island","formal",158919.5,0.24069980553418
+"1617",2019-01-01,"statefip","South Carolina","formal",668186.26,0.2174495281847
+"1618",2019-01-01,"statefip","South Dakota","formal",122120.02,0.24243704539091
+"1619",2019-01-01,"statefip","Tennessee","formal",900884.04,0.217572193188924
+"1620",2019-01-01,"statefip","Texas","formal",3521684.64,0.198515871241202
+"1621",2019-01-01,"statefip","Utah","formal",391666.75,0.209945364973376
+"1622",2019-01-01,"statefip","Vermont","formal",100176.77,0.259876622332382
+"1623",2019-01-01,"statefip","Virginia","formal",1138880.41,0.218065596979296
+"1624",2019-01-01,"statefip","Washington","formal",1060271.29,0.217395839876179
+"1625",2019-01-01,"statefip","West Virginia","formal",223895.39,0.209545788686363
+"1626",2019-01-01,"statefip","Wisconsin","formal",809377.6,0.226159554627819
+"1627",2019-01-01,"statefip","Wyoming","formal",82577,0.242258499209522
+"1628",2020-01-01,"statefip","Alabama","formal",556994.5315,0.181572408389734
+"1629",2020-01-01,"statefip","Alaska","formal",91052.6551,0.208589026594809
+"1630",2020-01-01,"statefip","Arizona","formal",877681.561,0.202831703355343
+"1631",2020-01-01,"statefip","Arkansas","formal",384779.1192,0.221593619918559
+"1632",2020-01-01,"statefip","California","formal",4905952.5675,0.194819768583593
+"1633",2020-01-01,"statefip","Colorado","formal",739047.8354,0.202212956482734
+"1634",2020-01-01,"statefip","Connecticut","formal",560519.0975,0.260539956386054
+"1635",2020-01-01,"statefip","Delaware","formal",143984.3522,0.245374485784146
+"1636",2020-01-01,"statefip","District of Columbia","formal",73769.7979,0.155372046332449
+"1637",2020-01-01,"statefip","Florida","formal",2829361.5138,0.219442104784519
+"1638",2020-01-01,"statefip","Georgia","formal",1303179.9393,0.200790062209284
+"1639",2020-01-01,"statefip","Hawaii","formal",206742.6453,0.243589918064123
+"1640",2020-01-01,"statefip","Idaho","formal",229538.1113,0.206585381448216
+"1641",2020-01-01,"statefip","Illinois","formal",1643200.6881,0.20543756668159
+"1642",2020-01-01,"statefip","Indiana","formal",890205.2218,0.212850857406827
+"1643",2020-01-01,"statefip","Iowa","formal",456728.4303,0.231777303401692
+"1644",2020-01-01,"statefip","Kansas","formal",394138.3071,0.230922053830192
+"1645",2020-01-01,"statefip","Kentucky","formal",513462.7061,0.188150885806182
+"1646",2020-01-01,"statefip","Louisiana","formal",627462.6013,0.222942292256748
+"1647",2020-01-01,"statefip","Maine","formal",217419.714,0.257921791491788
+"1648",2020-01-01,"statefip","Maryland","formal",901041.4657,0.225220141747332
+"1649",2020-01-01,"statefip","Massachusetts","formal",954611.3582,0.209799231140794
+"1650",2020-01-01,"statefip","Michigan","formal",1294923.2349,0.20883577574197
+"1651",2020-01-01,"statefip","Minnesota","formal",801487.7851,0.230792736956288
+"1652",2020-01-01,"statefip","Mississippi","formal",379517.8136,0.211749488413815
+"1653",2020-01-01,"statefip","Missouri","formal",846452.6383,0.22965430810197
+"1654",2020-01-01,"statefip","Montana","formal",140544.9672,0.222389243324563
+"1655",2020-01-01,"statefip","Nebraska","formal",290139.9849,0.248280561310401
+"1656",2020-01-01,"statefip","Nevada","formal",402850.3984,0.206214866954221
+"1657",2020-01-01,"statefip","New Hampshire","formal",188929.9036,0.217549007811213
+"1658",2020-01-01,"statefip","New Jersey","formal",1152632.6983,0.205905041737525
+"1659",2020-01-01,"statefip","New Mexico","formal",278485.5701,0.224255229792916
+"1660",2020-01-01,"statefip","New York","formal",2776310.6785,0.223979233121852
+"1661",2020-01-01,"statefip","North Carolina","formal",1372980.3157,0.211300192221506
+"1662",2020-01-01,"statefip","North Dakota","formal",111422.8815,0.236812606754876
+"1663",2020-01-01,"statefip","Ohio","formal",1640421.0769,0.228687544350387
+"1664",2020-01-01,"statefip","Oklahoma","formal",518043.6014,0.220505331452033
+"1665",2020-01-01,"statefip","Oregon","formal",604409.2368,0.241259987996341
+"1666",2020-01-01,"statefip","Pennsylvania","formal",1724762.2907,0.215748293519723
+"1667",2020-01-01,"statefip","Rhode Island","formal",172382.4064,0.257115299866841
+"1668",2020-01-01,"statefip","South Carolina","formal",577910.2664,0.18661344555133
+"1669",2020-01-01,"statefip","South Dakota","formal",119064.9045,0.227968649340202
+"1670",2020-01-01,"statefip","Tennessee","formal",859640.0996,0.202041672335894
+"1671",2020-01-01,"statefip","Texas","formal",3584877.5937,0.201114550640328
+"1672",2020-01-01,"statefip","Utah","formal",390824.2394,0.202524470276678
+"1673",2020-01-01,"statefip","Vermont","formal",105143.7641,0.271166675798334
+"1674",2020-01-01,"statefip","Virginia","formal",1183310.5134,0.221278076434775
+"1675",2020-01-01,"statefip","Washington","formal",1046389.1433,0.216526508851413
+"1676",2020-01-01,"statefip","West Virginia","formal",229222.0839,0.221161478355492
+"1677",2020-01-01,"statefip","Wisconsin","formal",801635.1699,0.224879537680902
+"1678",2020-01-01,"statefip","Wyoming","formal",83942.4984,0.249133579400594
+"1679",2021-01-01,"statefip","Alabama","formal",549944.0105,0.180364853980976
+"1680",2021-01-01,"statefip","Alaska","formal",81479.7241,0.186430501159782
+"1681",2021-01-01,"statefip","Arizona","formal",745535.4384,0.172104647479696
+"1682",2021-01-01,"statefip","Arkansas","formal",369193.2067,0.206384885951257
+"1683",2021-01-01,"statefip","California","formal",4531232.6057,0.181724757143899
+"1684",2021-01-01,"statefip","Colorado","formal",766061.159,0.206904209722234
+"1685",2021-01-01,"statefip","Connecticut","formal",400351.2134,0.181759513433374
+"1686",2021-01-01,"statefip","Delaware","formal",122293.1479,0.200239478811244
+"1687",2021-01-01,"statefip","District of Columbia","formal",78577.6854,0.166498177752383
+"1688",2021-01-01,"statefip","Florida","formal",2717111.4901,0.206481047951239
+"1689",2021-01-01,"statefip","Georgia","formal",1247219.4902,0.185381074114647
+"1690",2021-01-01,"statefip","Hawaii","formal",189363.6998,0.224083201743322
+"1691",2021-01-01,"statefip","Idaho","formal",226669.9463,0.197960784420267
+"1692",2021-01-01,"statefip","Illinois","formal",1652397.6559,0.209896576368584
+"1693",2021-01-01,"statefip","Indiana","formal",869074.9497,0.211816072628484
+"1694",2021-01-01,"statefip","Iowa","formal",435062.7329,0.220940137349026
+"1695",2021-01-01,"statefip","Kansas","formal",429649.375,0.24425659920539
+"1696",2021-01-01,"statefip","Kentucky","formal",482637.757,0.174862461808484
+"1697",2021-01-01,"statefip","Louisiana","formal",556599.576,0.200252869384716
+"1698",2021-01-01,"statefip","Maine","formal",205491.7354,0.24381190913722
+"1699",2021-01-01,"statefip","Maryland","formal",670039.5571,0.176753910913402
+"1700",2021-01-01,"statefip","Massachusetts","formal",959889.1895,0.217112396192794
+"1701",2021-01-01,"statefip","Michigan","formal",1171389.6496,0.196408976669199
+"1702",2021-01-01,"statefip","Minnesota","formal",756578.2674,0.218011706982189
+"1703",2021-01-01,"statefip","Mississippi","formal",382461.3149,0.211287549627629
+"1704",2021-01-01,"statefip","Missouri","formal",841747.5282,0.229057194436694
+"1705",2021-01-01,"statefip","Montana","formal",137166.6567,0.213224575673992
+"1706",2021-01-01,"statefip","Nebraska","formal",291146.3729,0.245382099128354
+"1707",2021-01-01,"statefip","Nevada","formal",365333.6092,0.188652580620371
+"1708",2021-01-01,"statefip","New Hampshire","formal",182900.0833,0.214873136095798
+"1709",2021-01-01,"statefip","New Jersey","formal",1072786.1395,0.186691220244024
+"1710",2021-01-01,"statefip","New Mexico","formal",255706.2508,0.209643411993849
+"1711",2021-01-01,"statefip","New York","formal",2673646.3834,0.220807878088909
+"1712",2021-01-01,"statefip","North Carolina","formal",1309572.9584,0.201624214854286
+"1713",2021-01-01,"statefip","North Dakota","formal",107914.6401,0.23401314569343
+"1714",2021-01-01,"statefip","Ohio","formal",1507048.246,0.212087252088849
+"1715",2021-01-01,"statefip","Oklahoma","formal",491297.525,0.210372162665792
+"1716",2021-01-01,"statefip","Oregon","formal",640198.9479,0.251656498209051
+"1717",2021-01-01,"statefip","Pennsylvania","formal",1576955.6474,0.199478998212409
+"1718",2021-01-01,"statefip","Rhode Island","formal",168004.2613,0.240656852545153
+"1719",2021-01-01,"statefip","South Carolina","formal",638759.1997,0.206061516206954
+"1720",2021-01-01,"statefip","South Dakota","formal",120836.2156,0.23498886662304
+"1721",2021-01-01,"statefip","Tennessee","formal",913599.9511,0.210310495842292
+"1722",2021-01-01,"statefip","Texas","formal",3457117.4064,0.194034410826794
+"1723",2021-01-01,"statefip","Utah","formal",390283.463,0.19928340908715
+"1724",2021-01-01,"statefip","Vermont","formal",93704.8553,0.242033788499069
+"1725",2021-01-01,"statefip","Virginia","formal",1075593.9787,0.198283831326498
+"1726",2021-01-01,"statefip","Washington","formal",1033860.4911,0.210267904358002
+"1727",2021-01-01,"statefip","West Virginia","formal",218969.5891,0.20348861219139
+"1728",2021-01-01,"statefip","Wisconsin","formal",787706.9256,0.210854376600562
+"1729",2021-01-01,"statefip","Wyoming","formal",75190.776,0.22684453537596
+"1730",2022-01-01,"statefip","Alabama","formal",582922.75,0.192520976478617
+"1731",2022-01-01,"statefip","Alaska","formal",88191.5,0.200091238600875
+"1732",2022-01-01,"statefip","Arizona","formal",913494.61,0.207369882388984
+"1733",2022-01-01,"statefip","Arkansas","formal",365816.87,0.203403323350275
+"1734",2022-01-01,"statefip","California","formal",5105663.06,0.20797906877186
+"1735",2022-01-01,"statefip","Colorado","formal",677316.99,0.183841791606532
+"1736",2022-01-01,"statefip","Connecticut","formal",483102.19,0.219765710253148
+"1737",2022-01-01,"statefip","Delaware","formal",133522.51,0.222219346709704
+"1738",2022-01-01,"statefip","District of Columbia","formal",74511.71,0.170572264482903
+"1739",2022-01-01,"statefip","Florida","formal",2831895.42,0.21516865849604
+"1740",2022-01-01,"statefip","Georgia","formal",1268030.96,0.18791814304157
+"1741",2022-01-01,"statefip","Hawaii","formal",190407.98,0.222953676347942
+"1742",2022-01-01,"statefip","Idaho","formal",257796.29,0.224962564966184
+"1743",2022-01-01,"statefip","Illinois","formal",1628786.57,0.207365734395489
+"1744",2022-01-01,"statefip","Indiana","formal",786909.28,0.187869994207947
+"1745",2022-01-01,"statefip","Iowa","formal",442628.42,0.231311695794043
+"1746",2022-01-01,"statefip","Kansas","formal",436530.74,0.25430062416591
+"1747",2022-01-01,"statefip","Kentucky","formal",549980.64,0.20383319518639
+"1748",2022-01-01,"statefip","Louisiana","formal",665525.44,0.238398192739251
+"1749",2022-01-01,"statefip","Maine","formal",201711.4,0.24539978956667
+"1750",2022-01-01,"statefip","Maryland","formal",782034.96,0.208321309886296
+"1751",2022-01-01,"statefip","Massachusetts","formal",1043322.43,0.242158513406433
+"1752",2022-01-01,"statefip","Michigan","formal",1193879.69,0.201542041118041
+"1753",2022-01-01,"statefip","Minnesota","formal",806327.48,0.24078739782674
+"1754",2022-01-01,"statefip","Mississippi","formal",349843.92,0.197804941589733
+"1755",2022-01-01,"statefip","Missouri","formal",745934.67,0.20505911902087
+"1756",2022-01-01,"statefip","Montana","formal",157471.66,0.233887084539925
+"1757",2022-01-01,"statefip","Nebraska","formal",268100.41,0.228268742516675
+"1758",2022-01-01,"statefip","Nevada","formal",377803.34,0.199590683172371
+"1759",2022-01-01,"statefip","New Hampshire","formal",194772.84,0.229777882809774
+"1760",2022-01-01,"statefip","New Jersey","formal",1141200.25,0.199156136612556
+"1761",2022-01-01,"statefip","New Mexico","formal",288026.6,0.23513844309687
+"1762",2022-01-01,"statefip","New York","formal",2563770.47,0.211674569017609
+"1763",2022-01-01,"statefip","North Carolina","formal",1330002.34,0.199007925689171
+"1764",2022-01-01,"statefip","North Dakota","formal",117271.68,0.251551226428189
+"1765",2022-01-01,"statefip","Ohio","formal",1612416.99,0.228090634109202
+"1766",2022-01-01,"statefip","Oklahoma","formal",518368.49,0.218130074249485
+"1767",2022-01-01,"statefip","Oregon","formal",578962.4,0.223144799820199
+"1768",2022-01-01,"statefip","Pennsylvania","formal",1825851.51,0.234354386211301
+"1769",2022-01-01,"statefip","Rhode Island","formal",170737.01,0.248874466141875
+"1770",2022-01-01,"statefip","South Carolina","formal",712943.91,0.222647888592472
+"1771",2022-01-01,"statefip","South Dakota","formal",113642.33,0.218130198024914
+"1772",2022-01-01,"statefip","Tennessee","formal",853873.93,0.202708649606901
+"1773",2022-01-01,"statefip","Texas","formal",3774680.91,0.207977664080983
+"1774",2022-01-01,"statefip","Utah","formal",386077.73,0.191426720842281
+"1775",2022-01-01,"statefip","Vermont","formal",94384.6,0.24101787423811
+"1776",2022-01-01,"statefip","Virginia","formal",1149053.23,0.209842204894612
+"1777",2022-01-01,"statefip","Washington","formal",1121559.15,0.226054839858126
+"1778",2022-01-01,"statefip","West Virginia","formal",211295.35,0.196556988120292
+"1779",2022-01-01,"statefip","Wisconsin","formal",835268.59,0.223313136195842
+"1780",2022-01-01,"statefip","Wyoming","formal",77146.82,0.227220701186335
+"1781",2023-01-01,"statefip","Alabama","formal",638310.61,0.210321891761086
+"1782",2023-01-01,"statefip","Alaska","formal",88989.04,0.203435144283801
+"1783",2023-01-01,"statefip","Arizona","formal",991722.03,0.226905405020651
+"1784",2023-01-01,"statefip","Arkansas","formal",422916.76,0.235882715417711
+"1785",2023-01-01,"statefip","California","formal",5083936.79,0.207543930969798
+"1786",2023-01-01,"statefip","Colorado","formal",766031.24,0.212126985166961
+"1787",2023-01-01,"statefip","Connecticut","formal",555482.43,0.249885965397531
+"1788",2023-01-01,"statefip","Delaware","formal",163566.59,0.258364330617642
+"1789",2023-01-01,"statefip","District of Columbia","formal",70259.68,0.159848394050974
+"1790",2023-01-01,"statefip","Florida","formal",2889126.1,0.214370839527612
+"1791",2023-01-01,"statefip","Georgia","formal",1354138.65,0.196961488062093
+"1792",2023-01-01,"statefip","Hawaii","formal",198732.4,0.232358366378009
+"1793",2023-01-01,"statefip","Idaho","formal",273703.34,0.233335363164243
+"1794",2023-01-01,"statefip","Illinois","formal",1534203.88,0.200898710290111
+"1795",2023-01-01,"statefip","Indiana","formal",820214.72,0.197579376180163
+"1796",2023-01-01,"statefip","Iowa","formal",378643.57,0.203553382586222
+"1797",2023-01-01,"statefip","Kansas","formal",473226.52,0.276902490712423
+"1798",2023-01-01,"statefip","Kentucky","formal",557464.06,0.20812467163183
+"1799",2023-01-01,"statefip","Louisiana","formal",643897.26,0.232373431257937
+"1800",2023-01-01,"statefip","Maine","formal",193771.24,0.234260060055399
+"1801",2023-01-01,"statefip","Maryland","formal",874869.25,0.222069661114482
+"1802",2023-01-01,"statefip","Massachusetts","formal",1097457.7,0.251125699748975
+"1803",2023-01-01,"statefip","Michigan","formal",1304086.36,0.208677801190104
+"1804",2023-01-01,"statefip","Minnesota","formal",807428.89,0.23687769323953
+"1805",2023-01-01,"statefip","Mississippi","formal",364686.41,0.207833367983967
+"1806",2023-01-01,"statefip","Missouri","formal",768867.15,0.20970876549395
+"1807",2023-01-01,"statefip","Montana","formal",156160,0.233882915750135
+"1808",2023-01-01,"statefip","Nebraska","formal",273775.77,0.239431500132626
+"1809",2023-01-01,"statefip","Nevada","formal",398014.78,0.200977899927407
+"1810",2023-01-01,"statefip","New Hampshire","formal",189431.91,0.220758236705915
+"1811",2023-01-01,"statefip","New Jersey","formal",1160808.1,0.206142788106967
+"1812",2023-01-01,"statefip","New Mexico","formal",253821.18,0.197792119687506
+"1813",2023-01-01,"statefip","New York","formal",2943951.26,0.241227861885687
+"1814",2023-01-01,"statefip","North Carolina","formal",1257634.79,0.189417686555897
+"1815",2023-01-01,"statefip","North Dakota","formal",117551.89,0.249459167214916
+"1816",2023-01-01,"statefip","Ohio","formal",1499366.14,0.217703060160177
+"1817",2023-01-01,"statefip","Oklahoma","formal",503234.36,0.208762044129382
+"1818",2023-01-01,"statefip","Oregon","formal",554070.21,0.212060336411147
+"1819",2023-01-01,"statefip","Pennsylvania","formal",1737485.48,0.222040866104786
+"1820",2023-01-01,"statefip","Rhode Island","formal",157178.05,0.231138715228379
+"1821",2023-01-01,"statefip","South Carolina","formal",731818.75,0.226672842987181
+"1822",2023-01-01,"statefip","South Dakota","formal",119765.63,0.228156243027022
+"1823",2023-01-01,"statefip","Tennessee","formal",960478.03,0.227985967763419
+"1824",2023-01-01,"statefip","Texas","formal",4019550.02,0.213606215417869
+"1825",2023-01-01,"statefip","Utah","formal",424562.72,0.211185055086112
+"1826",2023-01-01,"statefip","Vermont","formal",100250.45,0.250387774617647
+"1827",2023-01-01,"statefip","Virginia","formal",1130270.61,0.208988286875436
+"1828",2023-01-01,"statefip","Washington","formal",1086275.82,0.221851481212958
+"1829",2023-01-01,"statefip","West Virginia","formal",217622.03,0.20296523453966
+"1830",2023-01-01,"statefip","Wisconsin","formal",796099.42,0.221345037954029
+"1831",2023-01-01,"statefip","Wyoming","formal",69999.35,0.207453334050536
+"1832",2024-01-01,"statefip","Alabama","formal",632233.9,0.211452739218002
+"1833",2024-01-01,"statefip","Alaska","formal",99899.06,0.223585952698749
+"1834",2024-01-01,"statefip","Arizona","formal",1042060.04,0.240063457325884
+"1835",2024-01-01,"statefip","Arkansas","formal",409644.58,0.22276714717267
+"1836",2024-01-01,"statefip","California","formal",5188762.52,0.211988518681322
+"1837",2024-01-01,"statefip","Colorado","formal",747258.66,0.202563338111008
+"1838",2024-01-01,"statefip","Connecticut","formal",560883.92,0.253052324198385
+"1839",2024-01-01,"statefip","Delaware","formal",156085.87,0.259320271834114
+"1840",2024-01-01,"statefip","District of Columbia","formal",84273.31,0.182244751510813
+"1841",2024-01-01,"statefip","Florida","formal",2835951.64,0.209574609915788
+"1842",2024-01-01,"statefip","Georgia","formal",1286351.07,0.189137650906625
+"1843",2024-01-01,"statefip","Hawaii","formal",212951.1,0.255052153434511
+"1844",2024-01-01,"statefip","Idaho","formal",267808.49,0.224498285291525
+"1845",2024-01-01,"statefip","Illinois","formal",1667866.15,0.212229195493412
+"1846",2024-01-01,"statefip","Indiana","formal",855802.85,0.206504896574811
+"1847",2024-01-01,"statefip","Iowa","formal",469812.65,0.243189361964181
+"1848",2024-01-01,"statefip","Kansas","formal",406274.26,0.235896297737385
+"1849",2024-01-01,"statefip","Kentucky","formal",563728.6,0.210024978776519
+"1850",2024-01-01,"statefip","Louisiana","formal",646153.93,0.234640913725053
+"1851",2024-01-01,"statefip","Maine","formal",229797.94,0.274313963931879
+"1852",2024-01-01,"statefip","Maryland","formal",776183.99,0.201265418764043
+"1853",2024-01-01,"statefip","Massachusetts","formal",1134657.4,0.257481139292001
+"1854",2024-01-01,"statefip","Michigan","formal",1299328.69,0.212239567806998
+"1855",2024-01-01,"statefip","Minnesota","formal",790908.2,0.220779464579479
+"1856",2024-01-01,"statefip","Mississippi","formal",364647.22,0.208519465227469
+"1857",2024-01-01,"statefip","Missouri","formal",795186.58,0.213690696350941
+"1858",2024-01-01,"statefip","Montana","formal",140856.43,0.209917589237318
+"1859",2024-01-01,"statefip","Nebraska","formal",272708.44,0.237625584109961
+"1860",2024-01-01,"statefip","Nevada","formal",451055.64,0.221934833750845
+"1861",2024-01-01,"statefip","New Hampshire","formal",205575.96,0.244941474303564
+"1862",2024-01-01,"statefip","New Jersey","formal",1187787.77,0.207854212599047
+"1863",2024-01-01,"statefip","New Mexico","formal",240596.36,0.194323162709496
+"1864",2024-01-01,"statefip","New York","formal",3140106.21,0.261400847945013
+"1865",2024-01-01,"statefip","North Carolina","formal",1299923.89,0.197974034413633
+"1866",2024-01-01,"statefip","North Dakota","formal",102812.17,0.213007821599801
+"1867",2024-01-01,"statefip","Ohio","formal",1550111.42,0.225006387254445
+"1868",2024-01-01,"statefip","Oklahoma","formal",548097.46,0.226271413549997
+"1869",2024-01-01,"statefip","Oregon","formal",602528.84,0.231869909020296
+"1870",2024-01-01,"statefip","Pennsylvania","formal",1814161.07,0.234174214850977
+"1871",2024-01-01,"statefip","Rhode Island","formal",166992.01,0.247653324281344
+"1872",2024-01-01,"statefip","South Carolina","formal",691195.45,0.215636495472947
+"1873",2024-01-01,"statefip","South Dakota","formal",134089.73,0.253794033490697
+"1874",2024-01-01,"statefip","Tennessee","formal",930197.55,0.21348442265336
+"1875",2024-01-01,"statefip","Texas","formal",3842206.48,0.203869860807013
+"1876",2024-01-01,"statefip","Utah","formal",431505.7,0.206447288038992
+"1877",2024-01-01,"statefip","Vermont","formal",99393.24,0.254954102831676
+"1878",2024-01-01,"statefip","Virginia","formal",1217885.52,0.23220985037088
+"1879",2024-01-01,"statefip","Washington","formal",1028777.82,0.204103229163635
+"1880",2024-01-01,"statefip","West Virginia","formal",222513.02,0.216383313495305
+"1881",2024-01-01,"statefip","Wisconsin","formal",768666.93,0.220032227076845
+"1882",2024-01-01,"statefip","Wyoming","formal",79829.55,0.23776850188469
