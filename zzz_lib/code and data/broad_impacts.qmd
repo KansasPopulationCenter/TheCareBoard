@@ -1,0 +1,415 @@
+---
+title: "broad_impacts"
+format: html
+editor: visual
+---
+
+## Setup
+
+```{r}
+source("load_defaults.R")
+min_year <- 2003
+
+us_gdp <- read.csv("../../01_preliminary-code-and-data/01_USGDP.csv") |>
+  clean_names() |>
+  mutate(
+    date = as.Date(paste0(
+      substr(
+        observation_date,
+        nchar(observation_date) - 3,
+        nchar(observation_date)
+      ), "-01-01"
+    )),
+    fygdp = fygdp * 1e9,
+    gdp_daily = fygdp / 365
+  ) |>
+  filter(year(date) >= min_year) |>
+  select(date, gdp_daily)
+```
+
+## Formal
+
+### Data Setup
+
+#### Base Table
+
+```{r}
+asec <- readRDS("../../02_data-prep-and-cleaning/03_ASECdata.rds") |>
+  # incorporate HFLAG clause due to survey redesign in 2014
+  # https://blog.popdata.org/2014sample/
+  filter(HFLAG == 1 | is.na(HFLAG)) |> 
+  filter(YEAR >= min_year) |>
+  filter(AGE >= 18 & AGE <= 65) |>
+  select(YEAR,
+         ASECWT,
+         UHRSWORKT,
+         INCWAGE,
+         empstat,
+         occ_care_focus,
+         gender_parent) |>
+  clean_names() |>
+  mutate(
+    date = as.Date(paste0(year, "-01-01")),
+    uhrsworkt = ifelse(uhrsworkt == 999, 0, uhrsworkt),
+    occ_type = ifelse(occ_care_focus == "none", "non-care", "care"),
+    overall = "overall"
+  ) 
+```
+
+#### Labor Force
+
+```{r}
+get_formal_lfp <- function(df, demo_group) {
+  df <- asec |>
+    mutate(
+      category_id = demo_group,
+      subcategory_id = get(demo_group)
+      ) |>
+    group_by(date, category_id, subcategory_id) |>
+    summarise(
+      formal_care_labor_force = sum(
+        ifelse(
+          occ_type == "care" & empstat == "Employed", 
+          asecwt, 0)),
+      formal_care_labor_force_proportion = formal_care_labor_force /
+        sum(asecwt)
+    )
+  
+  return(df)
+}
+
+formal_lfp <- bind_rows(
+  get_formal_lfp(asec, "overall"),
+  get_formal_lfp(asec, "gender_parent")
+  )
+```
+
+#### Hours
+
+```{r}
+get_formal_time <- function(df, demo_group) {
+  df <- asec |>
+    filter(uhrsworkt != 997) |> 
+    mutate(
+      category_id = demo_group,
+      subcategory_id = get(demo_group)
+      ) |>
+    group_by(date, category_id, subcategory_id) |>
+    summarise(
+      formal_care_time = sum(
+        ifelse(
+          occ_type == "care" & empstat == "Employed",
+          asecwt * uhrsworkt * 60 / 7,
+          0
+        )
+      ),
+      formal_care_time_proportion = formal_care_time /
+        sum(asecwt * uhrsworkt * 60 / 7)
+    )
+  
+  return(df)
+}
+
+formal_time <- bind_rows(
+  get_formal_time(asec, "overall"),
+  get_formal_time(asec, "gender_parent")
+)
+```
+
+#### Value
+
+```{r}
+get_formal_value <- function(df, demo_group) {
+  df <- asec |>
+    filter(uhrsworkt != 997) |> 
+    filter(incwage != 0) |> 
+    mutate(
+      category_id = demo_group,
+      subcategory_id = get(demo_group)
+      ) |>
+    group_by(date, category_id, subcategory_id) |>
+    summarise(
+      formal_value = sum(
+        ifelse(occ_type == "care" & empstat == "Employed", 
+               incwage * asecwt, 0))
+      ) |>
+    left_join(us_gdp, by = "date") |>
+    mutate(formal_value = formal_value / 365,
+           formal_value_proportion = formal_value / gdp_daily) |>
+    select(-gdp_daily)
+  
+  return(df)
+}
+
+formal_value <- bind_rows(
+  get_formal_value(asec, "overall"),
+  get_formal_value(asec, "gender_parent")
+)
+```
+
+### Write to File
+
+```{r}
+metrics_formal <- bind_rows(
+  formal_lfp, 
+  formal_time, 
+  formal_value
+) 
+
+write.csv(
+  metrics_formal, 
+  "./app_data/metrics_formal.csv", 
+  row.names = FALSE
+  )
+```
+
+### Plot
+
+#### Trends
+
+```{r}
+plt_trend <- function(df, col, sel_title = NULL){
+  p <- ggplot() +
+    geom_line(data = df, aes(x = date, y = get(col))) +
+    geom_point(data = df, aes(x = date, y = get(col))) +
+    theme_minimal() +
+    theme(axis.title = element_blank()) +
+    scale_y_continuous(labels = comma) +
+    expand_limits(y = 0) +
+    ggtitle(sel_title)
+  
+  return(p)
+}
+
+plt_trend(formal_lfp |> filter(category_id == "overall"), "formal_care_labor_force", "Formal Care Labor Force")
+
+plt_trend(formal_lfp |> filter(category_id == "overall"), "formal_care_labor_force_proportion", "Formal Care Labor Force Proportion")
+
+
+plt_trend(formal_time |> filter(category_id == "overall"), "formal_care_time", "Formal Care Time")
+
+plt_trend(formal_time |> filter(category_id == "overall"), "formal_care_time_proportion", "Formal Care Time Proportion")
+
+
+
+plt_trend(formal_value |> filter(category_id == "overall"), "formal_value", "Formal Value")
+
+plt_trend(formal_value |> filter(category_id == "overall"), "formal_value_proportion", "Formal Value Proportion")
+```
+
+#### Check Totals
+
+```{r}
+formal_checks <- asec |> 
+  filter(uhrsworkt != 997) |> 
+  filter(incwage != 0) |> 
+  group_by(year) |> 
+  summarise(
+    population = sum(asecwt), 
+    avg_wage = sum(asecwt*incwage, na.rm = TRUE)/population,
+    median_wage = wtd.quantile(
+      incwage, 
+      weights = asecwt, 
+      probs = 0.5
+    )    
+  ) |> 
+  ungroup() |> 
+  mutate(date = as.Date(paste0(as.character(year), "-01-01")))
+
+
+plt_trend(formal_checks, "population", "Population")
+plt_trend(formal_checks, "avg_wage", "Average Wage")
+plt_trend(formal_checks, "median_wage", "Median wage")
+```
+
+## Informal
+
+### Data Setup
+
+```{r}
+source("load_defaults.R")
+atus <- readRDS("../../02_data-prep-and-cleaning/03_ATUSdata.rds") |> 
+  filter(YEAR != 2020) |> 
+  #filter(AGE >= 18 & AGE <= 65) |>
+  select(YEAR, CASEID, WT06, ACTIVITY, DURATION, SCC_ALL_LN, SEC_ALL_LN,
+         act_care_focus, activity, gender_parent) |> 
+  clean_names() |> 
+  mutate(
+    care_flag = ifelse(act_care_focus == "non-care", "non-care", "care"), 
+    overall = "overall"
+    ) 
+```
+
+#### Base Table
+
+```{r}
+case_year <- atus |> 
+  mutate(weight = wt06 / 365) |> 
+  summarise(
+    total_time = sum(duration),
+    .by = c(year, caseid, gender_parent, weight, care_flag)
+    ) |> 
+  mutate(overall = "overall")
+
+yr_range <- atus_yr_range(atus)
+```
+
+#### Labor Force
+
+```{r}
+get_informal_lfp <- function(demo_group) {
+  informal_lfp <- list()
+  i = 1
+  
+  for (sel_year in yr_range$year) {
+    year_min <- yr_range$yr_start[i]
+    
+    # calculate total population for the selected demo group
+    tot_pop <- atus |>
+      filter(year >= year_min & year <= sel_year) |>
+      mutate(category_id = demo_group,
+             subcategory_id = get(demo_group)) |>
+      distinct(year, caseid, wt06, category_id, subcategory_id) |>
+      summarise(
+        total_population = sum(wt06 / 365 / 5), 
+        .by = c(category_id, subcategory_id)
+        )
+    
+    # calculate population doing minimum 3 hours care work
+    informal_lfp[[sel_year]] <- case_year |>
+      filter(year >= year_min & year <= sel_year) |>
+      filter(care_flag == "care" & total_time > 3*60) |>
+      mutate(category_id = demo_group,
+             subcategory_id = get(demo_group)) |>
+      summarise(
+        informal_care_labor_force = sum(weight / 5), 
+        .by = c(category_id, subcategory_id)
+        ) |>
+      left_join(tot_pop, by = c("category_id", "subcategory_id")) |>
+      mutate(
+        date = as.Date(paste0(as.character(sel_year), "-01-01")),
+        informal_care_labor_force_proportion = 
+          informal_care_labor_force / total_population
+        ) |>
+      relocate(date) 
+    
+    i = i + 1
+  }
+  
+  df <- bind_rows(informal_lfp)
+  return(df)
+}
+
+informal_lfp <- bind_rows(
+  get_informal_lfp("overall"),
+  get_informal_lfp("gender_parent")
+)
+```
+
+#### Hours
+
+```{r}
+get_informal_time <- function(demo_group) {
+  informal_time <- list()
+  i = 1
+  
+  for (sel_year in yr_range$year) {
+    year_min <- yr_range$yr_start[i]
+    
+    informal_time[[sel_year]] <- case_year |>
+      filter(year >= year_min & year <= sel_year) |>
+      mutate(category_id = demo_group,
+             subcategory_id = get(demo_group)) |>
+      summarise(
+        informal_care_time = sum(total_time*weight/5),
+        .by = c(care_flag, category_id, subcategory_id) 
+      ) |> 
+      group_by(category_id, subcategory_id) |> 
+      mutate(
+        date = as.Date(paste0(as.character(sel_year), "-01-01")),
+        informal_care_time_proportion = informal_care_time /
+          sum(informal_care_time)
+        ) |> 
+      relocate(date)
+    
+    i = i + 1
+  }
+  
+  df <- bind_rows(informal_time)
+  return(df)
+}
+
+informal_time <- bind_rows(
+  get_informal_time("overall"),
+  get_informal_time("gender_parent")
+) 
+```
+
+#### Value
+
+```{r}
+informal_value <- informal_time |> 
+  left_join(us_gdp, by = "date") |> 
+  mutate(informal_value = (informal_care_time / 60) * 7.25) |> 
+  mutate(informal_value_proportion = informal_value/gdp_daily)
+```
+
+### Write to File
+
+```{r}
+metrics_informal <- bind_rows(
+  informal_lfp, 
+  informal_time, 
+  informal_value |> select(-matches("time|gdp_daily"))
+) |> 
+  filter(care_flag == "care" | is.na(care_flag)) |> 
+  select(-care_flag, -total_population)
+
+write.csv(
+  metrics_informal, 
+  "./app_data/metrics_informal.csv", 
+  row.names = FALSE
+  )
+```
+
+### Plot
+
+#### Trends
+
+```{r}
+plt_trend <- function(df, col, sel_title = NULL){
+  p <- ggplot() +
+    geom_line(data = df, aes(x = date, y = get(col))) +
+    geom_point(data = df, aes(x = date, y = get(col))) +
+    theme_minimal() +
+    theme(axis.title = element_blank()) +
+    scale_y_continuous(labels = comma) +
+    expand_limits(y = 0) +
+    ggtitle(sel_title)
+  
+  return(p)
+}
+
+plt_trend(informal_lfp |> filter(category_id == "overall"), "informal_care_labor_force", "Informal Care Labor Force")
+
+plt_trend(informal_lfp |> filter(category_id == "overall"), "informal_care_labor_force_proportion", "Informal Care Labor Force Proportion")
+
+
+plt_trend(informal_time |> 
+            filter(category_id == "overall"  & care_flag == "care"), 
+          "informal_care_time", "Informal Care Time")
+
+plt_trend(informal_time |> 
+            filter(category_id == "overall" & care_flag == "care"), 
+          "informal_care_time_proportion", "Informal Care Time Proportion")
+
+
+
+plt_trend(informal_value |> 
+            filter(category_id == "overall" & care_flag == "care"),
+          "informal_value", "Formal Value")
+
+plt_trend(informal_value |> 
+            filter(category_id == "overall" & care_flag == "care"), 
+          "informal_value_proportion", "Formal Value Proportion")
+```
