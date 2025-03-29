@@ -8,27 +8,22 @@ editor: visual
 
 ```{r}
 source("load_defaults.R")
-min_year <- 2003
-min_year_all <- 1990
+min_year <- 1994
 
-us_gdp <- read.csv("./app_data/FYGDP.csv") |>
+us_gdp <- read.csv("../../01_preliminary-code-and-data/01_USGDP.csv") |>
   clean_names() |>
   mutate(
-    date = as.Date(paste0(year(as.Date(observation_date)), "-01-01")),
+    date = as.Date(paste0(
+      substr(
+        observation_date,
+        nchar(observation_date) - 3,
+        nchar(observation_date)
+      ), "-01-01"
+    )),
     fygdp = fygdp * 1e9,
     gdp_daily = fygdp / 365
   ) |>
   filter(year(date) >= min_year) |>
-  select(date, gdp_daily)
-
-us_gdp_all <- read.csv("./app_data/FYGDP.csv") |>
-  clean_names() |>
-  mutate(
-    date = as.Date(paste0(year(as.Date(observation_date)), "-01-01")),
-    fygdp = fygdp * 1e9,
-    gdp_daily = fygdp / 365
-  ) |>
-  filter(year(date) >= min_year_all) |>
   select(date, gdp_daily)
 ```
 
@@ -39,28 +34,24 @@ us_gdp_all <- read.csv("./app_data/FYGDP.csv") |>
 #### Base Table
 
 ```{r}
-asec <- read.csv("./data/CSV/ASECdata.csv") |>
+asec <- readRDS("../../02_data-prep-and-cleaning/03_ASECdata.rds") |>
   # incorporate HFLAG clause due to survey redesign in 2014
   # https://blog.popdata.org/2014sample/
   filter(HFLAG == 1 | is.na(HFLAG)) |> 
+  filter(AGE >= 18) |>
   filter(YEAR >= min_year) |>
-  filter(AGE >= 18 & AGE <= 65) |>
   select(YEAR,
          ASECWT,
          UHRSWORKT,
          INCWAGE,
          empstat,
-         race_ethnicity,
-         educ,
-         statefip,
-         FOCUS,
-         marst,
+         occ_care_focus,
          gender_parent) |>
   clean_names() |>
   mutate(
     date = as.Date(paste0(year, "-01-01")),
     uhrsworkt = ifelse(uhrsworkt == 999, 0, uhrsworkt),
-    occ_type = ifelse(focus == "none", "non-care", "care"),
+    occ_type = ifelse(occ_care_focus == "none", "non-care", "care"),
     overall = "overall"
   ) 
 ```
@@ -91,8 +82,6 @@ formal_lfp <- bind_rows(
   get_formal_lfp(asec, "overall"),
   get_formal_lfp(asec, "gender_parent")
   )
-
-
 ```
 
 #### Hours
@@ -101,6 +90,7 @@ formal_lfp <- bind_rows(
 get_formal_time <- function(df, demo_group) {
   df <- asec |>
     filter(uhrsworkt != 997) |> 
+    filter(empstat == "Employed") |> 
     mutate(
       category_id = demo_group,
       subcategory_id = get(demo_group)
@@ -109,7 +99,8 @@ get_formal_time <- function(df, demo_group) {
     summarise(
       formal_care_time = sum(
         ifelse(
-          occ_type == "care" & empstat == "Employed",
+          #occ_type == "care" & empstat == "Employed",
+          occ_type == "care",
           asecwt * uhrsworkt * 60 / 7,
           0
         )
@@ -132,8 +123,7 @@ formal_time <- bind_rows(
 ```{r}
 get_formal_value <- function(df, demo_group) {
   df <- asec |>
-    filter(uhrsworkt != 997) |> 
-    filter(incwage != 0) |> 
+  filter(incwage != 0 & incwage != 99999999) |>
     mutate(
       category_id = demo_group,
       subcategory_id = get(demo_group)
@@ -212,8 +202,7 @@ plt_trend(formal_value |> filter(category_id == "overall"), "formal_value_propor
 
 ```{r}
 formal_checks <- asec |> 
-  filter(uhrsworkt != 997) |> 
-  filter(incwage != 0) |> 
+  filter(incwage != 0 & incwage != 99999999) |>
   group_by(year) |> 
   summarise(
     population = sum(asecwt), 
@@ -239,16 +228,27 @@ plt_trend(formal_checks, "median_wage", "Median wage")
 
 ```{r}
 source("load_defaults.R")
-atus <- read.csv("./data/CSV/ATUSdata.csv") |> 
+atus <- readRDS("../../02_data-prep-and-cleaning/03_ATUSdata.rds") |> 
+  filter(activity != "Formal Work") |> 
+  filter(AGE >= 18) |>
   filter(YEAR != 2020) |> 
-  #filter(AGE >= 18 & AGE <= 65) |>
   select(YEAR, CASEID, WT06, ACTIVITY, DURATION, SCC_ALL_LN, SEC_ALL_LN,
          act_care_focus, activity, gender_parent) |> 
   clean_names() |> 
+  pivot_longer(
+    cols = c(duration, scc_all_ln, sec_all_ln),
+    names_to = "metric", 
+    values_to = "duration"
+  ) |>   
   mutate(
-    care_flag = ifelse(act_care_focus == "non-care", "non-care", "care"), 
+    duration = coalesce(duration, 0),
+    care_flag = case_when(
+      metric %in% c("scc_all_ln", "sec_all_ln") | 
+        act_care_focus != "non-care" ~ "care", 
+      TRUE ~ "non-care" 
+    ), 
     overall = "overall"
-    ) 
+  )
 ```
 
 #### Base Table
@@ -289,7 +289,7 @@ get_informal_lfp <- function(demo_group) {
     # calculate population doing minimum 3 hours care work
     informal_lfp[[sel_year]] <- case_year |>
       filter(year >= year_min & year <= sel_year) |>
-      filter(care_flag == "care" & total_time > 3*60) |>
+      filter(care_flag == "care" & total_time >= 3*60) |>
       mutate(category_id = demo_group,
              subcategory_id = get(demo_group)) |>
       summarise(
@@ -373,7 +373,7 @@ metrics_informal <- bind_rows(
   informal_time, 
   informal_value |> select(-matches("time|gdp_daily"))
 ) |> 
-  filter(care_flag == "care" | is.na(care_flag)) |> 
+  filter(care_flag == "care" | is.na(care_flag)) |>
   select(-care_flag, -total_population)
 
 write.csv(
