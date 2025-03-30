@@ -1,0 +1,63 @@
+---
+title: "market"
+format: html
+editor: visual
+---
+
+## Overview
+
+The country's current age distribution represents the care market. Age demographics directly influences the needs for services like healthcare and education. Understanding age profiles can help forecast shifts in service needs over time.
+
+We will use the ASEC data to inform this distribution. Due to privacy and sample sizes:
+
+-   age 80 represents individuals 80-84 years old
+
+-   age 85 represents individuals 85 years and older
+
+## Load Recent Data
+
+```{r}
+source("load_defaults.R")
+
+age_list <- data.frame(age = seq(0, 85, by = 1))
+
+age_data <- readRDS("../../02_data-prep-and-cleaning/03_ASECdata.rds") |>
+  filter(YEAR == max(YEAR)) |>
+  select(AGE, ASECWT) |>
+  clean_names()
+
+# get age summary in format needed for app
+age_modified <- full_join(
+  age_list,
+  age_data |>
+    group_by(age) |>
+    summarise(population = sum(asecwt, na.rm = TRUE)),
+  by = "age"
+) |>
+  mutate(population = coalesce(population, 0))
+
+write.csv(age_modified, "./app_data/market.csv", row.names = FALSE)
+```
+
+### View Data
+
+```{r}
+plt_dist <- function(df){
+  p <- ggplot() +
+    geom_col(
+      data = df,
+      aes(x = age, y = population)
+    ) +
+    theme_minimal() +
+    theme(axis.title = element_blank()) +
+    scale_y_continuous(labels = comma) +
+    ggtitle(label = paste(
+      "total population:",
+      comma(sum(age_modified$population))
+      ))
+
+  return(p)
+}
+
+plt_dist(age_modified)
+```
