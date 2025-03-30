@@ -3,13 +3,13 @@ title: "Care Board Methodology"
 author: "Joseph Bommarito"
 date: "`r Sys.Date()`"
 output:
-  word_document:
-    toc: true
   html_document:
     theme: cerulean
     toc: true
     toc_float:
       collapsed: true
+  word_document:
+    toc: true
 editor_options: 
   markdown: 
     wrap: sentence
@@ -274,20 +274,18 @@ The CPS and ASEC data often have variables that measure the same thing as the AT
 Thus we need to ensure that all variables are coded correctly.
 This section does that while also providing information on the variety of variables throughout the samples.
 
-```{r var list}
-setwd(data_prep_wd)
-
-ipums_asec_path <- file.path("data", "cps_00418.xml")
+```{r IPUMS Pulls}
+ipums_asec_path <- file.path("data/IPUMS Pulls", "cps_00420.xml")
 ddi_asec <- read_ipums_ddi(ipums_asec_path)
 label_asec <- ddi_asec$var_info$var_label
 lbl_tbl_asec <- ddi_asec$var_info$val_labels
 
-ipums_cps_path <- file.path("data", "cps_00419.xml")
+ipums_cps_path <- file.path("data/IPUMS Pulls", "cps_00421.xml")
 ddi_cps <- read_ipums_ddi(ipums_cps_path)
 label_cps <- ddi_cps$var_info$var_label
 lbl_tbl_cps <- ddi_cps$var_info$val_labels
 
-ipums_atus_path <- file.path("data", "atus_00027.xml")
+ipums_atus_path <- file.path("data/IPUMS Pulls", "atus_00027.xml")
 ddi_atus <- read_ipums_ddi(ipums_atus_path)
 label_atus <- ddi_atus$var_info$var_label
 lbl_tbl_atus <- ddi_atus$var_info$val_labels
@@ -1362,7 +1360,6 @@ This then saves the files as an rds file for future use.
 
 
 ```{r recode cps data}
-setwd(data_prep_wd)
 # Read data
 micro_cps <- read_ipums_micro(ddi_cps)
 
@@ -1374,7 +1371,7 @@ micro_cps <- micro_cps %>%
   select(any_of(col_order)) |> 
   left_join(df_occ, by = c("OCC2010" = "code"))
 
-saveRDS(micro_cps, "03_CPSdata.rds")
+write.csv(micro_cps, "data/CSV/CPSdata.csv")
 
 skim(micro_cps)
 ```
@@ -1386,7 +1383,6 @@ The code below does the same thing applying the functions created to recode the 
 This code then assembles the data in the proper order and merges them with the activity data.
 
 ```{r recode asec data}
-setwd(data_prep_wd)
 # Read data
 micro_asec <- read_ipums_micro(ddi_asec)
 
@@ -1398,7 +1394,7 @@ micro_asec <- micro_asec %>%
   select(any_of(col_order)) |> 
   left_join(df_occ, by = c("OCC2010" = "code"))
 
-saveRDS(micro_asec, "03_ASECdata.rds")
+write.csv(micro_asec, "data/CSV/ASECdata.csv")
 
 skim(micro_asec)
 ```
@@ -1415,8 +1411,6 @@ We utilize the data from the last month an individual is present in the cps to i
 ```{r recode atus data}
 rm(micro_asec)
 gc()
-
-setwd(data_prep_wd)
 
 micro_atus <- read_ipums_micro(ddi_atus)
 
@@ -1451,7 +1445,7 @@ micro_atus <- micro_atus |>
     by = c("CPSIDP")
     )
 
-saveRDS(micro_atus, "03_ATUSdata.rds")
+write.csv(micro_atus, "data/CSV/ATUSdata.csv")
 
 skim(micro_atus)
 ```
@@ -1466,44 +1460,1650 @@ Upon the complete running of this code, three datasets should be written into th
 
 # Care needs and provision
 
+Understanding how much time in a given day a person requires care giving from others is essential for accurately assessing the scale and structure of the care economy.
+While caregiving can be measured using a variety of methods, time based measurements provide a more granular and human-centered view of care needs than simple headcounts or categorical designations of dependency.
+They help differentiate between levels of care intensity and the allocation of resources across health and social service systems.
+Furthermore, time-use data allows researchers and policymakers to model scenarios of unmet care needs and evaluate how demographic shifts, such as population aging or rising rates of disability, will affect demand for care services in both formal and informal sectors.
+
+This knowledge is also foundational for estimating the economic value of caregiving.
+Many individuals who require care do not receive it through formal markets but rely instead on family members or community networks.
+Without quantifying the time demands associated with caregiving needs, it is difficult to assess the hidden costs borne by households or to design equitable social support programs. Accurately capturing time needs can reveal care deficits and stress points in existing systems, thus informing policies aimed at improving accessibility, equity, and wellbeing outcomes for care recipients.
+
+Equally important is understanding how much time the average person spends providing care on a daily basis.
+Capturing this data highlights the often-invisible labor that sustains households and communities, particularly the unpaid and gendered work frequently carried out by women.
+By quantifying caregiving as a time commitment, researchers can estimate its opportunity costs—such as foregone earnings, education, or leisure—and more comprehensively assess its impact on individual wellbeing and economic productivity.
+This information is crucial for designing interventions, from tax credits to caregiver respite programs, that acknowledge and support the vital contributions of care providers.
+
+Moreover, time-use data on caregiving offers a powerful tool for comparative policy analysis.
+It enables cross-population comparisons, tracking how caregiving varies by age, gender, socioeconomic status, and family structure.
+It also facilitates longitudinal studies of how caregiving responsibilities evolve over the life course or in response to social policy changes.
+Embedding time-based caregiving metrics into national surveys and economic accounts can help integrate care work into the broader understanding of labor markets, social reproduction, and economic development, thereby strengthening the case for investing in the care economy as both a moral and strategic priority.
+
+The first section of the Care Economy part of the care board uses a variety of methods to create measurements of average time spent needing and providing care.
+The code in the next few sections comes with many assumptions and simplifications.
+In the years to come it is vital that more data be collected to provide better estimates on the following outcomes, but for now, this code represents are most complete work on estimating the care needs and provision by individuals across society.
+
 ## Age Data
+
+The first piece of data we need, is information about the amount of people thorughout the US in different age groups.
+We recognize that need and provision of care differs dramatically based on when someone is in their life.
+We utilize the code below and 2024 ASEC data to create population estimates for age groups between 0 and 85.
+This R code chunk is doing the following steps:
+
+---
+
+1. **Creating an age reference list**:  
+   It creates a dataframe called `age_list` with one column (`age`) containing every age from 0 to 85, one row per age.
+
+2. **Loading and filtering age data**:  
+   - Reads a CSV file (`ASECdata.csv`) into a dataframe called `age_data`.
+   - Filters the data to keep only rows from the most recent year (`max(YEAR)`).
+   - Selects just the age (`AGE`) and person-level weight (`ASECWT`) columns.
+   - Cleans column names to standardize them (e.g., lowercase with underscores).
+
+3. **Calculating weighted population by age**:
+   - Groups the cleaned data by age and sums the weights to estimate the total population for each age.
+
+4. **Joining with full age list**:  
+   Performs a full join between `age_list` (ages 0 to 85) and the summarized population data to make sure **every age is included**, even if some are missing from the dataset.
+
+5. **Handling missing population values**:  
+   Fills in any missing population values with 0 using `coalesce()`.
+
+---
+
+In plain language:  
+**This code creates a complete list of ages from 0 to 85 and attaches population estimates from the latest year of survey data. It ensures all ages are represented, even if some had no responses in the data.**
+```{r age data}
+age_list <- data.frame(age = seq(0, 85, by = 1))
+
+age_data <- read.csv("./data/CSV/ASECdata.csv") |>
+  filter(YEAR == max(YEAR)) |>
+  select(AGE, ASECWT) |>
+  clean_names()
+
+# get age summary in format needed for app
+age_modified <- full_join(
+  age_list,
+  age_data |>
+    group_by(age) |>
+    summarise(population = sum(asecwt, na.rm = TRUE)),
+  by = "age"
+) |>
+  mutate(population = coalesce(population, 0))
+
+write.csv(age_modified, "./app_data/market.csv", row.names = FALSE)
+
+datatable(
+  age_modified,
+  options = list(
+    pageLength = 10,
+    scrollX = TRUE,
+    autoWidth = TRUE
+  ),
+  caption = 'Table: Age Data',
+  rownames = FALSE
+)
+```
+
+To ensure as much accuracy as possible, we look at the age distribution from this using the plot below.
+
+```{r}
+plt_dist <- function(df){
+  p <- ggplot() +
+    geom_col(
+      data = df,
+      aes(x = age, y = population)
+    ) +
+    theme_minimal() +
+    theme(axis.title = element_blank()) +
+    scale_y_continuous(labels = comma) +
+    ggtitle(label = paste(
+      "total population:",
+      comma(sum(age_modified$population))
+      ))
+
+  return(p)
+}
+
+plt_dist(age_modified)
+```
 
 ## Market Datum
 
+Now that we have the population for each age, our next step is to pair this data with information on care needs and demands for each age.
+We use a combination of assumptions and data informed analysis to create these values.
+We call this section the market datum table.
+We start by creating a blank table for this where each group is paired with the three possible care focuses.
+
+```{r create market datum}
+market_datum <- age_modified |> 
+  cross_join(data.frame(care_focus = c("developmental", "daily_living", "health")))
+```
+
+Once we have this information, we need to load in the data from ATUS that we developed.
+When studying time use, ATUS data will act as our primary source of analysis.
+We utilize a variety of methods to to convert this data into our desired format.
+This R code chunk is doing the following steps:
+
+---
+
+1. **Loading time use data**:  
+   It reads a CSV file (`ATUSdata.csv`) into a dataframe called `atus`, keeping only selected columns related to time use, demographic info, and care activities.
+
+2. **Cleaning column names**:  
+   Standardizes column names to lowercase with underscores.
+
+3. **Identifying recent years (excluding 2020)**:
+   - Extracts a list of unique years from the dataset.
+   - Removes the year 2020 (Due to COVID pandemic survey issues).
+   - Sorts the years in descending order and keeps the **5 most recent** years.
+   - Saves this list as `years_include`.
+
+4. **Filtering to recent years and creating new variables**:
+   - Keeps only rows where the year is in the most recent 5 years (excluding 2020).
+   - Renames the `act_care_focus` column to `care_focus` for simplicity.
+   - Creates new columns:
+     - `care_job`: a binary indicator for whether the activity involved care (1) or not (0), based on the `focus` column.
+     - `weight`: adjusts the person-level weight to reflect a daily average over 5 years.
+     - `work_time`: calculates time spent in **paid care work** by multiplying `duration` with the `paid_work` and `care_job` indicators.
+
+---
+
+In plain language:  
+**This code loads and filters time-use survey data to include only the last 5 valid years, calculates daily weights, flags care-related paid work, and computes how much time individuals spent on that work.**
+
+```{r atus market datum load}
+atus <- read.csv("./data/CSV/ATUSdata.csv") %>%
+  select(
+    YEAR, CASEID, WT06, ACTLINE, HH_SIZE, AGE, marst, nchild, 
+    activity, act_care_focus, FOCUS, 
+    paid_work, child_care, elder_care, sleeping, 
+    DURATION, SCC_ALL_LN, SEC_ALL_LN
+    ) %>%
+  clean_names() 
+
+years_include <- atus|> 
+  distinct(year) |> 
+  filter(year != 2020) |> 
+  arrange(desc(year)) |> 
+  slice_head(n = 5) |> 
+  pull()
+
+atus <- atus |> 
+  filter(year %in% years_include) |> 
+  rename(care_focus = act_care_focus) |> 
+  mutate(
+    care_job = ifelse(focus == "none", 0, 1),
+    weight = wt06 / 365 / 5,
+    work_time = duration * paid_work * care_job
+    )
+
+skim(atus)
+```
+
+We then utilize ATUS hierarchical data to assign more variables to the individuals and activities outlined above.
+Specifically, we want to link activities using the RELATEW variable which is used to identify who an activity was done with.
+This R code chunk is doing the following steps:
+
+1. **Reading IPUMS metadata**:  
+   Loads the IPUMS DDI (data description) XML file using `read_ipums_ddi()`. This file describes the structure and variables of the household microdata.
+
+2. **Reading IPUMS household microdata**:  
+   Loads the actual household-level data using `read_ipums_micro()` based on the structure defined in the DDI file. The resulting dataframe is called `atus_hh`.
+
+3. **Cleaning column names**:  
+   Standardizes the column names in the household data (`atus_hh`) for consistency and easier use.
+
+4. **Merging household data with individual-level ATUS data**:
+   - Joins selected columns (`caseid`, `actlinew`, `relatew`) from `atus_hh` into the existing `atus` dataframe.
+   - Matches rows based on both `caseid` and `actline` (from the individual-level data) aligning with `actlinew` (from the household data).
+
+---
+
+In plain language:  
+**This code reads in additional household-level data from IPUMS and merges it with individual time-use data, allowing each activity record to be linked with household relationship information.**
+
+```{r atus market hierarchical load}
+library(ipumsr)
+ddi_file <- read_ipums_ddi("./data/IPUMS Pulls/atus_00026.xml")
+atus_hh <- read_ipums_micro(ddi_file) |> 
+  clean_names()
+
+atus <- atus |> 
+  left_join(
+    atus_hh |>  select(caseid, actlinew, relatew),
+    by = c("caseid" = "caseid", "actline" = "actlinew")
+    )
+```
+
+Following this we create a function that is used to overide data as we desire.
+This function takes in a care interval, age range, and column name to overide it with established data.
+The reason we need this function is that we are not confident that the ATUS data alone can provide us with the necessary true outcomes withough us using significant assumptions.
+For example, ATUS data does not look at respondents under the age of 15.
+Additionally, our methodology is likely somewhat biased for individuals at specifically high age ranges, such as in their 80s.
+In these cases, we want to overide the data with informed assumptions to help with the distribution.
+This R function is doing the following steps:
+
+---
+
+1. **Defining a function**:  
+   It defines a function called `prepare_overrides` with three inputs:
+   - `care_interval`: a named list where each element corresponds to an age range and contains care-related interval data (e.g., time spent on care by type).
+   - `age_ranges`: a dataframe that maps `age_range` labels to specific ages.
+   - `col_name`: the name to give to the new output column created from the interval values.
+
+2. **Reshaping nested data into a dataframe**:
+   - Uses `lapply()` to loop over each named `age_range` in `care_interval`.
+   - For each age range, it turns the nested data into a dataframe with:
+     - `age_range`: the name of the group (e.g., "0–4", "65+")
+     - `care_focus`: the specific type of care activity
+     - `interval`: the numeric value (e.g., minutes per day)
+   - Combines all these small dataframes into one (`care_override`) using `rbind`.
+
+3. **Joining with actual ages**:
+   - Joins the `care_override` dataframe with `age_ranges` to expand each age range into its individual ages (e.g., mapping "0–4" to 0, 1, 2, 3, 4).
+   - Uses `relationship = "many-to-many"` to allow for multiple age mappings per group.
+
+4. **Final formatting**:
+   - Keeps only the `age`, `care_focus`, and `interval` columns.
+   - Renames the `interval` column to whatever is passed in via `col_name`.
+
+5. **Returning the result**:  
+   Returns a tidy dataframe that assigns the given `col_name` value to each age and care focus type.
+
+---
+
+**In plain language:  
+This function transforms age-group-based care interval data into a long-form table that maps each individual age to a specific type of care activity and its associated value, labeling that value with a customizable column name.**
+
+```{r overide function}
+prepare_overrides <- function(care_interval, age_ranges, col_name) {
+  care_override <- do.call(rbind, lapply(names(care_interval), function(age_range) {
+    data <- care_interval[[age_range]]
+    
+    df <- data.frame(
+      age_range = age_range, 
+      care_focus = names(data), 
+      interval = as.numeric(data)
+    )
+    
+    return(df)
+  })) 
+  
+  care_override <- care_override |> 
+    left_join(age_ranges, by = "age_range", relationship = "many-to-many") |> 
+    select(age, care_focus, interval) |> 
+    rename({{col_name}} := interval)
+  
+  return(care_override)
+}
+```
+
+### Care Needs
+
+Now that we have all of the prep work done, we utilze the code below to assign care needs to different age groups.
+Our methodology for computing these needs isn't very simple.
+At it's core, the ATUS methodology provides information on care provision NOT care needs.
+We need to be able to use this data to understand how much care a person providing care needs.
+To do this, we look at cases where the amount of care supplied will be equal to the amount of care demanded.
+We filter the data for each age group to look only at individuals who live alone and in their entire day spend 0 total minutes providing care to children or elderly adults.
+We further limit the data to only those activities done alone.
+
+This subset group of individuals are most likely to have the situation where care supply and care demand are equal.
+These individuals are providing care only to themselves and receiving care only from themselves.
+As such, by measuring the amount of care provided by this subset we are also measuring the amount of care that they demand.
+Thus we can use this methodology to create a measurement of care needs for each age group.
+This R code chunk is doing the following steps:
+
+---
+
+1. **Setting up age loop**:  
+   It creates a list of ages from the `age_modified` dataframe and initializes an empty list (`needs_atus_calc`) to store results.
+
+2. **Looping through each age**:
+   For each age `a`, it filters the `atus` dataset to identify individuals with the following characteristics:
+   - No time spent in secondary care activities (`scc_all_ln` and `sec_all_ln` are all 0)
+   - No time spent in child or elder care (`child_care` and `elder_care` are all 0)
+   - Activity is still labeled as care-related (`care_focus != "non-care"`)
+   - Lives alone (`hh_size == 1`)
+   - Is the reference person in the household (`relatew == 100`)
+   - Falls within a **5-year age band** around age `a` (ages `a-2` to `a+2`)
+
+3. **Summarizing individual-level data**:
+   - For each `caseid` and `care_focus` group:
+     - Sums the total duration of care-related activities for each individual.
+     - Keeps the first available weight value.
+
+4. **Calculating need interval estimates**:
+   - Within each `care_focus` group, calculates the **weighted mean** duration across individuals to estimate how much care time is associated with that activity for that age group.
+   - Attaches the current `age` to the summary row.
+
+5. **Storing results**:
+   - If the filtered and summarized data is not empty, it adds the result to the `needs_atus_calc` list for that age.
+
+6. **Combining all results**:
+   - After looping through all ages, it binds the list of dataframes into a single dataframe (`needs_atus_calc`).
+
+---
+
+In plain language:  
+**This code estimates how much time people living alone at each age (in 5-year bands) typically receive in care-related activities—under the assumption they don’t provide care to others. It uses this as a proxy for *care needs* across different age groups.**
+
+```{r}
+age <- age_modified$age 
+needs_atus_calc <- list()
+
+for(a in age){
+  data <- atus |> 
+    group_by(caseid) |> 
+    filter(all(scc_all_ln == 0)) |> 
+    filter(all(sec_all_ln == 0)) |> 
+    filter(all(child_care == 0)) |> 
+    filter(all(elder_care == 0)) |> 
+    ungroup() |> 
+    filter(care_focus != "non-care") |> 
+    filter(hh_size == 1) |> 
+    filter(relatew == 100) |> 
+    # 5-year lag group
+    filter(age == a | age == a-1 | age == a+1 | age == a-2 | age == a+2)  
+  
+  # Estimates for each individual
+  data <- data |> 
+    reframe(
+      duration = sum(duration, na.rm = TRUE),
+      weight = first(weight),
+      .by = c(care_focus, caseid)
+    ) |> 
+    reframe(
+      need_interval = weighted.mean(duration, w = weight, na.rm = TRUE),
+      .by = c(care_focus)
+    ) |> 
+    mutate(age = a)
+
+  if (nrow(data) > 0) {
+    needs_atus_calc[[a]] <- data
+  }
+}
+
+needs_atus_calc <- bind_rows(needs_atus_calc)
+```
+
+Finally, we utilize the override function that we defined above to input our assumptions.
+The code below inserts minutes for health, developmental, and daily care for the age groups of 0-5, 6-12, 13-18, 75-84, and over 85.
+These specific assumption values are based on informed thought processes as opposed to actual data.
+For instance, many state laws require that those under the age of 12 years old are required to be supervised 24 hours a day.
+This R code chunk is doing the following steps:
+
+---
+
+1. **Defining care time needs for specific age groups**:
+   - It sets values (in minutes per day) for **health-related** and **developmental** care needs for specific age ranges.
+   - It then calculates the **remaining time** in the day allocated to **daily living** by subtracting health and developmental care from the total available time (usually 1440 minutes, or 24 hours—though some groups like teenagers or elderly have reduced totals, likely representing actual active time).
+
+2. **Creating age-to-age-range mapping**:
+   - Builds a dataframe called `age_ranges` that maps specific ages to age range categories (e.g., age 0–5 is "age_0to5", age 6–12 is "age_6to12", etc.).
+
+3. **Organizing care need intervals**:
+   - Constructs a list called `need_interval` where each entry corresponds to an age range and specifies the time (in minutes) needed per day for:
+     - Developmental care
+     - Health-related care
+     - Daily living support
+
+4. **Converting structured input into a long-form dataframe**:
+   - Calls the previously defined function `prepare_overrides()` to transform the structured `need_interval` list into a tidy dataframe (`needs_ku_override`) where:
+     - Each row represents one age and one type of care focus (e.g., "developmental" for age 3)
+     - Includes the time required (called `need_override`) for that type of care
+
+---
+
+In plain language:  
+**This code defines how much care time people in specific age groups typically need each day for health, development, and daily living. It converts that information into a usable table that links each age to specific care needs—ready for analysis or visualization.**
+
+```{r}
+health_0to5 <- 300
+develop_0to5 <- 420
+daily_0to5 <- 1440 - health_0to5 - develop_0to5
+
+health_6to12 <- 150
+develop_6to12 <- 480
+daily_6to12 <- 1440 - health_6to12 - develop_6to12
+
+health_13to18 <- 90
+develop_13to18 <- 360
+daily_13to18 <- 1200 - health_13to18 - develop_13to18
+
+health_75to84 <- 200
+develop_75to84 <- 0
+daily_75to84 <- 780 - health_75to84 - develop_75to84
+
+health_85 <- 300
+develop_85 <- 0
+daily_85 <- 1200 - health_85 - develop_85
+
+age_ranges <- bind_rows(
+  expand.grid(age_range = "age_0to5", age = c(seq(0, 5, by = 1))),
+  expand.grid(age_range = "age_6to12", age = c(seq(6, 12, by = 1))),
+  expand.grid(age_range = "age_13to18", age = c(seq(13, 18, by = 1))),
+  
+  expand.grid(age_range = "age_75to84", age = c(seq(75, 84, by = 1))),
+  expand.grid(age_range = "age_85", age = 85)
+) 
+  
+need_interval <- list(
+  age_0to5 = c("developmental" = develop_0to5, 
+               "health" = health_0to5, "daily_living" = daily_0to5),
+  
+  age_6to12 = c("developmental" = develop_6to12, 
+                "health" = health_6to12, "daily_living" = daily_6to12),
+  
+  age_13to18 = c("developmental" = develop_13to18, 
+                 "health" = health_13to18, "daily_living" = daily_13to18), 
+  
+  age_75to84 = c("developmental" = develop_75to84, 
+                 "health" = health_75to84, "daily_living" = daily_75to84),
+  
+  age_85 = c("developmental" = develop_85, 
+             "health" = health_85, "daily_living" = daily_85)
+)
+
+needs_ku_override <- prepare_overrides(need_interval, age_ranges, "need_override")
+```
+
+### Care Provision
+
+Now that we have our data on care needs, we replicate the above methodology to measure the average amount of time a group provides care in a day.
+The main difference between this code and the code above is that we do not limit ourselves to only looking at individuals living alone.
+Instead we look at all individuals in an age group and measure the average amount of time they spend in care related activities.
+These activities could consiste of selfcare, primary care to others, care in the formal economy, or secondary care to a child or elder.
+This code thus analyzes on average, how much time a group spends on caregiving.
+This R code chunk is doing the following steps:
+
+---
+
+1. **Setting up for age-based analysis**:  
+   - Uses a list of individual ages (`age`) from `age_modified`.
+   - Initializes an empty list (`provision_atus_calc`) to store results.
+
+2. **Looping through each age**:  
+   For each age `a`, it creates a combined dataset (`data`) representing all **types of care provision**, pulling from the `atus` dataset.
+
+3. **Combining different types of care time**:
+   - **Formal care**: Includes paid care-related work activities where `focus` is not `"none"`.
+   - **Informal care**: Includes any activity already marked as care-related.
+   - **Secondary child care**:
+     - Uses `scc_all_ln` (secondary child care).
+     - Filters out people already counted as doing formal or informal care to avoid **double-counting**.
+     - Labels the care as `"developmental"` and uses `scc_all_ln` as the care duration.
+   - **Secondary elder care**:
+     - Same logic as child care but using `sec_all_ln` (secondary elder care).
+     - Labels it as `"health"` care.
+
+4. **Filtering to 5-year age bands**:
+   - Keeps only observations where the person is within 2 years of the target age `a` (i.e., ages `a-2` to `a+2`).
+
+5. **Summarizing care time per individual**:
+   - Groups by individual (`caseid`) and care type (`care_focus`), summing care durations and keeping the weight.
+
+6. **Calculating care provision estimates**:
+   - Computes the **weighted median** (`wtd.quantile()`) of care time per `care_focus` type, across all individuals in that age band.
+   - Adds the current `age` to the result.
+
+7. **Storing results**:  
+   - If the resulting summary for that age is not empty, it adds it to the `provision_atus_calc` list.
+
+8. **Combining all results**:  
+   After looping through all ages, it merges the results into a single dataframe.
+
+---
+
+In plain language:  
+**This code estimates how much care people of each age typically *provide*—including formal work, informal care, and secondary care (like watching kids or elders while doing something else). It uses weighted medians to summarize how care provision varies by age and type.**
+
+```{r}
+age <- age_modified$age 
+provision_atus_calc <- list()
+
+for(a in age){
+  data <- bind_rows(
+    # formal care work
+    atus |>
+      filter(activity == "Formal Work" & focus != "none") |> 
+      mutate(
+        care_focus = focus, 
+        duration = duration 
+        ),
+    
+    # informal care 
+    atus |> filter(care_focus != "non-care"),
+
+    # secondary child care - remove double counting
+    atus |> 
+      filter(scc_all_ln > 0) |>
+      filter(!(activity == "Formal Work" & focus != "none")) |> 
+      filter(!(care_focus != "non-care")) |> 
+      filter(sec_all_ln == 0) |>
+      mutate(
+        care_focus = "developmental",
+        duration = scc_all_ln
+        ),
+    
+    # secondary elder care - remove double counting
+    atus |> 
+      filter(sec_all_ln > 0) |>
+      filter(!(activity == "Formal Work" & focus != "none")) |> 
+      filter(!(care_focus != "non-care")) |> 
+      filter(scc_all_ln == 0) |>      
+      mutate(
+        care_focus = "health", 
+        duration = sec_all_ln
+        )
+    )
+  
+  data <- data|> 
+    filter(age %in% c(a-2, a-1, a, a+1, a+2)) %>%
+    reframe(
+      duration = sum(duration, na.rm = TRUE),
+      weight = first(weight),
+      .by = c(caseid, care_focus)
+      ) %>%
+    reframe( 
+      provision_interval = wtd.quantile(
+        duration, weights = weight, probs = 0.5, normwt = FALSE), 
+      .by = care_focus
+      ) |> 
+    mutate(age = a)
+
+  if (nrow(data) > 0) {
+    provision_atus_calc[[a]] <- data
+  }
+}
+
+provision_atus_calc <- bind_rows(provision_atus_calc)
+```
+
+Just as with assumptions related to care needs for children and the elderly, we make assumptions for care provision.
+The code chunk below outlines the assumptions and utilizes the override function to create the values.
+
+```{r}
+health_0to18 <- 0
+develop_0to18 <- 0
+daily_0to18 <- 0
+
+health_85 <- 0
+develop_85 <- 0
+daily_85 <- 0
+
+provision_interval <- list(
+  age_0to18 = c("developmental" = develop_0to18, 
+               "health" = health_0to18, "daily_living" = daily_0to18),
+  
+  age_85 = c("developmental" = develop_85, 
+             "health" = health_85, "daily_living" = daily_85)
+)
+
+age_ranges <- bind_rows(
+  expand.grid(age_range = "age_0to18", age = c(seq(0, 18, by = 1))),
+  expand.grid(age_range = "age_85", age = 85)
+) 
+
+provision_ku_override <- prepare_overrides(provision_interval, age_ranges, "provision_override")
+```
+
+
 ## Finalize Care Economy Data
 
+We now have our final data on care needs and provision by group.
+We want to utilize a few more steps to help finalize this data and ready it for presentation.
+We start by combining the various dataframes together into a single market datum file.
 
-# Lives of Care (Provider Demographics)
+```{r}
+df_list <- list(
+  market_datum,
+  needs_atus_calc, 
+  needs_ku_override, 
+  provision_atus_calc, 
+  provision_ku_override
+) 
 
-## Provider Groups
+market_datum2 <- reduce(df_list, full_join, by = c("age", "care_focus")) |> 
+  mutate(
+    need_interval = coalesce(need_override, need_interval, 0),
+    provision_interval = coalesce(provision_override, provision_interval, 0)
+  ) |> 
+  select(age, care_focus, need_interval, provision_interval)
 
-## Providers
+datatable(
+  market_datum2,
+  options = list(
+    pageLength = 10,
+    scrollX = TRUE,
+    autoWidth = TRUE
+  ),
+  caption = 'Table: Care Need and Provision',
+  rownames = FALSE
+)
+```
 
-## Provider Informal
+We then provide this same information as a plot to help visualise it.
 
-## Provider formal data
+```{r}
+plot_market <- function(df){
+  df_total <- df |> 
+    group_by(age) |> 
+    summarise(
+      total_need = sum(need_interval)/60, 
+      total_provision = -sum(provision_interval)/60
+      )
+  
+    need <- comma(round(sum(df_total$total_need)))
+    provision <- comma(round(sum(df_total$total_provision)))
+    sel_title <- paste0("total need: ", need, "  total provision: ", provision)
+  
 
-# The Circle of Care (Activity Timeuse)
+  p <- ggplot(data = df_total, aes(x = age)) +
+    geom_col(aes(y = total_need), fill = "grey") +
+    geom_col(aes(y = total_provision), fill = "steelblue") +
+    theme_minimal() +
+    theme(axis.title = element_blank()) +
+    ggtitle(sel_title)
+  
+  print(p)
+}
+
+plot_market(market_datum2)
+```
+
+One of the weaknesses of our methodology is that it is prone to outliers.
+We can see that in the above hump around the age of 54.
+This method is also highly reliant on our assumptions around the low and high ends.
+To help account for this, we utilize a smoothing function to help create a smoother density curve.
+We generally keep the smoothign function relativly weak to preserve as much as the underlying patterns as possible.
+
+```{r smooth market datum}
+smooth_data <- function(df) {
+  df %>%
+    group_by(care_focus) %>%
+    arrange(age) %>%  
+    mutate(
+      smoothed_need = predict(
+        loess(need_interval ~ age, data = cur_data(), span = 0.2), 
+        newdata = data.frame(age = age)), 
+      min_val_need = min(need_interval, na.rm = TRUE),
+      max_val_need = max(need_interval, na.rm = TRUE),
+      smoothed_need = pmax(pmin(smoothed_need, max_val_need), min_val_need), 
+
+      smoothed_prov = predict(
+        loess(provision_interval ~ age, data = cur_data(), span = 0.2), 
+        newdata = data.frame(age = age)), 
+      min_val_prov = min(provision_interval, na.rm = TRUE),
+      max_val_prov = max(provision_interval, na.rm = TRUE),
+      smoothed_prov = pmax(pmin(smoothed_prov, max_val_prov), min_val_prov) 
+    ) %>%
+    ungroup()
+}
+
+# Apply smoothing function to your dataset
+market_datum_smoothed <- smooth_data(market_datum2) %>%
+  select(age, care_focus, smoothed_need, smoothed_prov) %>%
+  rename("need_interval" = smoothed_need) %>%
+  rename("provision_interval" = smoothed_prov)
+
+plot_market(market_datum_smoothed)
+```
+
+Our final step is next to merge this final market datum information with the data on age.
+We merge these two datasets together and export it for final analysis.
+
+```{r final market data report}
+final_market_data <- merge(market_datum_smoothed, age_modified, by = "age", all.x = TRUE)
+
+write.csv(final_market_data, "./data/CSV/need_provision_data.csv", row.names = FALSE)
+write_dta(final_market_data, "./data/DTA/need_provision_data.dta")
+
+datatable(
+  final_market_data,
+  options = list(
+    pageLength = 10,
+    scrollX = TRUE,
+    autoWidth = TRUE
+  ),
+  caption = 'Table: Final Market Data',
+  rownames = FALSE
+)
+```
+
+# Providers of Care
+
+The next section of statistics that we calculate is our "care providers" section.
+This section aims to identify whom within society conducts care.
+The main outcome of this section will be to identify the care providers across both informal and formal care across the different care focuses.
+
+
+Understanding who provides caregiving within society is a cornerstone for analyzing and strengthening the care economy.
+Caregiving takes place across a continuum of formal and informal settings, including professional healthcare and social service environments, as well as unpaid support provided by family, friends, and community members.
+Quantifying the individuals engaged in caregiving—particularly by gender and parenthood status—offers critical insight into how care responsibilities are distributed and how this distribution reflects broader social, economic, and policy structures.
+Without this demographic detail, policymakers risk overlooking the inequities embedded in caregiving systems and the hidden labor that sustains households and communities.
+
+Gender and parenthood status are especially salient categories for measuring who provides care, as these factors strongly influence both the likelihood of providing care and the intensity of caregiving responsibilities.
+Women, for example, disproportionately shoulder unpaid caregiving work, whether as mothers, daughters, or other kin, contributing to persistent gender disparities in income, career advancement, and retirement security.
+Similarly, parents—especially single parents—may juggle dual caregiving responsibilities for children and aging relatives, compounding their time and emotional burdens.
+By tracking the number of caregivers across these dimensions, researchers and policymakers can better understand the structural pressures facing different populations and design targeted interventions that support caregivers, such as paid leave policies, subsidized care services, or caregiver tax credits.
+Accurate demographic data on caregiving is essential not only for recognizing and valuing care work but also for fostering a more equitable and resilient care economy.
+
+## Formal Providers
+
+The first section of code below looks at the formal care economy.
+The code chunk below loads in the asec data which is our primary datasource for understanding the formal economy.
+We load in this data and and select the correct columns as needed below.
+
+```{r formal providers asec load}
+# Load asec formal care activities
+asec <- read.csv("./data/CSV/ASECdata.csv") |>
+  filter(YEAR == max(YEAR)) |>  
+  filter(AGE >= 18) |> 
+  select(YEAR, OCC2010, empstat, Label, UHRSWORKT, EARNWT, INCWAGE, 
+         FOCUS, ASECWT, sex, gender_parent) |> 
+  clean_names()
+```
+  
+Following this, we calculate the amount of time spent and the number of people working in each specific care focus by each of our gender and parenthood combinations.
+This R code chunk is doing the following steps:
+
+---
+
+1. **Creating a dataset of formal care providers**:
+   - Filters the `asec` dataset to include only **employed** individuals.
+   - Creates new variables for categorization:
+     - `gender`: lowercase version of the `sex` column.
+     - `provider_status`: groups people into those **with children**, **without children**, or **other**, based on the `gender_parent` label.
+     - `time_use`: labels work as **“care”** if it has a focus, and **“non_care”** otherwise.
+     - `care_focus`: directly copies the `focus` variable.
+     - `care_type`: assigns `"formal"` to indicate this is paid labor.
+     - `provider_attention`: sets `"active"` to describe the type of care (vs. passive or secondary).
+
+2. **Summarizing formal care stats**:
+   - Removes entries where usual hours worked (`uhrsworkt`) are coded as 997 (time use fluctuates).
+   - Replaces a placeholder value (999) in `uhrsworkt` with 0 to avoid inflating results from NILF.
+   - Summarizes the data by multiple grouping variables:
+     - `population`: total weighted number of people in each group (using `asecwt`).
+     - `provision_interval`: total **daily minutes** of formal care work, calculated as `uhrsworkt / 7 * 60 * asecwt` (i.e., average minutes worked per day, weighted).
+
+---
+
+In plain language:  
+**This code prepares and summarizes data on people who provide formal (paid) care work. It calculates the total number of providers and how much care time they give per day, grouped by gender, parent status, and type of care provided.**
+
+```{r}
+# create columns required by the app
+cp_formal <- asec |> 
+  filter(empstat == "Employed") |>
+  mutate(
+    gender = str_to_lower(sex), 
+    provider_status = case_when(
+      gender_parent %in% c("Mothers", "Fathers") ~ "with_children",
+      gender_parent %in% c("Non-Mothers", "Non-Fathers") ~ "without_children",
+      TRUE ~ "other"
+    ), 
+    time_use = ifelse(focus == "none", "non_care", "care"),
+    care_focus = focus,
+    care_type	= "formal", 
+    provider_attention = "active"
+  ) 
+
+# summarise formal stats
+cp_formal <- cp_formal %>%
+  filter(uhrsworkt != 997) |> 
+  mutate(uhrsworkt = ifelse(uhrsworkt == 999, 0, uhrsworkt)) |> 
+  summarise(
+    population = sum(asecwt),
+    provision_interval = sum(uhrsworkt/7*60*asecwt), 
+    .by = c(gender, provider_status, time_use, care_type, 
+            care_focus, provider_attention)
+  )
+
+datatable(
+  cp_formal,
+  options = list(
+    pageLength = 10,
+    scrollX = TRUE,
+    autoWidth = TRUE
+  ),
+  caption = 'Table: Formal Care Providers',
+  rownames = FALSE
+)
+```
+
+## Informal Providers
+
+The next step is to replicate the above table but to look at informal activities as opposed to only formal activities.
+To do this we utilize the atus data for informal care activities.
+
+```{r}
+atus <- read.csv("./data/CSV/ATUSdata.csv") |> 
+  filter(activity != "Formal Work") |> 
+  filter(AGE >= 18) |>
+  filter(YEAR >= 2018 & YEAR != 2020) |> 
+  select(YEAR, CASEID, WT06, sex, gender_parent, act_care_focus, 
+         DURATION, SCC_ALL_LN, SEC_ALL_LN) |> 
+  clean_names() 
+```
+
+We now use the code below to calculate the number of people and the amount of time spent by these providers for each of the informal care status.
+For secondary child care, we include it as developmental care.
+For secondary elder care, we include it as health care.
+This R code chunk is doing the following steps:
+
+---
+
+1. **Get the most recent 5-year time window**:
+```r
+yr_range <- atus_yr_range(atus) |> 
+  filter(year == max(year))
+```
+- Uses a helper function `atus_yr_range()` to get a range of valid years.
+- Keeps only the entry for the most recent year, likely as a reference for filtering.
+
+---
+
+2. **Prepare informal care data**:
+```r
+cp_informal <- atus |> 
+  pivot_longer(...) |> 
+  filter(!is.na(duration))
+```
+- Reshapes the `atus` dataset so that columns `duration`, `scc_all_ln` (secondary child care), and `sec_all_ln` (secondary elder care) are stacked into a long format.
+- This allows consistent handling of different types of care time.
+- Removes rows with missing duration values.
+
+---
+
+3. **Create standardized variables for app use**:
+```r
+cp_informal <- cp_informal |> 
+  mutate(...)
+```
+- Creates several new columns to match what the app expects:
+  - `gender`: lowercase version of respondent's sex.
+  - `provider_status`: identifies if a person has children or not, based on `gender_parent`.
+  - `care_type`: all entries here are labeled as `"informal"` (unpaid or household-based care).
+  - `provider_attention`: labels care as `"active"` or passive (`"passive_child"` or `"passive_elder"`) depending on the source of the care time.
+  - `care_focus`: sets the type of care (e.g., `"developmental"`, `"health"`, or `"none"`).
+  - `time_use`: categorizes each activity as `"care"` or `"non_care"` based on `care_focus`.
+  - `weight`: adjusts the person-level weight (`wt06`) to a daily scale.
+
+---
+
+### 4. **Summarize time by person and activity**:
+```r
+cp_informal <- cp_informal |> 
+  summarise(...) |> 
+  summarise(...)
+```
+- **First summarization**:
+  - Groups by each person (`caseid`) and activity category to calculate their total time in each care type.
+  - Multiplies time by daily weights.
+
+- **Second summarization**:
+  - Aggregates across individuals to get:
+    - `provision_interval`: total care time in minutes, scaled to a 5-year average.
+    - `population`: the weighted count of individuals in each group.
+  - Grouped by gender, parental status, care type, care focus, and whether the care was active or passive.
+
+---
+
+In plain language:  
+**This code organizes and summarizes all types of *informal care* (including active and passive care) across recent years. It groups people by gender and parenting status and calculates how much time, on average, they spend providing different types of care.**
+
+
+```{r Informal Provider Calculation}
+# get most recent 5 year and clean up columns
+yr_range <- atus_yr_range(atus) |> 
+  filter(year == max(year))
+
+# prep secondary care time
+cp_informal <- atus |> 
+  pivot_longer(
+    cols = c(duration, scc_all_ln, sec_all_ln), 
+    names_to = "metric", 
+    values_to = "duration"
+  ) |> 
+  filter(!is.na(duration)) 
+
+# create columns required by the app
+cp_informal <- cp_informal |> 
+  mutate(
+    gender = str_to_lower(sex), 
+    provider_status = case_when(
+      gender_parent %in% c("Mothers", "Fathers") ~ "with_children",
+      TRUE ~ "without_children"
+    ), 
+    care_type	= "informal", 
+    provider_attention = case_when(
+      metric == "scc_all_ln" ~ "passive_child", 
+      metric == "sec_all_ln" ~ "passive_elder",
+      TRUE ~ "active"
+      ), 
+    care_focus = case_when(
+      metric == "scc_all_ln" ~ "developmental", 
+      metric == "sec_all_ln" ~ "health",
+      act_care_focus == "non-care" ~ "none", 
+      TRUE ~ act_care_focus
+      ), 
+    time_use = ifelse(care_focus == "none", "non_care", "care"),
+    weight = wt06/365
+  ) 
+
+# summarise formal stats
+cp_informal <- cp_informal |> 
+  summarise(
+    total_time = sum(duration), 
+    .by = c(year, caseid, weight, gender, provider_status, time_use, 
+            care_type, care_focus, provider_attention)
+    ) |> 
+  summarise(
+    provision_interval = sum(total_time*weight/5),
+    population = sum(weight/5), 
+    .by = c(gender, provider_status, time_use, 
+           care_type, care_focus, provider_attention)
+  )
+
+datatable(
+  cp_informal,
+  options = list(
+    pageLength = 10,
+    scrollX = TRUE,
+    autoWidth = TRUE
+  ),
+  caption = 'Table: Formal Care Providers',
+  rownames = FALSE
+)
+```
+
+## Care Provider Demographics
+
+The next step is to create a demographics table for our care providers.
+Specifically for the Careboard we are interested in the associated between gender and parenthood status.
+We use the code below to create a table showing the distribution of this demographic across society.
+This R code chunk is doing the following steps:
+
+---
+
+1. **Preparing demographic categories**:
+   - Takes the `asec` dataset and creates two new classification variables:
+     - `gender`: converts the `sex` variable to lowercase for consistency.
+     - `provider_status`: categorizes individuals as:
+       - `"with_children"` if they're labeled as mothers or fathers,
+       - `"without_children"` if labeled as non-mothers or non-fathers,
+       - `"other"` for anyone else (e.g., ambiguous or missing category).
+
+2. **Calculating population totals**:
+   - Groups the data by `gender` and `provider_status`.
+   - Sums the survey weights (`asecwt`) to estimate the total **population size** of each group.
+
+3. **Sorting results**:
+   - Arranges the resulting summary by `gender` and `provider_status` for easier reading or display.
+
+---
+
+In plain language:  
+**This code estimates the size of different demographic groups (by gender and parental status) using survey weights, providing a breakdown of how many people fall into each category.**
+
+
+
+```{r cp population table}
+cp_population <- asec |> 
+  mutate(
+    gender = str_to_lower(sex), 
+    provider_status = case_when(
+      gender_parent %in% c("Mothers", "Fathers") ~ "with_children",
+      gender_parent %in% c("Non-Mothers", "Non-Fathers") ~ "without_children",
+      TRUE ~ "other")
+    )|> 
+  summarise(population = sum(asecwt), .by = c(gender, provider_status)) |> 
+  arrange(gender, provider_status)
+  
+write.csv(cp_population, "./app_data/care_provider_population.csv", 
+          row.names = FALSE)
+write.csv(cp_population, "./data/CSV/care_provider_population.csv", 
+          row.names = FALSE)
+write_dta(cp_population, "./data/DTA/care_provider_population.dta")
+
+datatable(
+  cp_population,
+  options = list(
+    pageLength = 10,
+    scrollX = TRUE,
+    autoWidth = TRUE
+  ),
+  caption = 'Table: Formal Care Providers',
+  rownames = FALSE
+)
+```
+
+## Finalization of Care Providers
+
+We finalize this analysis by combining the different catagories of formal and informal time use together into a single care provider table.
+
+```{r}
+cp_combined <- bind_rows(
+  cp_formal, 
+  cp_informal
+) |> 
+  arrange(care_type, time_use, gender, provider_status, care_focus)
+
+write.csv(cp_combined, "./app_data/care_provider_datum.csv", 
+          row.names = FALSE)
+write.csv(cp_combined, "./data/CSV/care_provider_datum.csv", 
+          row.names = FALSE)
+write_dta(cp_combined, "./data/DTA/care_provider_datum.dta")
+```
+
+# Activity Time data
+
+Collecting data on specific care-related activities across both the formal and informal sectors is vital for a comprehensive understanding of the care economy.
+By disaggregating care work into its constituent activities—such as nursing, home health assistance, cleaning, teaching, feeding, or emotional support—we gain a clearer picture of the full range and diversity of labor that underpins human well-being and social reproduction.
+Calculating metrics like the average time spent on each care activity and the corresponding wages earned allows us to evaluate not only the volume of care being provided, but also the economic value placed on different forms of care.
+This granular approach is particularly important in revealing the undervaluation of essential work, much of which is disproportionately performed by women, people of color, and immigrants.
+
+Detailed activity-level data is also critical for crafting targeted and effective policy interventions.
+It allows researchers and decision-makers to identify gaps in compensation, exposure to physical and emotional strain, or mismatches between time demands and available support systems. For example, data showing long hours in unpaid eldercare alongside low wages for professional caregivers may point to the need for investment in long-term care infrastructure or wage floors in care occupations.
+Similarly, tracking time spent on caregiving tasks in educational or domestic contexts can highlight the blurred lines between formal employment and informal labor.
+Without this specificity, the care economy remains abstract, obscuring the real conditions of care workers and the needs of care recipients.
+Collecting and analyzing this level of detail helps make visible the full scope of care labor and strengthens the foundation for equitable and sustainable care systems.
 
 ## Formal Care Activities
 
+The first step is to look at the formal care economy and to gather the needed data for it.
+Like most analysis of the formal care economy, this section uses ASEC data.
+The first step is thus to load in the ASEC data and manage it to the proper format.
+This R code chunk is doing the following steps:
+
+---
+
+1. **Loading cleaned ASEC data**:
+   - Reads in an `.csv` file (`ASECdata.csv`) into the `asec` dataframe.
+   - Filters the data to include only:
+     - Adults (age 18 or older),
+     - Data from the most recent year available,
+     - People working in care-related occupations (`occ_care_focus != "none"`),
+     - People who are employed (`empstat == "Employed"`).
+   - Keeps only selected columns related to occupation, income, hours worked, and weights.
+
+2. **Cleaning and transforming variables**:
+   - Replaces the placeholder value `999` in `uhrsworkt` (usual hours worked) with 0.
+   - Creates a new `activity_id`:
+     - Based on the `occ_label` (occupation label), it replaces non-alphanumeric characters with hyphens and converts the result to lowercase.
+     - Then it removes any trailing hyphen from the resulting string.
+   - Renames:
+     - `label` → `name` (likely for cleaner display or consistency),
+     - `focus` → `care_focus`.
+
+---
+
+In plain language:  
+**This code loads and filters survey data to keep only employed adults working in care occupations, cleans up the occupation labels for use as unique identifiers, and standardizes some column names for further analysis or visualization.**
+
+```{r activity formal asec load}
+source("load_defaults.R")
+
+# Load asec formal care activities
+asec <- read.csv("./data/CSV/ASECdata.csv") |>
+  filter(AGE >= 18) |>
+  filter(YEAR == max(YEAR)) |>
+  filter(FOCUS != "none") |> 
+  filter(empstat == "Employed") |>
+  select(YEAR, OCC2010, Label, UHRSWORKT, 
+         EARNWT, INCWAGE, FOCUS, ASECWT) |> 
+  clean_names()
+
+# clean up names
+asec <- asec|> 
+  mutate(
+    uhrsworkt = ifelse(uhrsworkt == 999, 0, uhrsworkt), 
+    activity_id = str_replace_all(
+      label, "[^a-zA-Z0-9]+", "-") |> 
+      str_to_lower(),
+    activity_id = gsub("-$", "", activity_id)
+  ) |> 
+  rename(
+    name = label, 
+    care_focus = focus
+    )
+```
+
+After prepping the data we calculate three main statistics for each formal care economy activity.
+First, we calculate the amount of people who engaged in this activity during a day.
+Second, we calculate the total amount of time spent across this activity throughout society.
+Third, we calculate the median wage for people employed in this activity in society.
+This R code chunk is doing the following steps:
+
+---
+
+1. **Calculate population by care occupation**:
+```r
+act_formal_population <- asec |> 
+  summarise(
+    population = sum(asecwt),
+    .by = c(activity_id, name, care_focus)
+  )
+```
+- Sums the survey weights (`asecwt`) to estimate the total number of employed individuals working in each care-related occupation.
+- Groups by:
+  - `activity_id` (a cleaned-up identifier for the occupation),
+  - `name` (the occupation label),
+  - `care_focus` (type of care: developmental, health, etc.).
+
+---
+
+2. **Calculate time spent in formal care work**:
+```r
+act_formal_time <- asec |> 
+  filter(uhrsworkt != 997) |> 
+  summarise(...)
+```
+- Removes entries with invalid or missing work hours (`uhrsworkt == 997`).
+- Calculates the total number of **daily minutes worked** per occupation group using:
+  - `asecwt * uhrsworkt * 60 / 7` (to convert weekly hours to daily minutes).
+- Groups by the same occupation-related columns.
+
+---
+
+3. **Calculate median wage by occupation**:
+```r
+act_formal_med_wage <- asec |>
+  filter(incwage != 0 & incwage != 99999999) |> 
+  summarise(...)
+```
+- Filters out invalid or placeholder income values.
+- Computes the **weighted median wage** (`wtd.quantile`) for each occupation group.
+- Again groups by `activity_id`, `name`, and `care_focus`.
+
+---
+
+4. **Combine all formal care occupation stats**:
+```r
+act_formal_stats <- full_join(...) |> 
+  full_join(...) |> 
+  arrange(activity_id)
+```
+- Merges the three separate summaries (`population`, `time`, and `median_wage`) into a single table (`act_formal_stats`) using full joins.
+- Ensures that all occupation groups are included, even if one of the summaries is missing.
+- Sorts the final result by `activity_id`.
+
+---
+
+In plain language:  
+**This code summarizes key statistics for each formal care occupation, including how many people work in it, how much time they spend on care work per day, and what the median wage is. The result is a comprehensive dataset ready for reporting or visualization.**
+
+```{r activity formal data}
+act_formal_population <- asec |> 
+  summarise(
+    population = sum(asecwt),
+    .by = c(activity_id, name, care_focus)
+  )
+
+act_formal_time <- asec |> 
+  filter(uhrsworkt != 997) |> 
+  summarise(
+    provision_interval = sum(asecwt*uhrsworkt*60/7),
+    .by = c(activity_id, name, care_focus)
+  )
+
+act_formal_med_wage <- asec |>
+  filter(incwage != 0 & incwage != 99999999) |> 
+  summarise(
+      median_wage = wtd.quantile(
+      incwage, 
+      weights = asecwt, 
+      probs = 0.5
+      ),
+    .by = c(activity_id, name, care_focus)
+  )
+
+act_formal_stats <- full_join(
+  act_formal_population, 
+  act_formal_time, 
+  by = c("activity_id", "name", "care_focus")
+  ) |> 
+  full_join(act_formal_med_wage, by = c("activity_id", "name", "care_focus")) |>
+  arrange(activity_id)
+
+activity_formal <- act_formal_stats |> 
+  select(activity_id, name, care_focus, median_wage) |> 
+  rename(id = activity_id)
+
+write.csv(activity_formal, "./app_data/activity_formal.csv", 
+          row.names = FALSE)
+
+activity_formal_datum <- act_formal_stats |> 
+  select(activity_id, provision_interval, population)
+
+write.csv(activity_formal_datum, "./app_data/activity_formal_datum.csv", 
+          row.names = FALSE)
+
+final_activity_formal <- activity_formal %>%
+  left_join(activity_formal_datum, by = c("id" = "activity_id"))
+
+datatable(
+  final_activity_formal,
+  options = list(
+    pageLength = 10,
+    scrollX = TRUE,
+    autoWidth = TRUE
+  ),
+  caption = 'Table: Formal Care Providers',
+  rownames = FALSE
+)
+```
+
 ## Informal Care Activities
 
-##Activity Formal Datum
+After compiling the data on the formal care economy, we calculate the data desired for the informal care economy.
+Like other times when analyzing the informal care economy, we utilize atus data.
+The first step is thus to load in and correctly format the data.
+This R code chunk is doing the following steps:
 
-## Activity Informal Datum
+---
+
+1. **Loading and filtering ATUS data**:
+```r
+atus <- read.csv(...) |> 
+  filter(activity != "Formal Work") |>   
+  filter(YEAR >= 2018 & YEAR != 2020) |> 
+  filter(AGE >= 18) |> 
+  select(...) |> 
+  clean_names()
+```
+- Reads time-use survey data (`ATUSdata.csv`) into a dataframe called `atus`.
+- Filters out:
+  - Any records labeled as `"Formal Work"` (keeping only non-paid activities).
+  - The year 2020 (often excluded due to COVID-related disruptions).
+  - Years before 2018.
+  - Individuals under age 18.
+- Selects only relevant columns related to time use and care activity.
+- Cleans column names to a consistent lowercase format with underscores.
+
+---
+
+2. **Determine the most recent 5-year window**:
+```r
+yr_range <- atus_yr_range(atus) |> 
+  filter(year == max(year))
+```
+- Uses a helper function `atus_yr_range()` to get a 5-year rolling window.
+- Selects the most recent year in that window, storing both the start and end years.
+
+---
+
+3. **Filter and transform the dataset**:
+```r
+atus <- atus |> 
+  filter(year >= yr_range$yr_start & year <= yr_range$year) |> 
+  rename(...) |> 
+  mutate(...)
+```
+- Keeps only data within the most recent 5-year range.
+- Renames:
+  - `act_care_focus` → `care_focus`
+  - `activity_2` (presumably a derived activity name column) → `activity_name`
+
+- Creates new variables:
+  - `activity_name`: Sets this to `"non-care"` if `care_focus` is `"non-care"`, otherwise keeps the original activity name.
+  - `activity_id`: Cleans up `activity_name` to be lowercase and hyphen-separated (removing special characters), and removes trailing hyphens. This creates a consistent identifier for each activity.
+  - `weight`: Converts annual person weights (`wt06`) to a **daily average** over a 5-year period.
+
+---
+
+In plain language:  
+**This code prepares recent time-use data for analysis by cleaning, filtering, and standardizing activity names. It focuses on unpaid or informal care activities and creates identifiers and daily weights for later use in summaries or visualizations.**
+
+```{r Informal care atus load}
+source("load_defaults.R")
+# load data
+atus <- read.csv("./data/CSV/ATUSdata.csv") |> 
+  filter(activity != "Formal Work") |>   
+  filter(YEAR >= 2018 & YEAR != 2020) |> 
+  filter(AGE >= 18) |>
+  select(YEAR, CASEID, WT06, ACTIVITY, activity, act_care_focus, 
+         DURATION, SCC_ALL_LN, SEC_ALL_LN) |> 
+  clean_names() 
+
+# get most recent 5 year and clean up columns
+yr_range <- atus_yr_range(atus) |> 
+  filter(year == max(year))
+
+atus <- atus |> 
+  filter(year >= yr_range$yr_start & year <= yr_range$year) |> 
+  rename(
+    care_focus = act_care_focus, 
+    activity_name = activity_2
+    ) |>
+  mutate(
+    activity_name = ifelse(
+      care_focus == "non-care", "non-care", activity_name), 
+    
+    activity_id = str_replace_all(
+      activity_name, "[^a-zA-Z0-9]+", "-") |> 
+      str_to_lower(),
+    activity_id = gsub("-$", "", activity_id), 
+    
+    weight = wt06/365/5
+  )
+```
+
+We then calculate selected statistics for the informal care economy activities.
+To start with we calculate the number of people who engage in each activity.
+Then we calculate the time spent across the population in each category.
+This R code chunk is doing the following steps:
+
+---
+
+**1. Create `case_stats`: time-use totals per person and care activity**
+```r
+case_stats <- bind_rows(...)
+```
+It builds a combined dataset of individual-level care time from three sources:
+
+a. **Primary care activities**:
+- Sums `duration` for each individual (`caseid`) by:
+  - `activity_id`
+  - `activity_name`
+  - `care_focus`
+  - Includes their weight for later aggregation
+
+b. **Secondary child care**:
+- Creates synthetic activity labels:
+  - Sets `activity_id` to `"secondary-childcare"`
+  - Sets `activity_name` to `"Secondary Childcare"`
+  - Labels the `care_focus` as `"developmental"`
+- Sums `scc_all_ln` (secondary child care minutes) by individual
+- Keeps only those with positive time spent
+
+c. **Secondary elder care**:
+- Similar to child care, but:
+  - Uses `sec_all_ln`
+  - Sets `activity_id` to `"secondary-eldercare"`
+  - Sets `care_focus` to `"health"`
+- Again, keeps only those with positive time spent
+
+These three blocks are stacked together using `bind_rows()` to create a single long-form dataset of care activity time by individual.
+
+---
+
+**2. Create `activity_stats`: aggregate care provision stats**
+```r
+activity_stats <- case_stats |> summarise(...) |> filter(...) |> arrange(...)
+```
+- Aggregates `case_stats` to the **activity level**, calculating:
+  - `provision_interval`: total weighted time spent on that activity across all people
+  - `population`: total weighted number of people represented
+- Groups by:
+  - `activity_id`, `activity_name`, and `care_focus`
+- Filters out `"non-care"` activities to focus on actual caregiving
+- Sorts the results by `activity_id`
+
+---
+
+In plain language:  
+**This code calculates how much time people spend on different types of unpaid or informal caregiving activities—including both direct and secondary care—and summarizes it by activity type. It produces a table that shows total care minutes and population size for each category.**
+
+```{r infomral activity population and time}
+case_stats <- bind_rows(
+  atus |>
+    summarise(
+      total_time = sum(duration),
+      .by = c(caseid, weight, activity_id, activity_name, care_focus)
+      ),
+
+  atus |>
+    mutate(
+      activity_id = "secondary-childcare",
+      activity_name = "Secondary Childcare",
+      care_focus = "developmental"
+    ) |>
+    summarise(
+      total_time = sum(scc_all_ln),
+      .by = c(caseid, weight, activity_id, activity_name, care_focus)
+      ) |>
+    filter(total_time > 0),
+
+  atus |>
+    mutate(
+      activity_id = "secondary-eldercare",
+      activity_name = "Secondary Eldercare",
+      care_focus = "health"
+    ) |>
+    summarise(
+      total_time = sum(sec_all_ln),
+      .by = c(caseid, weight, activity_id, activity_name, care_focus)
+      )  |>
+    filter(total_time > 0)
+  )
+
+
+activity_stats <- case_stats |>
+  summarise(
+    provision_interval = sum(total_time*weight),
+    population = sum(weight),
+    .by = c(activity_id, activity_name, care_focus)
+  ) |>
+  filter(care_focus != "non-care") |>
+  arrange(activity_id)
+```
+
+Just as with the formal care economy, we want to add a column this this section for the median wages.
+However, people working in the informal care economy do not earn a wage.
+To solve for this, we create a **shadow wage** for each activity.
+A shadow wage represents the roughly equivilant wage that this activity earns when done in the formal care economy.
+The creation of this shadow wage can be useful for us comparing the tasks between the formal and informal care economy.
+
+In order to create this shadowage, we need to pair activities in the formal and informal economy.
+We utilize a crosswalk that pairs activity codes with occupation codes to do this.
+This crosswalk can be found below.
+
+```{r}
+act_cross <- read.csv("./data/CSV/Informal_Formal_Crosswalk.csv", fileEncoding = "latin1") |> 
+  clean_names() |> 
+  select(activity, code_formal) |> 
+  unique() |> 
+  mutate(
+    activity = str_trim(activity),
+    occ_code_start = str_extract(code_formal, "^[^-]+") |> as.numeric(),
+    occ_code_end = coalesce(
+      str_extract(code_formal, "(?<=-).*") |> as.numeric(), 
+      occ_code_start
+      )
+  )
+
+datatable(
+  act_cross,
+  options = list(
+    pageLength = 10,
+    scrollX = TRUE,
+    autoWidth = TRUE
+  ),
+  caption = 'Table: Informal to Formal Activity Crosswalk',
+  rownames = FALSE
+)
+```
+
+We then load in a new version of the asec data which we will utilize to find wages associated with the crosswalked activities.
+
+```{r}
+asec <- read.csv("./data/CSV/ASECdata.csv") |>
+  filter(AGE >= 18) |>
+  filter(YEAR == max(YEAR)) |> 
+  filter(empstat == "Employed") |>
+  filter(INCWAGE != 0 & INCWAGE != 99999999) |>
+  select(YEAR, OCC2010, Label, FOCUS, INCWAGE, ASECWT) |> 
+  clean_names() |> 
+  mutate(occ2010 = as.numeric(occ2010))
+```
+
+Finally we utilize the crosswalk along with the asec data to assign a wage for each of the informal care activities.
+This R code chunk is doing the following steps:
+
+---
+
+**1. Initialize storage and loop over activity types**
+```r
+df <- list()
+activity <- act_cross$activity
+```
+- Prepares an empty list `df` to hold results.
+- Extracts the list of unique activity names from `act_cross`, a lookup table that likely maps each care activity to an occupational code range.
+
+---
+
+**2. Loop through each activity and calculate median wage**
+```r
+for(sel_activity in activity) {
+  ...
+}
+```
+For each care activity (`sel_activity`), it:
+
+a. **Gets the occupational code range**:
+```r
+codes <- act_cross |> filter(activity == sel_activity)
+```
+- Looks up the start and end `OCC2010` codes associated with the current activity.
+
+b. **Filters the `asec` data to those occupations**:
+```r
+filter(occ2010 >= codes$occ_code_start & occ2010 <= codes$occ_code_end)
+```
+- Selects only individuals working in occupations within the defined range for that activity.
+
+c. **Calculates the median wage**:
+```r
+summarise(
+  median_wage = wtd.quantile(incwage, weights = asecwt, probs = 0.5)
+)
+```
+- Uses weighted quantiles to compute the **median income** (`incwage`) for those workers, using survey weights (`asecwt`).
+
+d. **Labels the result**:
+```r
+mutate(activity_name = sel_activity) |> 
+relocate(activity_name)
+```
+- Adds the name of the activity to the result and moves it to the front of the dataframe.
+
+e. **Stores the result in the list**:
+```r
+df[[sel_activity]] <- ...
+```
+
+---
+
+### **3. Combine all results into one dataframe**
+```r
+median_wage <- bind_rows(df)
+```
+- Merges all the individual activity median wage summaries into one dataframe.
+
+---
+
+In plain language:  
+**This code calculates the median wage for each care activity type by mapping activities to occupation codes, filtering for those jobs in the dataset, and summarizing income data. The result is a table showing what workers in each type of care activity typically earn.**
+
+```{r shadow wage assignment}
+df <- list()
+activity <- act_cross$activity
+
+for(sel_activity in activity) {
+  codes <- act_cross |> 
+    filter(activity == sel_activity) 
+  
+  df[[sel_activity]] <- asec %>%
+    filter(
+      occ2010 >= codes$occ_code_start &  
+      occ2010 <= codes$occ_code_end
+      ) |> 
+    summarise(
+      median_wage = wtd.quantile(incwage, weights = asecwt, probs = 0.5)
+    ) |> 
+    mutate(activity_name = sel_activity) |> 
+    relocate(activity_name)
+}
+
+median_wage <- bind_rows(df)
+```
+
+Finally, we combine the different data together, write it to the app, and prepare it for download.
+
+```{r}
+activity_informal <- activity_stats |>
+  select(activity_id, activity_name, care_focus) |>
+  left_join(median_wage, by = c("activity_name")) |> 
+  rename(
+    id = activity_id, 
+    name = activity_name
+    ) 
+
+write.csv(activity_informal, "./app_data/activity_informal.csv", 
+          row.names = FALSE)
+
+activity_informal_datum <- activity_stats |>
+  mutate(
+    provider_attention = case_when(
+      activity_id == "secondary-childcare" ~ "passive_child",
+      activity_id == "secondary-eldercare" ~ "passive_elder",
+      TRUE ~ "active"
+      )
+    ) |>
+  select(activity_id, provider_attention, provision_interval, population)
+
+write.csv(activity_informal_datum, 
+          "./app_data/activity_informal_datum.csv", 
+          row.names = FALSE)
+
+final_activity_informal <- activity_informal %>%
+  left_join(activity_informal_datum, by = c("id" = "activity_id"))
+
+datatable(
+  final_activity_informal,
+  options = list(
+    pageLength = 10,
+    scrollX = TRUE,
+    autoWidth = TRUE
+  ),
+  caption = 'Table: Formal Care Providers',
+  rownames = FALSE
+)
+```
+
+## Finalized activity data
+
+We combine the formal and informal activity data together into a single dataset that we export to make available for download.
+
+```{r}
+final_activity_formal$sector <- "Formal"
+final_activity_formal$provider_attention <- "active"
+final_activity_informal$sector <- "Informal"
+
+final_activity <- rbind(final_activity_formal, final_activity_informal)
+
+write.csv(final_activity, "./data/CSV/final_activity.csv", row.names = FALSE)
+write_dta(final_activity, "./data/DTA/final_activity.dta")
+
+datatable(
+  final_activity,
+  options = list(
+    pageLength = 10,
+    scrollX = TRUE,
+    autoWidth = TRUE
+  ),
+  caption = 'Table: Finalized activity data',
+  rownames = FALSE
+)
+```
 
 # Care Gini
 
 # Care Ratio
-
-# Labor Force Participation
-
-## Labor Force Participation by Care Giver Status
-
-## Formal Care Force
-
-## Informal Care Force
 
 # The Sandwhich Generation
 
@@ -1674,16 +3274,1048 @@ datatable(
 )
 ```
 
-# The share of the Formal/Informal Care Economy
+# Care Labor Force Broad Indicators Prep
+
+The **Bureau of Labor Statistics (BLS)** releases monthly labor force statistics through the **Current Population Survey (CPS)**, a nationally representative household survey conducted in collaboration with the **U.S. Census Bureau**.
+These statistics offer a timely and comprehensive overview of employment, unemployment, labor force participation, and other key indicators that shape our understanding of the U.S. economy.
+Policymakers, researchers, and the public rely on these data to assess economic conditions, identify trends, and inform decisions ranging from interest rate adjustments to workforce development initiatives.
+Monthly updates facilitate the close monitoring of labor market dynamics, enabling early detection of economic downturns or recoveries.
+
+In its monthly reports, the BLS provides detailed labor force participation tables dis aggregated by variables such as sex and race.
+Building on this framework, our analysis extends the focus to include parenthood status and employment in care-related industries.
+We further examine labor force participation not only within the formal care economy but also across informal care roles, capturing a more comprehensive view of care giving and its impact on labor dynamics.
+
+### Prepping Economy Data
+
+In the broad indicators section, we conclude by examining the value of the care economy in relation to the U.S. gross domestic product (GDP).
+To do so, we draw on GDP data from the Federal Reserve Bank of St. Louis's online dashboard (FRED: https://fred.stlouisfed.org/).
+The dataset used reports annual GDP figures for the entire U.S. economy, expressed in billions of dollars.
+This R code chunk is doing the following steps:
+
+---
+
+1. **Setting a minimum year**:  
+   It defines a variable `min_year` and sets it to 1994. This will be used later to filter the data.
+
+2. **Loading GDP data**:  
+   It reads the CSV file called `FYGDP.csv` into a dataframe called `us_gdp`.
+
+3. **Cleaning column names**:  
+   It standardizes the column names to a consistent, tidy format (e.g., lowercase with underscores).
+
+4. **Creating and modifying columns**:
+   - `date`: Extracts the year from the `observation_date` column and converts it into a Date format representing January 1st of that year.
+   - `fygdp`: Converts GDP figures to actual dollar amounts by multiplying by 1 billion.
+   - `gdp_daily`: Calculates an estimated daily GDP by dividing the annual GDP by 365.
+
+5. **Filtering by year**:  
+   It keeps only the rows where the year of the `date` is greater than or equal to 1994.
+
+6. **Selecting relevant columns**:  
+   It keeps only the `date` and `gdp_daily` columns for display.
+
+7. **Displaying the data as a table**:  
+   It uses `datatable()` to show an interactive table of `us_gdp`, with options for:
+   - Showing 10 rows per page
+   - Enabling horizontal scrolling
+   - Automatically adjusting column widths  
+   The table is given the caption **“Table: US GDP By Year”** and excludes row names.
+
+---
+
+In plain language:  
+**This code reads in U.S. GDP data, adjusts it to reflect daily values, filters for years from 1994 onward, and displays it in an interactive table format for easy viewing.**
+
+```{r Broad Impacts GDP Prep}
+min_year <- 1994
+
+us_gdp <- read.csv("./app_data/FYGDP.csv") |>
+  clean_names() |>
+  mutate(
+    date = as.Date(paste0(
+      substr(
+        observation_date,
+        nchar(observation_date) - 3,
+        nchar(observation_date)
+      ), "-01-01"
+    )),
+    fygdp = fygdp * 1e9,
+    gdp_daily = fygdp / 365
+  ) |>
+  filter(year(date) >= min_year) |>
+  select(date, gdp_daily)
+
+datatable(
+  us_gdp,
+  options = list(
+    pageLength = 10,
+    scrollX = TRUE,
+    autoWidth = TRUE
+  ),
+  caption = 'Table: US GDP By Year',
+  rownames = FALSE
+)
+```
+
+### Prepping ASEC Data
+
+In this section we prepare ASEC data.
+We will use this set of ASEC data for the remainder of the analysis representing all stats in the broad indicator data.
+The code below is used to load in the data and structure it as needed for analysis.
+This R code chunk is doing the following steps:
+
+---
+
+1. **Loading data**: It reads a CSV file called `ASECdata.csv` into a dataframe named `asec`.
+
+2. **Filtering for valid responses**: It keeps only the rows where `HFLAG` equals 1 or is missing. This accounts for a survey redesign starting in 2014, ensuring consistent data.
+
+3. **Filtering by year**: It keeps only the data from a specific range of years, starting from `min_year` (which is currently defined as 1994 labeled above).
+
+4. **Filtering by age**: It keeps only people between aged 18 and over.
+
+5. **Selecting variables**: It keeps only the listed columns, which are relevant to the analysis (like year, wages, employment status, education, etc.).
+
+6. **Cleaning column names**: It standardizes column names to a consistent format (usually lowercase with underscores).
+
+7. **Creating new variables**:
+   - `date`: Adds a new column that sets the date to January 1st of the given year.
+   - `uhrsworkt`: Replaces a special code (999, meaning NILF) with 0 in the work hours column.
+   - `occ_type`: Classifies each person as working in “care” or “non-care” based on the `focus` variable.
+   - `overall`: Adds a column with the same value “overall” for every row, to simplify grouping and plotting later.
+
+---
+
+In plain language:  
+**This code prepares and cleans survey data, keeping working-age adults, dealing with some inconsistencies, and creating new variables to distinguish between care and non-care occupations.**
+
+
+```{r, broad impacts ASEC prep}
+asec <- read.csv("./data/CSV/ASECdata.csv") |>
+  # incorporate HFLAG clause due to survey redesign in 2014
+  # https://blog.popdata.org/2014sample/
+  filter(HFLAG == 1 | is.na(HFLAG)) |> 
+  filter(AGE >= 18) |>
+  filter(YEAR >= min_year) |>
+  select(YEAR,
+         ASECWT,
+         UHRSWORKT,
+         INCWAGE,
+         empstat,
+         race_ethnicity,
+         educ,
+         statefip,
+         FOCUS,
+         marst,
+         gender_parent) |>
+  clean_names() |>
+  mutate(
+    date = as.Date(paste0(year, "-01-01")),
+    uhrsworkt = ifelse(uhrsworkt == 999, 0, uhrsworkt),
+    occ_type = ifelse(focus == "none", "non-care", "care"),
+    overall = "overall"
+  )
+
+summary(asec)
+```
+
+### Prepping ATUS Data
+
+In this section we prepare the ATUS data.
+We will use this set of ASEC data for the remainder of the analysis.
+The code below is used to load in the data and structure it as needed for analysis representing all stats in the broad indicator data.
+This R code chunk is doing the following steps:
+
+---
+
+This R code chunk is doing the following steps:
+
+1. **Loading data**:  
+   It reads the CSV file called `ATUSdata.csv` into a dataframe called `atus`.
+
+2. **Filtering data**:  
+   It keeps only:
+   - Rows where the activity is *not* "Formal Work"
+   - People aged 18 or older
+   - Years other than 2020 (Removed due to pandemic-related anomalies)
+
+4. **Selecting variables**:  
+   It keeps only a specific set of columns related to time use, demographics, and care-related activities.
+
+5. **Cleaning column names**:  
+   It standardizes column names to a consistent format (e.g., lowercase with underscores).
+
+6. **Reshaping the data**:  
+   It transforms three columns (`duration`, `scc_all_ln`, and `sec_all_ln`) into a long format so that they all go into a single `duration` column with an associated `metric` label.
+
+7. **Handling missing data and categorizing activities**:
+   - Replaces missing values in `duration` with 0.
+   - Creates a new `care_flag` column that labels each row as either “care” or “non-care” based on the type of time-use metric or whether the activity was marked as care-related.
+   - Adds an “overall” column with the same value ("overall") for grouping purposes.
+
+8. **Summarizing individual-level data**:  
+   It creates a new dataframe `case_year` that:
+   - Converts annual weights to daily weights by dividing by 365.
+   - Aggregates total time spent on care and non-care activities for each person per year.
+   - Adds the same “overall” label to this summary dataset.
+
+9. **Defining the time range**:  
+   It uses a custom function `atus_yr_range()`, defined above, to calculate the range of years represented in the dataset.
+
+---
+
+In plain language:  
+**This code prepares and summarizes time-use data by filtering adult respondents, reshaping and cleaning time records, flagging care-related activities, and calculating total time spent on care versus non-care activities for each person and year.**
+
+
+```{r broad impacts ATUS prep}
+atus <- read.csv("./data/CSV/ATUSdata.csv") |> 
+  filter(activity != "Formal Work") |> 
+  filter(AGE >= 18) |>
+  filter(YEAR != 2020) |>
+  select(YEAR, CASEID, WT06, ACTIVITY, DURATION, SCC_ALL_LN, SEC_ALL_LN,
+         act_care_focus, activity, gender_parent, marst, educ, race_ethnicity, STATEFIP) |> 
+  clean_names() |> 
+  pivot_longer(
+    cols = c(duration, scc_all_ln, sec_all_ln),
+    names_to = "metric", 
+    values_to = "duration"
+  ) |>   
+  mutate(
+    duration = coalesce(duration, 0),
+    care_flag = case_when(
+      metric %in% c("scc_all_ln", "sec_all_ln") | 
+        act_care_focus != "non-care" ~ "care", 
+      TRUE ~ "non-care" 
+    ), 
+    overall = "overall"
+  )
+
+case_year <- atus |> 
+  mutate(weight = wt06 / 365) |> 
+  summarise(
+    total_time = sum(duration),
+    .by = c(year, caseid, gender_parent, weight, care_flag)
+    ) |> 
+  mutate(overall = "overall")
+
+yr_range <- atus_yr_range(atus)
+
+summary(case_year)
+```
+
+## Labor Force Participation by Care Giver Status
+
+While demographic factors such as sex are essential to labor force analysis, further disaggregating data by parenthood status offers deeper insight into how caregiving responsibilities intersect with employment.
+Parenthood—particularly in the context of child-rearing—can significantly influence labor force participation, working hours, and occupational choices.
+For example, mothers may reduce their working hours or leave the labor force entirely due to caregiving demands, while fathers may face societal expectations to maintain or increase their labor force involvement.
+Conversely, some mothers, particularly those from lower socio-economic backgrounds, may be compelled to enter or remain in the workforce after childbirth to help meet caregiving needs. Disaggregating labor force data by both sex and parenthood status reveals these nuanced dynamics, enabling policymakers and researchers to design more targeted interventions that support families, promote gender equity, and illuminate the structural forces shaping labor market outcomes.
+
+```{r BLS Replication Gender Parenthood}
+
+
+```
+
+## Formal Care Force
+
+The formal care force is defined as the individuals working in a job that has been identified as part of the care economy.
+Jobs such as nurses, teachers, and janitors all work to provide services which are considered to be care giving at home and thus we code as care jobs in the formal economy.
+The formal care force statistics on the dashboard provide the overall and gender/parenthood count of individuals in the formal care economy.
+
+The code below uses the ASEC yearly data from the CPS survey.
+This code creates a function where when a certain variable representing the demographic group is inserted, the cont and percentage of that demographic group are exported.
+The proportions are relative to within each group.
+Overall as a proportion thus refers to the proportion of all individuals but within a demographic proportion refers to the percent of, for example fathers, who work in the care force
+
+The code below creates a function that will be used to input a demographic and find the needed statistics.
+This R function is doing the following steps:
+
+---
+1. **Defining a function**:  
+   It creates a function called `get_formal_lfp` that takes two inputs:
+   - `df`: a dataframe (asec for this purpose)
+   - `demo_group`: a variable representing the demographic category to group by (e.g., race, gender, education)
+
+2. **Preparing the data**:
+   - It uses the `asec` dataset (or the passed `df`).
+   - Creates two new columns:
+     - `category_id`: stores the name of the demographic group variable passed in.
+     - `subcategory_id`: stores the actual value of that demographic variable for each person.
+
+3. **Grouping the data**:  
+   It groups the data by `date`, the demographic group name (`category_id`), and each group’s value (`subcategory_id`).
+
+4. **Summarizing labor force participation**:
+   - `formal_care_labor_force`: Calculates the weighted number of people employed in care occupations using the person-level weight (`asecwt`).
+   - `formal_care_force_proportion`: Divides the care labor force total by the total weighted population in the group to get a proportion.
+
+5. **Returning the results**:  
+   It returns the summarized dataframe, showing the number and proportion of employed care workers for each demographic group over time.
+
+---
+
+In plain language:  
+**This function calculates the size and share of the formal care labor force across different demographic groups using employment and occupation data. It outputs totals and proportions by group and year.**
+
+```{r formal lfp function}
+get_formal_lfp <- function(df, demo_group) {
+  df <- df |>
+    mutate(
+      category_id = demo_group,
+      subcategory_id = get(demo_group)
+      ) |>
+    group_by(date, category_id, subcategory_id) |>
+    summarise(
+      formal_care_labor_force = sum(
+        ifelse(
+          occ_type == "care" & empstat == "Employed", 
+          asecwt, 0)),
+      formal_care_force_proportion = formal_care_labor_force /
+        sum(asecwt)
+    )
+  
+  return(df)
+}
+```
+
+### Formal Labor Force Participation on the Care Board
+
+The table below presents the table, as it is used to feed the care board.
+
+```{r formal LFP CB}
+formal_lfp <- bind_rows(
+  get_formal_lfp(asec, "overall"),
+  get_formal_lfp(asec, "gender_parent")
+  )
+
+datatable(
+  formal_lfp,
+  options = list(
+    pageLength = 10,
+    scrollX = TRUE,
+    autoWidth = TRUE
+  ),
+  caption = 'Table: Formal Care Force Participation for CB',
+  rownames = FALSE
+)
+```
+
+### Expanded Formal Labor Force Participation on GitHub
+
+For download on the Care Board GitHub we provide a series of further specifications, disagregating this data by additional demographics.
+These include race_ethnicity, state, and education.
+The code below uses the function created above to return all of these statistics and then writes them to the correct files.
+
+```{r formal LFP all}
+formal_lfp_all <- bind_rows(
+  get_formal_lfp(asec, "overall"),
+  get_formal_lfp(asec, "gender_parent"),
+  get_formal_lfp(asec, "race_ethnicity"),
+  get_formal_lfp(asec, "educ"),
+  get_formal_lfp(asec, "marst"),
+  get_formal_lfp(asec, "statefip")
+  )
+
+
+datatable(
+  formal_lfp_all,
+  options = list(
+    pageLength = 10,
+    scrollX = TRUE,
+    autoWidth = TRUE
+  ),
+  caption = 'Table: Formal Care Force Participation all demographics',
+  rownames = FALSE
+)
+
+
+```
+
+## Informal Care Force
+
+To estimate the number of individuals participating in the informal care workforce, we use data from the American Time Use Survey (ATUS).
+The function below takes a specified demographic group and calculates the number of individuals within that group engaged in informal labor.
+For the purposes of this analysis, we define informal labor force participation as providing three or more hours of unpaid care per day.
+This threshold aligns with the Bureau of Labor Statistics' criteria for classifying individuals as unpaid family workers on family farms.
+By adopting this definition, we establish a consistent framework for identifying and analyzing unpaid family care workers within the broader labor force.
+This R function is doing the following steps:
+
+---
+
+1. **Defining a function**:  
+   It creates a function called `get_informal_lfp` that takes one input:
+   - `demo_group`: the name of a demographic variable (e.g., race, gender, etc.) to group by.
+
+2. **Setting up for looping over years**:  
+   - It initializes an empty list called `informal_lfp` to store results for each year.
+   - Sets a counter `i` to track the index during the loop.
+
+3. **Looping through each year in the dataset**:  
+   For each year in the dataset (`sel_year`), using year ranges from `yr_range`:
+   - Defines `year_min`, which sets the lower bound for the moving 5-year window (used in the analysis).
+
+4. **Calculating total population in the group**:
+   - Filters `atus` to include data from the 5-year window ending in `sel_year`.
+   - Keeps distinct individuals with their weights and demographic values.
+   - Calculates the total population by summing weights (converted to daily and averaged over 5 years).
+
+5. **Identifying informal caregivers**:
+   - Filters `case_year` for the same 5-year window.
+   - Keeps only those doing **more than 3 hours of care work per day**.
+   - Groups by the demographic variable and calculates the size of the informal care labor force (again, using 5-year averaging of daily weights).
+
+6. **Combining the two datasets**:
+   - Joins the care labor force data with the total population for the group.
+   - Adds a `date` column for that year (January 1st).
+   - Calculates the **proportion of the population doing informal caregiving**.
+   - Stores the result in the list for the given year.
+
+7. **Combining and returning results**:  
+   After looping through all years, it combines all yearly dataframes into one (`df`) and returns it.
+
+---
+
+In plain language:  
+**This function calculates the share of the population doing significant amounts of informal care work (3+ hours/day) within each demographic group over time, using a rolling 5-year window. It returns a dataset showing how informal caregiving participation changes across groups and years.**
+
+```{r informal lfp function}
+get_informal_lfp <- function(demo_group) {
+  informal_lfp <- list()
+  i <- 1
+  
+  for (sel_year in yr_range$year) {
+    year_min <- yr_range$yr_start[i]
+    
+    # total population for selected demo group
+    tot_pop <- atus |>
+      filter(year >= year_min & year <= sel_year) |>
+      mutate(category_id = demo_group,
+             subcategory_id = !!sym(demo_group)) |>
+      distinct(year, caseid, wt06, category_id, subcategory_id) |>
+      summarise(
+        total_population = sum(wt06 / 365 / 5), 
+        .by = c(category_id, subcategory_id)
+      )
+    
+    # population doing 3+ hours care work
+    informal_lfp[[sel_year]] <- case_year |>
+      filter(year >= year_min & year <= sel_year) |>
+      filter(care_flag == "care" & total_time > 3*60) |>
+      mutate(category_id = demo_group,
+             subcategory_id = !!sym(demo_group)) |>
+      summarise(
+        informal_care_labor_force = sum(weight / 5), 
+        .by = c(category_id, subcategory_id)
+      ) |>
+      left_join(tot_pop, by = c("category_id", "subcategory_id")) |>
+      mutate(
+        date = as.Date(paste0(as.character(sel_year), "-01-01")),
+        informal_care_proportion = 
+          informal_care_labor_force / total_population
+      ) |>
+      relocate(date)
+    
+    i <- i + 1
+  }
+  
+  df <- bind_rows(informal_lfp)
+  return(df)
+}
+```
+
+### Informal Careforce Participation for CB
+
+Just like with formal, we start by presenting this data as an overall and by gender/parenthood estimation.
+
+```{r}
+informal_lfp <- bind_rows(
+  get_informal_lfp("overall"),
+  get_informal_lfp("gender_parent")
+)
+
+datatable(
+  informal_lfp,
+  options = list(
+    pageLength = 10,
+    scrollX = TRUE,
+    autoWidth = TRUE
+  ),
+  caption = 'Table: Informal Careforce for CB',
+  rownames = FALSE
+)
+```
+
+### Informal Careforce Participation for CB
+
+Finally we present this same information for all catagories that is available for download from the Care Board GitHub.
+
+```{r}
+informal_lfp_all <- bind_rows(
+  get_informal_lfp("overall"),
+  get_informal_lfp("gender_parent"),
+  get_informal_lfp("race_ethnicity"),
+  get_informal_lfp("educ"),
+  get_informal_lfp("marst")
+  )
+
+datatable(
+  informal_lfp_all,
+  options = list(
+    pageLength = 10,
+    scrollX = TRUE,
+    autoWidth = TRUE
+  ),
+  caption = 'Table: Informal Care Force Participation all Stats',
+  rownames = FALSE
+)
+```
+
+## Complete Careforce Participation Data.
+
+We finally bind the information in the different datasets together.
+This creates a single dataset for the care labor force for both formal and total.
+We bind the rows based on the date, category_id, and subcategory_id columns.
+
+```{r care force}
+informal_lfp_all <- informal_lfp_all |>
+  mutate(sector = "informal")
+
+formal_lfp_all <- formal_lfp_all |>
+  mutate(sector = "formal")
+
+
+combined_lfp <- bind_rows(informal_lfp_all, formal_lfp_all)
+
+care_force_data <- combined_lfp |>
+  transmute(
+    date,
+    category_id,
+    subcategory_id,
+    sector,
+    care_force = coalesce(informal_care_labor_force, formal_care_labor_force),
+    care_force_proportion = coalesce(informal_care_proportion, formal_care_proportion)
+  )
+
+write.csv(care_force_data, "./data/CSV/care_force_data.csv")
+write_dta(care_force_data, "./data/DTA/care_force_data.dta")
+
+datatable(
+  care_force_data,
+  options = list(
+    pageLength = 10,
+    scrollX = TRUE,
+    autoWidth = TRUE
+  ),
+  caption = 'Table: Informal Care Force Participation all Stats',
+  rownames = FALSE
+)
+```
+
+
+# Time spent working in the Care Economy
+
+The second major broad indicator data created for the Care Board represents the time spent by the above workers in the Care Economy.
+We utilize both ASEC and ATUS data to calculate the total number of minutes in a day that workers spend providing care.
+These statistics are useful to show the size of the care economy work relative to other aspects of the formal economy and informal time use.
 
 ## Minutes Worked in the Formal Care Economy
 
+The formal care economy constitutes a significant portion of the labor force, as demonstrated in the preceding section.
+However, measuring its size by participation alone does not fully capture its scope.
+Time spent working offers a complementary perspective, particularly in care-related roles where intensity and duration of labor vary widely.
+To address this, we calculate the total minutes worked in the formal care economy as a proportion of all minutes worked across the broader labor force.
+We implement this through a function, get_formal_time, which takes a specified demographic group and computes the total number of minutes this group spends working in the formal care economy.
+This R function is doing the following steps:
+
+---
+
+1. **Defining a function**:  
+   It defines a function called `get_formal_time` that takes two inputs:
+   - `df`: a dataframe (most likely asec)
+   - `demo_group`: a demographic variable to group by (e.g., race, gender, etc.)
+
+2. **Filtering out invalid data**:  
+   It removes rows where reported work hours (`uhrsworkt`) equals 997, which indicates flexible hours.
+
+3. **Creating grouping variables**:  
+   - Adds a `category_id` column that stores the name of the demographic variable.
+   - Adds a `subcategory_id` column that stores the value of that variable for each individual.
+
+4. **Grouping data**:  
+   It groups the dataset by year (`date`), the demographic group name (`category_id`), and the demographic subgroup (`subcategory_id`).
+
+5. **Calculating time spent in formal care work**:
+   - `formal_care_time`: Totals the number of minutes per week spent in care-related paid work, using reported hours and survey weights. The formula:
+     ```
+     asecwt * uhrsworkt * 60 / 7
+     ```
+     converts weekly work hours into minutes per day.
+   - `formal_care_time_proportion`: Divides that total by the total number of weighted work minutes for the group to get a proportion.
+
+6. **Returning the result**:  
+   It returns a dataframe with the total and proportion of time spent in formal care work, broken down by demographic group and year.
+
+---
+
+In plain language:  
+**This function calculates how much time people spend in paid care jobs across different demographic groups, using survey data on work hours. It returns both total care time and the share of all work time spent in care occupations.**
+
+```{r formal minutes function}
+get_formal_time <- function(df, demo_group) {
+  df <- asec |>
+    filter(uhrsworkt != 997) |> 
+    mutate(
+      category_id = demo_group,
+      subcategory_id = get(demo_group)
+      ) |>
+    group_by(date, category_id, subcategory_id) |>
+    summarise(
+      formal_care_time = sum(
+        ifelse(
+          occ_type == "care" & empstat == "Employed",
+          asecwt * uhrsworkt * 60 / 7,
+          0
+        )
+      ),
+      formal_care_time_proportion = formal_care_time /
+        sum(asecwt * uhrsworkt * 60 / 7)
+    )
+  
+  return(df)
+}
+```
+
+### Time spent working in formal careforce CB
+
+For the care board data itself we present an overall estimate and an estimate broken down by gender and parenthood.
+
+```{r formal time cb}
+formal_time <- bind_rows(
+  get_formal_time(asec, "overall"),
+  get_formal_time(asec, "gender_parent")
+)
+
+datatable(
+  formal_time,
+  options = list(
+    pageLength = 10,
+    scrollX = TRUE,
+    autoWidth = TRUE
+  ),
+  caption = 'Table: Formal time spent CB',
+  rownames = FALSE
+)
+```
+
+### Time spent working in formal careforce all Demographics
+
+We then provide another version that is available for download from the Care Board Github that expands this analysis.
+The expansion of this analysis breaks this data down by race_ethnicity, education, marital status, and state.
+
+```{r formal time all}
+formal_time_all <- bind_rows(
+  get_formal_time(asec, "overall"),
+  get_formal_time(asec, "gender_parent"),
+  get_formal_time(asec, "educ"),
+  get_formal_time(asec, "marst"),
+  get_formal_time(asec, "race_ethnicity"),
+  get_formal_time(asec, "statefip")
+)
+
+write.csv(formal_time_all, "./data/CSV/formal_time_all.csv")
+write_dta(formal_time_all, "./data/DTA/formal_time_all.dta")
+
+datatable(
+  formal_time_all,
+  options = list(
+    pageLength = 10,
+    scrollX = TRUE,
+    autoWidth = TRUE
+  ),
+  caption = 'Table: Formal Time spent all demographics',
+  rownames = FALSE
+)
+```
+
 ## Minutes Worked in the Informal Care Economy
+
+To measure time spent in the informal care economy, we draw on data from the American Time Use Survey (ATUS).
+Using the activity crosswalks described above, we categorize time use entries into specific types of care activities.
+We then calculate the total time spent on informal caregiving across the population.
+The function below is designed to compute the average amount of time dedicated to informal caregiving, providing a clearer picture of the scope and intensity of unpaid care work.
+This R function is doing the following steps:
+
+---
+
+1. **Defining a function**:  
+   It defines a function called `get_informal_time` that takes one input:
+   - `demo_group`: the name of a demographic variable (e.g., gender, education) used to group the data.
+
+2. **Setting up for a loop across years**:  
+   - It initializes an empty list called `informal_time` to store yearly results.
+   - Starts a counter `i` for tracking the index during the loop.
+
+3. **Looping through each year**:  
+   For each year (`sel_year`) in `yr_range$year`, using a 5-year window:
+   - Sets `year_min` as the lower limit of that 5-year range.
+
+4. **Calculating informal care time**:
+   - Filters `case_year` to include records in the 5-year window ending with `sel_year`.
+   - Adds two new columns:
+     - `category_id`: the name of the demographic variable.
+     - `subcategory_id`: the value of that variable for each person.
+   - Groups by care status (`care_flag`) and demographic category/subgroup.
+   - Calculates **total informal care time** using weighted total minutes of care (scaled to a 5-year average).
+
+5. **Calculating proportions**:
+   - Within each demographic subgroup, it calculates the **proportion of time spent** on each care type (care vs. non-care).
+   - Adds a `date` column representing January 1st of the `sel_year`.
+
+6. **Storing and returning results**:
+   - Each year’s results are stored in the `informal_time` list.
+   - After the loop, all results are combined into one dataframe (`df`) and returned.
+
+---
+
+In plain language:  
+**This function calculates how much time people in each demographic group spend on informal care work, over rolling 5-year periods. It returns both the total and proportion of informal care time for each group and year.**
+
+```{r informal time function}
+get_informal_time <- function(demo_group) {
+  informal_time <- list()
+  i = 1
+  
+  for (sel_year in yr_range$year) {
+    year_min <- yr_range$yr_start[i]
+    
+    informal_time[[sel_year]] <- case_year |>
+      filter(year >= year_min & year <= sel_year) |>
+      mutate(category_id = demo_group,
+             subcategory_id = get(demo_group)) |>
+      summarise(
+        informal_care_time = sum(total_time*weight/5),
+        .by = c(care_flag, category_id, subcategory_id) 
+      ) |> 
+      group_by(category_id, subcategory_id) |> 
+      mutate(
+        date = as.Date(paste0(as.character(sel_year), "-01-01")),
+        informal_care_time_proportion = informal_care_time /
+          sum(informal_care_time)
+        ) |> 
+      relocate(date)
+    
+    i = i + 1
+  }
+  
+  df <- bind_rows(informal_time)
+  return(df)
+}
+```
+
+### Time spent in informal careforce CB
+
+Just as with the formal sector, for the CB statistics alone we present an overall and a division by gender and parenthood.
+
+```{r informal cb care time}
+informal_time <- bind_rows(
+  get_informal_time("overall"),
+  get_informal_time("gender_parent")
+) 
+
+datatable(
+  informal_time,
+  options = list(
+    pageLength = 10,
+    scrollX = TRUE,
+    autoWidth = TRUE
+  ),
+  caption = 'Table: Time spent in informal careforce CB',
+  rownames = FALSE
+)
+```
+
+### Time spent in informal careforce all demographics
+
+Now we can look at the time spent in informal care economy across all stats that will be available to download from github.
+
+```{r informal all care time}
+informal_time_all <- bind_rows(
+  get_informal_time("overall"),
+  get_informal_time("gender_parent"),
+  get_informal_time("educ"),
+  get_informal_time("marst"),
+  get_informal_time("race_ethnicity"),
+  
+) 
+
+datatable(
+  informal_time_all,
+  options = list(
+    pageLength = 10,
+    scrollX = TRUE,
+    autoWidth = TRUE
+  ),
+  caption = 'Table: Time spent in informal careforce all demographics',
+  rownames = FALSE
+)
+```
+
+## Finalization of careforce time
+
+We finalize this by binding the informal and formal tables together to create one final table that will be used to analyze the time spent caregiving.
+
+```{r final care force labor time}
+informal_time_all <- informal_time_all |>
+  mutate(sector = "informal")
+
+formal_time_all <- formal_time_all |>
+  mutate(sector = "formal")
+
+
+combined_time <- bind_rows(informal_time_all, formal_time_all)
+
+care_force_time_data <- combined_time |>
+  transmute(
+    date,
+    category_id,
+    subcategory_id,
+    sector,
+    care_force_minutes = coalesce(informal_care_time, formal_care_time),
+    care_force_proportion = coalesce(informal_care_time_proportion, formal_care_time_proportion)
+  )
+
+write.csv(care_force_time_data, "./data/CSV/care_force_time_data.csv")
+write_dta(care_force_time_data, "./data/DTA/care_force_time_data.dta")
+
+datatable(
+  care_force_time_data,
+  options = list(
+    pageLength = 10,
+    scrollX = TRUE,
+    autoWidth = TRUE
+  ),
+  caption = 'Table: Time spent by careforce',
+  rownames = FALSE
+)
+```
 
 # Valuing the Care Economy
 
+## Formal Care Economy Valuation.
+
+Thus far, we have examined both the number of individuals employed in the formal care economy and the time they spend in care-related work.
+A final dimension of analysis involves assigning a monetary value to this labor.
+The code chunk below performs this valuation based on several assumptions.
+Specifically, we identify individuals working within the formal care economy and associate their roles with corresponding wage data.
+We then estimate the total value of formal care labor by multiplying the median wage for care-related occupations by the number of individuals employed in these roles.
+The resulting valuation is compared to U.S. GDP figures to contextualize the economic weight of the formal care sector.
+For the Care Board, we present both an overall valuation and disaggregated estimates by gender and parenthood status.
+This R function is doing the following steps:
+
+---
+
+1. **Defining a function**:  
+   It creates a function called `get_formal_value` that takes two inputs:
+   - `df`: a dataframe (usually asec data)
+   - `demo_group`: a demographic variable to group by (e.g., race, gender, education)
+
+2. **Filtering the data**:
+   - Removes rows where reported work hours are fluctuating (`uhrsworkt == 997`)
+   - Removes rows where income from wages (`incwage`) is zero (to focus on active earners)
+
+3. **Creating demographic labels**:
+   - Adds two columns:
+     - `category_id`: the name of the demographic variable
+     - `subcategory_id`: the actual value of that demographic variable for each person
+
+4. **Grouping and calculating value of formal care work**:
+   - Groups by year (`date`) and demographic group
+   - Calculates `formal_value` as the total income earned from formal care work (wage * weight), only for people employed in care occupations
+
+5. **Joining with GDP data**:
+   - Joins the result with the `us_gdp` dataset to add daily GDP information for the corresponding year
+
+6. **Adjusting and scaling values**:
+   - Converts total care earnings to a **daily value** by dividing by 365
+   - Calculates the **proportion of GDP** represented by care labor earnings
+
+7. **Final cleanup**:
+   - Removes the `gdp_daily` column since it's no longer needed
+
+8. **Returning the result**:  
+   Returns a dataframe with the total daily value of formal care work and its share of GDP, broken down by demographic group and year.
+
+---
+
+In plain language:  
+**This function calculates how much income people earn from paid care work across different demographic groups and years, and shows how that income compares to the overall U.S. economy.**
+
+
+```{r formal valuation function}
+get_formal_value <- function(df, demo_group) {
+  df <- asec |>
+    filter(uhrsworkt != 997) |> 
+    filter(incwage != 0) |> 
+    mutate(
+      category_id = demo_group,
+      subcategory_id = get(demo_group)
+      ) |>
+    group_by(date, category_id, subcategory_id) |>
+    summarise(
+      formal_value = sum(
+        ifelse(occ_type == "care" & empstat == "Employed", 
+               incwage * asecwt, 0))
+      ) |>
+    left_join(us_gdp, by = "date") |>
+    mutate(formal_value = formal_value / 365,
+           formal_value_proportion = formal_value / gdp_daily) |>
+    select(-gdp_daily)
+  
+  return(df)
+}
+```
+
+### Formal Careforce Valuation CB
+
+The table below provides the data related to the valuation of the formal careforce.
+
+```{r}
+formal_value <- bind_rows(
+  get_formal_value(asec, "overall"),
+  get_formal_value(asec, "gender_parent")
+)
+
+datatable(
+  formal_value,
+  options = list(
+    pageLength = 10,
+    scrollX = TRUE,
+    autoWidth = TRUE
+  ),
+  caption = 'Table: Formal Careforce Valuation CB',
+  rownames = FALSE
+)
+
+```
+
+### Formal Careforce Valuation All Demographics
+
+We then compile a more expanded version of this table that can be downloaded directly from the Gitub.
+This expanded version ads demogrpahic information for education, marital status, race_ethnicity, and state.
+
+```{r formal value all}
+formal_value_all <- bind_rows(
+  get_formal_value(asec, "overall"),
+  get_formal_value(asec, "gender_parent"),
+  get_formal_value(asec, "educ"),
+  get_formal_value(asec, "marst"),
+  get_formal_value(asec, "race_ethnicity"),
+  get_formal_value(asec, "statefip")
+)
+
+datatable(
+  formal_value_all,
+  options = list(
+    pageLength = 10,
+    scrollX = TRUE,
+    autoWidth = TRUE
+  ),
+  caption = 'Table: Formal Careforce Valuation All Demographics',
+  rownames = FALSE
+)
+```
+
 ## Informal Care Economy Valuation.
 
-## Formal Care Economy Valuation.
+We now extend our valuation approach to the informal care economy.
+Using ATUS data, we estimate the amount of time individuals spend on informal caregiving activities.
+A key challenge in this process is determining how to assign a monetary value to this unpaid labor.
+One approach, explored in a related working paper, involves mapping informal care tasks to comparable occupations in the formal care economy—for instance, assigning the average wage of professional chefs to time spent on cooking.
+While this method offers a nuanced valuation, it raises concerns, as formal sector workers typically possess more training and experience, making their wages an imperfect proxy for informal labor.
+
+To address this limitation and provide a conservative estimate, we adopt the federal minimum wage of $7.25 per hour as the baseline value for informal care labor.
+This wage reflects the minimum amount an individual is generally expected to earn in the U.S., allowing us to assess the value of informal care at a socially recognized floor.
+The code below implements this calculation by converting time spent on informal care (from minutes to hours) and multiplying it by $7.25. We then compare the estimated value of informal caregiving to U.S. GDP on a daily basis, presenting it as a proportion of overall economic activity.
+
+### Informal Careforce valuation CB
+```{r Informal value CB}
+informal_value <- informal_time |> 
+  left_join(us_gdp, by = "date") |> 
+  mutate(informal_value = (informal_care_time / 60) * 7.25) |> 
+  mutate(informal_value_proportion = informal_value/gdp_daily)
+
+datatable(
+  informal_value,
+  options = list(
+    pageLength = 10,
+    scrollX = TRUE,
+    autoWidth = TRUE
+  ),
+  caption = 'Table: Informal Careforce valuation CB',
+  rownames = FALSE
+)
+```
+
+### Informal Careforce valuation all demogrpahics
+
+For the GitHub repository we calculate it with the addition of our key demographics.
+
+```{r Informal value all}
+informal_value_all <- informal_time_all |> 
+  left_join(us_gdp, by = "date") |> 
+  mutate(informal_value = (informal_care_time / 60) * 7.25) |> 
+  mutate(informal_value_proportion = informal_value/gdp_daily)
+
+datatable(
+  informal_value_all,
+  options = list(
+    pageLength = 10,
+    scrollX = TRUE,
+    autoWidth = TRUE
+  ),
+  caption = 'Table: Informal Careforce valuation all demogrpahics',
+  rownames = FALSE
+)
+```
+
+## Total Care Force Valuation
+
+Next we combine all the different datasets from the formal and informal valuation together to form a single downloadable care value table provided on the github.
+
+```{r care force value total}
+informal_value_all <- informal_value_all |>
+  mutate(sector = "informal")
+
+formal_value_all <- formal_value_all |>
+  mutate(sector = "formal")
+
+
+combined_value <- bind_rows(informal_value_all, formal_value_all)
+
+care_force_value_data <- combined_value |>
+  transmute(
+    date,
+    category_id,
+    subcategory_id,
+    sector,
+    care_force_value = coalesce(informal_value, formal_value),
+    care_force_value_proportion = coalesce(informal_value_proportion, formal_value_proportion)
+  )
+
+write.csv(care_force_value_data, "./data/CSV/care_force_value_data.csv")
+write_dta(care_force_value_data, "./data/DTA/care_force_value_data.dta")
+
+datatable(
+  care_force_value_data,
+  options = list(
+    pageLength = 10,
+    scrollX = TRUE,
+    autoWidth = TRUE
+  ),
+  caption = 'Table: Total Care Force Valuation',
+  rownames = FALSE
+)
+```
+
 
 # Conclusion
