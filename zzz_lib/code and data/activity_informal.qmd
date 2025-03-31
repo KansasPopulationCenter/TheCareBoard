@@ -1,0 +1,182 @@
+---
+title: "activity_informal"
+format: html
+editor: visual
+---
+
+## Overview
+
+## Load & Setup Data
+
+```{r}
+source("load_defaults.R")
+# load data
+atus <- readRDS("../../02_data-prep-and-cleaning/03_ATUSdata.rds") |> 
+  filter(activity != "Formal Work") |>   
+  filter(YEAR >= 2018 & YEAR != 2020) |> 
+  filter(AGE >= 18) |>
+  select(YEAR, CASEID, WT06, ACTIVITY, activity, act_care_focus, 
+         DURATION, SCC_ALL_LN, SEC_ALL_LN) |> 
+  clean_names() 
+
+# get most recent 5 year and clean up columns
+yr_range <- atus_yr_range(atus) |> 
+  filter(year == max(year))
+
+atus <- atus |> 
+  filter(year >= yr_range$yr_start & year <= yr_range$year) |> 
+  rename(
+    care_focus = act_care_focus, 
+    activity_name = activity_2
+    ) |>
+  mutate(
+    activity_name = ifelse(
+      care_focus == "non-care", "non-care", activity_name), 
+    
+    activity_id = str_replace_all(
+      activity_name, "[^a-zA-Z0-9]+", "-") |> 
+      str_to_lower(),
+    activity_id = gsub("-$", "", activity_id), 
+    
+    weight = wt06/365/5
+  )
+```
+
+## Calculate Informal Stats
+
+### Provision Interval and Population by CaseID
+
+```{r}
+case_stats <- bind_rows(
+  atus |>
+    summarise(
+      total_time = sum(duration),
+      .by = c(caseid, weight, activity_id, activity_name, care_focus)
+      ),
+
+  atus |>
+    mutate(
+      activity_id = "secondary-childcare",
+      activity_name = "Secondary Childcare",
+      care_focus = "developmental"
+    ) |>
+    summarise(
+      total_time = sum(scc_all_ln),
+      .by = c(caseid, weight, activity_id, activity_name, care_focus)
+      ) |>
+    filter(total_time > 0),
+
+  atus |>
+    mutate(
+      activity_id = "secondary-eldercare",
+      activity_name = "Secondary Eldercare",
+      care_focus = "health"
+    ) |>
+    summarise(
+      total_time = sum(sec_all_ln),
+      .by = c(caseid, weight, activity_id, activity_name, care_focus)
+      )  |>
+    filter(total_time > 0)
+  )
+
+
+activity_stats <- case_stats |>
+  summarise(
+    provision_interval = sum(total_time*weight),
+    population = sum(weight),
+    .by = c(activity_id, activity_name, care_focus)
+  ) |>
+  filter(care_focus != "non-care") |>
+  arrange(activity_id)
+```
+
+### Median Shadow Wage
+
+#### Setup Crosswalk
+
+```{r}
+act_cross <- read.csv("../../01_preliminary-code-and-data/01_Informal_Formal_Crosswalk.csv", fileEncoding = "latin1") |> 
+  clean_names() |> 
+  select(activity, code_formal) |> 
+  unique() |> 
+  mutate(
+    activity = str_trim(activity),
+    occ_code_start = str_extract(code_formal, "^[^-]+") |> as.numeric(),
+    occ_code_end = coalesce(
+      str_extract(code_formal, "(?<=-).*") |> as.numeric(), 
+      occ_code_start
+      )
+  )
+```
+
+#### ASEC Wages
+
+```{r}
+# Load asec formal care activities
+asec <- readRDS("../../02_data-prep-and-cleaning/03_ASECdata.rds") |>
+  filter(AGE >= 18) |>
+  filter(YEAR == max(YEAR)) |> 
+  filter(empstat == "Employed") |>
+  filter(INCWAGE != 0 & INCWAGE != 99999999) |>
+  select(YEAR, OCC2010, occ_label, occ_care_focus, INCWAGE, ASECWT) |> 
+  clean_names() |> 
+  mutate(occ2010 = as.numeric(occ2010))
+```
+
+```{r}
+df <- list()
+activity <- act_cross$activity
+
+for(sel_activity in activity) {
+  codes <- act_cross |> 
+    filter(activity == sel_activity) 
+  
+  df[[sel_activity]] <- asec %>%
+    filter(
+      occ2010 >= codes$occ_code_start &  
+      occ2010 <= codes$occ_code_end
+      ) |> 
+    summarise(
+      median_wage = wtd.quantile(incwage, weights = asecwt, probs = 0.5)
+    ) |> 
+    mutate(activity_name = sel_activity) |> 
+    relocate(activity_name)
+}
+
+median_wage <- bind_rows(df)
+```
+
+## Output Required Files
+
+### Activity Informal
+
+```{r}
+activity_informal <- activity_stats |>
+  select(activity_id, activity_name, care_focus) |>
+  left_join(median_wage, by = c("activity_name")) |> 
+  rename(
+    id = activity_id, 
+    name = activity_name
+    ) 
+
+write.csv(activity_informal, "./app_data/activity_informal.csv", 
+          row.names = FALSE)
+```
+
+### Activity Informal Datum
+
+```{r}
+activity_informal_datum <- activity_stats |>
+  mutate(
+    provider_attention = case_when(
+      activity_id == "secondary-childcare" ~ "passive_child",
+      activity_id == "secondary-eldercare" ~ "passive_elder",
+      TRUE ~ "active"
+      )
+    ) |>
+  select(activity_id, provider_attention, provision_interval, population)
+
+write.csv(activity_informal_datum, 
+          "./app_data/activity_informal_datum.csv", 
+          row.names = FALSE)
+```

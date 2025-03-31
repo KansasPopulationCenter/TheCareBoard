@@ -1,0 +1,195 @@
+---
+title: "care_ratio"
+format: html
+editor: visual
+---
+
+## Load Data
+
+### Formal Sector Employment
+
+```{r}
+source("load_defaults.R")
+
+#Load in data on the formal sector employment from the quarterly census of employment and wages.
+formalsector <- fread("../../01_preliminary-code-and-data/County_Employment_By_IndustryYear.csv")  |> 
+  filter(!grepl("0$", area_fips)) |>
+  filter(!grepl("^C", area_fips)) |>
+  filter(area_fips != "USMSA" & area_fips != "USCMS" & area_fips != "USNMS")
+```
+
+### Age by County
+
+```{r}
+#Load in our yearly data on age by county.
+#This data is currently for the years 2020 and onward.
+ages <- fread("../../01_preliminary-code-and-data/AgeByCounty2020Plus.csv") |> 
+  filter(YEAR != 1) |> 
+  mutate(year = case_when(
+    YEAR == 2 ~ 2020,
+    YEAR == 3 ~ 2021,
+    YEAR == 4 ~ 2022,
+    YEAR == 5 ~ 2023,
+    TRUE ~ NA_real_  # Assigns NA to any other values not specified
+  ))
+```
+
+### Disability Rates by County
+
+```{r}
+#Load in data estimates on disability by county rates
+disability <- fread("../../01_preliminary-code-and-data/disability_by_county.csv")
+```
+
+### Market Datum
+
+```{r}
+#Create a vector of years to analyze
+YEARS <- unique(ages$year)
+
+#To understand the weights of different populations we need to use the market_Datum data
+market_datum <- fread("./app_data/market_datum.csv") |> 
+  group_by(age) |>
+  summarise(
+    need = sum(need_interval)
+  ) %>%
+  #Weight refers to for each age group, on a scale of 0-1 how much care is needed with 1 representing the highest need group.
+  mutate(
+    weight = need/max(need)
+  )
+
+#We normalize this weight creating a mean of 1 and a stnadard deviation of 1
+market_datum$weight <- (market_datum$weight - mean(market_datum$weight, na.rm = TRUE)) / sd(market_datum$weight, na.rm = TRUE) + 1
+```
+
+### NILF Activity
+
+```{r}
+data <- readRDS("../../02_data-prep-and-cleaning/03_CPSdata.rds") |>
+  filter(YEAR >= 2020) |>
+  filter(nilf_activity == "Homemaker") |>
+  select(YEAR, month, nilf_activity, WTFINL)
+```
+
+## Calculate Care Ratio
+
+### Denominators - Care Recipients
+
+```{r}
+Denominators = {}
+Years = {}
+
+for (yr in YEARS) {
+  ages_temp <- ages |>
+    filter(year == yr)
+  
+  disability_temp <- disability |>
+    filter(Year == yr)
+  
+  under5 <- sum(ages_temp$UNDER5_TOT)
+  under5_W <- market_datum |>
+    filter(age < 5)
+  under5_W <- mean(under5_W$weight)
+  
+  five_thirteen <- sum(ages_temp$AGE513_TOT)
+  five_thirteen_W <- market_datum |>
+    filter(age > 4 & age < 14)
+  five_thirteen_W <- mean(five_thirteen_W$weight)
+  
+  fourteen_seventeen <- sum(ages_temp$AGE1417_TOT)
+  fourteen_seventeen_W <- market_datum|>
+    filter(age > 13 & age < 18)
+  fourteen_seventeen_W <- mean(fourteen_seventeen_W$weight)
+  
+  sixtyfive_sixtynine <- sum(ages_temp$AGE6569_TOT)
+  sixtyfive_sixtynine_W <- market_datum |>
+    filter(age > 64 & age < 70)
+  sixtyfive_sixtynine_W <- mean(sixtyfive_sixtynine_W$weight)
+  
+  seventy_seventyfour <- sum(ages_temp$AGE7074_TOT)
+  seventy_seventyfour_W <- market_datum |>
+    filter(age > 69 & age < 75)
+  seventy_seventyfour_W <- mean(seventy_seventyfour_W$weight)
+  
+  seventyfive_plus <- sum(ages_temp$AGE7579_TOT) + sum(ages_temp$AGE8084_TOT)
+  seventyfive_plus_W <- market_datum |>
+    filter(age > 74)
+  seventyfive_plus_W <- mean(seventyfive_plus_W$weight)
+  
+  child_disabled <- sum(as.numeric(disability_temp$DisabUnd18), na.rm = TRUE)
+  child_disabled_W <- market_datum |> 
+    filter(age < 18)
+  child_disabled_W <- mean(child_disabled_W$weight) + 1
+  
+  adult_disabled <- sum(disability_temp$DisabAdult)
+  adult_disabled_W <- market_datum |>
+    filter(age > 17 & age < 65)
+  adult_disabled_W <- mean(adult_disabled_W$weight) + 1
+  
+  elder_disabled <- sum(disability_temp$DisabElder)
+  elder_disabled_W <- market_datum |>
+    filter(age > 64)
+  elder_disabled_W <- mean(elder_disabled_W$weight) + 1
+  
+  Denom = under5*under5_W + 
+    five_thirteen*five_thirteen_W + 
+    sixtyfive_sixtynine*sixtyfive_sixtynine_W + 
+    seventy_seventyfour*seventy_seventyfour_W + 
+    seventyfive_plus*seventyfive_plus_W +
+    child_disabled*child_disabled_W + 
+    adult_disabled*adult_disabled_W +
+    elder_disabled*elder_disabled_W 
+  
+  Denominators = append(Denominators, Denom)
+  Years = append(Years, yr)
+}
+```
+
+### Numerators - Care Providers
+
+```{r}
+Numerators = {}
+Years = {}
+W = c(1.5, 0.5, 1)
+
+for (yr in YEARS) {
+  ages_temp <- ages %>%
+    filter(year == yr)
+  
+  disability_temp <- disability %>%
+    filter(Year == yr)
+  
+  formal_temp <- formalsector %>%
+    filter(year == yr)
+  
+  cps_temp <- data %>%
+    filter(YEAR == yr)
+  
+  population <- sum(ages_temp$POPESTIMATE)
+  
+  careworkers <- formal_temp %>%
+    filter(industry_code != 10)
+  careworkers <- sum(careworkers$IndustryEmployment)
+  
+  workingnoncare <- formal_temp %>%
+    filter(industry_code == 10)
+  workingnoncare <- sum(workingnoncare$IndustryEmployment)-careworkers
+  
+  Homemakers <- sum(cps_temp$WTFINL/length(unique(cps_temp$month)))
+  
+  Years = append(Years, yr)
+  Numer <- careworkers*W[1] + workingnoncare*W[2] + Homemakers*W[3]
+  Numerators<- append(Numerators, Numer)
+}
+```
+
+### Care Ratio
+
+```{r}
+care_ratio <- data.frame(
+  date = as.Date(paste0(Years, "-01-01")), 
+  care_ratio = Numerators / Denominators
+)
+
+write.csv(care_ratio, "./app_data/metrics_care_ratio.csv", row.names = FALSE)
+```

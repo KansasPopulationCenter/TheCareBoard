@@ -1,0 +1,144 @@
+---
+title: "activity_formal"
+format: html
+editor: visual
+---
+
+## Overview
+
+## Load & Setup Data
+
+```{r}
+source("load_defaults.R")
+
+# Load asec formal care activities
+asec <- readRDS("../../02_data-prep-and-cleaning/03_ASECdata.rds") |>
+  filter(AGE >= 18) |>
+  filter(YEAR == max(YEAR)) |>
+  filter(occ_care_focus != "none") |> 
+  filter(empstat == "Employed") |>
+  select(YEAR, OCC2010, occ_label, UHRSWORKT, 
+         EARNWT, INCWAGE, occ_care_focus, ASECWT) |> 
+  clean_names()
+
+# clean up names
+asec <- asec|> 
+  mutate(
+    uhrsworkt = ifelse(uhrsworkt == 999, 0, uhrsworkt), 
+    activity_id = str_replace_all(
+      occ_label, "[^a-zA-Z0-9]+", "-") |> 
+      str_to_lower(),
+    activity_id = gsub("-$", "", activity_id)
+  ) |> 
+  rename(
+    name = occ_label, 
+    care_focus = occ_care_focus
+    )
+```
+
+## Calculate Statistics
+
+```{r}
+act_formal_population <- asec |> 
+  summarise(
+    population = sum(asecwt),
+    .by = c(activity_id, name, care_focus)
+  )
+
+act_formal_time <- asec |> 
+  filter(uhrsworkt != 997) |> 
+  summarise(
+    provision_interval = sum(asecwt*uhrsworkt*60/7),
+    .by = c(activity_id, name, care_focus)
+  )
+
+act_formal_med_wage <- asec |>
+  filter(incwage != 0 & incwage != 99999999) |> 
+  summarise(
+      median_wage = wtd.quantile(
+      incwage, 
+      weights = asecwt, 
+      probs = 0.5
+      ),
+    .by = c(activity_id, name, care_focus)
+  )
+
+act_formal_stats <- full_join(
+  act_formal_population, 
+  act_formal_time, 
+  by = c("activity_id", "name", "care_focus")
+  ) |> 
+  full_join(act_formal_med_wage, by = c("activity_id", "name", "care_focus")) |>
+  arrange(activity_id)
+```
+
+## Output Required Files
+
+```{r}
+activity_formal <- act_formal_stats |> 
+  select(activity_id, name, care_focus, median_wage) |> 
+  rename(id = activity_id)
+
+write.csv(activity_formal, "./app_data/activity_formal.csv", 
+          row.names = FALSE)
+
+activity_formal_datum <- act_formal_stats |> 
+  select(activity_id, provision_interval, population)
+
+write.csv(activity_formal_datum, "./app_data/activity_formal_datum.csv", 
+          row.names = FALSE)
+```
+
+## High Level Checks
+
+### Formal Care Stats
+
+#### Overall
+
+```{r}
+tot_pop <- sum(act_formal_stats$population)
+tot_hours <- sum(act_formal_stats$provision_interval)/60
+avg_hours_per_worker <- round(tot_hours/tot_pop, 1)
+
+print(paste("Number of formal care workers:", comma(tot_pop)))
+print(paste("Total daily hours per day:", comma(tot_hours)))
+print(paste("Average care hours per day per worker:", avg_hours_per_worker))
+```
+
+#### By Occupation
+
+```{r}
+act_formal_stats_long <- act_formal_stats |>
+  mutate(hours_per_worker = (provision_interval/60)/population) |> 
+  select(-provision_interval) |> 
+  pivot_longer(
+    cols = -c(activity_id, name, care_focus),
+    names_to = "metric",
+    values_to = "value"
+  ) |>
+  mutate(
+    metric = factor(
+      metric,
+      levels = c("population", 
+                 "hours_per_worker", "median_wage")
+      )
+  )
+
+ggplot(
+  data = act_formal_stats_long,
+  aes(
+    y = reorder(substr(activity_id, 1, 25), value),
+    x = value, 
+    fill = care_focus
+    ),
+  alpha = 0.5
+  ) +
+  geom_col() +
+  facet_grid(care_focus~metric, scales = "free") +
+  scale_x_continuous(labels = comma) +
+  theme_minimal() +
+  theme(
+    legend.position = "none", 
+    axis.title = element_blank()
+    )
+```
