@@ -3794,17 +3794,11 @@ min_year <- 1994
 us_gdp <- read.csv("./app_data/FYGDP.csv") |>
   clean_names() |>
   mutate(
-    date = as.Date(paste0(
-      substr(
-        observation_date,
-        nchar(observation_date) - 3,
-        nchar(observation_date)
-      ), "-01-01"
-    )),
     fygdp = fygdp * 1e9,
     gdp_daily = fygdp / 365
   ) |>
-  filter(year(date) >= min_year) |>
+  filter(year(observation_date) >= min_year) |>
+  rename(date = observation_date) |>
   select(date, gdp_daily)
 
 datatable(
@@ -3957,7 +3951,7 @@ case_year <- atus |>
   mutate(weight = wt06 / 365) |> 
   summarise(
     total_time = sum(duration),
-    .by = c(year, caseid, gender_parent, weight, care_flag)
+    .by = c(year, caseid, gender_parent,race_ethnicity, educ, marst, weight, care_flag)
     ) |> 
   mutate(overall = "overall")
 
@@ -4306,7 +4300,7 @@ datatable(
     scrollX = TRUE,
     autoWidth = TRUE
   ),
-  caption = 'Table: Informal Care Force Participation all Stats',
+  caption = 'Table: Care Force Participation all Stats',
   rownames = FALSE
 )
 ```

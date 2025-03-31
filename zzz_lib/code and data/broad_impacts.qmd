@@ -256,7 +256,7 @@ case_year <- atus |>
   mutate(weight = wt06 / 365) |> 
   summarise(
     total_time = sum(duration),
-    .by = c(year, caseid, gender_parent, weight, care_flag)
+    .by = c(year, caseid, gender_parent,race_ethnicity, educ, marst, weight, care_flag)
     ) |> 
   mutate(overall = "overall")
 
@@ -379,6 +379,9 @@ write.csv(
   "./app_data/metrics_informal.csv", 
   row.names = FALSE
   )
+
+
+source("broad_impacts_extended.R")
 ```
 
 ### Plot
