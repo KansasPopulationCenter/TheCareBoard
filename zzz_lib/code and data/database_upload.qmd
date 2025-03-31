@@ -61,7 +61,10 @@ dbWriteTable(cn, SQL("raw.market_datum"), market_datum, append = TRUE)
 ### Care Provider
 
 ```{r}
-
+dbGetQuery(cn, "truncate table raw.care_provider_datum cascade;")
+dbGetQuery(cn, "truncate table raw.care_provider_population cascade;")
+dbWriteTable(cn, SQL("raw.care_provider_datum"), care_provider_datum, append = TRUE)
+dbWriteTable(cn, SQL("raw.care_provider_population"), care_provider_population, append = TRUE)
 ```
 
 ### Metric Tables
@@ -101,14 +104,6 @@ metric_datum <- metric_datum |>
         str_replace_all("-proportion", "")
       ),
     
-    type = case_when(
-      str_detect(name, "proportion") ~ "percent", 
-      str_detect(name, "time") ~ "interval", 
-      str_detect(name, "gini|ratio") ~ "ratio", 
-      str_detect(name, "value") ~ "dollar", 
-      TRUE ~ "count"
-      ),
-
     category_id = str_replace_all(
       category_id, "[^a-zA-Z0-9]+", "-") |> 
       str_to_lower() |> 
@@ -123,6 +118,19 @@ metric_datum <- metric_datum |>
       category_id == "overall" & str_detect(name, "proportion|time_median") ~ "trend",
       category_id == "overall" ~ "current",
       TRUE ~ subcategory_id
+      ),
+    
+    type = case_when(
+      str_detect(name, "proportion") ~ "percent", 
+      str_detect(name, "time") & subcategory_id != "current" ~ "interval", 
+      str_detect(name, "gini|ratio") ~ "ratio", 
+      str_detect(name, "value") ~ "dollar", 
+      TRUE ~ "count"
+      ),
+
+    value = case_when(
+      str_detect(name, "time") & subcategory_id == "current" ~ value/60,
+      TRUE ~ value
     )
     ) |> 
   select(metric_id, category_id, subcategory_id, type, date, value) |> 
@@ -140,8 +148,8 @@ metric_category <- bind_rows(
 ) |> 
   unique() |> 
   mutate(
-    name = str_replace_all(id, "-", " ") |> str_to_title(), 
-    name = case_when(name == "Gender Parent" ~ "By Gender & Parenthood", TRUE ~ name),
+    name = str_to_title(id), 
+    name = case_when(name == "Gender-Parent" ~ "By Gender & Parenthood", TRUE ~ name),
     
     order = case_when(
       id == "overall" ~ 0, 
