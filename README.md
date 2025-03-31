@@ -10,7 +10,7 @@
 |Table 7: Labor Force Participation by Gender and Parental Status|Replication of BLS Labor Force Participation statistics broken out by gender and parenthood status | CSV HERE | XLSX HERE | DTA HERE | NOTES HERE | SOURCE HERE |
 |Table 8: Care Force Participation by Gender and Parental Status |Number and proportion of individuals providing formal and informal care work to others  | CSV HERE | XLSX HERE | DTA HERE | NOTES HERE | SOURCE HERE |
 |Table 9: Sandwich Generation                                    |Data related to individuals engaged in caring for children and engaged in elder care       |https://bit.ly/SandwichCSV|https://bit.ly/SandwichXLSX|https://bit.ly/SandwichDTA|NOTES HERE|SOURCE HERE|
-|Table 10: Value of Care                                          |Estimates of the value of care activities in the economy across formal and informal caregiving | CSV HERE | XLSX HERE | DTA HERE | SOURCE HERE |
+|Table 10: Value of Care                                          |Estimates of the value of care activities in the economy across formal and informal caregiving | CSV HERE | XLSX HERE | DTA HERE | NOTES HERE | SOURCE HERE |
 |Table 11: Minutes of Care | Total minutes spent in care giving across forman and informal sectors | CSV HERE | XLSX HERE | DTA HERE | NOTES HERE | SOURCE HERE |
 
 # Data Crosswalks
@@ -29,13 +29,21 @@
 |Micro Data Cleaning Functions| Functions used to clean ATUS, ASEC, and CPS Monthly data | CODE HERE |  |  |
 |Micro Data Processing | Code to Process and format Micro Data from ATUS, ASEC, and CPS Monthly data | CODE HERE | | |
 
+# Code
+|Name                         | Description|.R file| Notes|Data Sources|
+|-----------------------------|------------|-------|------|------------|
+| Formal Activities | Code compiling statistics related to formal care activities | CODE HERE | NOTES HERE | SOURCE HERE |
+| Informal Activities | Code compiling statistics related to informal care activities | CODE HERE | NOTES HERE | SOURCE HERE |
+| Broad Impacts | Code compiling statistics related to the broad impacts section | CODE HERE | NOTES HERE | SOURCE HERE |
+|Care Proviers | Code compiling statistics on the people providing care | CODE HERE | NOTES HERE | SOURCE HERE |
+|Care Ratio | Code calculating the Care Ratio | CODE HERE | NOTES HERE | SOURCE HERE |
+|GINI | Code calculating Care GINI Coefficients | CODE HERE | NOTES HERE | SOURCE HERE |
+|Population Information | Code reporting dta on the population including age | CODE HERE | NOTES HERE | SOURCE HERE |
+|Need and Provision | Code calculating the need and provision of care | CODE HERE | NOTES HERE | SOURCE HERE |
 
 # Replication Data
 |Name                         | Description|.csv file| .xlsx file| .dta file| Code|Data Sources|
 |-----------------------------|------------|---------|-----------|----------|------|------------|
 |NYT Sandwich Generation 2025|Replication data for the article published in NYT mm.dd.yyyy| https://bit.ly/SandwichNYTCSV | https://bit.ly/SandwichNYTXLSX | https://bit.ly/SandwichNYTDTA |CODE HERE|https://timeuse.ipums.org/|
 
-# Code
-|Name                         | Description|.R file| Notes|Data Sources|
-|-----------------------------|------------|-------|------|------------|
-|                             |            |       |      |            |      
+    
