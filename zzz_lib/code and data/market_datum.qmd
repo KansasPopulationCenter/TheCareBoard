@@ -30,7 +30,8 @@ atus <- read.csv("./data/CSV/ATUSdata.csv") %>%
     paid_work, child_care, elder_care, sleeping, 
     DURATION, SCC_ALL_LN, SEC_ALL_LN
     ) %>%
-  clean_names() 
+  clean_names() %>%
+  filter(caseid != 20220402221228)
 
 years_include <- atus|> 
   distinct(year) |> 
@@ -420,12 +421,10 @@ plot_market(market_datum_smoothed)
 ##### Care Market
 
 ```{r}
-final_market_data <- merge(market_datum_smoothed, age_modified, by = "age", all.x = TRUE)
 
-write.csv(final_market_data, "./app_data/need_provision_data.csv", row.names = FALSE)
+write.csv(market_datum_smoothed, "./app_data/market_datum.csv", row.names = FALSE)
 
-
-write.csv(final_market_data, "./data/CSV/need_provision_data.csv", row.names = FALSE)
-write_dta(final_market_data, "./data/DTA/need_provision_data.dta")
-
+source(need_provision_expanded.R)
 ```
+
+\`
