@@ -13,21 +13,26 @@
 |Table 10: Minutes of Care                                       |
 
 # Data Crosswalks
-|Name| Description| .csv file | .xlsx file    | .dta file | Notes | Data Sources|
-|-----------------------------------------------------------------|-------------------------------------------------------------------------------------------|-----------|---------------|-----------|--------|-------------|
-|Table 10: Crosswalk-Formal Jobs to Care Focus                   |Links between care focus and OCC2010 codes                                                 |
-|Table 11: Crosswalk-Informal Care Activities to Care Focus      |Links between care focus and ATUS activities                                               |https://bit.ly/ATUSActivityCrossoverCSV|https://bit.ly/ATUSActivityCrossoverXLSX| ATUS ACTIVITY DTA FILE HERE | ATUS ACTIVITY NOTES HERE | https://timeuse.ipums.org/ |
-|Table 12: Crosswalk-Formal Jobs to Informal Activities          |Links between OCC2010 codes and ATUS activities                                            |https://bit.ly/FormalOccs_CrossoverCSV|https://bit.ly/FormalOccs_CrossoverXLXS | FORMAL OCCS DTA HERE | FORMA OCCUS NOTES HERE |https://www.bls.gov/soc/2010/2010_major_groups.htm|
+|Name| Description| .csv file | .xlsx file    | Notes |
+|-----------------------------------------------------------------|-------------------------------------------------------------------------------------------|-----------|---------------|-----------|
+|Table 10: Crosswalk-Formal Jobs to Care Focus                   |Links between care focus and OCC2010 codes                                                 | https://bit.ly/FormalOccs_CrossoverCSV |https://bit.ly/FormalOccs_CrossoverXLXS | NOTES HERE |
+|Table 11: Crosswalk-Informal Care Activities to Care Focus      |Links between care focus and ATUS activities |  https://bit.ly/ATUSActivityCrossoverCSV | https://bit.ly/ATUSActivityCrossoverXLSX | NOTES HERE |
+|Table 12: Crosswalk-Formal Jobs to Informal Activities          |Links between OCC2010 codes and ATUS activities                                            | CSV HERE | XLSX HERE | NOTES HERE |
 
 # Micro Data
-|Table 13: Care Economy CPS Monthly Microdata                    |CPS Monthly microdata files                                                                |
-|Table 14: Care Economy CPS ASEC Microdata                       |CPS Yearly microdata files                                                                 |
-|Table 15: Care Economy ATUS Microdata                           |ATUS Yearly microdata files                                                                |
+|Name | Description | Code Files | XML Files | DAT Files|
+|-----|-------------|------------|-----------|----------|
+|ATUS Activities| Activity structured data from ATUS | CODE HERE | XML HERE | DAT EHRE |
+|ATUS Hierarchical| Hierarchical structured data from ATUS | CODE HERE | XML HERE | DATA HERE |
+|
+|Micro Data Cleaning Functions| Functions used to clean ATUS, ASEC, and CPS Monthly data | CODE HERE |  |  |
+|Micro Data Processing | Code to Proces and format Micro Data from ATUS, ASEC, and CPS Monthly data | CODE HERE | | |
+
 
 # Replication Data
-|Name                         | Description|.csv file| .xlsx file| .dta file| Notes|Data Sources|
+|Name                         | Description|.csv file| .xlsx file| .dta file| Code|Data Sources|
 |-----------------------------|------------|---------|-----------|----------|------|------------|
-|NYT Sandwhich Generation 2025|Replication data for the article published in NYT mm.dd.yyyy|CSV LINK|XL LINK|DTA LINK|NOTES|https://timeuse.ipums.org/|
+|NYT Sandwich Generation 2025|Replication data for the article published in NYT mm.dd.yyyy|CSV LINK|XL LINK|DTA LINK|R Code HERE|https://timeuse.ipums.org/|
 
 # Code
 |Name                         | Description|.R file| Notes|Data Sources|
