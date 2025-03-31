@@ -1,0 +1,161 @@
+---
+title: "database_upload"
+format: html
+editor: visual
+---
+
+## App Notes
+
+-   Flow of Care & Broader Impacts cards:
+
+    -   Left-hand BAN typically total summaries. Valid types include: count, dollar, interval
+
+    -   Right hand visual typically summarizes proportions or normalized values. Valid types include: ratio, rate, percent, interval
+
+## Setup
+
+```{r}
+# connect to database
+source("db_connect.R")
+source("load_defaults.R")
+
+# read all csv files into environment
+files <- list.files(path = "./app_data", pattern = ".csv", full.names = TRUE)
+for(sel_file in files){
+  name <- sel_file |> 
+    str_replace_all("./app_data/", "") |> 
+    str_replace_all(".csv", "")
+  df <- read.csv(sel_file)
+  
+  assign(name, df)
+}
+```
+
+### Activity Formal
+
+```{r}
+dbGetQuery(cn, "truncate table raw.activity_formal cascade;")
+
+dbWriteTable(cn, SQL("raw.activity_formal"), activity_formal, append = TRUE)
+dbWriteTable(cn, SQL("raw.activity_formal_datum"), activity_formal_datum, append = TRUE)
+```
+
+### Activity Informal
+
+```{r}
+dbGetQuery(cn, "truncate table raw.activity_informal cascade;")
+
+dbWriteTable(cn, SQL("raw.activity_informal"), activity_informal, append = TRUE)
+dbWriteTable(cn, SQL("raw.activity_informal_datum"), activity_informal_datum, append = TRUE)
+```
+
+### Market Tables
+
+```{r}
+dbGetQuery(cn, "truncate table raw.market_datum cascade;")
+dbGetQuery(cn, "truncate table raw.market cascade;")
+dbWriteTable(cn, SQL("raw.market"), market, append = TRUE)
+dbWriteTable(cn, SQL("raw.market_datum"), market_datum, append = TRUE)
+```
+
+### Care Provider
+
+```{r}
+
+```
+
+### Metric Tables
+
+#### Metric & Metric Group
+
+```{r}
+metric_group <- read_excel("./app_data/metric_tables.xlsx", sheet = "metric_group")
+dbGetQuery(cn, "truncate table raw.metric_group cascade;")
+dbWriteTable(cn, SQL("raw.metric_group"), metric_group, append = TRUE)
+
+metric <- read_excel("./app_data/metric_tables.xlsx", sheet = "metric")
+dbGetQuery(cn, "truncate table raw.metric cascade;")
+dbWriteTable(cn, SQL("raw.metric"), metric, append = TRUE)
+```
+
+#### Metric Datum
+
+```{r}
+metric_datum <- bind_rows(
+	metrics_care_ratio,
+  metrics_formal,
+  metrics_informal,
+  metrics_national_care_gini, 
+  metrics_sandwich_generation  
+) |> 
+  pivot_longer(
+    cols = -c(date, category_id, subcategory_id)
+  ) |> 
+  filter(!is.na(value))
+
+metric_datum <- metric_datum |> 
+  mutate(
+    metric_id = case_when(
+      str_detect(name, "sandwich_time") ~ "sandwich-time", 
+      TRUE ~ str_replace_all(name, "[^a-zA-Z0-9]+", "-") |>
+        str_replace_all("-proportion", "")
+      ),
+    
+    type = case_when(
+      str_detect(name, "proportion") ~ "percent", 
+      str_detect(name, "time") ~ "interval", 
+      str_detect(name, "gini|ratio") ~ "ratio", 
+      str_detect(name, "value") ~ "dollar", 
+      TRUE ~ "count"
+      ),
+
+    category_id = str_replace_all(
+      category_id, "[^a-zA-Z0-9]+", "-") |> 
+      str_to_lower() |> 
+      coalesce("overall"),
+    
+    subcategory_id = str_replace_all(
+      subcategory_id, 
+      "[^a-zA-Z0-9]+", "-") |>
+      str_to_lower(), 
+    
+    subcategory_id = case_when(
+      category_id == "overall" & str_detect(name, "proportion|time_median") ~ "trend",
+      category_id == "overall" ~ "current",
+      TRUE ~ subcategory_id
+    )
+    ) |> 
+  select(metric_id, category_id, subcategory_id, type, date, value) |> 
+  arrange(metric_id, category_id, subcategory_id, type, date) |> 
+  filter(subcategory_id != 'other')
+
+```
+
+#### Metric Category
+
+```{r}
+metric_category <- bind_rows(
+  metric_datum |> select(category_id) |> rename(id = category_id),
+  metric_datum |> select(subcategory_id) |> rename(id = subcategory_id)
+) |> 
+  unique() |> 
+  mutate(
+    name = str_replace_all(id, "-", " ") |> str_to_title(), 
+    name = case_when(name == "Gender Parent" ~ "By Gender & Parenthood", TRUE ~ name),
+    
+    order = case_when(
+      id == "overall" ~ 0, 
+      id == "gender-parent" ~ 3, 
+      id == "mothers" ~ 1, 
+      id == "fathers" ~ 2, 
+      id == "non-mothers" ~ 3, 
+      id == "non-fathers" ~ 4, 
+      id == "current" ~ 0,
+      id == "trend" ~ 1
+    )
+  )
+
+dbGetQuery(cn, "truncate table raw.metric_category cascade;")
+dbWriteTable(cn, SQL("raw.metric_category"), metric_category, append = TRUE)
+dbWriteTable(cn, SQL("raw.metric_datum"), metric_datum, append = TRUE)
+```

@@ -1,0 +1,158 @@
+---
+title: "GINI"
+format: html
+editor: visual
+---
+
+## Overview
+
+The Care GINI measures how evenly care jobs are distributed across society. It is based on the GINI coefficient, which ranges from 0 (perfect equality) to 1 (complete inequality). A lower value means a fairer distribution.
+
+Many industries, like healthcare and childcare, face "deserts"—areas with large populations but few essential services. The Care GINI helps identify these gaps.
+
+To calculate it, we use:
+
+-   county-level population data from the **Census Bureau**
+
+-   county-level employment data from the **Quarterly Census on Employment and Wages**
+
+## Load & Setup Data
+
+### Population
+
+```{r}
+source("load_defaults.R")
+
+population <- fread("../../01_preliminary-code-and-data/AgeByCounty2020Plus.csv") |>
+  clean_names() |> 
+  filter(year != 1) |>
+  mutate(
+    year = case_when(
+      year == 2 ~ 2020,
+      year == 3 ~ 2021,
+      year == 4 ~ 2022,
+      year == 5 ~ 2023,
+      TRUE ~ NA_real_  # Assigns NA to any other values not specified
+    ), 
+    area_fips = sprintf("%02d%03d", state, county)
+  ) |>
+  select(ctyname, stname, area_fips, year, popestimate)
+```
+
+### Employment
+
+```{r}
+employment <- fread("../../01_preliminary-code-and-data/County_Employment_By_IndustryYear.csv") |> 
+  clean_names() |> 
+  mutate(
+    area_fips = str_pad(area_fips, width = 5, side = "left", pad = "0")
+    ) |> 
+  rename(area_name = area) |> 
+  select(year, area_fips, area_name, 
+         industry_code, industry, industry_employment)
+
+care_emp_summary <- employment |> 
+  filter(industry_code != 10) |>
+  summarise(
+    care_employment = sum(industry_employment), 
+    .by = c(year, area_fips, area_name)
+    ) 
+```
+
+### Combined Data Set
+
+```{r}
+df_combined <- care_emp_summary |>
+  inner_join(population, by = c("year", "area_fips")) 
+```
+
+## Calculate National GINI
+
+```{r}
+national_gini <- df_combined |>
+  group_by(year) |>
+  summarise(
+    gini_national = Gini(care_employment, weights = popestimate)
+  ) |> 
+  ungroup() |> 
+  mutate(
+    date = as.Date(paste0(as.character(year), "-01-01"))
+    )
+
+write.csv(
+  national_gini |> select(date, gini_national), 
+  "./app_data/metrics_national_care_gini.csv", 
+  row.names = FALSE
+  )
+```
+
+## High Level Checks
+
+### GINI Trend
+
+```{r}
+ggplot(
+  data = national_gini, 
+  aes(x = year, y = gini_national)
+  ) +
+  geom_line() +
+  geom_point() + 
+  theme_minimal() +
+  theme(axis.title = element_blank()) +
+  scale_y_continuous(limits = c(0.60, 0.75))
+```
+
+### Location Match
+
+```{r}
+compare_area_names <- df_combined |> 
+  mutate(countyname = paste0(ctyname, ", ", stname)) |> 
+  filter(str_to_upper(area_name) != str_to_upper(countyname)) |> 
+  group_by(area_name, countyname) |> 
+  summarise(ct = n(), .groups = "drop")
+
+print(compare_area_names)
+```
+
+### Inner Join Impacts
+
+-   what are we excluding when we do the inner join clause above?
+
+```{r}
+# compare by doing full join
+df_combined_alt <- care_emp_summary |>
+  filter(year >= min(population$year) & year <= max(population$year)) |> 
+  full_join(population, by = c("year", "area_fips"))
+
+## check missing population counts 
+# employment data is using old counties based on CT
+# also excluding PR, which is fine. Just good to know what's happening
+missing_pop <- df_combined_alt |> 
+  filter(is.na(popestimate)) |> 
+  mutate(state = str_extract(area_name, "(?<=,).*")) |> 
+  group_by(year, state) |> 
+  summarise(ct = n()) |> 
+  pivot_wider(
+    names_from = year, 
+    values_from = ct
+  )
+
+## check missing care employment counts
+# lots missing from virginia.  anything interesting here?
+missing_emp <- df_combined_alt |> 
+  filter(is.na(care_employment)) |> 
+  group_by(year, stname) |> 
+  summarise(ct = n()) |> 
+  pivot_wider(
+    names_from = year, 
+    values_from = ct
+  )
+
+# virginia has 38 independent cities that function as separate legal entities.  There may be issues with how the employment data is calculated and how it lines up with population counts in this states
+virginia <- df_combined_alt |> 
+  filter(stname == "Virginia") |> 
+  group_by(ctyname) |> 
+  summarise(
+    ct_emp_data = sum(ifelse(is.na(care_employment), 0, 1))
+  )
+```
