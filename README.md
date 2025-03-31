@@ -32,9 +32,9 @@ If you have any questions or require additional data support, please refer to ou
 # Data Crosswalks
 |Name| Description| .csv file | .xlsx file    | Notes |
 |-----------------------------------------------------------------|-------------------------------------------------------------------------------------------|-----------|---------------|-----------|
-|Crosswalk-Formal Jobs to Care Focus                   |Links between care focus and OCC2010 codes                                                 | https://bit.ly/FormalOccs_CrossoverCSV |https://bit.ly/FormalOccs_CrossoverXLXS | NOTES HERE |
-|Crosswalk-Informal Care Activities to Care Focus      |Links between care focus and ATUS activities |  https://bit.ly/ATUSActivityCrossoverCSV | https://bit.ly/ATUSActivityCrossoverXLSX | NOTES HERE |
-|Crosswalk-Formal Jobs to Informal Activities          |Links between OCC2010 codes and ATUS activities                                            | CSV HERE | XLSX HERE | NOTES HERE |
+|Crosswalk-Formal Jobs to Care Focus                   |Links between care focus and OCC2010 codes                                                 | https://bit.ly/FormalOccs_CrossoverCSV |https://bit.ly/FormalOccs_CrossoverXLXS | SOC codes obtained from IPUMS CPS OCC2010 variable. |
+|Crosswalk-Informal Care Activities to Care Focus      |Links between care focus and ATUS activities |  https://bit.ly/ATUSActivityCrossoverCSV | https://bit.ly/ATUSActivityCrossoverXLSX | ATUS activity codes obtained from IPUMS ATUS Activity variable. |
+|Crosswalk-Formal Jobs to Informal Activities          |Links between OCC2010 codes and ATUS activities                                            | https://bit.ly/InformalFormalCrosswalkCSV | https://bit.ly/InformalFormalCrosswalkXLSX | SOC codes obtained from IPUMS CPS OCC2010 variable, Activity codes obtained from IPUMS ATUS Activity variable.|
 
 # Micro Data
 |Name | Description | Code Files | XML Files | DAT Files|
