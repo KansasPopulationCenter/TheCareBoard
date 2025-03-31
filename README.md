@@ -48,12 +48,13 @@ If you have any questions or require additional data support, please refer to ou
 # Code
 |Name                         | Description|.R file| Notes |Data Sources|
 |-----------------------------|------------|-------|------|------------|
-| Formal Activities | Code compiling statistics related to formal care activities | CODE HERE | SOURCE HERE |
-| Informal Activities | Code compiling statistics related to informal care activities | CODE HERE |  SOURCE HERE |
-| Broad Impacts | Code compiling statistics related to the broad impacts section | https://bit.ly/BroadImpactsR | Code feeds into the Broad Impacts section of the Care Board |
-|Care Proviers | Code compiling statistics on the people providing care | CODE HERE |  SOURCE HERE |
-|Care Ratio | Code calculating the Care Ratio | CODE HERE |  SOURCE HERE |
-|GINI | Code calculating Care GINI Coefficients | CODE HERE |  SOURCE HERE |
+| Formal Activities | Code compiling statistics related to formal care activities | https://bit.ly/ActivityFormalR | Code feeds into the Voronoi chart of the Care Economy section. |
+| Informal Activities | Code compiling statistics related to informal care activities | https://bit.ly/ActivityInformalR |  Code feeds into the Voronoi chart of the Care Economy section. |
+| Broad Impacts | Code compiling statistics related to the broad impacts section | https://bit.ly/BroadImpactsR | Code feeds into the Broad Impacts section. |
+|Care Providers | Code compiling statistics on the people providing care | https://bit.ly/CareProvidersR |  Code feeds into the Chord chart of the Care Economy section. |
+|Care Ratio | Code calculating the Care Ratio | https://bit.ly/CareRatioR |  Code feeds the Care Ratio card on the Flow of Care section. |
+|GINI | Code calculating Care GINI Coefficients | https://bit.ly/GiniCoefficientR| Code feeds the GINI card on the Flor of Care section.  |
+|Sandwich | Code calculating Sandwich generation stats | https://bit.ly/SandwichGenerationR | Code feeds the Sandwich generation charts on the Flow of Care Section |
 |Population Information | Code reporting data on the population, including age | https://bit.ly/AgeR | Code feeds into the care provision area chart of the Care Economy section. |
 |Care and Provision | Code calculating the need and provision of care | https://bit.ly/NeedProvisionR |  Code feeds into the care provision area chart of the Care Economy section. |
 
