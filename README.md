@@ -60,6 +60,5 @@ If you have any questions or require additional data support, please refer to ou
 # Replication Data
 |Name                         | Description|.csv file| .xlsx file| .dta file| Code|Data Sources|
 |-----------------------------|------------|---------|-----------|----------|------|------------|
-|NYT Sandwich Generation 2025|Replication data for the article published in NYT mm.dd.yyyy| https://bit.ly/SandwichNYTCSV | https://bit.ly/SandwichNYTXLSX | https://bit.ly/SandwichNYTDTA |CODE HERE|https://timeuse.ipums.org/|
 
     
