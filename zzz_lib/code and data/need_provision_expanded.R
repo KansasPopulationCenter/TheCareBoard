@@ -34,7 +34,7 @@ for (years_include in year_windows) {
     rename(care_focus = act_care_focus) |> 
     mutate(
       care_job = ifelse(focus == "none", 0, 1),
-      weight = wt06 / 365 / 5,
+      weight = wt06 / 365 / length(unique(atus_filtered$year[atus_filtered$year != 2020])),
       work_time = duration * paid_work * care_job
     )
   
@@ -48,6 +48,7 @@ for (years_include in year_windows) {
   needs_atus_calc <- list()
   for (a in age_modified$age) {
     data <- atus_filtered |> 
+      filter(year != 2020) |>
       group_by(caseid) |> 
       filter(all(scc_all_ln == 0), all(sec_all_ln == 0), 
              all(child_care == 0), all(elder_care == 0)) |> 

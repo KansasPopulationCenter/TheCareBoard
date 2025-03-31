@@ -36,6 +36,8 @@ age_modified <- full_join(
 ) |>
   mutate(population = coalesce(population, 0))
 
+source("age_data_extended.R")
+
 write.csv(age_modified, "./app_data/market.csv", row.names = FALSE)
 ```
 
