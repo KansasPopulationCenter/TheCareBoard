@@ -1,0 +1,506 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="ipums-ddi-xslt.xsl"?>
+<codeBook xmlns="ddi:codebook:2_5" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="ddi:codebook:2_5 http://www.ddialliance.org/Specification/DDI-Codebook/2.5/XMLSchema/codebook.xsd" version="2.5" ID="ddi2-559650d0-b175-013c-6f29-0242ac170004-atus_00026.dat-www.atusdata.org">
+  <docDscr>
+    <citation>
+      <titlStmt>
+        <titl>Codebook for an ATUS Data Extract</titl>
+        <subTitl>DDI 2.5 metadata describing the extract file  'atus_00026.dat'</subTitl>
+        <IDNo>ddi2-559650d0-b175-013c-6f29-0242ac170004-atus_00026.dat-www.atusdata.org</IDNo>
+      </titlStmt>
+      <rspStmt>
+        <AuthEnty affiliation="University of Minnesota">IPUMS</AuthEnty>
+      </rspStmt>
+      <prodStmt>
+        <producer abbr="IPUMS" affiliation="University of Minnesota" role="Documentation">IPUMS</producer>
+        <prodDate date="2025-03-26">March 26, 2025</prodDate>
+        <prodPlac>IPUMS, 50 Willey Hall, 225 - 19th Avenue South, Minneapolis, MN 55455</prodPlac>
+      </prodStmt>
+      <distStmt>
+        <contact affiliation="University of Minnesota" URI="https://ipums.org">IPUMS</contact>
+      </distStmt>
+    </citation>
+  </docDscr>
+  <stdyDscr>
+    <citation>
+      <titlStmt>
+        <titl>User Extract atus_00026.dat</titl>
+      </titlStmt>
+      <rspStmt>
+        <AuthEnty affiliation="University of Minnesota">IPUMS</AuthEnty>
+      </rspStmt>
+      <prodStmt>
+        <producer abbr="IPUMS" affiliation="University of Minnesota" role="Documentation">IPUMS</producer>
+        <prodDate date="2025-03-26">March 26, 2025</prodDate>
+        <prodPlac>IPUMS, 50 Willey Hall, 225 - 19th Avenue South, Minneapolis, MN 55455</prodPlac>
+      </prodStmt>
+      <distStmt>
+        <contact affiliation="University of Minnesota" URI="https://ipums.org">IPUMS</contact>
+      </distStmt>
+      <serStmt>
+        <serName abbr="atus">IPUMS ATUS</serName>
+        <serInfo>DOI:10.18128/D060.V3.2</serInfo>
+      </serStmt>
+      <verStmt>
+        <version date="2025-03-26"/>
+      </verStmt>
+    </citation>
+    <stdyInfo>
+      <subject>
+        <topcClas vocab="IPUMS">Technical Household Variables -- HOUSEHOLD</topcClas>
+        <topcClas vocab="IPUMS">Technical Person Variables -- PERSON</topcClas>
+        <topcClas vocab="IPUMS">Weights Variables -- PERSON</topcClas>
+        <topcClas vocab="IPUMS">Technical Activity Variables -- ACTIVITY</topcClas>
+        <topcClas vocab="IPUMS">Technical Who Variables -- WHO</topcClas>
+      </subject>
+      <sumDscr ID="sdatref-40">
+        <timePrd event="single" date="2018">2018</timePrd>
+        <nation abbr="us">United States</nation>
+      </sumDscr>
+      <sumDscr ID="sdatref-41">
+        <timePrd event="single" date="2019">2019</timePrd>
+        <nation abbr="us">United States</nation>
+      </sumDscr>
+      <sumDscr ID="sdatref-43">
+        <timePrd event="single" date="2021">2021</timePrd>
+        <nation abbr="us">United States</nation>
+      </sumDscr>
+      <sumDscr ID="sdatref-44">
+        <timePrd event="single" date="2022">2022</timePrd>
+        <nation abbr="us">United States</nation>
+      </sumDscr>
+      <sumDscr ID="sdatref-45">
+        <timePrd event="single" date="2023">2023</timePrd>
+        <nation abbr="us">United States</nation>
+      </sumDscr>
+      <notes><![CDATA[Additional notes on a sample that is part of this study:  ATUS 2018
+]]></notes>
+      <notes><![CDATA[Additional notes on a sample that is part of this study:  ATUS 2019
+]]></notes>
+      <notes><![CDATA[Additional notes on a sample that is part of this study:  ATUS 2021
+]]></notes>
+      <notes><![CDATA[Additional notes on a sample that is part of this study:  ATUS 2022
+]]></notes>
+      <notes><![CDATA[Additional notes on a sample that is part of this study:  ATUS 2023
+]]></notes>
+    </stdyInfo>
+    <dataAccs>
+      <useStmt>
+        <confDec required="no"><![CDATA[None]]></confDec>
+        <contact affiliation="IPUMS" URI="http://atusdata.org/">ATUS</contact>
+        <citReq><![CDATA[Publications and research reports based on the ATUS database must cite it appropriately. The citation should include the following:
+
+Sarah M. Flood, Liana C. Sayer, Daniel Backman, and Annie Chen. American Time Use Survey Data Extract Builder: Version 3.2 [dataset]. College Park, MD: University of Maryland and Minneapolis, MN: IPUMS, 2023. https://doi.org/10.18128/D060.V3.2
+
+The licensing agreement for use of ATUS data requires that users supply us with the title and full citation for any publications, research reports, or educational materials making use of the data or documentation. Please add your citation to the IPUMS bibliography: http://bibliography.ipums.org/]]></citReq>
+        <conditions><![CDATA[Users of ATUS data must agree to abide by the conditions of use. A user's license is valid for one year and may be renewed.  Users must agree to the following conditions:
+
+(1) No fees may be charged for use or distribution of the data.  All persons are granted a limited license to use these data, but you may not charge a fee for the data if you distribute it to others.
+
+(2) Cite IPUMS appropriately.  For information on proper citation, refer to the citation requirement section of this DDI document.
+
+(3) Tell us about any work you do using the IPUMS.  Publications, research reports, or presentations making use of ATUS should be added to our Bibliography. Continued funding for the IPUMS depends on our ability to show our sponsor agencies that researchers are using the data for productive purposes.
+
+(4) Use it for GOOD -- never for EVIL.]]></conditions>
+        <disclaimer>The user of the data acknowledges that the original collector of the data, the authorized distributor of the data, and the relevant funding agency bear no responsibility for use of the data or for interpretations or inferences based upon such uses.</disclaimer>
+      </useStmt>
+    </dataAccs>
+    <notes><![CDATA[User-provided description:  Hierarchical Model]]></notes>
+  </stdyDscr>
+  <fileDscr ID="ExtractData">
+    <fileTxt>
+      <fileName>atus_00026.dat</fileName>
+      <fileCont>Microdata records</fileCont>
+      <fileStrc type="hierarchical">
+        <recGrp rectype="1" recidvar="RECTYPE">
+          <labl>Household Record</labl>
+        </recGrp>
+        <recGrp rectype="2" recidvar="RECTYPE" keyvar="CASEID">
+          <labl>Person Record</labl>
+        </recGrp>
+        <recGrp rectype="3" recidvar="RECTYPE" keyvar="CASEID">
+          <labl>Activity Record</labl>
+        </recGrp>
+        <recGrp rectype="4" recidvar="RECTYPE" keyvar="CASEID">
+          <labl>Who Record</labl>
+        </recGrp>
+      </fileStrc>
+      <fileType charset="ISO-8859-1">ISO-8859-1 data file</fileType>
+      <format>fixed length fields</format>
+      <filePlac>IPUMS, 50 Willey Hall, 225 - 19th Avenue South, Minneapolis, MN 55455</filePlac>
+    </fileTxt>
+  </fileDscr>
+  <dataDscr><var ID="RECTYPE" files="ExtractData" name="RECTYPE" intrvl="contin" dcml="0" rectype="1 2 3 4">
+  <location StartPos="1" width="1" EndPos="1"/>
+  <labl>Record Type</labl>
+  <txt><![CDATA[RECTYPE assigns all household records the value "1"; person records are assigned "2"; activity records are assigned "3"; who records are assigned "4"; and eldercare records are assigned "5". This allows users to discriminate between different types of records in the data. Each household record is followed by one or more person records. ATUS respondents (LINENO=1) are followed by many activity records, which comprise the main time diary component of the data. Respondents may report many people with whom the activity was done; accordingly these records follow the activities to which they correspond. Finally, in 2011 forward, eldercare records include information about the individuals to whom the ATUS respondent has provided care.]]></txt>
+  <concept vocab="IPUMS">Technical Household Variables -- HOUSEHOLD</concept>
+  <varFormat schema="other" type="character"/>
+</var><var ID="YEAR" files="ExtractData" name="YEAR" intrvl="contin" dcml="0" rectype="1 2 3 4">
+  <location StartPos="2" width="5" EndPos="6"/>
+  <labl>Survey year</labl>
+  <txt><![CDATA[YEAR reports the survey year.
+
+There are several other variables that report date information on the diary day.  See DATE for the date of the diary day, DAY for the day of the diary day, and MONTH for the month of the diary day.
+
+The ATUS interview took place 2-5 months after the final CPS interview.  Date information is also available for the final CPS interview.  See MONTH_CPS8 for the month of the final CPS interview and YEAR_CPS8 for the year of the final CPS interview.]]></txt>
+  <codInstr><![CDATA[YEAR is a four-digit numeric variable reporting the survey year.]]></codInstr>
+  <concept vocab="IPUMS">Technical Household Variables -- HOUSEHOLD</concept>
+  <varFormat schema="other" type="numeric"/>
+</var><var ID="CASEID" files="ExtractData" name="CASEID" intrvl="contin" dcml="0" rectype="1 2 3 4">
+  <location StartPos="7" width="14" EndPos="20"/>
+  <labl>ATUS Case ID</labl>
+  <txt><![CDATA[CASEID is an identifying number unique to each household. 
+
+CASEID is the same as TUCASEID which is on the public use ATUS files. For user convenience CASEID has been converted to a numeric variable. Users who are trying to match ATUS-X files with public use ATUS files must be sure that CASEID and TUCASEID are of the same type.]]></txt>
+  <codInstr><![CDATA[
+  Codes
+  CASEID is a 14-digit numeric variable uniquely identifying each household.
+]]></codInstr>
+  <concept vocab="IPUMS">Technical Household Variables -- HOUSEHOLD</concept>
+  <varFormat schema="other" type="numeric"/>
+</var><var ID="SERIAL" files="ExtractData" name="SERIAL" intrvl="contin" dcml="0" rectype="1 2 3 4">
+  <location StartPos="21" width="7" EndPos="27"/>
+  <labl>Household serial number</labl>
+  <txt><![CDATA[SERIAL is an identifying number unique to each respondent.]]></txt>
+  <codInstr><![CDATA[
+  Codes
+  SERIAL is a 7-digit numeric variable.
+]]></codInstr>
+  <concept vocab="IPUMS">Technical Household Variables -- HOUSEHOLD</concept>
+  <varFormat schema="other" type="numeric"/>
+</var><var ID="PERNUM" files="ExtractData" name="PERNUM" intrvl="discrete" dcml="0" rectype="2">
+  <location StartPos="28" width="2" EndPos="29"/>
+  <labl>Person number (general)</labl>
+  <txt><![CDATA[PERNUM is constructed to uniquely identify each person within a given household. It is available for all household members whether they were present in the household at the time of the ATUS, CPS, or both. This is the only line number variable available for each person in every household. 
+
+LINENO was assigned to all household members present at the time of the ATUS interview. LINENO_CPS8 was assigned to all household members present at the time of the final CPS interview, 2-5 months before the ATUS interview. Because household composition could change, PERNUM, LINENO, and LINENO_CPS8 may not match.]]></txt>
+  <catgry>
+    <catValu>01</catValu>
+    <labl>1</labl>
+  </catgry>
+  <catgry>
+    <catValu>02</catValu>
+    <labl>2</labl>
+  </catgry>
+  <catgry>
+    <catValu>03</catValu>
+    <labl>3</labl>
+  </catgry>
+  <catgry>
+    <catValu>04</catValu>
+    <labl>4</labl>
+  </catgry>
+  <catgry>
+    <catValu>05</catValu>
+    <labl>5</labl>
+  </catgry>
+  <catgry>
+    <catValu>06</catValu>
+    <labl>6</labl>
+  </catgry>
+  <catgry>
+    <catValu>07</catValu>
+    <labl>7</labl>
+  </catgry>
+  <catgry>
+    <catValu>08</catValu>
+    <labl>8</labl>
+  </catgry>
+  <catgry>
+    <catValu>09</catValu>
+    <labl>9</labl>
+  </catgry>
+  <catgry>
+    <catValu>10</catValu>
+    <labl>10</labl>
+  </catgry>
+  <catgry>
+    <catValu>11</catValu>
+    <labl>11</labl>
+  </catgry>
+  <catgry>
+    <catValu>12</catValu>
+    <labl>12</labl>
+  </catgry>
+  <catgry>
+    <catValu>13</catValu>
+    <labl>13</labl>
+  </catgry>
+  <catgry>
+    <catValu>14</catValu>
+    <labl>14</labl>
+  </catgry>
+  <catgry>
+    <catValu>15</catValu>
+    <labl>15</labl>
+  </catgry>
+  <catgry>
+    <catValu>16</catValu>
+    <labl>16</labl>
+  </catgry>
+  <concept vocab="IPUMS">Technical Person Variables -- PERSON</concept>
+  <varFormat schema="other" type="numeric"/>
+</var><var ID="LINENO" files="ExtractData" name="LINENO" intrvl="discrete" dcml="0" rectype="2">
+  <location StartPos="30" width="3" EndPos="32"/>
+  <labl>Person line number</labl>
+  <txt><![CDATA[LINENO identifies each person within a given ATUS respondent household.  It is only available for individuals who were in an ATUS respondent household at the time of the ATUS interview. ATUS respondents always have a LINENO value of 1. 
+
+LINENO_CPS8 is a person identifier that was assigned at the time of the final CPS interview, 2-5 months before the ATUS interview.  Because household composition may have changed between the dates of the CPS and ATUS interviews, LINENO and LINENO_CPS8 may not match. 
+
+PERNUM is an additional person identifier that is available for all person records in the dataset.]]></txt>
+  <catgry>
+    <catValu>001</catValu>
+    <labl>1</labl>
+  </catgry>
+  <catgry>
+    <catValu>002</catValu>
+    <labl>2</labl>
+  </catgry>
+  <catgry>
+    <catValu>003</catValu>
+    <labl>3</labl>
+  </catgry>
+  <catgry>
+    <catValu>004</catValu>
+    <labl>4</labl>
+  </catgry>
+  <catgry>
+    <catValu>005</catValu>
+    <labl>5</labl>
+  </catgry>
+  <catgry>
+    <catValu>006</catValu>
+    <labl>6</labl>
+  </catgry>
+  <catgry>
+    <catValu>007</catValu>
+    <labl>7</labl>
+  </catgry>
+  <catgry>
+    <catValu>008</catValu>
+    <labl>8</labl>
+  </catgry>
+  <catgry>
+    <catValu>009</catValu>
+    <labl>9</labl>
+  </catgry>
+  <catgry>
+    <catValu>010</catValu>
+    <labl>10</labl>
+  </catgry>
+  <catgry>
+    <catValu>011</catValu>
+    <labl>11</labl>
+  </catgry>
+  <catgry>
+    <catValu>012</catValu>
+    <labl>12</labl>
+  </catgry>
+  <catgry>
+    <catValu>013</catValu>
+    <labl>13</labl>
+  </catgry>
+  <catgry>
+    <catValu>014</catValu>
+    <labl>14</labl>
+  </catgry>
+  <catgry>
+    <catValu>015</catValu>
+    <labl>15</labl>
+  </catgry>
+  <catgry>
+    <catValu>016</catValu>
+    <labl>16</labl>
+  </catgry>
+  <catgry>
+    <catValu>017</catValu>
+    <labl>17</labl>
+  </catgry>
+  <catgry>
+    <catValu>018</catValu>
+    <labl>18</labl>
+  </catgry>
+  <catgry>
+    <catValu>019</catValu>
+    <labl>19</labl>
+  </catgry>
+  <catgry>
+    <catValu>999</catValu>
+    <labl>NIU (Not in universe)</labl>
+  </catgry>
+  <concept vocab="IPUMS">Technical Person Variables -- PERSON</concept>
+  <varFormat schema="other" type="numeric"/>
+</var><var ID="WT06" files="ExtractData" name="WT06" intrvl="contin" dcml="0" rectype="2">
+  <location StartPos="33" width="17" EndPos="49"/>
+  <labl>Person weight, 2006 methodology</labl>
+  <txt><![CDATA[WT06 provides ATUS respondent weights based on the weighting methodology introduced in 2006. WT06 is available for all years and is the preferred weighting variable to use for most analyses.  It is the only weighting variable that is suitable for use in analyses that combine time use data from 2006 and later with data for earlier years.  The methodology used to construct WT06 ensures that the sums of the respondent weights add up to the appropriate number of weekday person-days and weekend person-days over the quarter, both for the population as a whole and for selected subpopulations. 
+
+All ATUS weights are probability weights. Users should take care to specify them properly in their statistical packages.
+
+Because the ATUS sample is not a simple random sample, standard errors calculated using the default options in most statistical packages will not be correct.  Calculation of correct standard errors requires the use of replicate weights.  RWT06 may be used in conjunction with WT06 for this purpose; for further details, see the description of RWT06.]]></txt>
+  <codInstr><![CDATA[
+  Codes
+  WT06 is a 16-digit numeric variable reporting the ATUS respondent probability weights. This variable can be used in all years.
+]]></codInstr>
+  <concept vocab="IPUMS">Weights Variables -- PERSON</concept>
+  <varFormat schema="other" type="numeric"/>
+</var><var ID="WT20" files="ExtractData" name="WT20" intrvl="contin" dcml="6" rectype="2">
+  <location StartPos="50" width="15" EndPos="64"/>
+  <labl>Person weight, 2020 methodology</labl>
+  <txt><![CDATA[WT20 provides ATUS respondent weights compatible with the partial-year 2020 data collection. WT20 does not yield annual estimates. It is designed to provide estimates that are representative of the period from January 1 through March 17 and May 10 through December 31. This weight omits the March 18 to May 9 period because 2020 data were not collected on these days due to the COVID-19 pandemic. This weight is required for analyses that include 2020 data. 
+
+All ATUS weights are probability weights. Users should take care to specify them properly in their statistical packages.
+
+Because the ATUS sample is not a simple random sample, standard errors calculated using the default options in most statistical packages will not be correct.  Calculation of correct standard errors requires the use of replicate weights.  RWT20 may be used in conjunction with WT20 for this purpose; for further details, see the description of RWT20.]]></txt>
+  <codInstr><![CDATA[
+  Codes
+  WT20 is a 15-digit numeric variable reporting the ATUS respondent probability weights.
+]]></codInstr>
+  <concept vocab="IPUMS">Weights Variables -- PERSON</concept>
+  <varFormat schema="other" type="numeric"/>
+</var><var ID="ACTLINE" files="ExtractData" name="ACTLINE" intrvl="contin" dcml="0" rectype="3">
+  <location StartPos="28" width="2" EndPos="29"/>
+  <labl>Activity line number</labl>
+  <txt><![CDATA[ACTLINE is an identifying number for each activity record. Activity records can be uniquely identified using CASEID and ACTLINE.
+
+ACTLINE is also used with ACTLINEW to link who records to activity records.
+
+This variable is available via extracts that are hierarchical or rectangular (activity) (more info on extract formats). If you request a hierarchical extract and plan to construct time use variables in your statistics package, this variable may be useful to you. If you request a rectangular extract and plan to construct time use variables through the extract system, ACTLINE will not be included in your extract, as persons are the unit of observation for rectangular extracts rather than activity or who records.]]></txt>
+  <codInstr><![CDATA[
+  Codes
+  ACTLINE is a 2-digit numeric variable identifying each activity record.
+]]></codInstr>
+  <concept vocab="IPUMS">Technical Activity Variables -- ACTIVITY</concept>
+  <varFormat schema="other" type="numeric"/>
+</var><var ID="ACTLINEW" files="ExtractData" name="ACTLINEW" intrvl="contin" dcml="0" rectype="4">
+  <location StartPos="28" width="2" EndPos="29"/>
+  <labl>Activity line number</labl>
+  <txt><![CDATA[ACTLINEW indicates the line number of the activity to which the who record corresponds. Because the ATUS respondent may have reported more than one person who was present during the activity, multiple who records may correspond to the same activity.
+
+ACTLINEW is available only if you select a hierarchical extract. If you request a hierarchical extract and plan to construct time use variables in your statistics package, this variable may be useful to you. If you request a rectangular extract and plan to construct time use variables through the extract system, ACTLINEW will not be included in your extract, as persons are the unit of observation for rectangular extracts rather than activity or who records.]]></txt>
+  <codInstr><![CDATA[This is a 2-digit numeric variable with 0 implied decimal places]]></codInstr>
+  <concept vocab="IPUMS">Technical Who Variables -- WHO</concept>
+  <varFormat schema="other" type="numeric"/>
+</var><var ID="RELATEW" files="ExtractData" name="RELATEW" intrvl="discrete" dcml="0" rectype="4">
+  <location StartPos="30" width="4" EndPos="33"/>
+  <labl>Relationship of person with whom activity was done</labl>
+  <txt><![CDATA[RELATEW reports the relationship to the respondent of the individual with whom the activity was performed. Users should note that "who" information is not collected for all activities (see WHO_ASK).
+
+RELATEW is available only if you select a hierarchical extract. If you request a hierarchical extract and plan to construct time use variables in your statistics package, this variable may be useful to you. If you request a rectangular extract and plan to construct time use variables through the extract system, RELATEW will not be included in your extract, as persons are the unit of observation for rectangular extracts rather than activity or who records.]]></txt>
+  <catgry>
+    <catValu>0100</catValu>
+    <labl>Alone</labl>
+  </catgry>
+  <catgry>
+    <catValu>0200</catValu>
+    <labl>Spouse</labl>
+  </catgry>
+  <catgry>
+    <catValu>0201</catValu>
+    <labl>Unmarried partner</labl>
+  </catgry>
+  <catgry>
+    <catValu>0202</catValu>
+    <labl>Own household child</labl>
+  </catgry>
+  <catgry>
+    <catValu>0203</catValu>
+    <labl>Grandchild</labl>
+  </catgry>
+  <catgry>
+    <catValu>0204</catValu>
+    <labl>Parent</labl>
+  </catgry>
+  <catgry>
+    <catValu>0205</catValu>
+    <labl>Brother sister</labl>
+  </catgry>
+  <catgry>
+    <catValu>0206</catValu>
+    <labl>Other related person</labl>
+  </catgry>
+  <catgry>
+    <catValu>0207</catValu>
+    <labl>Foster child</labl>
+  </catgry>
+  <catgry>
+    <catValu>0208</catValu>
+    <labl>Housemate, roommate</labl>
+  </catgry>
+  <catgry>
+    <catValu>0209</catValu>
+    <labl>Roomer, boarder</labl>
+  </catgry>
+  <catgry>
+    <catValu>0210</catValu>
+    <labl>Other nonrelative</labl>
+  </catgry>
+  <catgry>
+    <catValu>0300</catValu>
+    <labl>Own non-household child under 18</labl>
+  </catgry>
+  <catgry>
+    <catValu>0400</catValu>
+    <labl>Parents (not living in household)</labl>
+  </catgry>
+  <catgry>
+    <catValu>0401</catValu>
+    <labl>Other non-household family members under 18</labl>
+  </catgry>
+  <catgry>
+    <catValu>0402</catValu>
+    <labl>Other non-household family members 18 and older (including parents-in-law)</labl>
+  </catgry>
+  <catgry>
+    <catValu>0403</catValu>
+    <labl>Friends</labl>
+  </catgry>
+  <catgry>
+    <catValu>0404</catValu>
+    <labl>Co-workers, colleagues, clients (non-work activities only)</labl>
+  </catgry>
+  <catgry>
+    <catValu>0405</catValu>
+    <labl>Neighbors, acquaintances</labl>
+  </catgry>
+  <catgry>
+    <catValu>0406</catValu>
+    <labl>Other non-household children under 18</labl>
+  </catgry>
+  <catgry>
+    <catValu>0407</catValu>
+    <labl>Other non-household adults 18 and older</labl>
+  </catgry>
+  <catgry>
+    <catValu>0408</catValu>
+    <labl>Boss or manager (work activities only, 2010+)</labl>
+  </catgry>
+  <catgry>
+    <catValu>0409</catValu>
+    <labl>People whom I supervise (work activities only, 2010+)</labl>
+  </catgry>
+  <catgry>
+    <catValu>0410</catValu>
+    <labl>Co-workers (work activities only, 2010+)</labl>
+  </catgry>
+  <catgry>
+    <catValu>0411</catValu>
+    <labl>Customers (work activities only, 2010+)</labl>
+  </catgry>
+  <catgry>
+    <catValu>9996</catValu>
+    <labl>Refused</labl>
+  </catgry>
+  <catgry>
+    <catValu>9997</catValu>
+    <labl>Don't know</labl>
+  </catgry>
+  <catgry>
+    <catValu>9998</catValu>
+    <labl>Blank</labl>
+  </catgry>
+  <concept vocab="IPUMS">Technical Who Variables -- WHO</concept>
+  <varFormat schema="other" type="numeric"/>
+</var></dataDscr>
+</codeBook>
