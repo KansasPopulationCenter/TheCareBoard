@@ -1,3 +1,19 @@
+# Care Board Data Repository 
+
+The Care Board (https://thecareboard.org) is a dashboard of statistics on the care economy.
+This repository contains replication code, statistical tables, data crosswalks, and microdata compiled from IPUMS ATUS, IPUMS CPS, and IPUMS CPS-ASEC to support researchers, policymakers, and the public. 
+
+## How to Download Data 
+
+All data displayed on The Care Board can be downloaded freely.
+Each dataset in the repository is available in multiple formats (.csv, .xlsx, .dta).
+Users can navigate to individual files in the tables below to access and download the data.  
+
+If you use our data, we ask that you cite: 
+
+Misty Heggeness, Joseph Bommarito, and Lucie Prewitt. The Care Board: Version 1.0 [dataset]. Lawrence, KS: Kansas Population Center, 2025. https://thecareboard.org.  
+If you have any questions or require additional data support, please refer to our documentation (MARKDOWN LINK HERE) or contact careboard@ku.edu. 
+
 # Statistic Tables
 |Name | Description |  .csv file | .xlsx file | .dta file | Notes | Data Sources|
 |----------------------------------------------------------------|-------------------------------------------------------------------------------------------|------------|------------|-----------|-------|-------------|
