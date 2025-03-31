@@ -46,8 +46,8 @@ If you have any questions or require additional data support, please refer to ou
 |Micro Data Processing | Code to Process and format Micro Data from ATUS, ASEC, and CPS Monthly data | CODE HERE | | |
 
 # Code
-|Name                         | Description|.R file| Notes |Data Sources|
-|-----------------------------|------------|-------|------|------------|
+|Name                         | Description|.R file| Notes |
+|-----------------------------|------------|-------|------|
 | Formal Activities | Code compiling statistics related to formal care activities | https://bit.ly/ActivityFormalR | Code feeds into the Voronoi chart of the Care Economy section. |
 | Informal Activities | Code compiling statistics related to informal care activities | https://bit.ly/ActivityInformalR |  Code feeds into the Voronoi chart of the Care Economy section. |
 | Broad Impacts | Code compiling statistics related to the broad impacts section | https://bit.ly/BroadImpactsR | Code feeds into the Broad Impacts section. |
