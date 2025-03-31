@@ -21,7 +21,7 @@ source("load_defaults.R")
 
 age_list <- data.frame(age = seq(0, 85, by = 1))
 
-age_data <- readRDS("../../02_data-prep-and-cleaning/03_ASECdata.rds") |>
+age_data <- read.csv("./data/CSV/ASECdata.csv") |>
   filter(YEAR == max(YEAR)) |>
   select(AGE, ASECWT) |>
   clean_names()
