@@ -17,7 +17,7 @@ If you have any questions or require additional data support, please refer to ou
 # Statistic Tables
 |Name | Description |  .csv file | .xlsx file | .dta file | Notes | Data Sources|
 |----------------------------------------------------------------|-------------------------------------------------------------------------------------------|------------|------------|-----------|-------|-------------|
-|Table 1: Care Need and Care Provision |Information about the amount of time needed for care and time spent providing care | CSV HERE | XLSX HERE | DTA HERE | 2003 onward | ATUS and ASEC |
+|Table 1: Care Need and Care Provision |Information about the amount of time needed for care and time spent providing care | https://bit.ly/NeedProvisionCSV | https://bit.ly/NeedProvisionXLSX | https://bit.ly/NeedProvisionDTA | 2003 onward using 5-year rolling averages, excluding 2020. | IPUMS ATUS |
 |Table 2: Care Provider Demographics   |Demographic information on who is providing (formnal and informal) care  | CSV HERE | XLSX HERE | DTA HERE | NOTES HERE | SOURCE HERE |
 |Table 3: Care Provider Data | Statistics related to the population and time use of different care provider groups | CSV HERE | XLSX HERE | DTA HERE | NOTES HERE | SOURCE HERE |
 |Table 4: Care Activities | Data for formal and informal care activities including population of providers and time spent across the US population | CSV HERE | XLSX HERE | DTA HERE | NOTES HERE | SOURce HERE |
