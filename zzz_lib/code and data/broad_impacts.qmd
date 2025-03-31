@@ -10,16 +10,10 @@ editor: visual
 source("load_defaults.R")
 min_year <- 1994
 
-us_gdp <- read.csv("../../01_preliminary-code-and-data/01_USGDP.csv") |>
+us_gdp <- read.csv("./app_data/FYGDP.csv") |>
   clean_names() |>
   mutate(
-    date = as.Date(paste0(
-      substr(
-        observation_date,
-        nchar(observation_date) - 3,
-        nchar(observation_date)
-      ), "-01-01"
-    )),
+    date = as.Date(observation_date, format = "%Y-%m-%d"),  # Convert to Date
     fygdp = fygdp * 1e9,
     gdp_daily = fygdp / 365
   ) |>
@@ -34,7 +28,7 @@ us_gdp <- read.csv("../../01_preliminary-code-and-data/01_USGDP.csv") |>
 #### Base Table
 
 ```{r}
-asec <- readRDS("../../02_data-prep-and-cleaning/03_ASECdata.rds") |>
+asec <- read.csv("./data/CSV/ASECdata.csv") |>
   # incorporate HFLAG clause due to survey redesign in 2014
   # https://blog.popdata.org/2014sample/
   filter(HFLAG == 1 | is.na(HFLAG)) |> 
@@ -45,15 +39,19 @@ asec <- readRDS("../../02_data-prep-and-cleaning/03_ASECdata.rds") |>
          UHRSWORKT,
          INCWAGE,
          empstat,
-         occ_care_focus,
+         race_ethnicity,
+         educ,
+         statefip,
+         FOCUS,
+         marst,
          gender_parent) |>
   clean_names() |>
   mutate(
     date = as.Date(paste0(year, "-01-01")),
     uhrsworkt = ifelse(uhrsworkt == 999, 0, uhrsworkt),
-    occ_type = ifelse(occ_care_focus == "none", "non-care", "care"),
+    occ_type = ifelse(focus == "none", "non-care", "care"),
     overall = "overall"
-  ) 
+  )
 ```
 
 #### Labor Force
@@ -228,12 +226,12 @@ plt_trend(formal_checks, "median_wage", "Median wage")
 
 ```{r}
 source("load_defaults.R")
-atus <- readRDS("../../02_data-prep-and-cleaning/03_ATUSdata.rds") |> 
+atus <- read.csv("./data/CSV/ATUSdata.csv") |> 
   filter(activity != "Formal Work") |> 
   filter(AGE >= 18) |>
-  filter(YEAR != 2020) |> 
+  filter(YEAR != 2020) |>
   select(YEAR, CASEID, WT06, ACTIVITY, DURATION, SCC_ALL_LN, SEC_ALL_LN,
-         act_care_focus, activity, gender_parent) |> 
+         act_care_focus, activity, gender_parent, marst, educ, race_ethnicity, STATEFIP) |> 
   clean_names() |> 
   pivot_longer(
     cols = c(duration, scc_all_ln, sec_all_ln),
