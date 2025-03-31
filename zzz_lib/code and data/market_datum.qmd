@@ -13,7 +13,7 @@ editor: visual
 ```{r}
 source("load_defaults.R")
 
-age_modified <- read.csv("../../03_metric-tables/_updated_scripts/app_data/market.csv")
+age_modified <- read.csv("./app_data/market.csv")
 
 market_datum <- age_modified |> 
   cross_join(data.frame(care_focus = c("developmental", "daily_living", "health")))
@@ -23,10 +23,10 @@ market_datum <- age_modified |>
 #### Base ATUS setup
 
 ```{r}
-atus <- readRDS("../../02_data-prep-and-cleaning/03_ATUSdata.rds") %>%
+atus <- read.csv("./data/CSV/ATUSdata.csv") %>%
   select(
     YEAR, CASEID, WT06, ACTLINE, HH_SIZE, AGE, marst, nchild, 
-    activity, act_care_focus, occ_care_focus, 
+    activity, act_care_focus, FOCUS, 
     paid_work, child_care, elder_care, sleeping, 
     DURATION, SCC_ALL_LN, SEC_ALL_LN
     ) %>%
@@ -43,10 +43,10 @@ atus <- atus |>
   filter(year %in% years_include) |> 
   rename(care_focus = act_care_focus) |> 
   mutate(
-    care_job = ifelse(occ_care_focus == "none", 0, 1),
+    care_job = ifelse(focus == "none", 0, 1),
     weight = wt06 / 365 / 5,
     work_time = duration * paid_work * care_job
-    ) 
+    )
 ```
 
 #### Incorporate Activity Relationship Data
@@ -54,7 +54,7 @@ atus <- atus |>
 ```{r}
 library(ipumsr)
 
-ddi_file <- read_ipums_ddi("../../01_preliminary-code-and-data/atus_00026.xml")
+ddi_file <- read_ipums_ddi("./data/IPUMS Pulls/atus_00026.xml")
 atus_hh <- read_ipums_micro(ddi_file) |> 
   clean_names()
 
@@ -199,9 +199,9 @@ for(a in age){
   data <- bind_rows(
     # formal care work
     atus |>
-      filter(activity == "Formal Work" & occ_care_focus != "none") |> 
+      filter(activity == "Formal Work" & focus != "none") |> 
       mutate(
-        care_focus = occ_care_focus, 
+        care_focus = focus, 
         duration = duration 
         ),
     
@@ -211,7 +211,7 @@ for(a in age){
     # secondary child care - remove double counting
     atus |> 
       filter(scc_all_ln > 0) |>
-      filter(!(activity == "Formal Work" & occ_care_focus != "none")) |> 
+      filter(!(activity == "Formal Work" & focus != "none")) |> 
       filter(!(care_focus != "non-care")) |> 
       filter(sec_all_ln == 0) |>
       mutate(
@@ -222,7 +222,7 @@ for(a in age){
     # secondary elder care - remove double counting
     atus |> 
       filter(sec_all_ln > 0) |>
-      filter(!(activity == "Formal Work" & occ_care_focus != "none")) |> 
+      filter(!(activity == "Formal Work" & focus != "none")) |> 
       filter(!(care_focus != "non-care")) |> 
       filter(scc_all_ln == 0) |>      
       mutate(
@@ -333,7 +333,6 @@ plot_market(market_datum2)
 #### Smoothing Function
 
 ```{r}
-#Define function for smoothing while keeping within bounds
 smooth_data <- function(df) {
   df %>%
     group_by(care_focus) %>%
@@ -370,73 +369,63 @@ plot_market(market_datum_smoothed)
 ##### Needs
 
 ```{r}
-health_0to5 <- 300
-develop_0to5 <- 420
-daily_0to5 <- 1440 - health_0to5 - develop_0to5
+#health_0to5 <- 300
+#develop_0to5 <- 420
+#daily_0to5 <- 1440 - health_0to5 - develop_0to5
 
-health_6to12 <- 150
-develop_6to12 <- 480
-daily_6to12 <- 1440 - health_6to12 - develop_6to12
+#health_6to12 <- 150
+#develop_6to12 <- 480
+#daily_6to12 <- 1440 - health_6to12 - develop_6to12
 
-health_85 <- 300
-develop_85 <- 0
-daily_85 = 1200 - health_85 - develop_85
+#health_85 <- 300
+#develop_85 <- 0
+#daily_85 = 1200 - health_85 - develop_85
 
-need_interval <- list(
-  age_0to5 = c("developmental" = develop_0to5, 
-               "health" = health_0to5, "daily_living" = daily_0to5),
+#need_interval <- list(
+#  age_0to5 = c("developmental" = develop_0to5, 
+#               "health" = health_0to5, "daily_living" = daily_0to5),
   
-  age_6to12 = c("developmental" = develop_6to12, 
-                "health" = health_6to12, "daily_living" = daily_6to12),
+#  age_6to12 = c("developmental" = develop_6to12, 
+#                "health" = health_6to12, "daily_living" = daily_6to12),
   
-  age_85 = c("developmental" = develop_85, 
-             "health" = health_85, "daily_living" = daily_85)
-)
+#  age_85 = c("developmental" = develop_85, 
+#             "health" = health_85, "daily_living" = daily_85)
+#)
 
-age_ranges <- bind_rows(
-  expand.grid(age_range = "age_0to5", age = c(seq(0, 5, by = 1))),
-  expand.grid(age_range = "age_6to12", age = c(seq(6, 12, by = 1))),
-  expand.grid(age_range = "age_85", age = 85)
-) 
+#age_ranges <- bind_rows(
+#  expand.grid(age_range = "age_0to5", age = c(seq(0, 5, by = 1))),
+#  expand.grid(age_range = "age_6to12", age = c(seq(6, 12, by = 1))),
+#  expand.grid(age_range = "age_85", age = 85)
+#) 
 
-final_need_override <- prepare_overrides(need_interval, age_ranges, "need_override")
+#final_need_override <- prepare_overrides(need_interval, age_ranges, "need_override")
 ```
 
 ##### Provision
 
 ```{r}
-no_provision <- 0
+#no_provision <- 0
+#age_ranges <- bind_rows(
+#  expand.grid(age_range = "age_0to5", age = c(seq(0, 5, by = 1)))
+#) 
 
-age_ranges <- bind_rows(
-  expand.grid(age_range = "age_0to5", age = c(seq(0, 5, by = 1)))
-) 
+#provision_interval <- list(
+#  age_0to5 = c("developmental" = no_provision, 
+#               "health" = no_provision, "daily_living" = no_provision)
+#)
 
-provision_interval <- list(
-  age_0to5 = c("developmental" = no_provision, 
-               "health" = no_provision, "daily_living" = no_provision)
-)
-
-final_provision_override <- prepare_overrides(provision_interval, age_ranges, "provision_override")
+#final_provision_override <- prepare_overrides(provision_interval, age_ranges, #"provision_override")
 ```
 
 ##### Care Market
 
 ```{r}
-df_list <- list(
-  market_datum_smoothed,
-  final_need_override, 
-  final_provision_override
-) 
+final_market_data <- merge(market_datum_smoothed, age_modified, by = "age", all.x = TRUE)
 
-final_market_datum <- reduce(df_list, full_join, by = c("age", "care_focus")) |> 
-  mutate(
-    need_interval = coalesce(need_override, need_interval, 0),
-    provision_interval = coalesce(provision_override, provision_interval, 0)
-  ) |> 
-  select(age, care_focus, need_interval, provision_interval) |> 
-  arrange(age, care_focus)
+write.csv(final_market_data, "./app_data/need_provision_data.csv", row.names = FALSE)
 
-plot_market(final_market_datum)
 
-write.csv(final_market_datum, "./app_data/market_datum.csv", row.names = FALSE)
+write.csv(final_market_data, "./data/CSV/need_provision_data.csv", row.names = FALSE)
+write_dta(final_market_data, "./data/DTA/need_provision_data.dta")
+
 ```
