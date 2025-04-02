@@ -1,4 +1,5 @@
-# Care Board Data Repository 
+# Care Board Data Repository
+https://bit.ly/DataLibraryZip
 
 The Care Board (https://thecareboard.org) is a dashboard of statistics on the care economy.
 This repository contains replication code, statistical tables, data crosswalks, and microdata compiled from IPUMS ATUS, IPUMS CPS, and IPUMS CPS-ASEC to support researchers, policymakers, and the public. 
@@ -7,7 +8,7 @@ This repository contains replication code, statistical tables, data crosswalks, 
 
 All data displayed on The Care Board can be downloaded freely.
 Each dataset in the repository is available in multiple formats (.csv, .xlsx, .dta).
-Users can navigate to individual files in the tables below to access and download the data.  
+Users can navigate to individual files in the tables below to access and download the data. 
 
 If you use our data, we ask that you cite: 
 
