@@ -1,5 +1,979 @@
-"gender","provider_status","population"
-"female","other",96837610.63
-"female","with_children",35957627.56
-"male","other",97012975.2
-"male","with_children",29804926.93
+"year","prime_age","race_ethnicity","empstat","poverty","gender","provider_status","population"
+2024,"Fifty-Five Plus","American Indian","Employed","100-124 Percent of Poverty","female","without_children",2051.58
+2024,"Fifty-Five Plus","American Indian","Employed","100-124 Percent of Poverty","male","without_children",4307.11
+2024,"Fifty-Five Plus","American Indian","Employed","125-149 Percent of Poverty","female","other",3966.98
+2024,"Fifty-Five Plus","American Indian","Employed","125-149 Percent of Poverty","female","without_children",3159.46
+2024,"Fifty-Five Plus","American Indian","Employed","125-149 Percent of Poverty","male","with_children",4735.58
+2024,"Fifty-Five Plus","American Indian","Employed","125-149 Percent of Poverty","male","without_children",2555.55
+2024,"Fifty-Five Plus","American Indian","Employed","150+ Percent of Poverty","female","other",25546.24
+2024,"Fifty-Five Plus","American Indian","Employed","150+ Percent of Poverty","female","with_children",6383.63
+2024,"Fifty-Five Plus","American Indian","Employed","150+ Percent of Poverty","female","without_children",56249.67
+2024,"Fifty-Five Plus","American Indian","Employed","150+ Percent of Poverty","male","other",8484.08
+2024,"Fifty-Five Plus","American Indian","Employed","150+ Percent of Poverty","male","with_children",18618.67
+2024,"Fifty-Five Plus","American Indian","Employed","150+ Percent of Poverty","male","without_children",70248.48
+2024,"Fifty-Five Plus","American Indian","Employed","Below Poverty","female","other",3083.96
+2024,"Fifty-Five Plus","American Indian","Employed","Below Poverty","female","with_children",447.04
+2024,"Fifty-Five Plus","American Indian","Employed","Below Poverty","female","without_children",4378.2
+2024,"Fifty-Five Plus","American Indian","Employed","Below Poverty","male","without_children",1157.66
+2024,"Fifty-Five Plus","American Indian","NILF","100-124 Percent of Poverty","female","other",1184.02
+2024,"Fifty-Five Plus","American Indian","NILF","100-124 Percent of Poverty","female","without_children",17692.51
+2024,"Fifty-Five Plus","American Indian","NILF","100-124 Percent of Poverty","male","other",5723.05
+2024,"Fifty-Five Plus","American Indian","NILF","100-124 Percent of Poverty","male","without_children",11374.05
+2024,"Fifty-Five Plus","American Indian","NILF","125-149 Percent of Poverty","female","without_children",13195.02
+2024,"Fifty-Five Plus","American Indian","NILF","125-149 Percent of Poverty","male","other",1786.83
+2024,"Fifty-Five Plus","American Indian","NILF","125-149 Percent of Poverty","male","without_children",12439.21
+2024,"Fifty-Five Plus","American Indian","NILF","150+ Percent of Poverty","female","other",31925.82
+2024,"Fifty-Five Plus","American Indian","NILF","150+ Percent of Poverty","female","with_children",6207.73
+2024,"Fifty-Five Plus","American Indian","NILF","150+ Percent of Poverty","female","without_children",87491.23
+2024,"Fifty-Five Plus","American Indian","NILF","150+ Percent of Poverty","male","other",23094.82
+2024,"Fifty-Five Plus","American Indian","NILF","150+ Percent of Poverty","male","with_children",773.66
+2024,"Fifty-Five Plus","American Indian","NILF","150+ Percent of Poverty","male","without_children",90331.4
+2024,"Fifty-Five Plus","American Indian","NILF","Below Poverty","female","other",12681.45
+2024,"Fifty-Five Plus","American Indian","NILF","Below Poverty","female","with_children",367.39
+2024,"Fifty-Five Plus","American Indian","NILF","Below Poverty","female","without_children",52424.17
+2024,"Fifty-Five Plus","American Indian","NILF","Below Poverty","male","other",7041.88
+2024,"Fifty-Five Plus","American Indian","NILF","Below Poverty","male","without_children",58796.2
+2024,"Fifty-Five Plus","American Indian","Unemployed","150+ Percent of Poverty","female","other",361.01
+2024,"Fifty-Five Plus","American Indian","Unemployed","150+ Percent of Poverty","male","without_children",4533.52
+2024,"Fifty-Five Plus","American Indian","Unemployed","Below Poverty","female","without_children",280.37
+2024,"Fifty-Five Plus","American Indian","Unemployed","Below Poverty","male","without_children",5169.35
+2024,"Fifty-Five Plus","Asian/Pacific Island","Employed","100-124 Percent of Poverty","female","other",3829.94
+2024,"Fifty-Five Plus","Asian/Pacific Island","Employed","100-124 Percent of Poverty","female","with_children",688.32
+2024,"Fifty-Five Plus","Asian/Pacific Island","Employed","100-124 Percent of Poverty","female","without_children",8830.24
+2024,"Fifty-Five Plus","Asian/Pacific Island","Employed","100-124 Percent of Poverty","male","other",6659.14
+2024,"Fifty-Five Plus","Asian/Pacific Island","Employed","100-124 Percent of Poverty","male","with_children",3931.22
+2024,"Fifty-Five Plus","Asian/Pacific Island","Employed","100-124 Percent of Poverty","male","without_children",5496.28
+2024,"Fifty-Five Plus","Asian/Pacific Island","Employed","125-149 Percent of Poverty","female","other",9063.06
+2024,"Fifty-Five Plus","Asian/Pacific Island","Employed","125-149 Percent of Poverty","female","with_children",2712.99
+2024,"Fifty-Five Plus","Asian/Pacific Island","Employed","125-149 Percent of Poverty","female","without_children",16970.19
+2024,"Fifty-Five Plus","Asian/Pacific Island","Employed","125-149 Percent of Poverty","male","other",4791.48
+2024,"Fifty-Five Plus","Asian/Pacific Island","Employed","125-149 Percent of Poverty","male","with_children",11805.07
+2024,"Fifty-Five Plus","Asian/Pacific Island","Employed","125-149 Percent of Poverty","male","without_children",12980.23
+2024,"Fifty-Five Plus","Asian/Pacific Island","Employed","150+ Percent of Poverty","female","other",406917.43
+2024,"Fifty-Five Plus","Asian/Pacific Island","Employed","150+ Percent of Poverty","female","with_children",106685.49
+2024,"Fifty-Five Plus","Asian/Pacific Island","Employed","150+ Percent of Poverty","female","without_children",575672.11
+2024,"Fifty-Five Plus","Asian/Pacific Island","Employed","150+ Percent of Poverty","male","other",387640.07
+2024,"Fifty-Five Plus","Asian/Pacific Island","Employed","150+ Percent of Poverty","male","with_children",215428.24
+2024,"Fifty-Five Plus","Asian/Pacific Island","Employed","150+ Percent of Poverty","male","without_children",563130.57
+2024,"Fifty-Five Plus","Asian/Pacific Island","Employed","Below Poverty","female","other",5170.25
+2024,"Fifty-Five Plus","Asian/Pacific Island","Employed","Below Poverty","female","with_children",285.49
+2024,"Fifty-Five Plus","Asian/Pacific Island","Employed","Below Poverty","female","without_children",5990
+2024,"Fifty-Five Plus","Asian/Pacific Island","Employed","Below Poverty","male","other",5746.55
+2024,"Fifty-Five Plus","Asian/Pacific Island","Employed","Below Poverty","male","with_children",12443.66
+2024,"Fifty-Five Plus","Asian/Pacific Island","Employed","Below Poverty","male","without_children",19217.77
+2024,"Fifty-Five Plus","Asian/Pacific Island","NILF","100-124 Percent of Poverty","female","other",23343.33
+2024,"Fifty-Five Plus","Asian/Pacific Island","NILF","100-124 Percent of Poverty","female","with_children",3064.72
+2024,"Fifty-Five Plus","Asian/Pacific Island","NILF","100-124 Percent of Poverty","female","without_children",44641.18
+2024,"Fifty-Five Plus","Asian/Pacific Island","NILF","100-124 Percent of Poverty","male","other",17638.49
+2024,"Fifty-Five Plus","Asian/Pacific Island","NILF","100-124 Percent of Poverty","male","with_children",3064.72
+2024,"Fifty-Five Plus","Asian/Pacific Island","NILF","100-124 Percent of Poverty","male","without_children",36597.46
+2024,"Fifty-Five Plus","Asian/Pacific Island","NILF","125-149 Percent of Poverty","female","other",25039.03
+2024,"Fifty-Five Plus","Asian/Pacific Island","NILF","125-149 Percent of Poverty","female","with_children",2423.76
+2024,"Fifty-Five Plus","Asian/Pacific Island","NILF","125-149 Percent of Poverty","female","without_children",88949.18
+2024,"Fifty-Five Plus","Asian/Pacific Island","NILF","125-149 Percent of Poverty","male","other",4898.17
+2024,"Fifty-Five Plus","Asian/Pacific Island","NILF","125-149 Percent of Poverty","male","with_children",7766.78
+2024,"Fifty-Five Plus","Asian/Pacific Island","NILF","125-149 Percent of Poverty","male","without_children",59166.72
+2024,"Fifty-Five Plus","Asian/Pacific Island","NILF","150+ Percent of Poverty","female","other",557204.77
+2024,"Fifty-Five Plus","Asian/Pacific Island","NILF","150+ Percent of Poverty","female","with_children",31528.48
+2024,"Fifty-Five Plus","Asian/Pacific Island","NILF","150+ Percent of Poverty","female","without_children",913203.51
+2024,"Fifty-Five Plus","Asian/Pacific Island","NILF","150+ Percent of Poverty","male","other",376987.33
+2024,"Fifty-Five Plus","Asian/Pacific Island","NILF","150+ Percent of Poverty","male","with_children",25855.52
+2024,"Fifty-Five Plus","Asian/Pacific Island","NILF","150+ Percent of Poverty","male","without_children",627478.36
+2024,"Fifty-Five Plus","Asian/Pacific Island","NILF","Below Poverty","female","other",56218.74
+2024,"Fifty-Five Plus","Asian/Pacific Island","NILF","Below Poverty","female","with_children",7047.98
+2024,"Fifty-Five Plus","Asian/Pacific Island","NILF","Below Poverty","female","without_children",196159.65
+2024,"Fifty-Five Plus","Asian/Pacific Island","NILF","Below Poverty","male","other",30403.63
+2024,"Fifty-Five Plus","Asian/Pacific Island","NILF","Below Poverty","male","with_children",17197.68
+2024,"Fifty-Five Plus","Asian/Pacific Island","NILF","Below Poverty","male","without_children",156739.31
+2024,"Fifty-Five Plus","Asian/Pacific Island","Unemployed","100-124 Percent of Poverty","female","without_children",1876.26
+2024,"Fifty-Five Plus","Asian/Pacific Island","Unemployed","125-149 Percent of Poverty","female","with_children",3092.4
+2024,"Fifty-Five Plus","Asian/Pacific Island","Unemployed","150+ Percent of Poverty","female","without_children",4682.17
+2024,"Fifty-Five Plus","Asian/Pacific Island","Unemployed","150+ Percent of Poverty","male","other",5094.28
+2024,"Fifty-Five Plus","Asian/Pacific Island","Unemployed","150+ Percent of Poverty","male","with_children",4782.21
+2024,"Fifty-Five Plus","Asian/Pacific Island","Unemployed","150+ Percent of Poverty","male","without_children",11473.37
+2024,"Fifty-Five Plus","Asian/Pacific Island","Unemployed","Below Poverty","female","without_children",5216.11
+2024,"Fifty-Five Plus","Asian/Pacific Island","Unemployed","Below Poverty","male","with_children",5211.32
+2024,"Fifty-Five Plus","Asian/Pacific Island","Unemployed","Below Poverty","male","without_children",3513
+2024,"Fifty-Five Plus","Black","Armed Forces","150+ Percent of Poverty","female","with_children",2531.49
+2024,"Fifty-Five Plus","Black","Armed Forces","150+ Percent of Poverty","male","with_children",215.17
+2024,"Fifty-Five Plus","Black","Employed","100-124 Percent of Poverty","female","other",4794.68
+2024,"Fifty-Five Plus","Black","Employed","100-124 Percent of Poverty","female","with_children",9153.15
+2024,"Fifty-Five Plus","Black","Employed","100-124 Percent of Poverty","female","without_children",40348.68
+2024,"Fifty-Five Plus","Black","Employed","100-124 Percent of Poverty","male","other",7923.92
+2024,"Fifty-Five Plus","Black","Employed","100-124 Percent of Poverty","male","with_children",15891.86
+2024,"Fifty-Five Plus","Black","Employed","100-124 Percent of Poverty","male","without_children",12672.98
+2024,"Fifty-Five Plus","Black","Employed","125-149 Percent of Poverty","female","other",12625.44
+2024,"Fifty-Five Plus","Black","Employed","125-149 Percent of Poverty","female","with_children",4744.34
+2024,"Fifty-Five Plus","Black","Employed","125-149 Percent of Poverty","female","without_children",37364.72
+2024,"Fifty-Five Plus","Black","Employed","125-149 Percent of Poverty","male","other",1508.04
+2024,"Fifty-Five Plus","Black","Employed","125-149 Percent of Poverty","male","with_children",16380.67
+2024,"Fifty-Five Plus","Black","Employed","125-149 Percent of Poverty","male","without_children",20014.3
+2024,"Fifty-Five Plus","Black","Employed","150+ Percent of Poverty","female","other",609216.06
+2024,"Fifty-Five Plus","Black","Employed","150+ Percent of Poverty","female","with_children",110550.78
+2024,"Fifty-Five Plus","Black","Employed","150+ Percent of Poverty","female","without_children",1156848.49
+2024,"Fifty-Five Plus","Black","Employed","150+ Percent of Poverty","male","other",351487.68
+2024,"Fifty-Five Plus","Black","Employed","150+ Percent of Poverty","male","with_children",205866.68
+2024,"Fifty-Five Plus","Black","Employed","150+ Percent of Poverty","male","without_children",1095123.96
+2024,"Fifty-Five Plus","Black","Employed","Below Poverty","female","other",19395.43
+2024,"Fifty-Five Plus","Black","Employed","Below Poverty","female","with_children",15910.85
+2024,"Fifty-Five Plus","Black","Employed","Below Poverty","female","without_children",47925.51
+2024,"Fifty-Five Plus","Black","Employed","Below Poverty","male","other",6462.52
+2024,"Fifty-Five Plus","Black","Employed","Below Poverty","male","with_children",2113.3
+2024,"Fifty-Five Plus","Black","Employed","Below Poverty","male","without_children",52601.85
+2024,"Fifty-Five Plus","Black","NILF","100-124 Percent of Poverty","female","other",61115.95
+2024,"Fifty-Five Plus","Black","NILF","100-124 Percent of Poverty","female","with_children",12057.08
+2024,"Fifty-Five Plus","Black","NILF","100-124 Percent of Poverty","female","without_children",264642.28
+2024,"Fifty-Five Plus","Black","NILF","100-124 Percent of Poverty","male","other",20105.74
+2024,"Fifty-Five Plus","Black","NILF","100-124 Percent of Poverty","male","with_children",11251.25
+2024,"Fifty-Five Plus","Black","NILF","100-124 Percent of Poverty","male","without_children",159323.01
+2024,"Fifty-Five Plus","Black","NILF","125-149 Percent of Poverty","female","other",61652.02
+2024,"Fifty-Five Plus","Black","NILF","125-149 Percent of Poverty","female","with_children",5596.02
+2024,"Fifty-Five Plus","Black","NILF","125-149 Percent of Poverty","female","without_children",247347.75
+2024,"Fifty-Five Plus","Black","NILF","125-149 Percent of Poverty","male","other",33063.79
+2024,"Fifty-Five Plus","Black","NILF","125-149 Percent of Poverty","male","with_children",9019.77
+2024,"Fifty-Five Plus","Black","NILF","125-149 Percent of Poverty","male","without_children",143756.64
+2024,"Fifty-Five Plus","Black","NILF","150+ Percent of Poverty","female","other",674162.7
+2024,"Fifty-Five Plus","Black","NILF","150+ Percent of Poverty","female","with_children",38905.43
+2024,"Fifty-Five Plus","Black","NILF","150+ Percent of Poverty","female","without_children",1431168.14
+2024,"Fifty-Five Plus","Black","NILF","150+ Percent of Poverty","male","other",245974.58
+2024,"Fifty-Five Plus","Black","NILF","150+ Percent of Poverty","male","with_children",48143.07
+2024,"Fifty-Five Plus","Black","NILF","150+ Percent of Poverty","male","without_children",1230033.53
+2024,"Fifty-Five Plus","Black","NILF","Below Poverty","female","other",136994.79
+2024,"Fifty-Five Plus","Black","NILF","Below Poverty","female","with_children",23642.46
+2024,"Fifty-Five Plus","Black","NILF","Below Poverty","female","without_children",824933.75
+2024,"Fifty-Five Plus","Black","NILF","Below Poverty","male","other",23995.54
+2024,"Fifty-Five Plus","Black","NILF","Below Poverty","male","with_children",20787.41
+2024,"Fifty-Five Plus","Black","NILF","Below Poverty","male","without_children",708807.21
+2024,"Fifty-Five Plus","Black","Unemployed","100-124 Percent of Poverty","female","without_children",2178.01
+2024,"Fifty-Five Plus","Black","Unemployed","100-124 Percent of Poverty","male","without_children",7126.91
+2024,"Fifty-Five Plus","Black","Unemployed","125-149 Percent of Poverty","female","without_children",2942.97
+2024,"Fifty-Five Plus","Black","Unemployed","125-149 Percent of Poverty","male","with_children",2055.85
+2024,"Fifty-Five Plus","Black","Unemployed","125-149 Percent of Poverty","male","without_children",213.46
+2024,"Fifty-Five Plus","Black","Unemployed","150+ Percent of Poverty","female","other",19828.91
+2024,"Fifty-Five Plus","Black","Unemployed","150+ Percent of Poverty","female","with_children",2811.72
+2024,"Fifty-Five Plus","Black","Unemployed","150+ Percent of Poverty","female","without_children",27194.55
+2024,"Fifty-Five Plus","Black","Unemployed","150+ Percent of Poverty","male","other",9638.35
+2024,"Fifty-Five Plus","Black","Unemployed","150+ Percent of Poverty","male","with_children",13401.16
+2024,"Fifty-Five Plus","Black","Unemployed","150+ Percent of Poverty","male","without_children",42787.26
+2024,"Fifty-Five Plus","Black","Unemployed","Below Poverty","female","other",2974.83
+2024,"Fifty-Five Plus","Black","Unemployed","Below Poverty","female","without_children",24491.87
+2024,"Fifty-Five Plus","Black","Unemployed","Below Poverty","male","without_children",12952.5
+2024,"Fifty-Five Plus","Hispanic","Armed Forces","150+ Percent of Poverty","male","with_children",2129.6
+2024,"Fifty-Five Plus","Hispanic","Armed Forces","150+ Percent of Poverty","male","without_children",1652.06
+2024,"Fifty-Five Plus","Hispanic","Employed","100-124 Percent of Poverty","female","other",20751.92
+2024,"Fifty-Five Plus","Hispanic","Employed","100-124 Percent of Poverty","female","with_children",8978.28
+2024,"Fifty-Five Plus","Hispanic","Employed","100-124 Percent of Poverty","female","without_children",38147.18
+2024,"Fifty-Five Plus","Hispanic","Employed","100-124 Percent of Poverty","male","other",15360.28
+2024,"Fifty-Five Plus","Hispanic","Employed","100-124 Percent of Poverty","male","with_children",22276.67
+2024,"Fifty-Five Plus","Hispanic","Employed","100-124 Percent of Poverty","male","without_children",34390.36
+2024,"Fifty-Five Plus","Hispanic","Employed","125-149 Percent of Poverty","female","other",20740.77
+2024,"Fifty-Five Plus","Hispanic","Employed","125-149 Percent of Poverty","female","with_children",7619.79
+2024,"Fifty-Five Plus","Hispanic","Employed","125-149 Percent of Poverty","female","without_children",58779.32
+2024,"Fifty-Five Plus","Hispanic","Employed","125-149 Percent of Poverty","male","other",22277.74
+2024,"Fifty-Five Plus","Hispanic","Employed","125-149 Percent of Poverty","male","with_children",18330
+2024,"Fifty-Five Plus","Hispanic","Employed","125-149 Percent of Poverty","male","without_children",51962.07
+2024,"Fifty-Five Plus","Hispanic","Employed","150+ Percent of Poverty","female","other",707282.73
+2024,"Fifty-Five Plus","Hispanic","Employed","150+ Percent of Poverty","female","with_children",106114.44
+2024,"Fifty-Five Plus","Hispanic","Employed","150+ Percent of Poverty","female","without_children",1055575.54
+2024,"Fifty-Five Plus","Hispanic","Employed","150+ Percent of Poverty","male","other",836119.23
+2024,"Fifty-Five Plus","Hispanic","Employed","150+ Percent of Poverty","male","with_children",320627.86
+2024,"Fifty-Five Plus","Hispanic","Employed","150+ Percent of Poverty","male","without_children",1321566.07
+2024,"Fifty-Five Plus","Hispanic","Employed","Below Poverty","female","other",26577.09
+2024,"Fifty-Five Plus","Hispanic","Employed","Below Poverty","female","with_children",11712.77
+2024,"Fifty-Five Plus","Hispanic","Employed","Below Poverty","female","without_children",59054.36
+2024,"Fifty-Five Plus","Hispanic","Employed","Below Poverty","male","other",30286.15
+2024,"Fifty-Five Plus","Hispanic","Employed","Below Poverty","male","with_children",39658.5
+2024,"Fifty-Five Plus","Hispanic","Employed","Below Poverty","male","without_children",68281.17
+2024,"Fifty-Five Plus","Hispanic","NILF","100-124 Percent of Poverty","female","other",59175.24
+2024,"Fifty-Five Plus","Hispanic","NILF","100-124 Percent of Poverty","female","with_children",4741.97
+2024,"Fifty-Five Plus","Hispanic","NILF","100-124 Percent of Poverty","female","without_children",234632.22
+2024,"Fifty-Five Plus","Hispanic","NILF","100-124 Percent of Poverty","male","other",32352.06
+2024,"Fifty-Five Plus","Hispanic","NILF","100-124 Percent of Poverty","male","with_children",8073.22
+2024,"Fifty-Five Plus","Hispanic","NILF","100-124 Percent of Poverty","male","without_children",166874.42
+2024,"Fifty-Five Plus","Hispanic","NILF","125-149 Percent of Poverty","female","other",66824.38
+2024,"Fifty-Five Plus","Hispanic","NILF","125-149 Percent of Poverty","female","with_children",19278.29
+2024,"Fifty-Five Plus","Hispanic","NILF","125-149 Percent of Poverty","female","without_children",223567.11
+2024,"Fifty-Five Plus","Hispanic","NILF","125-149 Percent of Poverty","male","other",53096.75
+2024,"Fifty-Five Plus","Hispanic","NILF","125-149 Percent of Poverty","male","with_children",7428.82
+2024,"Fifty-Five Plus","Hispanic","NILF","125-149 Percent of Poverty","male","without_children",118501.84
+2024,"Fifty-Five Plus","Hispanic","NILF","150+ Percent of Poverty","female","other",1023304.06
+2024,"Fifty-Five Plus","Hispanic","NILF","150+ Percent of Poverty","female","with_children",60101.57
+2024,"Fifty-Five Plus","Hispanic","NILF","150+ Percent of Poverty","female","without_children",1374459.58
+2024,"Fifty-Five Plus","Hispanic","NILF","150+ Percent of Poverty","male","other",521278.94
+2024,"Fifty-Five Plus","Hispanic","NILF","150+ Percent of Poverty","male","with_children",48850.66
+2024,"Fifty-Five Plus","Hispanic","NILF","150+ Percent of Poverty","male","without_children",1075302.48
+2024,"Fifty-Five Plus","Hispanic","NILF","Below Poverty","female","other",165902.37
+2024,"Fifty-Five Plus","Hispanic","NILF","Below Poverty","female","with_children",31998.12
+2024,"Fifty-Five Plus","Hispanic","NILF","Below Poverty","female","without_children",721306.8
+2024,"Fifty-Five Plus","Hispanic","NILF","Below Poverty","male","other",90534.29
+2024,"Fifty-Five Plus","Hispanic","NILF","Below Poverty","male","with_children",39731.09
+2024,"Fifty-Five Plus","Hispanic","NILF","Below Poverty","male","without_children",472370.46
+2024,"Fifty-Five Plus","Hispanic","Unemployed","100-124 Percent of Poverty","female","other",1072.91
+2024,"Fifty-Five Plus","Hispanic","Unemployed","100-124 Percent of Poverty","female","with_children",2153.35
+2024,"Fifty-Five Plus","Hispanic","Unemployed","100-124 Percent of Poverty","female","without_children",6874.28
+2024,"Fifty-Five Plus","Hispanic","Unemployed","100-124 Percent of Poverty","male","other",551.73
+2024,"Fifty-Five Plus","Hispanic","Unemployed","100-124 Percent of Poverty","male","with_children",2151.57
+2024,"Fifty-Five Plus","Hispanic","Unemployed","100-124 Percent of Poverty","male","without_children",4539.87
+2024,"Fifty-Five Plus","Hispanic","Unemployed","125-149 Percent of Poverty","female","without_children",4320.25
+2024,"Fifty-Five Plus","Hispanic","Unemployed","125-149 Percent of Poverty","male","with_children",2865.83
+2024,"Fifty-Five Plus","Hispanic","Unemployed","125-149 Percent of Poverty","male","without_children",4812.36
+2024,"Fifty-Five Plus","Hispanic","Unemployed","150+ Percent of Poverty","female","other",25454.98
+2024,"Fifty-Five Plus","Hispanic","Unemployed","150+ Percent of Poverty","female","with_children",14720.23
+2024,"Fifty-Five Plus","Hispanic","Unemployed","150+ Percent of Poverty","female","without_children",30298.51
+2024,"Fifty-Five Plus","Hispanic","Unemployed","150+ Percent of Poverty","male","other",37540.76
+2024,"Fifty-Five Plus","Hispanic","Unemployed","150+ Percent of Poverty","male","with_children",8466.16
+2024,"Fifty-Five Plus","Hispanic","Unemployed","150+ Percent of Poverty","male","without_children",39651.51
+2024,"Fifty-Five Plus","Hispanic","Unemployed","Below Poverty","female","without_children",7414.03
+2024,"Fifty-Five Plus","Hispanic","Unemployed","Below Poverty","male","other",12939.28
+2024,"Fifty-Five Plus","Hispanic","Unemployed","Below Poverty","male","with_children",7726.47
+2024,"Fifty-Five Plus","Hispanic","Unemployed","Below Poverty","male","without_children",12928.9
+2024,"Fifty-Five Plus","Two or More Races","Employed","100-124 Percent of Poverty","female","without_children",1596.99
+2024,"Fifty-Five Plus","Two or More Races","Employed","125-149 Percent of Poverty","female","without_children",1328.72
+2024,"Fifty-Five Plus","Two or More Races","Employed","125-149 Percent of Poverty","male","with_children",619.14
+2024,"Fifty-Five Plus","Two or More Races","Employed","125-149 Percent of Poverty","male","without_children",3896.41
+2024,"Fifty-Five Plus","Two or More Races","Employed","150+ Percent of Poverty","female","other",40990.01
+2024,"Fifty-Five Plus","Two or More Races","Employed","150+ Percent of Poverty","female","with_children",14292.77
+2024,"Fifty-Five Plus","Two or More Races","Employed","150+ Percent of Poverty","female","without_children",117100.47
+2024,"Fifty-Five Plus","Two or More Races","Employed","150+ Percent of Poverty","male","other",32914.92
+2024,"Fifty-Five Plus","Two or More Races","Employed","150+ Percent of Poverty","male","with_children",21650.77
+2024,"Fifty-Five Plus","Two or More Races","Employed","150+ Percent of Poverty","male","without_children",101042.76
+2024,"Fifty-Five Plus","Two or More Races","Employed","Below Poverty","female","without_children",2209.91
+2024,"Fifty-Five Plus","Two or More Races","Employed","Below Poverty","male","with_children",6710.9
+2024,"Fifty-Five Plus","Two or More Races","Employed","Below Poverty","male","without_children",4192.02
+2024,"Fifty-Five Plus","Two or More Races","NILF","100-124 Percent of Poverty","female","other",490.81
+2024,"Fifty-Five Plus","Two or More Races","NILF","100-124 Percent of Poverty","female","without_children",20783.92
+2024,"Fifty-Five Plus","Two or More Races","NILF","100-124 Percent of Poverty","male","without_children",12077.93
+2024,"Fifty-Five Plus","Two or More Races","NILF","125-149 Percent of Poverty","female","other",1943.53
+2024,"Fifty-Five Plus","Two or More Races","NILF","125-149 Percent of Poverty","female","without_children",28000.33
+2024,"Fifty-Five Plus","Two or More Races","NILF","125-149 Percent of Poverty","male","other",2227.06
+2024,"Fifty-Five Plus","Two or More Races","NILF","125-149 Percent of Poverty","male","with_children",966.69
+2024,"Fifty-Five Plus","Two or More Races","NILF","125-149 Percent of Poverty","male","without_children",13136.72
+2024,"Fifty-Five Plus","Two or More Races","NILF","150+ Percent of Poverty","female","other",34359.92
+2024,"Fifty-Five Plus","Two or More Races","NILF","150+ Percent of Poverty","female","with_children",402.79
+2024,"Fifty-Five Plus","Two or More Races","NILF","150+ Percent of Poverty","female","without_children",181041.16
+2024,"Fifty-Five Plus","Two or More Races","NILF","150+ Percent of Poverty","male","other",30644.06
+2024,"Fifty-Five Plus","Two or More Races","NILF","150+ Percent of Poverty","male","with_children",3714.77
+2024,"Fifty-Five Plus","Two or More Races","NILF","150+ Percent of Poverty","male","without_children",122173.81
+2024,"Fifty-Five Plus","Two or More Races","NILF","Below Poverty","female","other",2279.35
+2024,"Fifty-Five Plus","Two or More Races","NILF","Below Poverty","female","with_children",2334.14
+2024,"Fifty-Five Plus","Two or More Races","NILF","Below Poverty","female","without_children",56181.57
+2024,"Fifty-Five Plus","Two or More Races","NILF","Below Poverty","male","other",1195.46
+2024,"Fifty-Five Plus","Two or More Races","NILF","Below Poverty","male","without_children",26886.47
+2024,"Fifty-Five Plus","Two or More Races","Unemployed","150+ Percent of Poverty","female","other",5340.77
+2024,"Fifty-Five Plus","Two or More Races","Unemployed","150+ Percent of Poverty","female","without_children",7400.96
+2024,"Fifty-Five Plus","Two or More Races","Unemployed","150+ Percent of Poverty","male","other",567.62
+2024,"Fifty-Five Plus","Two or More Races","Unemployed","150+ Percent of Poverty","male","without_children",13045.61
+2024,"Fifty-Five Plus","Two or More Races","Unemployed","Below Poverty","male","without_children",3521.28
+2024,"Fifty-Five Plus","White","Armed Forces","150+ Percent of Poverty","male","with_children",8496.03
+2024,"Fifty-Five Plus","White","Armed Forces","150+ Percent of Poverty","male","without_children",13227.31
+2024,"Fifty-Five Plus","White","Armed Forces","Below Poverty","male","without_children",2098.18
+2024,"Fifty-Five Plus","White","Employed","100-124 Percent of Poverty","female","other",19220.42
+2024,"Fifty-Five Plus","White","Employed","100-124 Percent of Poverty","female","with_children",3072.19
+2024,"Fifty-Five Plus","White","Employed","100-124 Percent of Poverty","female","without_children",89491.09
+2024,"Fifty-Five Plus","White","Employed","100-124 Percent of Poverty","male","other",11009.89
+2024,"Fifty-Five Plus","White","Employed","100-124 Percent of Poverty","male","with_children",11217.18
+2024,"Fifty-Five Plus","White","Employed","100-124 Percent of Poverty","male","without_children",72772.66
+2024,"Fifty-Five Plus","White","Employed","125-149 Percent of Poverty","female","other",29500.85
+2024,"Fifty-Five Plus","White","Employed","125-149 Percent of Poverty","female","with_children",6081.25
+2024,"Fifty-Five Plus","White","Employed","125-149 Percent of Poverty","female","without_children",122004.41
+2024,"Fifty-Five Plus","White","Employed","125-149 Percent of Poverty","male","other",13853.97
+2024,"Fifty-Five Plus","White","Employed","125-149 Percent of Poverty","male","with_children",7860.22
+2024,"Fifty-Five Plus","White","Employed","125-149 Percent of Poverty","male","without_children",123683.66
+2024,"Fifty-Five Plus","White","Employed","150+ Percent of Poverty","female","other",2309035.63
+2024,"Fifty-Five Plus","White","Employed","150+ Percent of Poverty","female","with_children",573579.34
+2024,"Fifty-Five Plus","White","Employed","150+ Percent of Poverty","female","without_children",8828346.42
+2024,"Fifty-Five Plus","White","Employed","150+ Percent of Poverty","male","other",2520243.37
+2024,"Fifty-Five Plus","White","Employed","150+ Percent of Poverty","male","with_children",1194234.48
+2024,"Fifty-Five Plus","White","Employed","150+ Percent of Poverty","male","without_children",9911933.6
+2024,"Fifty-Five Plus","White","Employed","Below Poverty","female","other",31160.06
+2024,"Fifty-Five Plus","White","Employed","Below Poverty","female","with_children",21912.23
+2024,"Fifty-Five Plus","White","Employed","Below Poverty","female","without_children",173714.43
+2024,"Fifty-Five Plus","White","Employed","Below Poverty","male","other",25829.88
+2024,"Fifty-Five Plus","White","Employed","Below Poverty","male","with_children",26675.52
+2024,"Fifty-Five Plus","White","Employed","Below Poverty","male","without_children",199249.15
+2024,"Fifty-Five Plus","White","NILF","100-124 Percent of Poverty","female","other",109904.02
+2024,"Fifty-Five Plus","White","NILF","100-124 Percent of Poverty","female","with_children",9122.69
+2024,"Fifty-Five Plus","White","NILF","100-124 Percent of Poverty","female","without_children",1004712.52
+2024,"Fifty-Five Plus","White","NILF","100-124 Percent of Poverty","male","other",52093.45
+2024,"Fifty-Five Plus","White","NILF","100-124 Percent of Poverty","male","with_children",18264.84
+2024,"Fifty-Five Plus","White","NILF","100-124 Percent of Poverty","male","without_children",726604.05
+2024,"Fifty-Five Plus","White","NILF","125-149 Percent of Poverty","female","other",127796.99
+2024,"Fifty-Five Plus","White","NILF","125-149 Percent of Poverty","female","with_children",14073.02
+2024,"Fifty-Five Plus","White","NILF","125-149 Percent of Poverty","female","without_children",1184395.16
+2024,"Fifty-Five Plus","White","NILF","125-149 Percent of Poverty","male","other",72126.95
+2024,"Fifty-Five Plus","White","NILF","125-149 Percent of Poverty","male","with_children",11426.35
+2024,"Fifty-Five Plus","White","NILF","125-149 Percent of Poverty","male","without_children",734011.68
+2024,"Fifty-Five Plus","White","NILF","150+ Percent of Poverty","female","other",2719175.72
+2024,"Fifty-Five Plus","White","NILF","150+ Percent of Poverty","female","with_children",221542.64
+2024,"Fifty-Five Plus","White","NILF","150+ Percent of Poverty","female","without_children",16511803.6
+2024,"Fifty-Five Plus","White","NILF","150+ Percent of Poverty","male","other",1722888.47
+2024,"Fifty-Five Plus","White","NILF","150+ Percent of Poverty","male","with_children",157826.57
+2024,"Fifty-Five Plus","White","NILF","150+ Percent of Poverty","male","without_children",13587030.88
+2024,"Fifty-Five Plus","White","NILF","Below Poverty","female","other",232932.6
+2024,"Fifty-Five Plus","White","NILF","Below Poverty","female","with_children",60619.9
+2024,"Fifty-Five Plus","White","NILF","Below Poverty","female","without_children",2546266.97
+2024,"Fifty-Five Plus","White","NILF","Below Poverty","male","other",154942.56
+2024,"Fifty-Five Plus","White","NILF","Below Poverty","male","with_children",54788.85
+2024,"Fifty-Five Plus","White","NILF","Below Poverty","male","without_children",1877250.25
+2024,"Fifty-Five Plus","White","Unemployed","100-124 Percent of Poverty","female","other",5533.85
+2024,"Fifty-Five Plus","White","Unemployed","100-124 Percent of Poverty","female","without_children",2313.85
+2024,"Fifty-Five Plus","White","Unemployed","100-124 Percent of Poverty","male","without_children",1127.29
+2024,"Fifty-Five Plus","White","Unemployed","125-149 Percent of Poverty","female","other",9919.09
+2024,"Fifty-Five Plus","White","Unemployed","125-149 Percent of Poverty","female","with_children",5311.26
+2024,"Fifty-Five Plus","White","Unemployed","125-149 Percent of Poverty","female","without_children",9861.83
+2024,"Fifty-Five Plus","White","Unemployed","125-149 Percent of Poverty","male","without_children",2927.57
+2024,"Fifty-Five Plus","White","Unemployed","150+ Percent of Poverty","female","other",26602.34
+2024,"Fifty-Five Plus","White","Unemployed","150+ Percent of Poverty","female","with_children",8919.76
+2024,"Fifty-Five Plus","White","Unemployed","150+ Percent of Poverty","female","without_children",186161.36
+2024,"Fifty-Five Plus","White","Unemployed","150+ Percent of Poverty","male","other",57629.95
+2024,"Fifty-Five Plus","White","Unemployed","150+ Percent of Poverty","male","with_children",13801.71
+2024,"Fifty-Five Plus","White","Unemployed","150+ Percent of Poverty","male","without_children",238998.44
+2024,"Fifty-Five Plus","White","Unemployed","Below Poverty","female","other",4412.61
+2024,"Fifty-Five Plus","White","Unemployed","Below Poverty","female","without_children",33177.82
+2024,"Fifty-Five Plus","White","Unemployed","Below Poverty","male","with_children",2457.49
+2024,"Fifty-Five Plus","White","Unemployed","Below Poverty","male","without_children",44507.2
+2024,"Prime Age","American Indian","Armed Forces","150+ Percent of Poverty","male","with_children",604.56
+2024,"Prime Age","American Indian","Armed Forces","Below Poverty","male","without_children",949.62
+2024,"Prime Age","American Indian","Employed","100-124 Percent of Poverty","female","with_children",11662.91
+2024,"Prime Age","American Indian","Employed","100-124 Percent of Poverty","female","without_children",644.47
+2024,"Prime Age","American Indian","Employed","100-124 Percent of Poverty","male","with_children",3991.67
+2024,"Prime Age","American Indian","Employed","100-124 Percent of Poverty","male","without_children",6988.35
+2024,"Prime Age","American Indian","Employed","125-149 Percent of Poverty","female","with_children",6730.25
+2024,"Prime Age","American Indian","Employed","125-149 Percent of Poverty","female","without_children",10942.08
+2024,"Prime Age","American Indian","Employed","125-149 Percent of Poverty","male","other",4525.64
+2024,"Prime Age","American Indian","Employed","125-149 Percent of Poverty","male","with_children",368.42
+2024,"Prime Age","American Indian","Employed","125-149 Percent of Poverty","male","without_children",6883.23
+2024,"Prime Age","American Indian","Employed","150+ Percent of Poverty","female","other",9761.83
+2024,"Prime Age","American Indian","Employed","150+ Percent of Poverty","female","with_children",166262.73
+2024,"Prime Age","American Indian","Employed","150+ Percent of Poverty","female","without_children",129325.1
+2024,"Prime Age","American Indian","Employed","150+ Percent of Poverty","male","other",20124.95
+2024,"Prime Age","American Indian","Employed","150+ Percent of Poverty","male","with_children",115528.12
+2024,"Prime Age","American Indian","Employed","150+ Percent of Poverty","male","without_children",183917.26
+2024,"Prime Age","American Indian","Employed","Below Poverty","female","other",2543.58
+2024,"Prime Age","American Indian","Employed","Below Poverty","female","with_children",17686.52
+2024,"Prime Age","American Indian","Employed","Below Poverty","female","without_children",11156.33
+2024,"Prime Age","American Indian","Employed","Below Poverty","male","with_children",6597.04
+2024,"Prime Age","American Indian","Employed","Below Poverty","male","without_children",5327.58
+2024,"Prime Age","American Indian","NILF","100-124 Percent of Poverty","female","other",1495.05
+2024,"Prime Age","American Indian","NILF","100-124 Percent of Poverty","female","with_children",3840.76
+2024,"Prime Age","American Indian","NILF","100-124 Percent of Poverty","female","without_children",3183.61
+2024,"Prime Age","American Indian","NILF","100-124 Percent of Poverty","male","other",1495.05
+2024,"Prime Age","American Indian","NILF","100-124 Percent of Poverty","male","with_children",3417.94
+2024,"Prime Age","American Indian","NILF","100-124 Percent of Poverty","male","without_children",2938.34
+2024,"Prime Age","American Indian","NILF","125-149 Percent of Poverty","female","other",4169.81
+2024,"Prime Age","American Indian","NILF","125-149 Percent of Poverty","female","with_children",3224.66
+2024,"Prime Age","American Indian","NILF","125-149 Percent of Poverty","female","without_children",2724.33
+2024,"Prime Age","American Indian","NILF","125-149 Percent of Poverty","male","with_children",3215.64
+2024,"Prime Age","American Indian","NILF","125-149 Percent of Poverty","male","without_children",718.32
+2024,"Prime Age","American Indian","NILF","150+ Percent of Poverty","female","other",14037.83
+2024,"Prime Age","American Indian","NILF","150+ Percent of Poverty","female","with_children",24853.53
+2024,"Prime Age","American Indian","NILF","150+ Percent of Poverty","female","without_children",14825.32
+2024,"Prime Age","American Indian","NILF","150+ Percent of Poverty","male","other",3335.79
+2024,"Prime Age","American Indian","NILF","150+ Percent of Poverty","male","with_children",8392.68
+2024,"Prime Age","American Indian","NILF","150+ Percent of Poverty","male","without_children",21732.09
+2024,"Prime Age","American Indian","NILF","Below Poverty","female","other",1238.05
+2024,"Prime Age","American Indian","NILF","Below Poverty","female","with_children",40953.69
+2024,"Prime Age","American Indian","NILF","Below Poverty","female","without_children",15613.79
+2024,"Prime Age","American Indian","NILF","Below Poverty","male","other",300.19
+2024,"Prime Age","American Indian","NILF","Below Poverty","male","with_children",17697.65
+2024,"Prime Age","American Indian","NILF","Below Poverty","male","without_children",31642.95
+2024,"Prime Age","American Indian","Unemployed","100-124 Percent of Poverty","male","without_children",490.02
+2024,"Prime Age","American Indian","Unemployed","150+ Percent of Poverty","female","with_children",3639.76
+2024,"Prime Age","American Indian","Unemployed","150+ Percent of Poverty","male","with_children",7260.34
+2024,"Prime Age","American Indian","Unemployed","150+ Percent of Poverty","male","without_children",7463.42
+2024,"Prime Age","American Indian","Unemployed","Below Poverty","female","with_children",6641.93
+2024,"Prime Age","American Indian","Unemployed","Below Poverty","female","without_children",5760.9
+2024,"Prime Age","American Indian","Unemployed","Below Poverty","male","with_children",2417.75
+2024,"Prime Age","American Indian","Unemployed","Below Poverty","male","without_children",297.2
+2024,"Prime Age","Asian/Pacific Island","Armed Forces","150+ Percent of Poverty","female","with_children",4336.89
+2024,"Prime Age","Asian/Pacific Island","Armed Forces","150+ Percent of Poverty","male","with_children",12690.74
+2024,"Prime Age","Asian/Pacific Island","Armed Forces","150+ Percent of Poverty","male","without_children",19489.25
+2024,"Prime Age","Asian/Pacific Island","Employed","100-124 Percent of Poverty","female","other",5044.15
+2024,"Prime Age","Asian/Pacific Island","Employed","100-124 Percent of Poverty","female","with_children",45309.71
+2024,"Prime Age","Asian/Pacific Island","Employed","100-124 Percent of Poverty","female","without_children",6224.32
+2024,"Prime Age","Asian/Pacific Island","Employed","100-124 Percent of Poverty","male","with_children",62037.1
+2024,"Prime Age","Asian/Pacific Island","Employed","100-124 Percent of Poverty","male","without_children",30984.1
+2024,"Prime Age","Asian/Pacific Island","Employed","125-149 Percent of Poverty","female","other",5174.49
+2024,"Prime Age","Asian/Pacific Island","Employed","125-149 Percent of Poverty","female","with_children",32678.95
+2024,"Prime Age","Asian/Pacific Island","Employed","125-149 Percent of Poverty","female","without_children",15910.66
+2024,"Prime Age","Asian/Pacific Island","Employed","125-149 Percent of Poverty","male","with_children",34251.95
+2024,"Prime Age","Asian/Pacific Island","Employed","125-149 Percent of Poverty","male","without_children",34175.73
+2024,"Prime Age","Asian/Pacific Island","Employed","150+ Percent of Poverty","female","other",276296.13
+2024,"Prime Age","Asian/Pacific Island","Employed","150+ Percent of Poverty","female","with_children",1689329.91
+2024,"Prime Age","Asian/Pacific Island","Employed","150+ Percent of Poverty","female","without_children",1615612.79
+2024,"Prime Age","Asian/Pacific Island","Employed","150+ Percent of Poverty","male","other",179511.81
+2024,"Prime Age","Asian/Pacific Island","Employed","150+ Percent of Poverty","male","with_children",1825035.04
+2024,"Prime Age","Asian/Pacific Island","Employed","150+ Percent of Poverty","male","without_children",2048414.81
+2024,"Prime Age","Asian/Pacific Island","Employed","Below Poverty","female","other",2133.77
+2024,"Prime Age","Asian/Pacific Island","Employed","Below Poverty","female","with_children",90764.81
+2024,"Prime Age","Asian/Pacific Island","Employed","Below Poverty","female","without_children",53888.5
+2024,"Prime Age","Asian/Pacific Island","Employed","Below Poverty","male","with_children",95077.27
+2024,"Prime Age","Asian/Pacific Island","Employed","Below Poverty","male","without_children",41724.99
+2024,"Prime Age","Asian/Pacific Island","NILF","100-124 Percent of Poverty","female","with_children",45857.53
+2024,"Prime Age","Asian/Pacific Island","NILF","100-124 Percent of Poverty","female","without_children",11517.94
+2024,"Prime Age","Asian/Pacific Island","NILF","100-124 Percent of Poverty","male","with_children",12871.19
+2024,"Prime Age","Asian/Pacific Island","NILF","100-124 Percent of Poverty","male","without_children",12199.65
+2024,"Prime Age","Asian/Pacific Island","NILF","125-149 Percent of Poverty","female","with_children",25123.43
+2024,"Prime Age","Asian/Pacific Island","NILF","125-149 Percent of Poverty","female","without_children",17676.87
+2024,"Prime Age","Asian/Pacific Island","NILF","125-149 Percent of Poverty","male","with_children",10401.4
+2024,"Prime Age","Asian/Pacific Island","NILF","125-149 Percent of Poverty","male","without_children",17675.79
+2024,"Prime Age","Asian/Pacific Island","NILF","150+ Percent of Poverty","female","other",73930.71
+2024,"Prime Age","Asian/Pacific Island","NILF","150+ Percent of Poverty","female","with_children",593455.37
+2024,"Prime Age","Asian/Pacific Island","NILF","150+ Percent of Poverty","female","without_children",339160.46
+2024,"Prime Age","Asian/Pacific Island","NILF","150+ Percent of Poverty","male","other",31876.56
+2024,"Prime Age","Asian/Pacific Island","NILF","150+ Percent of Poverty","male","with_children",56405.32
+2024,"Prime Age","Asian/Pacific Island","NILF","150+ Percent of Poverty","male","without_children",202736.63
+2024,"Prime Age","Asian/Pacific Island","NILF","Below Poverty","female","other",6334.89
+2024,"Prime Age","Asian/Pacific Island","NILF","Below Poverty","female","with_children",106479.21
+2024,"Prime Age","Asian/Pacific Island","NILF","Below Poverty","female","without_children",98873.15
+2024,"Prime Age","Asian/Pacific Island","NILF","Below Poverty","male","other",931.37
+2024,"Prime Age","Asian/Pacific Island","NILF","Below Poverty","male","with_children",43696.53
+2024,"Prime Age","Asian/Pacific Island","NILF","Below Poverty","male","without_children",97846.58
+2024,"Prime Age","Asian/Pacific Island","Unemployed","100-124 Percent of Poverty","female","with_children",8886.25
+2024,"Prime Age","Asian/Pacific Island","Unemployed","100-124 Percent of Poverty","male","with_children",11739.79
+2024,"Prime Age","Asian/Pacific Island","Unemployed","100-124 Percent of Poverty","male","without_children",3146.72
+2024,"Prime Age","Asian/Pacific Island","Unemployed","125-149 Percent of Poverty","female","with_children",2569.82
+2024,"Prime Age","Asian/Pacific Island","Unemployed","125-149 Percent of Poverty","female","without_children",2022.53
+2024,"Prime Age","Asian/Pacific Island","Unemployed","125-149 Percent of Poverty","male","other",1582.93
+2024,"Prime Age","Asian/Pacific Island","Unemployed","125-149 Percent of Poverty","male","with_children",3796.21
+2024,"Prime Age","Asian/Pacific Island","Unemployed","150+ Percent of Poverty","female","with_children",29382.07
+2024,"Prime Age","Asian/Pacific Island","Unemployed","150+ Percent of Poverty","female","without_children",49722.91
+2024,"Prime Age","Asian/Pacific Island","Unemployed","150+ Percent of Poverty","male","other",3095.96
+2024,"Prime Age","Asian/Pacific Island","Unemployed","150+ Percent of Poverty","male","with_children",22791.48
+2024,"Prime Age","Asian/Pacific Island","Unemployed","150+ Percent of Poverty","male","without_children",62289.72
+2024,"Prime Age","Asian/Pacific Island","Unemployed","Below Poverty","female","with_children",8704.83
+2024,"Prime Age","Asian/Pacific Island","Unemployed","Below Poverty","female","without_children",7251.03
+2024,"Prime Age","Asian/Pacific Island","Unemployed","Below Poverty","male","other",2204.33
+2024,"Prime Age","Asian/Pacific Island","Unemployed","Below Poverty","male","with_children",2723.42
+2024,"Prime Age","Asian/Pacific Island","Unemployed","Below Poverty","male","without_children",5665.07
+2024,"Prime Age","Black","Armed Forces","125-149 Percent of Poverty","male","with_children",3559.3
+2024,"Prime Age","Black","Armed Forces","150+ Percent of Poverty","female","with_children",11462.48
+2024,"Prime Age","Black","Armed Forces","150+ Percent of Poverty","male","other",4400.62
+2024,"Prime Age","Black","Armed Forces","150+ Percent of Poverty","male","with_children",44398.1
+2024,"Prime Age","Black","Armed Forces","150+ Percent of Poverty","male","without_children",29560.95
+2024,"Prime Age","Black","Armed Forces","Below Poverty","male","with_children",7730.97
+2024,"Prime Age","Black","Armed Forces","Below Poverty","male","without_children",2009.87
+2024,"Prime Age","Black","Employed","100-124 Percent of Poverty","female","other",16105.43
+2024,"Prime Age","Black","Employed","100-124 Percent of Poverty","female","with_children",233562.52
+2024,"Prime Age","Black","Employed","100-124 Percent of Poverty","female","without_children",45063.42
+2024,"Prime Age","Black","Employed","100-124 Percent of Poverty","male","other",1250.25
+2024,"Prime Age","Black","Employed","100-124 Percent of Poverty","male","with_children",70645.52
+2024,"Prime Age","Black","Employed","100-124 Percent of Poverty","male","without_children",104950.75
+2024,"Prime Age","Black","Employed","125-149 Percent of Poverty","female","other",13243.62
+2024,"Prime Age","Black","Employed","125-149 Percent of Poverty","female","with_children",203706.66
+2024,"Prime Age","Black","Employed","125-149 Percent of Poverty","female","without_children",61882.98
+2024,"Prime Age","Black","Employed","125-149 Percent of Poverty","male","other",1244.5
+2024,"Prime Age","Black","Employed","125-149 Percent of Poverty","male","with_children",87496.96
+2024,"Prime Age","Black","Employed","125-149 Percent of Poverty","male","without_children",60612.59
+2024,"Prime Age","Black","Employed","150+ Percent of Poverty","female","other",574548.89
+2024,"Prime Age","Black","Employed","150+ Percent of Poverty","female","with_children",2469835.02
+2024,"Prime Age","Black","Employed","150+ Percent of Poverty","female","without_children",2634003.25
+2024,"Prime Age","Black","Employed","150+ Percent of Poverty","male","other",275136.76
+2024,"Prime Age","Black","Employed","150+ Percent of Poverty","male","with_children",1901700.17
+2024,"Prime Age","Black","Employed","150+ Percent of Poverty","male","without_children",3306070.33
+2024,"Prime Age","Black","Employed","Below Poverty","female","other",11296.46
+2024,"Prime Age","Black","Employed","Below Poverty","female","with_children",358831.46
+2024,"Prime Age","Black","Employed","Below Poverty","female","without_children",135181.19
+2024,"Prime Age","Black","Employed","Below Poverty","male","other",4994.52
+2024,"Prime Age","Black","Employed","Below Poverty","male","with_children",147828.78
+2024,"Prime Age","Black","Employed","Below Poverty","male","without_children",181450.01
+2024,"Prime Age","Black","NILF","100-124 Percent of Poverty","female","other",16050.46
+2024,"Prime Age","Black","NILF","100-124 Percent of Poverty","female","with_children",77918.7
+2024,"Prime Age","Black","NILF","100-124 Percent of Poverty","female","without_children",64474.3
+2024,"Prime Age","Black","NILF","100-124 Percent of Poverty","male","with_children",17433.3
+2024,"Prime Age","Black","NILF","100-124 Percent of Poverty","male","without_children",101044.47
+2024,"Prime Age","Black","NILF","125-149 Percent of Poverty","female","other",9506.56
+2024,"Prime Age","Black","NILF","125-149 Percent of Poverty","female","with_children",36815.64
+2024,"Prime Age","Black","NILF","125-149 Percent of Poverty","female","without_children",28942.2
+2024,"Prime Age","Black","NILF","125-149 Percent of Poverty","male","other",4878.48
+2024,"Prime Age","Black","NILF","125-149 Percent of Poverty","male","with_children",14929.21
+2024,"Prime Age","Black","NILF","125-149 Percent of Poverty","male","without_children",68525.19
+2024,"Prime Age","Black","NILF","150+ Percent of Poverty","female","other",102990.22
+2024,"Prime Age","Black","NILF","150+ Percent of Poverty","female","with_children",271489.57
+2024,"Prime Age","Black","NILF","150+ Percent of Poverty","female","without_children",343219.43
+2024,"Prime Age","Black","NILF","150+ Percent of Poverty","male","other",31738.5
+2024,"Prime Age","Black","NILF","150+ Percent of Poverty","male","with_children",101233.05
+2024,"Prime Age","Black","NILF","150+ Percent of Poverty","male","without_children",576578.81
+2024,"Prime Age","Black","NILF","Below Poverty","female","other",23397.13
+2024,"Prime Age","Black","NILF","Below Poverty","female","with_children",391692.46
+2024,"Prime Age","Black","NILF","Below Poverty","female","without_children",332107.37
+2024,"Prime Age","Black","NILF","Below Poverty","male","other",11397.37
+2024,"Prime Age","Black","NILF","Below Poverty","male","with_children",94331.55
+2024,"Prime Age","Black","NILF","Below Poverty","male","without_children",311638.66
+2024,"Prime Age","Black","Unemployed","100-124 Percent of Poverty","female","with_children",12319.49
+2024,"Prime Age","Black","Unemployed","100-124 Percent of Poverty","female","without_children",5239.31
+2024,"Prime Age","Black","Unemployed","100-124 Percent of Poverty","male","with_children",7117.27
+2024,"Prime Age","Black","Unemployed","100-124 Percent of Poverty","male","without_children",9870.32
+2024,"Prime Age","Black","Unemployed","125-149 Percent of Poverty","female","with_children",21605.06
+2024,"Prime Age","Black","Unemployed","125-149 Percent of Poverty","female","without_children",9075.82
+2024,"Prime Age","Black","Unemployed","125-149 Percent of Poverty","male","with_children",4302.94
+2024,"Prime Age","Black","Unemployed","125-149 Percent of Poverty","male","without_children",13138.87
+2024,"Prime Age","Black","Unemployed","150+ Percent of Poverty","female","other",13438.65
+2024,"Prime Age","Black","Unemployed","150+ Percent of Poverty","female","with_children",97898.21
+2024,"Prime Age","Black","Unemployed","150+ Percent of Poverty","female","without_children",95605.1
+2024,"Prime Age","Black","Unemployed","150+ Percent of Poverty","male","other",4846.94
+2024,"Prime Age","Black","Unemployed","150+ Percent of Poverty","male","with_children",44742.11
+2024,"Prime Age","Black","Unemployed","150+ Percent of Poverty","male","without_children",168269.49
+2024,"Prime Age","Black","Unemployed","Below Poverty","female","other",3003.7
+2024,"Prime Age","Black","Unemployed","Below Poverty","female","with_children",95781.48
+2024,"Prime Age","Black","Unemployed","Below Poverty","female","without_children",42086.49
+2024,"Prime Age","Black","Unemployed","Below Poverty","male","with_children",40622.68
+2024,"Prime Age","Black","Unemployed","Below Poverty","male","without_children",98404.99
+2024,"Prime Age","Hispanic","Armed Forces","100-124 Percent of Poverty","male","with_children",2078.02
+2024,"Prime Age","Hispanic","Armed Forces","125-149 Percent of Poverty","female","with_children",2252.11
+2024,"Prime Age","Hispanic","Armed Forces","125-149 Percent of Poverty","male","with_children",8357.62
+2024,"Prime Age","Hispanic","Armed Forces","150+ Percent of Poverty","female","with_children",4763.27
+2024,"Prime Age","Hispanic","Armed Forces","150+ Percent of Poverty","female","without_children",2005.5
+2024,"Prime Age","Hispanic","Armed Forces","150+ Percent of Poverty","male","with_children",46556.95
+2024,"Prime Age","Hispanic","Armed Forces","150+ Percent of Poverty","male","without_children",21201.87
+2024,"Prime Age","Hispanic","Armed Forces","Below Poverty","male","with_children",3894.3
+2024,"Prime Age","Hispanic","Employed","100-124 Percent of Poverty","female","other",20510.61
+2024,"Prime Age","Hispanic","Employed","100-124 Percent of Poverty","female","with_children",213604.34
+2024,"Prime Age","Hispanic","Employed","100-124 Percent of Poverty","female","without_children",36554.76
+2024,"Prime Age","Hispanic","Employed","100-124 Percent of Poverty","male","other",17500.97
+2024,"Prime Age","Hispanic","Employed","100-124 Percent of Poverty","male","with_children",251854.66
+2024,"Prime Age","Hispanic","Employed","100-124 Percent of Poverty","male","without_children",136924.78
+2024,"Prime Age","Hispanic","Employed","125-149 Percent of Poverty","female","other",13935.51
+2024,"Prime Age","Hispanic","Employed","125-149 Percent of Poverty","female","with_children",316203.67
+2024,"Prime Age","Hispanic","Employed","125-149 Percent of Poverty","female","without_children",124856.82
+2024,"Prime Age","Hispanic","Employed","125-149 Percent of Poverty","male","other",14585.92
+2024,"Prime Age","Hispanic","Employed","125-149 Percent of Poverty","male","with_children",330029.96
+2024,"Prime Age","Hispanic","Employed","125-149 Percent of Poverty","male","without_children",189619.51
+2024,"Prime Age","Hispanic","Employed","150+ Percent of Poverty","female","other",785203.38
+2024,"Prime Age","Hispanic","Employed","150+ Percent of Poverty","female","with_children",3793541.54
+2024,"Prime Age","Hispanic","Employed","150+ Percent of Poverty","female","without_children",3054512.71
+2024,"Prime Age","Hispanic","Employed","150+ Percent of Poverty","male","other",696222.28
+2024,"Prime Age","Hispanic","Employed","150+ Percent of Poverty","male","with_children",3861002.85
+2024,"Prime Age","Hispanic","Employed","150+ Percent of Poverty","male","without_children",5386179.92
+2024,"Prime Age","Hispanic","Employed","Below Poverty","female","other",32218.38
+2024,"Prime Age","Hispanic","Employed","Below Poverty","female","with_children",561602.34
+2024,"Prime Age","Hispanic","Employed","Below Poverty","female","without_children",180374.02
+2024,"Prime Age","Hispanic","Employed","Below Poverty","male","other",13795.57
+2024,"Prime Age","Hispanic","Employed","Below Poverty","male","with_children",564060.46
+2024,"Prime Age","Hispanic","Employed","Below Poverty","male","without_children",403792.05
+2024,"Prime Age","Hispanic","NILF","100-124 Percent of Poverty","female","other",22639.34
+2024,"Prime Age","Hispanic","NILF","100-124 Percent of Poverty","female","with_children",204124.47
+2024,"Prime Age","Hispanic","NILF","100-124 Percent of Poverty","female","without_children",62332.2
+2024,"Prime Age","Hispanic","NILF","100-124 Percent of Poverty","male","other",1908.25
+2024,"Prime Age","Hispanic","NILF","100-124 Percent of Poverty","male","with_children",33345.6
+2024,"Prime Age","Hispanic","NILF","100-124 Percent of Poverty","male","without_children",79112.4
+2024,"Prime Age","Hispanic","NILF","125-149 Percent of Poverty","female","other",19688.72
+2024,"Prime Age","Hispanic","NILF","125-149 Percent of Poverty","female","with_children",214332.61
+2024,"Prime Age","Hispanic","NILF","125-149 Percent of Poverty","female","without_children",63430.93
+2024,"Prime Age","Hispanic","NILF","125-149 Percent of Poverty","male","other",3700.73
+2024,"Prime Age","Hispanic","NILF","125-149 Percent of Poverty","male","with_children",26506.56
+2024,"Prime Age","Hispanic","NILF","125-149 Percent of Poverty","male","without_children",74438.26
+2024,"Prime Age","Hispanic","NILF","150+ Percent of Poverty","female","other",239595.24
+2024,"Prime Age","Hispanic","NILF","150+ Percent of Poverty","female","with_children",1166431.74
+2024,"Prime Age","Hispanic","NILF","150+ Percent of Poverty","female","without_children",487701.7
+2024,"Prime Age","Hispanic","NILF","150+ Percent of Poverty","male","other",58422.98
+2024,"Prime Age","Hispanic","NILF","150+ Percent of Poverty","male","with_children",161688.59
+2024,"Prime Age","Hispanic","NILF","150+ Percent of Poverty","male","without_children",537362.23
+2024,"Prime Age","Hispanic","NILF","Below Poverty","female","other",48913.54
+2024,"Prime Age","Hispanic","NILF","Below Poverty","female","with_children",830472.56
+2024,"Prime Age","Hispanic","NILF","Below Poverty","female","without_children",367721.86
+2024,"Prime Age","Hispanic","NILF","Below Poverty","male","other",22929.6
+2024,"Prime Age","Hispanic","NILF","Below Poverty","male","with_children",103238.02
+2024,"Prime Age","Hispanic","NILF","Below Poverty","male","without_children",335543.48
+2024,"Prime Age","Hispanic","Unemployed","100-124 Percent of Poverty","female","other",2491.43
+2024,"Prime Age","Hispanic","Unemployed","100-124 Percent of Poverty","female","with_children",13232.77
+2024,"Prime Age","Hispanic","Unemployed","100-124 Percent of Poverty","female","without_children",4218.33
+2024,"Prime Age","Hispanic","Unemployed","100-124 Percent of Poverty","male","other",3388.14
+2024,"Prime Age","Hispanic","Unemployed","100-124 Percent of Poverty","male","with_children",9568.59
+2024,"Prime Age","Hispanic","Unemployed","100-124 Percent of Poverty","male","without_children",9049.73
+2024,"Prime Age","Hispanic","Unemployed","125-149 Percent of Poverty","female","other",5779.22
+2024,"Prime Age","Hispanic","Unemployed","125-149 Percent of Poverty","female","with_children",14568.38
+2024,"Prime Age","Hispanic","Unemployed","125-149 Percent of Poverty","female","without_children",6107.3
+2024,"Prime Age","Hispanic","Unemployed","125-149 Percent of Poverty","male","other",4268.93
+2024,"Prime Age","Hispanic","Unemployed","125-149 Percent of Poverty","male","with_children",15410.11
+2024,"Prime Age","Hispanic","Unemployed","125-149 Percent of Poverty","male","without_children",12411.39
+2024,"Prime Age","Hispanic","Unemployed","150+ Percent of Poverty","female","other",29187.76
+2024,"Prime Age","Hispanic","Unemployed","150+ Percent of Poverty","female","with_children",112686.93
+2024,"Prime Age","Hispanic","Unemployed","150+ Percent of Poverty","female","without_children",102467.41
+2024,"Prime Age","Hispanic","Unemployed","150+ Percent of Poverty","male","other",24200.06
+2024,"Prime Age","Hispanic","Unemployed","150+ Percent of Poverty","male","with_children",131034.52
+2024,"Prime Age","Hispanic","Unemployed","150+ Percent of Poverty","male","without_children",234201.29
+2024,"Prime Age","Hispanic","Unemployed","Below Poverty","female","other",1042.89
+2024,"Prime Age","Hispanic","Unemployed","Below Poverty","female","with_children",74497.8
+2024,"Prime Age","Hispanic","Unemployed","Below Poverty","female","without_children",39976.89
+2024,"Prime Age","Hispanic","Unemployed","Below Poverty","male","with_children",27504.76
+2024,"Prime Age","Hispanic","Unemployed","Below Poverty","male","without_children",46090.86
+2024,"Prime Age","Two or More Races","Armed Forces","125-149 Percent of Poverty","male","with_children",756.81
+2024,"Prime Age","Two or More Races","Armed Forces","150+ Percent of Poverty","female","with_children",2189.65
+2024,"Prime Age","Two or More Races","Armed Forces","150+ Percent of Poverty","female","without_children",2562.77
+2024,"Prime Age","Two or More Races","Armed Forces","150+ Percent of Poverty","male","with_children",3901.58
+2024,"Prime Age","Two or More Races","Armed Forces","150+ Percent of Poverty","male","without_children",2759.08
+2024,"Prime Age","Two or More Races","Employed","100-124 Percent of Poverty","female","other",1808.36
+2024,"Prime Age","Two or More Races","Employed","100-124 Percent of Poverty","female","with_children",6122.35
+2024,"Prime Age","Two or More Races","Employed","100-124 Percent of Poverty","female","without_children",12039.72
+2024,"Prime Age","Two or More Races","Employed","100-124 Percent of Poverty","male","with_children",4885.68
+2024,"Prime Age","Two or More Races","Employed","125-149 Percent of Poverty","female","with_children",14736.8
+2024,"Prime Age","Two or More Races","Employed","125-149 Percent of Poverty","female","without_children",19575.31
+2024,"Prime Age","Two or More Races","Employed","125-149 Percent of Poverty","male","with_children",8553.06
+2024,"Prime Age","Two or More Races","Employed","125-149 Percent of Poverty","male","without_children",5347.5
+2024,"Prime Age","Two or More Races","Employed","150+ Percent of Poverty","female","other",51160.2
+2024,"Prime Age","Two or More Races","Employed","150+ Percent of Poverty","female","with_children",369394.6
+2024,"Prime Age","Two or More Races","Employed","150+ Percent of Poverty","female","without_children",394195.74
+2024,"Prime Age","Two or More Races","Employed","150+ Percent of Poverty","male","other",22440.7
+2024,"Prime Age","Two or More Races","Employed","150+ Percent of Poverty","male","with_children",305429.6
+2024,"Prime Age","Two or More Races","Employed","150+ Percent of Poverty","male","without_children",458187.26
+2024,"Prime Age","Two or More Races","Employed","Below Poverty","female","with_children",35306.56
+2024,"Prime Age","Two or More Races","Employed","Below Poverty","female","without_children",11563.59
+2024,"Prime Age","Two or More Races","Employed","Below Poverty","male","with_children",6571.82
+2024,"Prime Age","Two or More Races","Employed","Below Poverty","male","without_children",16215.98
+2024,"Prime Age","Two or More Races","NILF","100-124 Percent of Poverty","female","with_children",9460.3
+2024,"Prime Age","Two or More Races","NILF","100-124 Percent of Poverty","female","without_children",862.38
+2024,"Prime Age","Two or More Races","NILF","100-124 Percent of Poverty","male","other",809.06
+2024,"Prime Age","Two or More Races","NILF","100-124 Percent of Poverty","male","with_children",4200.16
+2024,"Prime Age","Two or More Races","NILF","125-149 Percent of Poverty","female","with_children",5189.26
+2024,"Prime Age","Two or More Races","NILF","125-149 Percent of Poverty","female","without_children",8229.27
+2024,"Prime Age","Two or More Races","NILF","125-149 Percent of Poverty","male","without_children",3759.66
+2024,"Prime Age","Two or More Races","NILF","150+ Percent of Poverty","female","other",18021.78
+2024,"Prime Age","Two or More Races","NILF","150+ Percent of Poverty","female","with_children",65160.11
+2024,"Prime Age","Two or More Races","NILF","150+ Percent of Poverty","female","without_children",49556.74
+2024,"Prime Age","Two or More Races","NILF","150+ Percent of Poverty","male","other",5545.25
+2024,"Prime Age","Two or More Races","NILF","150+ Percent of Poverty","male","with_children",11186.13
+2024,"Prime Age","Two or More Races","NILF","150+ Percent of Poverty","male","without_children",59877.44
+2024,"Prime Age","Two or More Races","NILF","Below Poverty","female","with_children",53172.82
+2024,"Prime Age","Two or More Races","NILF","Below Poverty","female","without_children",56476.04
+2024,"Prime Age","Two or More Races","NILF","Below Poverty","male","other",3347.32
+2024,"Prime Age","Two or More Races","NILF","Below Poverty","male","with_children",10651.18
+2024,"Prime Age","Two or More Races","NILF","Below Poverty","male","without_children",33202.27
+2024,"Prime Age","Two or More Races","Unemployed","100-124 Percent of Poverty","male","without_children",5527.33
+2024,"Prime Age","Two or More Races","Unemployed","125-149 Percent of Poverty","female","with_children",3663.79
+2024,"Prime Age","Two or More Races","Unemployed","125-149 Percent of Poverty","male","without_children",4412.62
+2024,"Prime Age","Two or More Races","Unemployed","150+ Percent of Poverty","female","other",1619.65
+2024,"Prime Age","Two or More Races","Unemployed","150+ Percent of Poverty","female","with_children",11454.19
+2024,"Prime Age","Two or More Races","Unemployed","150+ Percent of Poverty","female","without_children",17367.74
+2024,"Prime Age","Two or More Races","Unemployed","150+ Percent of Poverty","male","other",2307.17
+2024,"Prime Age","Two or More Races","Unemployed","150+ Percent of Poverty","male","with_children",9177.72
+2024,"Prime Age","Two or More Races","Unemployed","150+ Percent of Poverty","male","without_children",25463.35
+2024,"Prime Age","Two or More Races","Unemployed","Below Poverty","female","with_children",3280.23
+2024,"Prime Age","Two or More Races","Unemployed","Below Poverty","female","without_children",12104.44
+2024,"Prime Age","Two or More Races","Unemployed","Below Poverty","male","without_children",1762.06
+2024,"Prime Age","White","Armed Forces","100-124 Percent of Poverty","male","with_children",8788.33
+2024,"Prime Age","White","Armed Forces","125-149 Percent of Poverty","female","with_children",5136.4
+2024,"Prime Age","White","Armed Forces","125-149 Percent of Poverty","male","with_children",7109.47
+2024,"Prime Age","White","Armed Forces","125-149 Percent of Poverty","male","without_children",6907.18
+2024,"Prime Age","White","Armed Forces","150+ Percent of Poverty","female","other",1092.52
+2024,"Prime Age","White","Armed Forces","150+ Percent of Poverty","female","with_children",27338.28
+2024,"Prime Age","White","Armed Forces","150+ Percent of Poverty","female","without_children",7884.6
+2024,"Prime Age","White","Armed Forces","150+ Percent of Poverty","male","with_children",246025.69
+2024,"Prime Age","White","Armed Forces","150+ Percent of Poverty","male","without_children",161344.23
+2024,"Prime Age","White","Armed Forces","Below Poverty","male","with_children",12010.52
+2024,"Prime Age","White","Armed Forces","Below Poverty","male","without_children",2693.13
+2024,"Prime Age","White","Employed","100-124 Percent of Poverty","female","other",8581.26
+2024,"Prime Age","White","Employed","100-124 Percent of Poverty","female","with_children",274206.47
+2024,"Prime Age","White","Employed","100-124 Percent of Poverty","female","without_children",132374.17
+2024,"Prime Age","White","Employed","100-124 Percent of Poverty","male","other",20101.9
+2024,"Prime Age","White","Employed","100-124 Percent of Poverty","male","with_children",205565.26
+2024,"Prime Age","White","Employed","100-124 Percent of Poverty","male","without_children",167791.46
+2024,"Prime Age","White","Employed","125-149 Percent of Poverty","female","other",18644.12
+2024,"Prime Age","White","Employed","125-149 Percent of Poverty","female","with_children",312095.49
+2024,"Prime Age","White","Employed","125-149 Percent of Poverty","female","without_children",257663.1
+2024,"Prime Age","White","Employed","125-149 Percent of Poverty","male","other",10339.02
+2024,"Prime Age","White","Employed","125-149 Percent of Poverty","male","with_children",294406.55
+2024,"Prime Age","White","Employed","125-149 Percent of Poverty","male","without_children",218123.66
+2024,"Prime Age","White","Employed","150+ Percent of Poverty","female","other",1854553.53
+2024,"Prime Age","White","Employed","150+ Percent of Poverty","female","with_children",12485171.77
+2024,"Prime Age","White","Employed","150+ Percent of Poverty","female","without_children",11566059.68
+2024,"Prime Age","White","Employed","150+ Percent of Poverty","male","other",1247079.87
+2024,"Prime Age","White","Employed","150+ Percent of Poverty","male","with_children",13399809.61
+2024,"Prime Age","White","Employed","150+ Percent of Poverty","male","without_children",14663429.16
+2024,"Prime Age","White","Employed","Below Poverty","female","other",20985.81
+2024,"Prime Age","White","Employed","Below Poverty","female","with_children",463033.95
+2024,"Prime Age","White","Employed","Below Poverty","female","without_children",333421
+2024,"Prime Age","White","Employed","Below Poverty","male","other",8063.09
+2024,"Prime Age","White","Employed","Below Poverty","male","with_children",365760.72
+2024,"Prime Age","White","Employed","Below Poverty","male","without_children",363743.75
+2024,"Prime Age","White","NILF","100-124 Percent of Poverty","female","other",21171.31
+2024,"Prime Age","White","NILF","100-124 Percent of Poverty","female","with_children",159802.81
+2024,"Prime Age","White","NILF","100-124 Percent of Poverty","female","without_children",148852.01
+2024,"Prime Age","White","NILF","100-124 Percent of Poverty","male","other",3996.6
+2024,"Prime Age","White","NILF","100-124 Percent of Poverty","male","with_children",46673.54
+2024,"Prime Age","White","NILF","100-124 Percent of Poverty","male","without_children",125566.61
+2024,"Prime Age","White","NILF","125-149 Percent of Poverty","female","other",7508.85
+2024,"Prime Age","White","NILF","125-149 Percent of Poverty","female","with_children",177277.57
+2024,"Prime Age","White","NILF","125-149 Percent of Poverty","female","without_children",100732.79
+2024,"Prime Age","White","NILF","125-149 Percent of Poverty","male","other",4848.33
+2024,"Prime Age","White","NILF","125-149 Percent of Poverty","male","with_children",44055.44
+2024,"Prime Age","White","NILF","125-149 Percent of Poverty","male","without_children",141787.64
+2024,"Prime Age","White","NILF","150+ Percent of Poverty","female","other",360074.78
+2024,"Prime Age","White","NILF","150+ Percent of Poverty","female","with_children",2804097.64
+2024,"Prime Age","White","NILF","150+ Percent of Poverty","female","without_children",1595807.64
+2024,"Prime Age","White","NILF","150+ Percent of Poverty","male","other",111922.41
+2024,"Prime Age","White","NILF","150+ Percent of Poverty","male","with_children",474162.47
+2024,"Prime Age","White","NILF","150+ Percent of Poverty","male","without_children",1749991.15
+2024,"Prime Age","White","NILF","Below Poverty","female","other",74045
+2024,"Prime Age","White","NILF","Below Poverty","female","with_children",837308.91
+2024,"Prime Age","White","NILF","Below Poverty","female","without_children",819917.46
+2024,"Prime Age","White","NILF","Below Poverty","male","other",28310.21
+2024,"Prime Age","White","NILF","Below Poverty","male","with_children",221764.05
+2024,"Prime Age","White","NILF","Below Poverty","male","without_children",843864.68
+2024,"Prime Age","White","Unemployed","100-124 Percent of Poverty","female","other",2070.74
+2024,"Prime Age","White","Unemployed","100-124 Percent of Poverty","female","with_children",6930.57
+2024,"Prime Age","White","Unemployed","100-124 Percent of Poverty","female","without_children",21688.19
+2024,"Prime Age","White","Unemployed","100-124 Percent of Poverty","male","with_children",11800.59
+2024,"Prime Age","White","Unemployed","100-124 Percent of Poverty","male","without_children",17271.34
+2024,"Prime Age","White","Unemployed","125-149 Percent of Poverty","female","other",4379.39
+2024,"Prime Age","White","Unemployed","125-149 Percent of Poverty","female","with_children",15429.73
+2024,"Prime Age","White","Unemployed","125-149 Percent of Poverty","female","without_children",8637.82
+2024,"Prime Age","White","Unemployed","125-149 Percent of Poverty","male","other",232.85
+2024,"Prime Age","White","Unemployed","125-149 Percent of Poverty","male","with_children",10829.59
+2024,"Prime Age","White","Unemployed","125-149 Percent of Poverty","male","without_children",23822.9
+2024,"Prime Age","White","Unemployed","150+ Percent of Poverty","female","other",34680.55
+2024,"Prime Age","White","Unemployed","150+ Percent of Poverty","female","with_children",172785.97
+2024,"Prime Age","White","Unemployed","150+ Percent of Poverty","female","without_children",290394.66
+2024,"Prime Age","White","Unemployed","150+ Percent of Poverty","male","other",22050.35
+2024,"Prime Age","White","Unemployed","150+ Percent of Poverty","male","with_children",217677.88
+2024,"Prime Age","White","Unemployed","150+ Percent of Poverty","male","without_children",528873.8
+2024,"Prime Age","White","Unemployed","Below Poverty","female","other",5047.89
+2024,"Prime Age","White","Unemployed","Below Poverty","female","with_children",65854.95
+2024,"Prime Age","White","Unemployed","Below Poverty","female","without_children",84123.33
+2024,"Prime Age","White","Unemployed","Below Poverty","male","other",849.42
+2024,"Prime Age","White","Unemployed","Below Poverty","male","with_children",52502.54
+2024,"Prime Age","White","Unemployed","Below Poverty","male","without_children",129257.35
+2024,"Under Twenty-Five","American Indian","Employed","100-124 Percent of Poverty","female","without_children",6252.44
+2024,"Under Twenty-Five","American Indian","Employed","100-124 Percent of Poverty","male","with_children",4551.02
+2024,"Under Twenty-Five","American Indian","Employed","125-149 Percent of Poverty","female","without_children",2656.41
+2024,"Under Twenty-Five","American Indian","Employed","150+ Percent of Poverty","female","with_children",2721.25
+2024,"Under Twenty-Five","American Indian","Employed","150+ Percent of Poverty","female","without_children",54687.42
+2024,"Under Twenty-Five","American Indian","Employed","150+ Percent of Poverty","male","with_children",899.32
+2024,"Under Twenty-Five","American Indian","Employed","150+ Percent of Poverty","male","without_children",44748.21
+2024,"Under Twenty-Five","American Indian","Employed","Below Poverty","female","with_children",340.47
+2024,"Under Twenty-Five","American Indian","Employed","Below Poverty","female","without_children",9796.46
+2024,"Under Twenty-Five","American Indian","Employed","Below Poverty","male","with_children",4414.32
+2024,"Under Twenty-Five","American Indian","Employed","Below Poverty","male","without_children",1216.81
+2024,"Under Twenty-Five","American Indian","NILF","100-124 Percent of Poverty","female","without_children",1651.96
+2024,"Under Twenty-Five","American Indian","NILF","100-124 Percent of Poverty","male","without_children",2067.32
+2024,"Under Twenty-Five","American Indian","NILF","150+ Percent of Poverty","female","with_children",3341.56
+2024,"Under Twenty-Five","American Indian","NILF","150+ Percent of Poverty","female","without_children",30019.48
+2024,"Under Twenty-Five","American Indian","NILF","150+ Percent of Poverty","male","without_children",9114.23
+2024,"Under Twenty-Five","American Indian","NILF","Below Poverty","female","with_children",5092.88
+2024,"Under Twenty-Five","American Indian","NILF","Below Poverty","female","without_children",39384.39
+2024,"Under Twenty-Five","American Indian","NILF","Below Poverty","male","with_children",2310.24
+2024,"Under Twenty-Five","American Indian","NILF","Below Poverty","male","without_children",16303.22
+2024,"Under Twenty-Five","American Indian","Unemployed","150+ Percent of Poverty","female","without_children",3902.3
+2024,"Under Twenty-Five","American Indian","Unemployed","150+ Percent of Poverty","male","with_children",1956.42
+2024,"Under Twenty-Five","American Indian","Unemployed","150+ Percent of Poverty","male","without_children",8467.13
+2024,"Under Twenty-Five","American Indian","Unemployed","Below Poverty","female","without_children",527.91
+2024,"Under Twenty-Five","American Indian","Unemployed","Below Poverty","male","without_children",1759.51
+2024,"Under Twenty-Five","Asian/Pacific Island","Armed Forces","150+ Percent of Poverty","male","without_children",4420.17
+2024,"Under Twenty-Five","Asian/Pacific Island","Employed","100-124 Percent of Poverty","female","without_children",14297.33
+2024,"Under Twenty-Five","Asian/Pacific Island","Employed","100-124 Percent of Poverty","male","without_children",4315.05
+2024,"Under Twenty-Five","Asian/Pacific Island","Employed","125-149 Percent of Poverty","female","with_children",703.35
+2024,"Under Twenty-Five","Asian/Pacific Island","Employed","125-149 Percent of Poverty","female","without_children",12402.57
+2024,"Under Twenty-Five","Asian/Pacific Island","Employed","125-149 Percent of Poverty","male","without_children",21058.83
+2024,"Under Twenty-Five","Asian/Pacific Island","Employed","150+ Percent of Poverty","female","with_children",17762.4
+2024,"Under Twenty-Five","Asian/Pacific Island","Employed","150+ Percent of Poverty","female","without_children",377464.96
+2024,"Under Twenty-Five","Asian/Pacific Island","Employed","150+ Percent of Poverty","male","with_children",5308.07
+2024,"Under Twenty-Five","Asian/Pacific Island","Employed","150+ Percent of Poverty","male","without_children",351100.81
+2024,"Under Twenty-Five","Asian/Pacific Island","Employed","Below Poverty","female","without_children",63853.6
+2024,"Under Twenty-Five","Asian/Pacific Island","Employed","Below Poverty","male","without_children",39690.58
+2024,"Under Twenty-Five","Asian/Pacific Island","NILF","100-124 Percent of Poverty","female","without_children",18207.76
+2024,"Under Twenty-Five","Asian/Pacific Island","NILF","100-124 Percent of Poverty","male","without_children",13343.29
+2024,"Under Twenty-Five","Asian/Pacific Island","NILF","125-149 Percent of Poverty","female","with_children",1970.16
+2024,"Under Twenty-Five","Asian/Pacific Island","NILF","125-149 Percent of Poverty","female","without_children",17719.3
+2024,"Under Twenty-Five","Asian/Pacific Island","NILF","125-149 Percent of Poverty","male","without_children",22333.42
+2024,"Under Twenty-Five","Asian/Pacific Island","NILF","150+ Percent of Poverty","female","with_children",7896.54
+2024,"Under Twenty-Five","Asian/Pacific Island","NILF","150+ Percent of Poverty","female","without_children",297674.23
+2024,"Under Twenty-Five","Asian/Pacific Island","NILF","150+ Percent of Poverty","male","with_children",4503.61
+2024,"Under Twenty-Five","Asian/Pacific Island","NILF","150+ Percent of Poverty","male","without_children",329023.44
+2024,"Under Twenty-Five","Asian/Pacific Island","NILF","Below Poverty","female","with_children",4440.99
+2024,"Under Twenty-Five","Asian/Pacific Island","NILF","Below Poverty","female","without_children",80001.04
+2024,"Under Twenty-Five","Asian/Pacific Island","NILF","Below Poverty","male","without_children",129728.34
+2024,"Under Twenty-Five","Asian/Pacific Island","Unemployed","125-149 Percent of Poverty","female","without_children",2837
+2024,"Under Twenty-Five","Asian/Pacific Island","Unemployed","125-149 Percent of Poverty","male","without_children",1961.9
+2024,"Under Twenty-Five","Asian/Pacific Island","Unemployed","150+ Percent of Poverty","female","without_children",25619.56
+2024,"Under Twenty-Five","Asian/Pacific Island","Unemployed","150+ Percent of Poverty","male","without_children",33891.81
+2024,"Under Twenty-Five","Asian/Pacific Island","Unemployed","Below Poverty","male","without_children",16792.43
+2024,"Under Twenty-Five","Black","Armed Forces","100-124 Percent of Poverty","male","with_children",677.68
+2024,"Under Twenty-Five","Black","Armed Forces","150+ Percent of Poverty","female","without_children",6688.11
+2024,"Under Twenty-Five","Black","Armed Forces","150+ Percent of Poverty","male","with_children",1649.54
+2024,"Under Twenty-Five","Black","Armed Forces","150+ Percent of Poverty","male","without_children",9145.44
+2024,"Under Twenty-Five","Black","Armed Forces","Below Poverty","female","without_children",4797.92
+2024,"Under Twenty-Five","Black","Employed","100-124 Percent of Poverty","female","with_children",6366.94
+2024,"Under Twenty-Five","Black","Employed","100-124 Percent of Poverty","female","without_children",29618.18
+2024,"Under Twenty-Five","Black","Employed","100-124 Percent of Poverty","male","with_children",3440.25
+2024,"Under Twenty-Five","Black","Employed","100-124 Percent of Poverty","male","without_children",31596.19
+2024,"Under Twenty-Five","Black","Employed","125-149 Percent of Poverty","female","without_children",32683.89
+2024,"Under Twenty-Five","Black","Employed","125-149 Percent of Poverty","male","without_children",39740.68
+2024,"Under Twenty-Five","Black","Employed","150+ Percent of Poverty","female","other",5515.49
+2024,"Under Twenty-Five","Black","Employed","150+ Percent of Poverty","female","with_children",74476.23
+2024,"Under Twenty-Five","Black","Employed","150+ Percent of Poverty","female","without_children",846202.2
+2024,"Under Twenty-Five","Black","Employed","150+ Percent of Poverty","male","with_children",22510.02
+2024,"Under Twenty-Five","Black","Employed","150+ Percent of Poverty","male","without_children",803337.49
+2024,"Under Twenty-Five","Black","Employed","Below Poverty","female","with_children",68044.3
+2024,"Under Twenty-Five","Black","Employed","Below Poverty","female","without_children",81180.12
+2024,"Under Twenty-Five","Black","Employed","Below Poverty","male","with_children",1221.94
+2024,"Under Twenty-Five","Black","Employed","Below Poverty","male","without_children",84038.22
+2024,"Under Twenty-Five","Black","NILF","100-124 Percent of Poverty","female","with_children",8729.29
+2024,"Under Twenty-Five","Black","NILF","100-124 Percent of Poverty","female","without_children",56950.66
+2024,"Under Twenty-Five","Black","NILF","100-124 Percent of Poverty","male","with_children",3367.52
+2024,"Under Twenty-Five","Black","NILF","100-124 Percent of Poverty","male","without_children",39106.91
+2024,"Under Twenty-Five","Black","NILF","125-149 Percent of Poverty","female","without_children",52427.47
+2024,"Under Twenty-Five","Black","NILF","125-149 Percent of Poverty","male","without_children",37373.41
+2024,"Under Twenty-Five","Black","NILF","150+ Percent of Poverty","female","other",8131.47
+2024,"Under Twenty-Five","Black","NILF","150+ Percent of Poverty","female","with_children",19017.82
+2024,"Under Twenty-Five","Black","NILF","150+ Percent of Poverty","female","without_children",496585
+2024,"Under Twenty-Five","Black","NILF","150+ Percent of Poverty","male","without_children",475119.04
+2024,"Under Twenty-Five","Black","NILF","Below Poverty","female","with_children",31076.31
+2024,"Under Twenty-Five","Black","NILF","Below Poverty","female","without_children",186659.64
+2024,"Under Twenty-Five","Black","NILF","Below Poverty","male","with_children",12305.38
+2024,"Under Twenty-Five","Black","NILF","Below Poverty","male","without_children",175859.22
+2024,"Under Twenty-Five","Black","Unemployed","100-124 Percent of Poverty","female","without_children",5376.4
+2024,"Under Twenty-Five","Black","Unemployed","100-124 Percent of Poverty","male","without_children",13063.06
+2024,"Under Twenty-Five","Black","Unemployed","125-149 Percent of Poverty","female","with_children",9103.32
+2024,"Under Twenty-Five","Black","Unemployed","125-149 Percent of Poverty","male","without_children",5308.73
+2024,"Under Twenty-Five","Black","Unemployed","150+ Percent of Poverty","female","with_children",10693.3
+2024,"Under Twenty-Five","Black","Unemployed","150+ Percent of Poverty","female","without_children",87029.7
+2024,"Under Twenty-Five","Black","Unemployed","150+ Percent of Poverty","male","with_children",11993.45
+2024,"Under Twenty-Five","Black","Unemployed","150+ Percent of Poverty","male","without_children",139431.56
+2024,"Under Twenty-Five","Black","Unemployed","Below Poverty","female","with_children",3175.82
+2024,"Under Twenty-Five","Black","Unemployed","Below Poverty","female","without_children",5440.34
+2024,"Under Twenty-Five","Black","Unemployed","Below Poverty","male","without_children",15560.53
+2024,"Under Twenty-Five","Hispanic","Armed Forces","100-124 Percent of Poverty","female","without_children",2057.55
+2024,"Under Twenty-Five","Hispanic","Armed Forces","100-124 Percent of Poverty","male","without_children",8338.26
+2024,"Under Twenty-Five","Hispanic","Armed Forces","125-149 Percent of Poverty","female","without_children",1938.15
+2024,"Under Twenty-Five","Hispanic","Armed Forces","150+ Percent of Poverty","female","with_children",931.25
+2024,"Under Twenty-Five","Hispanic","Armed Forces","150+ Percent of Poverty","female","without_children",1801.89
+2024,"Under Twenty-Five","Hispanic","Armed Forces","150+ Percent of Poverty","male","without_children",20041.81
+2024,"Under Twenty-Five","Hispanic","Armed Forces","Below Poverty","male","with_children",5962.24
+2024,"Under Twenty-Five","Hispanic","Employed","100-124 Percent of Poverty","female","with_children",16200.55
+2024,"Under Twenty-Five","Hispanic","Employed","100-124 Percent of Poverty","female","without_children",112540.42
+2024,"Under Twenty-Five","Hispanic","Employed","100-124 Percent of Poverty","male","other",2096.08
+2024,"Under Twenty-Five","Hispanic","Employed","100-124 Percent of Poverty","male","with_children",23584.6
+2024,"Under Twenty-Five","Hispanic","Employed","100-124 Percent of Poverty","male","without_children",118371.21
+2024,"Under Twenty-Five","Hispanic","Employed","125-149 Percent of Poverty","female","with_children",16093.74
+2024,"Under Twenty-Five","Hispanic","Employed","125-149 Percent of Poverty","female","without_children",108798.75
+2024,"Under Twenty-Five","Hispanic","Employed","125-149 Percent of Poverty","male","with_children",11061.86
+2024,"Under Twenty-Five","Hispanic","Employed","125-149 Percent of Poverty","male","without_children",115186.26
+2024,"Under Twenty-Five","Hispanic","Employed","150+ Percent of Poverty","female","other",3001.73
+2024,"Under Twenty-Five","Hispanic","Employed","150+ Percent of Poverty","female","with_children",93957.98
+2024,"Under Twenty-Five","Hispanic","Employed","150+ Percent of Poverty","female","without_children",1493498.03
+2024,"Under Twenty-Five","Hispanic","Employed","150+ Percent of Poverty","male","other",2209.98
+2024,"Under Twenty-Five","Hispanic","Employed","150+ Percent of Poverty","male","with_children",90105.44
+2024,"Under Twenty-Five","Hispanic","Employed","150+ Percent of Poverty","male","without_children",1840342.6
+2024,"Under Twenty-Five","Hispanic","Employed","Below Poverty","female","with_children",44710.61
+2024,"Under Twenty-Five","Hispanic","Employed","Below Poverty","female","without_children",185304.86
+2024,"Under Twenty-Five","Hispanic","Employed","Below Poverty","male","with_children",29999.45
+2024,"Under Twenty-Five","Hispanic","Employed","Below Poverty","male","without_children",235941.7
+2024,"Under Twenty-Five","Hispanic","NILF","100-124 Percent of Poverty","female","with_children",25539.89
+2024,"Under Twenty-Five","Hispanic","NILF","100-124 Percent of Poverty","female","without_children",84605.97
+2024,"Under Twenty-Five","Hispanic","NILF","100-124 Percent of Poverty","male","without_children",60571.46
+2024,"Under Twenty-Five","Hispanic","NILF","125-149 Percent of Poverty","female","with_children",16985.09
+2024,"Under Twenty-Five","Hispanic","NILF","125-149 Percent of Poverty","female","without_children",72215.24
+2024,"Under Twenty-Five","Hispanic","NILF","125-149 Percent of Poverty","male","with_children",6217.74
+2024,"Under Twenty-Five","Hispanic","NILF","125-149 Percent of Poverty","male","without_children",83530.87
+2024,"Under Twenty-Five","Hispanic","NILF","150+ Percent of Poverty","female","with_children",71983.46
+2024,"Under Twenty-Five","Hispanic","NILF","150+ Percent of Poverty","female","without_children",734320.2
+2024,"Under Twenty-Five","Hispanic","NILF","150+ Percent of Poverty","male","with_children",15810.69
+2024,"Under Twenty-Five","Hispanic","NILF","150+ Percent of Poverty","male","without_children",735531.28
+2024,"Under Twenty-Five","Hispanic","NILF","Below Poverty","female","with_children",84958.11
+2024,"Under Twenty-Five","Hispanic","NILF","Below Poverty","female","without_children",265213.72
+2024,"Under Twenty-Five","Hispanic","NILF","Below Poverty","male","with_children",9281.15
+2024,"Under Twenty-Five","Hispanic","NILF","Below Poverty","male","without_children",215061.43
+2024,"Under Twenty-Five","Hispanic","Unemployed","100-124 Percent of Poverty","female","with_children",5722.26
+2024,"Under Twenty-Five","Hispanic","Unemployed","100-124 Percent of Poverty","female","without_children",11078.54
+2024,"Under Twenty-Five","Hispanic","Unemployed","100-124 Percent of Poverty","male","without_children",10646.5
+2024,"Under Twenty-Five","Hispanic","Unemployed","125-149 Percent of Poverty","female","without_children",15222.34
+2024,"Under Twenty-Five","Hispanic","Unemployed","125-149 Percent of Poverty","male","without_children",18218.69
+2024,"Under Twenty-Five","Hispanic","Unemployed","150+ Percent of Poverty","female","other",2783.56
+2024,"Under Twenty-Five","Hispanic","Unemployed","150+ Percent of Poverty","female","with_children",10609.73
+2024,"Under Twenty-Five","Hispanic","Unemployed","150+ Percent of Poverty","female","without_children",111166.02
+2024,"Under Twenty-Five","Hispanic","Unemployed","150+ Percent of Poverty","male","with_children",5163.29
+2024,"Under Twenty-Five","Hispanic","Unemployed","150+ Percent of Poverty","male","without_children",140449.79
+2024,"Under Twenty-Five","Hispanic","Unemployed","Below Poverty","female","other",1305.04
+2024,"Under Twenty-Five","Hispanic","Unemployed","Below Poverty","female","with_children",8616.23
+2024,"Under Twenty-Five","Hispanic","Unemployed","Below Poverty","female","without_children",21615.44
+2024,"Under Twenty-Five","Hispanic","Unemployed","Below Poverty","male","with_children",8195.7
+2024,"Under Twenty-Five","Hispanic","Unemployed","Below Poverty","male","without_children",35052.01
+2024,"Under Twenty-Five","Two or More Races","Armed Forces","150+ Percent of Poverty","female","without_children",2434.31
+2024,"Under Twenty-Five","Two or More Races","Armed Forces","150+ Percent of Poverty","male","without_children",4500.31
+2024,"Under Twenty-Five","Two or More Races","Employed","100-124 Percent of Poverty","female","with_children",4585.33
+2024,"Under Twenty-Five","Two or More Races","Employed","100-124 Percent of Poverty","male","without_children",4302.12
+2024,"Under Twenty-Five","Two or More Races","Employed","125-149 Percent of Poverty","female","with_children",3757.74
+2024,"Under Twenty-Five","Two or More Races","Employed","125-149 Percent of Poverty","female","without_children",10137.5
+2024,"Under Twenty-Five","Two or More Races","Employed","125-149 Percent of Poverty","male","with_children",1928.94
+2024,"Under Twenty-Five","Two or More Races","Employed","125-149 Percent of Poverty","male","without_children",6879.92
+2024,"Under Twenty-Five","Two or More Races","Employed","150+ Percent of Poverty","female","with_children",13742.01
+2024,"Under Twenty-Five","Two or More Races","Employed","150+ Percent of Poverty","female","without_children",216269.21
+2024,"Under Twenty-Five","Two or More Races","Employed","150+ Percent of Poverty","male","with_children",8330.52
+2024,"Under Twenty-Five","Two or More Races","Employed","150+ Percent of Poverty","male","without_children",262768.59
+2024,"Under Twenty-Five","Two or More Races","Employed","Below Poverty","female","with_children",6892.65
+2024,"Under Twenty-Five","Two or More Races","Employed","Below Poverty","female","without_children",35390.74
+2024,"Under Twenty-Five","Two or More Races","Employed","Below Poverty","male","without_children",13130.19
+2024,"Under Twenty-Five","Two or More Races","NILF","100-124 Percent of Poverty","female","with_children",1579.53
+2024,"Under Twenty-Five","Two or More Races","NILF","100-124 Percent of Poverty","female","without_children",2308.01
+2024,"Under Twenty-Five","Two or More Races","NILF","100-124 Percent of Poverty","male","without_children",9267.36
+2024,"Under Twenty-Five","Two or More Races","NILF","125-149 Percent of Poverty","female","without_children",16325.22
+2024,"Under Twenty-Five","Two or More Races","NILF","125-149 Percent of Poverty","male","without_children",7742.53
+2024,"Under Twenty-Five","Two or More Races","NILF","150+ Percent of Poverty","female","with_children",4447.4
+2024,"Under Twenty-Five","Two or More Races","NILF","150+ Percent of Poverty","female","without_children",116783.31
+2024,"Under Twenty-Five","Two or More Races","NILF","150+ Percent of Poverty","male","without_children",146374.15
+2024,"Under Twenty-Five","Two or More Races","NILF","Below Poverty","female","with_children",453.08
+2024,"Under Twenty-Five","Two or More Races","NILF","Below Poverty","female","without_children",27802.88
+2024,"Under Twenty-Five","Two or More Races","NILF","Below Poverty","male","without_children",43255.47
+2024,"Under Twenty-Five","Two or More Races","Unemployed","100-124 Percent of Poverty","female","without_children",911.86
+2024,"Under Twenty-Five","Two or More Races","Unemployed","100-124 Percent of Poverty","male","without_children",11549.52
+2024,"Under Twenty-Five","Two or More Races","Unemployed","125-149 Percent of Poverty","male","without_children",3612.34
+2024,"Under Twenty-Five","Two or More Races","Unemployed","150+ Percent of Poverty","female","with_children",3319.42
+2024,"Under Twenty-Five","Two or More Races","Unemployed","150+ Percent of Poverty","female","without_children",16662.01
+2024,"Under Twenty-Five","Two or More Races","Unemployed","150+ Percent of Poverty","male","without_children",54662.78
+2024,"Under Twenty-Five","Two or More Races","Unemployed","Below Poverty","female","with_children",4467.7
+2024,"Under Twenty-Five","Two or More Races","Unemployed","Below Poverty","female","without_children",9091.08
+2024,"Under Twenty-Five","Two or More Races","Unemployed","Below Poverty","male","without_children",11153.2
+2024,"Under Twenty-Five","White","Armed Forces","125-149 Percent of Poverty","male","with_children",1040.47
+2024,"Under Twenty-Five","White","Armed Forces","150+ Percent of Poverty","female","without_children",11799.43
+2024,"Under Twenty-Five","White","Armed Forces","150+ Percent of Poverty","male","with_children",11486.79
+2024,"Under Twenty-Five","White","Armed Forces","150+ Percent of Poverty","male","without_children",69719.69
+2024,"Under Twenty-Five","White","Armed Forces","Below Poverty","male","with_children",6688.62
+2024,"Under Twenty-Five","White","Armed Forces","Below Poverty","male","without_children",1918.57
+2024,"Under Twenty-Five","White","Employed","100-124 Percent of Poverty","female","with_children",14711.85
+2024,"Under Twenty-Five","White","Employed","100-124 Percent of Poverty","female","without_children",115529.03
+2024,"Under Twenty-Five","White","Employed","100-124 Percent of Poverty","male","with_children",7974.39
+2024,"Under Twenty-Five","White","Employed","100-124 Percent of Poverty","male","without_children",93267.27
+2024,"Under Twenty-Five","White","Employed","125-149 Percent of Poverty","female","with_children",20219.69
+2024,"Under Twenty-Five","White","Employed","125-149 Percent of Poverty","female","without_children",206961.74
+2024,"Under Twenty-Five","White","Employed","125-149 Percent of Poverty","male","with_children",4867.18
+2024,"Under Twenty-Five","White","Employed","125-149 Percent of Poverty","male","without_children",129695.68
+2024,"Under Twenty-Five","White","Employed","150+ Percent of Poverty","female","other",3625.74
+2024,"Under Twenty-Five","White","Employed","150+ Percent of Poverty","female","with_children",141223.42
+2024,"Under Twenty-Five","White","Employed","150+ Percent of Poverty","female","without_children",3882768.47
+2024,"Under Twenty-Five","White","Employed","150+ Percent of Poverty","male","other",5136.32
+2024,"Under Twenty-Five","White","Employed","150+ Percent of Poverty","male","with_children",166292.04
+2024,"Under Twenty-Five","White","Employed","150+ Percent of Poverty","male","without_children",4086849.58
+2024,"Under Twenty-Five","White","Employed","Below Poverty","female","with_children",59615.01
+2024,"Under Twenty-Five","White","Employed","Below Poverty","female","without_children",343465.64
+2024,"Under Twenty-Five","White","Employed","Below Poverty","male","with_children",23186.19
+2024,"Under Twenty-Five","White","Employed","Below Poverty","male","without_children",292908.23
+2024,"Under Twenty-Five","White","NILF","100-124 Percent of Poverty","female","with_children",12802.5
+2024,"Under Twenty-Five","White","NILF","100-124 Percent of Poverty","female","without_children",66869.05
+2024,"Under Twenty-Five","White","NILF","100-124 Percent of Poverty","male","with_children",1726.74
+2024,"Under Twenty-Five","White","NILF","100-124 Percent of Poverty","male","without_children",54171.23
+2024,"Under Twenty-Five","White","NILF","125-149 Percent of Poverty","female","with_children",13181.54
+2024,"Under Twenty-Five","White","NILF","125-149 Percent of Poverty","female","without_children",51727.89
+2024,"Under Twenty-Five","White","NILF","125-149 Percent of Poverty","male","without_children",53757.11
+2024,"Under Twenty-Five","White","NILF","150+ Percent of Poverty","female","other",2744.18
+2024,"Under Twenty-Five","White","NILF","150+ Percent of Poverty","female","with_children",118104.75
+2024,"Under Twenty-Five","White","NILF","150+ Percent of Poverty","female","without_children",1671047.27
+2024,"Under Twenty-Five","White","NILF","150+ Percent of Poverty","male","with_children",7919.42
+2024,"Under Twenty-Five","White","NILF","150+ Percent of Poverty","male","without_children",1919809.07
+2024,"Under Twenty-Five","White","NILF","Below Poverty","female","with_children",77148.97
+2024,"Under Twenty-Five","White","NILF","Below Poverty","female","without_children",279970.23
+2024,"Under Twenty-Five","White","NILF","Below Poverty","male","other",5894.68
+2024,"Under Twenty-Five","White","NILF","Below Poverty","male","with_children",13227.68
+2024,"Under Twenty-Five","White","NILF","Below Poverty","male","without_children",410507.18
+2024,"Under Twenty-Five","White","Unemployed","100-124 Percent of Poverty","female","without_children",11139.25
+2024,"Under Twenty-Five","White","Unemployed","100-124 Percent of Poverty","male","without_children",22604.94
+2024,"Under Twenty-Five","White","Unemployed","125-149 Percent of Poverty","female","without_children",7769.37
+2024,"Under Twenty-Five","White","Unemployed","125-149 Percent of Poverty","male","with_children",1798.61
+2024,"Under Twenty-Five","White","Unemployed","125-149 Percent of Poverty","male","without_children",2305.37
+2024,"Under Twenty-Five","White","Unemployed","150+ Percent of Poverty","female","with_children",10705.95
+2024,"Under Twenty-Five","White","Unemployed","150+ Percent of Poverty","female","without_children",184652.5
+2024,"Under Twenty-Five","White","Unemployed","150+ Percent of Poverty","male","with_children",3178.56
+2024,"Under Twenty-Five","White","Unemployed","150+ Percent of Poverty","male","without_children",223609.98
+2024,"Under Twenty-Five","White","Unemployed","Below Poverty","female","with_children",10675.69
+2024,"Under Twenty-Five","White","Unemployed","Below Poverty","female","without_children",40248.75
+2024,"Under Twenty-Five","White","Unemployed","Below Poverty","male","with_children",1552.64
+2024,"Under Twenty-Five","White","Unemployed","Below Poverty","male","without_children",66239.84

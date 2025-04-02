@@ -1,24 +1,30 @@
----
-title: "care_provider"
-format: html
-editor: visual
----
+library(dplyr)
+library(stringr)
 
-```{r}
-source("load_defaults.R")
-```
+cp_population_ext <- asec |> 
+  mutate(
+    gender = str_to_lower(sex), 
+    provider_status = case_when(
+      gender_parent %in% c("Mothers", "Fathers") ~ "with_children",
+      gender_parent %in% c("Non-Mothers", "Non-Fathers") ~ "without_children",
+      TRUE ~ "other")
+  ) |> 
+  summarise(
+    population = sum(asecwt),
+    .by = c(year, prime_age, race_ethnicity, empstat, poverty,  gender, provider_status)
+  ) |> 
+  arrange(year, prime_age, race_ethnicity, empstat, poverty,  gender, provider_status)
 
-## Formal Hours
+write.csv(cp_population, "./data/CSV/care_provider_population.csv", 
+          row.names = FALSE)
+write_dta(cp_population, "./data/CSV/care_provider_population.dta")
 
-```{r}
-# Load asec formal care activities
+
 asec <- read.csv("./data/CSV/ASECdata.csv") |>
-  filter(YEAR == max(YEAR)) |>  
   filter(AGE >= 18) |> 
   select(YEAR, OCC2010, empstat, occ_label, UHRSWORKT, EARNWT, INCWAGE, 
          occ_care_focus, ASECWT, sex, gender_parent, poverty, empstat, race_ethnicity, prime_age) |> 
   clean_names() 
-  
 
 # create columns required by the app
 cp_formal <- asec |> 
@@ -43,26 +49,21 @@ cp_formal <- cp_formal %>%
   summarise(
     population = sum(asecwt),
     provision_interval = sum(uhrsworkt/7*60*asecwt), 
-    .by = c(gender, provider_status, time_use, care_type, 
+    .by = c(year, prime_age, race_ethnicity, empstat, poverty, gender, provider_status, time_use, care_type, 
             care_focus, provider_attention)
   )
-```
 
-## Informal Hours
 
-```{r}
-# load data
+##### INFORMAL
+
+
 atus <- read.csv("./data/CSV/ATUSdata.csv") |> 
   filter(activity != "Formal Work") |> 
   filter(AGE >= 18) |>
-  filter(YEAR >= 2018 & YEAR != 2020) |> 
   select(YEAR, CASEID, WT06, sex, gender_parent, act_care_focus, 
-         DURATION, SCC_ALL_LN, SEC_ALL_LN) |> 
+         DURATION, SCC_ALL_LN, SEC_ALL_LN, prime_age, race_ethnicity, empstat, poverty) |> 
   clean_names() 
 
-# get most recent 5 year and clean up columns
-yr_range <- atus_yr_range(atus) |> 
-  filter(year == max(year))
 
 # prep secondary care time
 cp_informal <- atus |> 
@@ -86,13 +87,13 @@ cp_informal <- cp_informal |>
       metric == "scc_all_ln" ~ "passive_child", 
       metric == "sec_all_ln" ~ "passive_elder",
       TRUE ~ "active"
-      ), 
+    ), 
     care_focus = case_when(
       metric == "scc_all_ln" ~ "developmental", 
       metric == "sec_all_ln" ~ "health",
       act_care_focus == "non-care" ~ "none", 
       TRUE ~ act_care_focus
-      ), 
+    ), 
     time_use = ifelse(care_focus == "none", "non_care", "care"),
     weight = wt06/365
   ) 
@@ -101,42 +102,24 @@ cp_informal <- cp_informal |>
 cp_informal <- cp_informal |> 
   summarise(
     total_time = sum(duration), 
-    .by = c(year, caseid, weight, gender, provider_status, time_use, 
+    .by = c(year, caseid, race_ethnicity, empstat, poverty,prime_age, weight, gender, provider_status, time_use, 
             care_type, care_focus, provider_attention)
-    ) |> 
+  ) |> 
   summarise(
     provision_interval = sum(total_time*weight/5),
     population = sum(weight/5), 
-    .by = c(gender, provider_status, time_use, 
-           care_type, care_focus, provider_attention)
+    .by = c(year, prime_age, race_ethnicity, empstat, poverty, gender, provider_status, time_use, 
+            care_type, care_focus, provider_attention)
   )
-```
 
-## Output Required Files
-
-```{r}
 cp_combined <- bind_rows(
   cp_formal, 
   cp_informal
 ) |> 
-  arrange(care_type, time_use, gender, provider_status, care_focus)
+  arrange(year, care_type, time_use, prime_age, race_ethnicity, empstat, poverty, gender, provider_status, care_focus)
 
-write.csv(cp_combined, "./app_data/care_provider_datum.csv", 
-          row.names = FALSE)
-```
 
-```{r}
-cp_population <- asec |> 
-  mutate(
-    gender = str_to_lower(sex), 
-    provider_status = case_when(
-      gender_parent %in% c("Mothers", "Fathers") ~ "with_children",
-      gender_parent %in% c("Non-Mothers", "Non-Fathers") ~ "without_children",
-      TRUE ~ "other")
-    )|> 
-  summarise(population = sum(asecwt), .by = c(gender, provider_status)) |> 
-  arrange(gender, provider_status)
-  
-write.csv(cp_population, "./app_data/care_provider_population.csv", 
+
+write.csv(cp_combined, "./data/CSV/care_provider_data.csv", 
           row.names = FALSE)
-```
+write_dta(cp_combined, "./data/CSV/care_provider_data.dta")
