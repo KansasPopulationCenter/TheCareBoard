@@ -1,5 +1,7 @@
 "gender","provider_status","population"
-"female","other",96837610.63
+"female","other",15515482.24
 "female","with_children",35957627.56
-"male","other",97012975.2
+"female","without_children",81322128.39
+"male","other",10894031.34
 "male","with_children",29804926.93
+"male","without_children",86118943.86

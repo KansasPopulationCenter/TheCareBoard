@@ -12,7 +12,7 @@ editor: visual
 source("load_defaults.R")
 
 # Load asec formal care activities
-asec <- readRDS("../../02_data-prep-and-cleaning/03_ASECdata.rds") |>
+asec <- read.csv("./data/CSV/ASECdata.csv") |>
   filter(AGE >= 18) |>
   filter(YEAR == max(YEAR)) |>
   filter(occ_care_focus != "none") |> 

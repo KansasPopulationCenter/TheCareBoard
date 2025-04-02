@@ -12,7 +12,7 @@ editor: visual
 source("load_defaults.R")
 
 #Load in data on the formal sector employment from the quarterly census of employment and wages.
-formalsector <- fread("../../01_preliminary-code-and-data/County_Employment_By_IndustryYear.csv")  |> 
+formalsector <- fread("./data/CSV/County_Employment_By_IndustryYear.csv")  |> 
   filter(!grepl("0$", area_fips)) |>
   filter(!grepl("^C", area_fips)) |>
   filter(area_fips != "USMSA" & area_fips != "USCMS" & area_fips != "USNMS")
@@ -23,7 +23,7 @@ formalsector <- fread("../../01_preliminary-code-and-data/County_Employment_By_I
 ```{r}
 #Load in our yearly data on age by county.
 #This data is currently for the years 2020 and onward.
-ages <- fread("../../01_preliminary-code-and-data/AgeByCounty2020Plus.csv") |> 
+ages <- fread("./data/CSV/AgeByCounty2020Plus.csv") |> 
   filter(YEAR != 1) |> 
   mutate(year = case_when(
     YEAR == 2 ~ 2020,
@@ -38,7 +38,7 @@ ages <- fread("../../01_preliminary-code-and-data/AgeByCounty2020Plus.csv") |>
 
 ```{r}
 #Load in data estimates on disability by county rates
-disability <- fread("../../01_preliminary-code-and-data/disability_by_county.csv")
+disability <- fread("./data/CSV/disability_by_county.csv")
 ```
 
 ### Market Datum
@@ -65,7 +65,7 @@ market_datum$weight <- (market_datum$weight - mean(market_datum$weight, na.rm = 
 ### NILF Activity
 
 ```{r}
-data <- readRDS("../../02_data-prep-and-cleaning/03_CPSdata.rds") |>
+data <- read.csv("./data/CSV/CPSdata.csv") |>
   filter(YEAR >= 2020) |>
   filter(nilf_activity == "Homemaker") |>
   select(YEAR, month, nilf_activity, WTFINL)

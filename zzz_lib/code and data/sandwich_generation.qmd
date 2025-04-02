@@ -14,6 +14,7 @@ editor: visual
 source("load_defaults.R")
 
 atus <- read.csv("./data/CSV/ATUSdata.csv") |> 
+  filter(activity != "Formal Work") |>
   filter(YEAR >= 2011 & YEAR != 2020) |>
   select(YEAR, date, CASEID, WT06, YNGCH, AGE, 
          child_care, elder_care, DURATION,
@@ -82,6 +83,71 @@ sandwich_stats_5yr <- bind_rows(sandwich_stats_5yr) |>
   select(date, sandwich_population, sandwich_population_proportion,
          sandwich_time_total, sandwich_time_median)
 
-write.csv(sandwich_stats_5yr, "./data/CSV/sandwichstats.csv", row.names = FALSE)
-write_dta(sandwich_stats_5yr, "./data/Dta/sandwichstats.dta")
+write.csv(sandwich_stats_5yr, "./app_data/metrics_sandwich_generation.csv", row.names = FALSE)
+```
+
+## High Level Checks
+
+### Alt Calc: Moving Avg (Post Aggregation)
+
+```{r}
+check_sandwich_stats <- case_time |>
+  group_by(date, sandwich_all) |> 
+  summarise(
+    population = sum(wt06/365),
+    time_total = sum(wt06/365*time_child_elder),
+    time_median = wtd.quantile(time_child_elder, weights = wt06, 
+                               probs = 0.5)
+    ) |> 
+  group_by(date) |> 
+  mutate(population_proportion = population/sum(population)) |> 
+  ungroup() |> 
+  filter(sandwich_all == "sandwich")
+
+check_sandwich_stats <- check_sandwich_stats |>
+  mutate(
+    # averages 4 period beforehand skipping over missing years
+    population = slide_mean(population, before = 4, complete = TRUE),
+    population_proportion = slide_mean(population_proportion, before = 4, complete = TRUE),
+    time_total = slide_mean(time_total, before = 4, complete = TRUE),
+    time_median = slide_mean(time_median, before = 4, complete = TRUE)
+    )
+```
+
+### Plot
+
+```{r}
+plt_trend <- function(df1, col1, df2, col2){
+  p <- ggplot() +
+    geom_line(data = df1, aes(x = date, y = get(col1)), 
+              colour = "steelblue", alpha = 0.8) +
+    geom_point(data = df1, aes(x = date, y = get(col1)), 
+               colour = "steelblue", alpha = 0.8) +
+    geom_line(data = df2, aes(x = date, y = get(col2)), 
+              colour = "grey", alpha = 0.8) +
+    geom_point(data = df2, aes(x = date, y = get(col2)), 
+               colour = "grey", alpha = 0.8) +
+    theme_minimal() +
+    theme(axis.title = element_blank()) +
+    scale_y_continuous(labels = comma) +
+    expand_limits(y = 0)  
+  
+  return(p)
+}
+
+plt_trend(sandwich_stats_5yr, "sandwich_population", 
+          check_sandwich_stats, "population") +
+  ggtitle("Sandwich Population")
+
+plt_trend(sandwich_stats_5yr, "sandwich_population_proportion", 
+          check_sandwich_stats, "population_proportion") +
+  ggtitle("Sandwich Pop Proportion")
+
+plt_trend(sandwich_stats_5yr, "sandwich_time_total", 
+          check_sandwich_stats, "time_total") +
+  ggtitle("Sandwich time median")
+
+plt_trend(sandwich_stats_5yr, "sandwich_time_median", 
+          check_sandwich_stats, "time_median") +
+  ggtitle("Sandwich time median")
 ```

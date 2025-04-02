@@ -12,7 +12,7 @@ source("load_defaults.R")
 
 ```{r}
 # Load asec formal care activities
-asec <- readRDS("../../02_data-prep-and-cleaning/03_ASECdata.rds") |>
+asec <- read.csv("./data/CSV/ASECdata.csv") |>
   filter(YEAR == max(YEAR)) |>  
   filter(AGE >= 18) |> 
   select(YEAR, OCC2010, empstat, occ_label, UHRSWORKT, EARNWT, INCWAGE, 
@@ -52,7 +52,7 @@ cp_formal <- cp_formal %>%
 
 ```{r}
 # load data
-atus <- readRDS("../../02_data-prep-and-cleaning/03_ATUSdata.rds") |> 
+atus <- read.csv("./data/CSV/ATUSdata.csv") |> 
   filter(activity != "Formal Work") |> 
   filter(AGE >= 18) |>
   filter(YEAR >= 2018 & YEAR != 2020) |> 

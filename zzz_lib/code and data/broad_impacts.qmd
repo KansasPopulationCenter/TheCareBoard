@@ -10,10 +10,16 @@ editor: visual
 source("load_defaults.R")
 min_year <- 1994
 
-us_gdp <- read.csv("./app_data/FYGDP.csv") |>
+us_gdp <- read.csv("./data/CSV/USGDP.csv") |>
   clean_names() |>
   mutate(
-    date = as.Date(observation_date, format = "%Y-%m-%d"),  # Convert to Date
+    date = as.Date(paste0(
+      substr(
+        observation_date,
+        nchar(observation_date) - 3,
+        nchar(observation_date)
+      ), "-01-01"
+    )),
     fygdp = fygdp * 1e9,
     gdp_daily = fygdp / 365
   ) |>
@@ -39,19 +45,15 @@ asec <- read.csv("./data/CSV/ASECdata.csv") |>
          UHRSWORKT,
          INCWAGE,
          empstat,
-         race_ethnicity,
-         educ,
-         statefip,
-         FOCUS,
-         marst,
+         occ_care_focus,
          gender_parent) |>
   clean_names() |>
   mutate(
     date = as.Date(paste0(year, "-01-01")),
     uhrsworkt = ifelse(uhrsworkt == 999, 0, uhrsworkt),
-    occ_type = ifelse(focus == "none", "non-care", "care"),
+    occ_type = ifelse(occ_care_focus == "none", "non-care", "care"),
     overall = "overall"
-  )
+  ) 
 ```
 
 #### Labor Force
@@ -229,9 +231,9 @@ source("load_defaults.R")
 atus <- read.csv("./data/CSV/ATUSdata.csv") |> 
   filter(activity != "Formal Work") |> 
   filter(AGE >= 18) |>
-  filter(YEAR != 2020) |>
+  filter(YEAR != 2020) |> 
   select(YEAR, CASEID, WT06, ACTIVITY, DURATION, SCC_ALL_LN, SEC_ALL_LN,
-         act_care_focus, activity, gender_parent, marst, educ, race_ethnicity, STATEFIP) |> 
+         act_care_focus, activity, gender_parent) |> 
   clean_names() |> 
   pivot_longer(
     cols = c(duration, scc_all_ln, sec_all_ln),
@@ -256,7 +258,7 @@ case_year <- atus |>
   mutate(weight = wt06 / 365) |> 
   summarise(
     total_time = sum(duration),
-    .by = c(year, caseid, gender_parent,race_ethnicity, educ, marst, weight, care_flag)
+    .by = c(year, caseid, gender_parent, weight, care_flag)
     ) |> 
   mutate(overall = "overall")
 
@@ -379,9 +381,6 @@ write.csv(
   "./app_data/metrics_informal.csv", 
   row.names = FALSE
   )
-
-
-source("broad_impacts_extended.R")
 ```
 
 ### Plot

@@ -23,7 +23,7 @@ To calculate it, we use:
 ```{r}
 source("load_defaults.R")
 
-population <- fread("../../01_preliminary-code-and-data/AgeByCounty2020Plus.csv") |>
+population <- fread("./data/CSV/AgeByCounty2020Plus.csv") |>
   clean_names() |> 
   filter(year != 1) |>
   mutate(
@@ -42,7 +42,7 @@ population <- fread("../../01_preliminary-code-and-data/AgeByCounty2020Plus.csv"
 ### Employment
 
 ```{r}
-employment <- fread("../../01_preliminary-code-and-data/County_Employment_By_IndustryYear.csv") |> 
+employment <- fread("./data/CSV/County_Employment_By_IndustryYear.csv") |> 
   clean_names() |> 
   mutate(
     area_fips = str_pad(area_fips, width = 5, side = "left", pad = "0")

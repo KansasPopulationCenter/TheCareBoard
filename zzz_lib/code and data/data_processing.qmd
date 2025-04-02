@@ -12,7 +12,7 @@ source("load_libraries.R")
 source("data_prep_functions.R") 
 
 # Load formal occupation codes and their care focus
-df_occ <- fread("./data/CSV/FormalOccs_Crossover.csv")
+df_occ <- fread("./data/CSV/Formal_Occupation_Crosswalk.csv")
 
 # Load activity codes and their care focus
 df_act <- fread("./data/CSV/ATUSActivityCrossover.csv") |> 
@@ -36,9 +36,9 @@ micro_cps <- micro_cps |>
   recode_asec_cps() |> 
   recode_cps() |>
   select(any_of(col_order)) |> 
-  left_join(df_occ, by = c("OCC2010" = "Code")) 
+  left_join(df_occ, by = c("OCC2010" = "code")) 
 
-write.csv(micro_cps, "data/CSV/CPSdata.csv")
+write.csv(micro_cps, "./data/CSV/CPSdata.csv")
 ```
 
 ## ASEC
@@ -53,9 +53,9 @@ micro_asec <- micro_asec |>
   recode_asec_cps() |> 
   recode_asec() |>
   select(any_of(col_order)) |> 
-  left_join(df_occ, by = c("OCC2010" = "Code")) 
+  left_join(df_occ, by = c("OCC2010" = "code")) 
 
-write.csv(micro_asec, "data/CSV/ASECdata.csv")
+write.csv(micro_asec, "./data/CSV/ASECdata.csv")
 
 rm(micro_asec)
 gc()
@@ -88,7 +88,7 @@ cps_occ <- micro_cps |>
   group_by(CPSIDP) |> 
   filter(date == max(date)) |> 
   ungroup() |> 
-  select(CPSIDP, date, FOCUS) 
+  select(CPSIDP, date, occ_care_focus) 
 
 rm(micro_cps)
 gc()
@@ -112,7 +112,7 @@ micro_atus <- micro_atus |>
       volunteering, education), 
       ~replace_na(., 0)))
 
-write.csv(micro_atus, "data/CSV/ATUSdata.csv")
+write.csv(micro_atus, "./data/CSV/ATUSdata.csv")
 ```
 
 \
