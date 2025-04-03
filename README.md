@@ -39,10 +39,10 @@ If you have any questions or require additional data support, please refer to ou
 |Crosswalk-Formal Jobs to Informal Activities          |Links between OCC2010 codes and ATUS activities                                            | [Informal to Formal CW CSV](https://bit.ly/InformalFormalCrosswalkCSV) | [Informal to Formal CW Excel](https://bit.ly/InformalFormalCrosswalkXLSX) | SOC codes obtained from IPUMS CPS OCC2010 variable, Activity codes obtained from IPUMS ATUS Activity variable.|
 
 # Micro Data
-|Name | Description | Code Files | XML Files | DAT Files|
-|-----|-------------|------------|-----------|----------|
-|ATUS Activities| Activity structured data from ATUS |  | [ATUS Data Metadata](https://bit.ly/ATUSActivityMetaDataXML) | [ATUS Data Zip](https://bit.ly/ATUSActivityMetaDataDAT) |
-|ATUS Hierarchical| Hierarchical structured data from ATUS |  | [Hierarchical Data Metadata](https://bit.ly/ATUSHierarchicalMetaDataXML) | [Hierarchical Data Zip](https://bit.ly/ATUSHierarchicalMetaDataDAT) |
+|Name | Description | Code Files | XML Files | DAT Files| Source |
+|-----|-------------|------------|-----------|----------|--------|
+|ATUS Activities| Activity structured data from ATUS |  | [ATUS Data Metadata](https://bit.ly/ATUSActivityMetaDataXML) | [ATUS Data Zip](https://bit.ly/ATUSActivityMetaDataDAT) | [IPUMS ATUS](https://timeuse.ipums.org/) |
+|ATUS Hierarchical| Hierarchical structured data from ATUS |  | [Hierarchical Data Metadata](https://bit.ly/ATUSHierarchicalMetaDataXML) | [Hierarchical Data Zip](https://bit.ly/ATUSHierarchicalMetaDataDAT) | [IPUMS ATUS](https://timeuse.ipums.org/)
 |Micro Data Download | Code to use IPUMS API to download ASEC and CPS Monthly data | [CPS and ASEC Download](https://bit.ly/MicroDataDownloadR) |  |  |
 |Micro Data Cleaning Functions| Functions used to clean ATUS, ASEC, and CPS Monthly data | [CPS and ASEC Download](https://bit.ly/MicroDataPrepR) |  |  |
 |Micro Data Processing | Code to Process and format Micro Data from ATUS, ASEC, and CPS Monthly data | [CPS and ASEC Processing](https://bit.ly/MicroDataProcessingR) | | |
