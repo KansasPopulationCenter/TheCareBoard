@@ -378,24 +378,28 @@ health_6to12 <- 150
 develop_6to12 <- 480
 daily_6to12 <- 1440 - health_6to12 - develop_6to12
 
-health_85 <- 300
-develop_85 <- 0
-daily_85 = 1200 - health_85 - develop_85
+#health_85 <- 300
+#develop_85 <- 0
+#daily_85 = 1200 - health_85 - develop_85
 
 need_interval <- list(
   age_0to5 = c("developmental" = develop_0to5, 
                "health" = health_0to5, "daily_living" = daily_0to5),
   
   age_6to12 = c("developmental" = develop_6to12, 
-                "health" = health_6to12, "daily_living" = daily_6to12),
-  
-  age_85 = c("developmental" = develop_85, 
-             "health" = health_85, "daily_living" = daily_85)
+                "health" = health_6to12, "daily_living" = daily_6to12)
 )
+  
+#  age_85 = c("developmental" = develop_85, 
+#             "health" = health_85, "daily_living" = daily_85)
+#)
 
 age_ranges <- bind_rows(
   expand.grid(age_range = "age_0to5", age = c(seq(0, 5, by = 1))),
-  expand.grid(age_range = "age_6to12", age = c(seq(6, 12, by = 1))),
+  expand.grid(age_range = "age_6to12", age = c(seq(6, 12, by = 1))))
+              
+              
+              
   expand.grid(age_range = "age_85", age = 85)
 ) 
 
@@ -424,7 +428,7 @@ final_provision_override <- prepare_overrides(provision_interval, age_ranges, "p
 ```{r}
 df_list <- list(
   market_datum_smoothed,
-  final_need_override, 
+  final_need_override,
   final_provision_override
 ) 
 

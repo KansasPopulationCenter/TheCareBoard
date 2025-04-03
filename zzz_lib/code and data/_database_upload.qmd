@@ -34,7 +34,7 @@ for(sel_file in files){
 ### Activity Formal
 
 ```{r}
-dbGetQuery(cn, "truncate table raw.activity_formal cascade;")
+dbGetQuery(cn, "delete from raw.activity_formal cascade;")
 
 dbWriteTable(cn, SQL("raw.activity_formal"), activity_formal, append = TRUE)
 dbWriteTable(cn, SQL("raw.activity_formal_datum"), activity_formal_datum, append = TRUE)
@@ -43,7 +43,7 @@ dbWriteTable(cn, SQL("raw.activity_formal_datum"), activity_formal_datum, append
 ### Activity Informal
 
 ```{r}
-dbGetQuery(cn, "truncate table raw.activity_informal cascade;")
+dbGetQuery(cn, "delete from raw.activity_informal cascade;")
 
 dbWriteTable(cn, SQL("raw.activity_informal"), activity_informal, append = TRUE)
 dbWriteTable(cn, SQL("raw.activity_informal_datum"), activity_informal_datum, append = TRUE)
@@ -52,8 +52,8 @@ dbWriteTable(cn, SQL("raw.activity_informal_datum"), activity_informal_datum, ap
 ### Market Tables
 
 ```{r}
-dbGetQuery(cn, "truncate table raw.market_datum cascade;")
-dbGetQuery(cn, "truncate table raw.market cascade;")
+dbGetQuery(cn, "delete from raw.market_datum cascade;")
+dbGetQuery(cn, "delete from raw.market cascade;")
 dbWriteTable(cn, SQL("raw.market"), market, append = TRUE)
 dbWriteTable(cn, SQL("raw.market_datum"), market_datum, append = TRUE)
 ```
@@ -61,8 +61,8 @@ dbWriteTable(cn, SQL("raw.market_datum"), market_datum, append = TRUE)
 ### Care Provider
 
 ```{r}
-dbGetQuery(cn, "truncate table raw.care_provider_datum cascade;")
-dbGetQuery(cn, "truncate table raw.care_provider_population cascade;")
+dbGetQuery(cn, "delete from raw.care_provider_datum cascade;")
+dbGetQuery(cn, "delete from raw.care_provider_population cascade;")
 dbWriteTable(cn, SQL("raw.care_provider_datum"), care_provider_datum, append = TRUE)
 dbWriteTable(cn, SQL("raw.care_provider_population"), care_provider_population, append = TRUE)
 ```
@@ -73,11 +73,11 @@ dbWriteTable(cn, SQL("raw.care_provider_population"), care_provider_population, 
 
 ```{r}
 metric_group <- read_excel("./app_data/metric_tables.xlsx", sheet = "metric_group")
-dbGetQuery(cn, "truncate table raw.metric_group cascade;")
+dbGetQuery(cn, "delete from raw.metric_group cascade;")
 dbWriteTable(cn, SQL("raw.metric_group"), metric_group, append = TRUE)
 
 metric <- read_excel("./app_data/metric_tables.xlsx", sheet = "metric")
-dbGetQuery(cn, "truncate table raw.metric cascade;")
+dbGetQuery(cn, "delete from raw.metric cascade;")
 dbWriteTable(cn, SQL("raw.metric"), metric, append = TRUE)
 ```
 
@@ -163,7 +163,7 @@ metric_category <- bind_rows(
     )
   )
 
-dbGetQuery(cn, "truncate table raw.metric_category cascade;")
+dbGetQuery(cn, "delete from raw.metric_category cascade;")
 dbWriteTable(cn, SQL("raw.metric_category"), metric_category, append = TRUE)
 dbWriteTable(cn, SQL("raw.metric_datum"), metric_datum, append = TRUE)
 ```

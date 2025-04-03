@@ -79,7 +79,8 @@ cp_informal <- cp_informal |>
     gender = str_to_lower(sex), 
     provider_status = case_when(
       gender_parent %in% c("Mothers", "Fathers") ~ "with_children",
-      TRUE ~ "without_children"
+      gender_parent %in% c("Non-Mothers", "Non-Fathers") ~ "without_children",
+      TRUE ~ "other"
     ), 
     care_type	= "informal", 
     provider_attention = case_when(
