@@ -43,9 +43,9 @@ If you have any questions or require additional data support, please refer to ou
 |-----|-------------|------------|-----------|----------|--------|
 |ATUS Activities| Activity structured data from ATUS |  | [ATUS Data Metadata](https://bit.ly/ATUSActivityMetaDataXML) | [ATUS Data Zip](https://bit.ly/ATUSActivityMetaDataDAT) | [IPUMS ATUS](https://timeuse.ipums.org/) |
 |ATUS Hierarchical| Hierarchical structured data from ATUS |  | [Hierarchical Data Metadata](https://bit.ly/ATUSHierarchicalMetaDataXML) | [Hierarchical Data Zip](https://bit.ly/ATUSHierarchicalMetaDataDAT) | [IPUMS ATUS](https://timeuse.ipums.org/)
-|Micro Data Download | Code to use IPUMS API to download ASEC and CPS Monthly data | [CPS and ASEC Download](https://bit.ly/MicroDataDownloadR) |  | [IPUMS CPS](https://cps.ipums.org/cps/) |
-|Micro Data Cleaning Functions| Functions used to clean ATUS, ASEC, and CPS Monthly data | [CPS and ASEC Download](https://bit.ly/MicroDataPrepR) |  | [IPUMS CPS](https://cps.ipums.org/cps/) |
-|Micro Data Processing | Code to Process and format Micro Data from ATUS, ASEC, and CPS Monthly data | [CPS and ASEC Processing](https://bit.ly/MicroDataProcessingR) |  | [IPUMS CPS](https://cps.ipums.org/cps/) |
+|Micro Data Download | Code to use IPUMS API to download ASEC and CPS Monthly data | [CPS and ASEC Download](https://bit.ly/MicroDataDownloadR) |  | | [IPUMS CPS](https://cps.ipums.org/cps/) |
+|Micro Data Cleaning Functions| Functions used to clean ATUS, ASEC, and CPS Monthly data | [CPS and ASEC Download](https://bit.ly/MicroDataPrepR) |  | | [IPUMS CPS](https://cps.ipums.org/cps/) |
+|Micro Data Processing | Code to Process and format Micro Data from ATUS, ASEC, and CPS Monthly data | [CPS and ASEC Processing](https://bit.ly/MicroDataProcessingR) |  | | [IPUMS CPS](https://cps.ipums.org/cps/) |
 
 # Code
 |Name                         | Description|.R file| Notes |
