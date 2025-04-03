@@ -129,4 +129,4 @@ cp_combined <- bind_rows(
 
 write.csv(cp_combined, "./data/CSV/care_provider_data.csv", 
           row.names = FALSE)
-write_dta(cp_combined, "./data/CSV/care_provider_data.dta")
+write_dta(cp_combined, "./data/DTA/care_provider_data.dta")
