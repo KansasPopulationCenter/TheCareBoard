@@ -1,6 +1,13 @@
 library(dplyr)
 library(stringr)
 
+asec <- read.csv("./data/CSV/ASECdata.csv") |>
+  filter(AGE >= 18) |> 
+  select(YEAR, OCC2010, empstat, occ_label, UHRSWORKT, EARNWT, INCWAGE, 
+         occ_care_focus, ASECWT, sex, gender_parent, poverty, empstat, race_ethnicity, prime_age) |> 
+  clean_names() 
+
+
 cp_population_ext <- asec |> 
   mutate(
     gender = str_to_lower(sex), 
@@ -15,9 +22,9 @@ cp_population_ext <- asec |>
   ) |> 
   arrange(year, prime_age, race_ethnicity, empstat, poverty,  gender, provider_status)
 
-write.csv(cp_population, "./data/CSV/care_provider_population.csv", 
+write.csv(cp_population_ext, "./data/CSV/care_provider_population.csv", 
           row.names = FALSE)
-write_dta(cp_population, "./data/CSV/care_provider_population.dta")
+write_dta(cp_population_ext, "./data/DTA/care_provider_population.dta")
 
 
 asec <- read.csv("./data/CSV/ASECdata.csv") |>

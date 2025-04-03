@@ -156,8 +156,8 @@ metric_category <- bind_rows(
       id == "gender-parent" ~ 3, 
       id == "mothers" ~ 1, 
       id == "fathers" ~ 2, 
-      id == "childless-women" ~ 3, 
-      id == "childless-men" ~ 4, 
+      id == "non-mothers" ~ 3, 
+      id == "non-fathers" ~ 4, 
       id == "current" ~ 0,
       id == "trend" ~ 1
     )
