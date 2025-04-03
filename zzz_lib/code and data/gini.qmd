@@ -23,6 +23,9 @@ To calculate it, we use:
 ```{r}
 source("load_defaults.R")
 
+library(tidycensus)
+library(tidyverse)
+
 population <- fread("./data/CSV/AgeByCounty2020Plus.csv") |>
   clean_names() |> 
   filter(year != 1) |>
@@ -37,6 +40,34 @@ population <- fread("./data/CSV/AgeByCounty2020Plus.csv") |>
     area_fips = sprintf("%02d%03d", state, county)
   ) |>
   select(ctyname, stname, area_fips, year, popestimate)
+
+
+
+years <- 2015:2019
+
+# Function to get population estimates by county for a given year
+get_county_population <- function(year) {
+  get_estimates(
+    geography = "county",
+    product = "population",
+    year = year,
+    geometry = FALSE
+  ) %>%
+    filter(variable == "POP") %>%  # only total population
+    transmute(
+      ctyname = str_remove(NAME, " County,.*"),
+      stname = str_extract(NAME, ",\\s*(.*)$") %>% str_remove(",\\s*"),
+      area_fips = GEOID,
+      year = year,
+      popestimate = value
+    )
+}
+
+# Get population for all years
+county_pop_all_years <- map_dfr(years, get_county_population)
+
+county_pop_all_years <- rbind(county_pop_all_years, population)
+
 ```
 
 ### Employment
@@ -63,7 +94,7 @@ care_emp_summary <- employment |>
 
 ```{r}
 df_combined <- care_emp_summary |>
-  inner_join(population, by = c("year", "area_fips")) 
+  inner_join(county_pop_all_years, by = c("year", "area_fips")) 
 ```
 
 ## Calculate National GINI
@@ -84,6 +115,30 @@ write.csv(
   "./app_data/metrics_national_care_gini.csv", 
   row.names = FALSE
   )
+```
+
+## Calculate State GINI
+
+```{r}
+state_gini <- df_combined |>
+  group_by(stname, year) |>
+  summarise(
+    gini_national = Gini(care_employment, weights = popestimate, na.rm = TRUE)
+  ) |>
+  ungroup() |>
+  mutate(
+    date = as.Date(paste0(as.character(year), "-01-01"))
+  )
+
+national_gini$stname <- "National"
+
+gini <- rbind(national_gini, state_gini)
+
+gini <- gini %>% select(-date)
+
+write.csv(gini, "./data/CSV/metrics_national_care_gini.csv", row.names = FALSE)
+write_dta(gini, "./data/DTA/metrics_national_care_gini.dta")
+
 ```
 
 ## High Level Checks
