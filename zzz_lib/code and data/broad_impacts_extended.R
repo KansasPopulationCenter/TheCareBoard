@@ -1,3 +1,65 @@
+asec <- read.csv("./data/CSV/ASECdata.csv") |>
+  # incorporate HFLAG clause due to survey redesign in 2014
+  # https://blog.popdata.org/2014sample/
+  filter(HFLAG == 1 | is.na(HFLAG)) |> 
+  filter(AGE >= 18) |>
+  filter(YEAR >= 1990) |>
+  select(YEAR,
+         ASECWT,
+         UHRSWORKT,
+         INCWAGE,
+         empstat,
+         race_ethnicity,
+         educ,
+         marst,
+         statefip,
+         occ_care_focus,
+         gender_parent) |>
+  clean_names() |>
+  mutate(
+    date = as.Date(paste0(year, "-01-01")),
+    uhrsworkt = ifelse(uhrsworkt == 999, 0, uhrsworkt),
+    occ_type = ifelse(occ_care_focus == "none", "non-care", "care"),
+    overall = "overall"
+  ) 
+
+atus <- read.csv("./data/CSV/ATUSdata.csv") |> 
+  filter(activity != "Formal Work") |> 
+  filter(AGE >= 18) |>
+  filter(YEAR != 2020) |> 
+  select(YEAR, CASEID, WT06, ACTIVITY, DURATION, SCC_ALL_LN, SEC_ALL_LN,
+         race_ethnicity, educ, marst,
+         act_care_focus, activity, gender_parent) |> 
+  clean_names() |> 
+  pivot_longer(
+    cols = c(duration, scc_all_ln, sec_all_ln),
+    names_to = "metric", 
+    values_to = "duration"
+  ) |>   
+  mutate(
+    duration = coalesce(duration, 0),
+    care_flag = case_when(
+      metric %in% c("scc_all_ln", "sec_all_ln") | 
+        act_care_focus != "non-care" ~ "care", 
+      TRUE ~ "non-care" 
+    ), 
+    overall = "overall"
+  )
+
+source("load_defaults.R")
+case_year <- atus |> 
+  mutate(weight = wt06 / 365) |> 
+  summarise(
+    total_time = sum(duration),
+    .by = c(year, caseid, race_ethnicity, educ, marst, gender_parent, weight, care_flag)
+  ) |> 
+  mutate(overall = "overall")
+
+yr_range <- atus_yr_range(atus)
+
+
+
+
 formal_lfp_all <- bind_rows(
   get_formal_lfp(asec, "overall"),
   get_formal_lfp(asec, "gender_parent"),
@@ -76,6 +138,22 @@ care_force_time_data <- combined_time |>
 
 write.csv(care_force_time_data, "./data/CSV/care_force_time_data.csv")
 write_dta(care_force_time_data, "./data/DTA/care_force_time_data.dta")
+
+us_gdp <- read.csv("./data/CSV/USGDP.csv") |>
+  clean_names() |>
+  mutate(
+    date = as.Date(paste0(
+      substr(
+        observation_date,
+        nchar(observation_date) - 3,
+        nchar(observation_date)
+      ), "-01-01"
+    )),
+    fygdp = fygdp * 1e9,
+    gdp_daily = fygdp / 365
+  ) |>
+  filter(year(date) >= 1990) |>
+  select(date, gdp_daily)
 
 
 formal_value_all <- bind_rows(
