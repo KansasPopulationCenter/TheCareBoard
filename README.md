@@ -13,7 +13,7 @@ Users can navigate to individual files in the tables below to access and downloa
 If you use our data, we ask that you cite: 
 
 Misty Heggeness, Joseph Bommarito, and Lucie Prewitt. The Care Board: Version 1.0 [dataset]. Lawrence, KS: Kansas Population Center, 2025. https://thecareboard.org.  
-If you have any questions or require additional data support, please refer to our documentation (MARKDOWN LINK HERE) or contact careboard@ku.edu. 
+If you have any questions or require additional data support, please refer to our documentation [Methodology](https://rpubs.com/joseph_bommarito363/1291991) or contact careboard@ku.edu. 
 
 # Statistical Tables
 |Name | Description |  .csv file | .xlsx file | .dta file | Notes | Data Sources|
