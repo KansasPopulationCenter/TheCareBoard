@@ -63,7 +63,7 @@ If you have any questions or require additional data support, please refer to ou
 # Replication Data
 |Name                         | Description| .xlsx file| Code|Data Sources|
 |-----------------------------|------------|----------|------|------------|
-|Time Use for Parents         |Data on daily weekday and weekend time use for parents, including by gender and sandwich generation. This data was used in a New York Times opinion piece published on April 30, 2025, by Jess Grose. | [Time Use for Parents](https://bit.ly/TimeUseforParents) | [Time Use for Parents R file](https://github.com/KansasPopulationCenter/TheCareBoard/raw/refs/heads/main/zzz_lib/code%20and%20data/sandwich_generation_nyt.qmd) | IPUMS ATUS [IPUMS ATUS](https://timeuse.ipums.org/). |  
+|Time Use for Parents         |Data on daily weekday and weekend time use for parents, including by gender and sandwich generation. This data was used in a New York Times opinion piece published on April 30, 2025, by Jess Grose. | [Time Use for Parents](https://bit.ly/TimeUseforParents) | [Time Use for Parents R file](https://github.com/KansasPopulationCenter/TheCareBoard/raw/refs/heads/main/zzz_lib/code%20and%20data/sandwich_generation_nyt.qmd) | [IPUMS ATUS](https://timeuse.ipums.org/). |  
 
 
     
