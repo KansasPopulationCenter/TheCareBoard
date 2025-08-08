@@ -1,0 +1,259 @@
+Code_Informal,Type,Activity,Code_Formal
+10201,SELF,Hygiene,4500-4520
+10299,SELF,Hygiene,4500-4520
+10301,SELF,Self Healthcare,3600
+10399,SELF,Self Healthcare,3600
+10401,NC,Personal/Private Activities,4140
+10499,NC,Personal/Private Activities,4140
+10501,SELF,Self Healthcare,3600
+10599,SELF,Self Healthcare,3600
+19999,SELF,Self Healthcare,3600
+20101,PROVIDING,Home Cleaning,4200-4250
+20102,PROVIDING,Laundry,4610
+20103,PROVIDING,Clothing Maintenance,4200-4250
+20104,PROVIDING,Home Organization,4200-4250
+20199,PROVIDING,General Housework,4200-4250
+20201,PROVIDING,Food and drink preparation ,4000-4060
+20202,PROVIDING,Food and drink preparation ,4000-4060
+20203,PROVIDING,Kitchen and food clean-up,4000-4060
+20299,PROVIDING,Food and drink preparation ,4000-4060
+20301,PROVIDING,Home Organization,4200-4250
+20302,PROVIDING,Home Items Repair,4200-4250
+20303,PROVIDING,Home Items Repair,4200-4250
+20399,PROVIDING,Home Items Repair,4200-4250
+20401,PROVIDING,Exterior cleaning,4200-4250
+20402,PROVIDING,Home Exterior Repair,4200-4250
+20499,PROVIDING,Home Exterior Repair,4200-4250
+20501,PROVIDING,Exterior cleaning,4200-4250
+20502,PROVIDING,Lawn and Garden,4200-4250
+20599,PROVIDING,Lawn and Garden,4200-4250
+20601,NC,Animal Care,4340-4350
+20602,NC,Animal Care,4340-4350
+20699,NC,Animal Care,4340-4350
+20701,PROVIDING,Vehicle Repair,7000
+20799,PROVIDING,Vehicle Repair,7000
+20801,PROVIDING,Appliance/Tool Organization,4200-4250
+20899,PROVIDING,Appliance/Tool Organization,4200-4250
+20901,SUPPORT,Household Financial and Organizational Management,5000-5530
+20902,SUPPORT,Household Financial and Organizational Management,5000-5530
+20903,SUPPORT,Household Financial and Organizational Management,5000-5530
+20904,SUPPORT,Household Financial and Organizational Management,5000-5530
+20905,SUPPORT,Household Financial and Organizational Management,5000-5530
+20999,SUPPORT,Household Financial and Organizational Management,5000-5530
+29999,SUPPORT,General Household Activities,4200-4250
+30101,PROVIDING,Physical Care for Children,4600
+30102,PROVIDING,Reading to Children,4600
+30103,PROVIDING,Playing with Children,4600
+30104,PROVIDING,Playing with Children,4600
+30105,PROVIDING,Playing with Children,4600
+30106,PROVIDING,Talking to Children,4600
+30108,SUPPORT,Organization & planning for children,4600
+30109,PROVIDING,Looking after children,4600
+30110,PROVIDING,Attending Children's events,4600
+30111,SUPERVISING,Waiting for Children,4600
+30112,SUPPORT,Picking up/dropping off children,4600
+30199,PROVIDING,General childcare,4600
+30201,PROVIDING,Helping with homework,2310
+30202,SUPPORT,Meetings and school conferences,4600
+30203,PROVIDING,Home schooling of children,2310
+30204,SUPPORT,Waiting associated with children's education,4600
+30299,PROVIDING,General Children's Education,2310
+30301,PROVIDING,Providing medical care to children,3600
+30302,PROVIDING,Obtaining medical care for children,3600
+30303,SUPPORT,Providing medical care to children,3600
+30399,PROVIDING,Providing medical care to children,3600
+30401,PROVIDING,Physical care for adults,3600
+30402,PROVIDING,Looking after adults (as a primary activity),3600
+30403,PROVIDING,Providing medical care to adults,3600
+30404,PROVIDING,Obtaining medical and care services for adults,3600
+30405,SUPPORT,Providing medical care to adults,3600
+30499,PROVIDING,Providing medical care to adults,3600
+30501,PROVIDING,Helping adults,4610
+30502,SUPPORT,Organization & planning for other adults,4610
+30503,SUPPORT,Picking up/dropping off adults,4610
+30504,SUPPORT,Waiting associated with helping adults,4610
+30599,PROVIDING,Helping adults,4610
+39999,PROVIDING,Helping adults,4610
+40101,PROVIDING,Physical Care for Children,4600
+40102,PROVIDING,Reading to Children,4600
+40103,PROVIDING,Playing with Children,4600
+40104,PROVIDING,Playing with Children,4600
+40105,PROVIDING,Playing with Children,4600
+40106,PROVIDING,Talking to Children,4600
+40108,SUPPORT,Organization & planning for children,4600
+40109,PROVIDING,Looking after children,4600
+40110,Support,Attending Children's events,4600
+40111,SUPPORT,Waiting for Children,4600
+40112,SUPPORT,Picking up/dropping off children,4600
+40199,PROVIDING,General childcare,4600
+40201,PROVIDING,Helping with homework,2310
+40202,SUPPORT,Meetings and school conferences,4600
+40203,PROVIDING,Home schooling of children,2310
+40204,SUPPORT,Waiting associated with children's education,4600
+40299,PROVIDING,General Children's Education,2310
+40301,PROVIDING,Providing medical care to children,3600
+40302,PROVIDING,Obtaining medical care for children,3600
+40303,SUPPORT,Providing medical care to children,3600
+40399,PROVIDING,Providing medical care to children,3600
+40401,PROVIDING,Physical care for adults,3600
+40402,PROVIDING,Looking after adults (as a primary activity),3600
+40403,PROVIDING,Providing medical care to adults,3600
+40404,PROVIDING,Obtaining medical and care services for adults,3600
+40405,SUPPORT,Providing medical care to adults,3600
+40499,PROVIDING,Providing medical care to adults,3600
+40501,DOMESTIC,General Housework,4200-4250
+40502,DOMESTIC,Lawn and Garden,4200-4250
+40503,NC,Animal Care,4340-4350
+40504,DOMESTIC,Vehicle Repair,7000
+40505,SUPPORT,Household Financial and Organizational Management,5000-5530
+40506,SUPPORT,Household Financial and Organizational Management,5000-5530
+40507,SUPPORT,Picking up/dropping off adults,4610
+40508,SUPPORT,Waiting associated with helping adults,4610
+40599,PROVIDING,Helping adults,4610
+49999,PROVIDING,Helping adults,4610
+70101,PROVIDING,Grocery shopping,4200-4250
+70102,PROVIDING,Purchasing gas,4200-4250
+70103,PROVIDING,Purchasing food (not groceries),4200-4250
+70104,PROVIDING,"Shopping, except groceries, food and gas",4200-4250
+70105,SUPPORT,Waiting associated with shopping,4200-4250
+70199,PROVIDING,"Shopping, except groceries, food and gas",4200-4250
+70201,SUPPORT,"Shopping, except groceries, food and gas",4200-4250
+70299,SUPPORT,"Shopping, except groceries, food and gas",4200-4250
+70301,nc,"Shopping, except groceries, food and gas",4200-4250
+70399,nc,"Shopping, except groceries, food and gas",4200-4250
+79999,PROVIDING,"Shopping, except groceries, food and gas",4200-4250
+80101,SUPPORT,Using paid childcare services,4600
+80102,SUPPORT,Using paid childcare services,4600
+80199,SUPPORT,Using paid childcare services,4600
+80201,SUPPORT,Banking,5000-5530
+80202,SUPPORT,Banking,5000-5530
+80203,SUPPORT,Banking,5000-5530
+80299,SUPPORT,Banking,5000-5530
+80301,SUPPORT,Using legal services,5000-5530
+80302,SUPPORT,Using legal services,5000-5530
+80399,SUPPORT,Using legal services,5000-5530
+80401,SUPPORT,Using health and care services outside the home,4610
+80402,SUPPORT,Using in-home health and care services,4610
+80403,SUPPORT,Using health and care services outside the home,4610
+80499,SUPPORT,Using health and care services outside the home,4610
+80501,SUPPORT,Using personal care services,4610
+80502,SUPPORT,Using personal care services,4610
+80599,SUPPORT,Using personal care services,4610
+80601,SUPPORT,Real Estate Sales,5000-5530
+80602,SUPPORT,Real Estate Sales,5000-5530
+80699,SUPPORT,Real Estate Sales,5000-5530
+80701,NC,Using veterinary services,4340-4350
+80702,NC,Using veterinary services,4340-4350
+80799,NC,Using veterinary services,4340-4350
+80801,SUPPORT,General personal services,4610
+80899,SUPPORT,General personal services,4610
+89999,SUPPORT,General personal services,4610
+90101,SUPPORT,Using interior cleaning services ,4200-4250
+90102,SUPPORT,Using meal preparation services,4200-4250
+90103,SUPPORT,Using clothing repair and cleaning services,4200-4250
+90104,SUPPORT,General personal services,4610
+90199,SUPPORT,General personal services,4610
+90201,SUPPORT,Using home maint/repair/d cor/construction svcs,7000
+90202,SUPPORT,Using home maint/repair/d cor/construction svcs,7000
+90299,SUPPORT,Using home maint/repair/d cor/construction svcs,7000
+90401,SUPPORT,Using lawn and garden services,4200-4250
+90402,SUPPORT,Using lawn and garden services,4200-4250
+90499,SUPPORT,Using lawn and garden services,4200-4250
+90501,SUPPORT,Using vehicle maintenance or repair services,7000
+90502,SUPPORT,Using vehicle maintenance or repair services,7000
+90599,SUPPORT,Using vehicle maintenance or repair services,7000
+99999,SUPPORT,Using Home Services,4610
+100101,SUPPORT,Using police and fire services,4610
+100102,SUPPORT,Using social services,4610
+150201,PROVIDING,Volunteering,5000-5530
+150202,PROVIDING,Volunteering,5000-5530
+150203,PROVIDING,Volunteering,5000-5530
+150204,PROVIDING,Volunteering,5000-5530
+150299,PROVIDING,Volunteering,5000-5530
+150301,PROVIDING,Volunteering,5000-5530
+150302,PROVIDING,Volunteering,5000-5530
+150399,PROVIDING,Volunteering,5000-5530
+150402,SUPPORT,Volunteering,5000-5530
+150701,SUPPORT,Volunteering,5000-5530
+150799,SUPPORT,Volunteering,5000-5530
+150801,SUPPORT,Volunteering,5000-5530
+150899,SUPPORT,Volunteering,5000-5530
+159999,SUPPORT,Volunteering,5000-5530
+,,Secondary Childcare,4600
+,,Secondary Eldercare,4610
+180101,SUPPORT,Daily Living Travel,9140
+180199,SUPPORT,Daily Living Travel,9140
+180201,SUPPORT,Daily Living Travel,9140
+180202,SUPPORT,Daily Living Travel,9140
+180203,SUPPORT,Daily Living Travel,9140
+180204,SUPPORT,Daily Living Travel,9140
+180205,SUPPORT,Daily Living Travel,9140
+180206,SUPPORT,Daily Living Travel,9140
+180207,SUPPORT,Daily Living Travel,9140
+180208,SUPPORT,Daily Living Travel,9140
+180209,SUPPORT,Daily Living Travel,9140
+180299,SUPPORT,Daily Living Travel,9140
+180301,SUPPORT,Developmental Travel,9140
+180302,SUPPORT,Developmental Travel,9140
+180303,SUPPORT,Developmental Travel,9140
+180304,SUPPORT,Healthcare Travel,9140
+180305,SUPPORT,Healthcare Travel,9140
+180399,SUPPORT,Healthcare Travel,9140
+180401,SUPPORT,Healthcare Travel,9140
+180402,SUPPORT,Developmental Travel,9140
+180403,SUPPORT,Developmental Travel,9140
+180404,SUPPORT,Healthcare Travel,9140
+180405,SUPPORT,Healthcare Travel,9140
+180499,SUPPORT,Healthcare Travel,9140
+180501,SUPPORT,Unpaid Travel for Work,9140
+180502,SUPPORT,Unpaid Travel for Work,9140
+180503,SUPPORT,Unpaid Travel for Work,9140
+180504,SUPPORT,Unpaid Travel for Work,9140
+180599,SUPPORT,Unpaid Travel for Work,9140
+180601,SUPPORT,Developmental Travel,9140
+180602,SUPPORT,Developmental Travel,9140
+180603,SUPPORT,Developmental Travel,9140
+180604,SUPPORT,Developmental Travel,9140
+180699,SUPPORT,Developmental Travel,9140
+180701,SUPPORT,Daily Living Travel,9140
+180702,SUPPORT,Daily Living Travel,9140
+180703,SUPPORT,Daily Living Travel,9140
+180704,SUPPORT,Daily Living Travel,9140
+180799,SUPPORT,Daily Living Travel,9140
+180801,SUPPORT,Developmental Travel,9140
+180802,SUPPORT,Daily Living Travel,9140
+180803,SUPPORT,Noncare Travel,9140
+180804,SUPPORT,Healthcare Travel,9140
+180805,SUPPORT,Daily Living Travel,9140
+180806,SUPPORT,Daily Living Travel,9140
+180807,SUPPORT,Daily Living Travel,9140
+180899,SUPPORT,Daily Living Travel,9140
+180901,SUPPORT,Daily Living Travel,9140
+180902,SUPPORT,Daily Living Travel,9140
+180903,SUPPORT,Daily Living Travel,9140
+180904,SUPPORT,Daily Living Travel,9140
+180905,SUPPORT,Daily Living Travel,9140
+180999,SUPPORT,Daily Living Travel,9140
+181001,SUPPORT,Noncare Travel,9140
+181002,SUPPORT,Noncare Travel,9140
+181099,SUPPORT,Noncare Travel,9140
+181101,SUPPORT,Daily Living Travel,9140
+181199,SUPPORT,Daily Living Travel,9140
+181201,SUPPORT,Noncare Travel,9140
+181202,SUPPORT,Noncare Travel,9140
+181203,SUPPORT,Noncare Travel,9140
+181204,SUPPORT,Noncare Travel,9140
+181205,SUPPORT,Noncare Travel,9140
+181299,SUPPORT,Noncare Travel,9140
+181301,SUPPORT,Noncare Travel,9140
+181302,SUPPORT,Noncare Travel,9140
+181399,SUPPORT,Noncare Travel,9140
+181401,SUPPORT,Noncare Travel,9140
+181499,SUPPORT,Noncare Travel,9140
+181501,SUPPORT,Daily Living Travel,9140
+181599,SUPPORT,Daily Living Travel,9140
+181601,SUPPORT,Noncare Travel,9140
+181699,SUPPORT,Noncare Travel,9140
+181801,SUPPORT,Noncare Travel,9140
+181899,SUPPORT,Noncare Travel,9140
+189999,SUPPORT,Noncare Travel,9140

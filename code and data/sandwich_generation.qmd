@@ -1,0 +1,184 @@
+---
+title: "sandwich_generation — annotated"
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    code-overflow: wrap
+    df-print: paged
+execute:
+  warning: false
+  message: false
+  echo: true
+editor: visual
+date: 2025-08-07
+---
+
+# Methods Overview
+
+```{r step_1_01, message=FALSE, warning=FALSE}
+source("load_defaults.R")
+
+atus <- read.csv("./data/CSV/ATUSdata.csv") |>  # pipe 
+# Filter rows by conditions
+filter(activity != "Formal Work") |>  # pipe
+# Filter rows by conditions
+filter(YEAR >= 2011 & YEAR != 2020) |>  # pipe
+# Select/reorder columns
+select(YEAR, date, CASEID, WT06, YNGCH, AGE, 
+         child_care, elder_care, DURATION,
+         SCC_ALL_LN, SEC_ALL_LN, STATEFIP) |>  # pipe 
+  data.frame() |>  # pipe 
+  clean_names() |>  # pipe
+  rename(geo_level = statefip)
+
+yr_range <- atus_yr_range(atus)
+
+case_time <- atus |>  # pipe 
+# Group rows for downstream summaries
+group_by(year, geo_level, date, caseid, wt06, yngch, age) |>  # pipe 
+# Compute summary statistics
+summarise(
+    time_child_care = sum(child_care*duration + scc_all_ln),
+    time_elder_care = sum(elder_care*duration + sec_all_ln),
+    time_child_elder = sum(time_child_care + time_elder_care)
+  ) |>  # pipe 
+  ungroup() 
+  
+case_time <- case_time |>  # pipe 
+# Create or modify columns
+mutate(
+    sandwich_all = ifelse(
+      time_elder_care > 0 & yngch <= 10 & age >= 18,
+      "sandwich", "other")
+  )
+
+sandwich_stats_5yr <- list()
+i = 1
+
+for(sel_year in yr_range$year) {
+  year_min <- yr_range$yr_start[i]
+  
+  sandwich_stats_5yr[[sel_year]] <- case_time |>  # pipe
+# Filter rows by conditions
+filter(year >= year_min & year <= sel_year) |>  # pipe
+# Group rows for downstream summaries
+group_by(sandwich_all, geo_level) |>  # pipe
+# Compute summary statistics
+summarise(
+      sandwich_population = sum(wt06/365)/5,
+      sandwich_time_total = sum(wt06/365*time_child_elder)/5/60,
+      sandwich_time_median = wtd.quantile(
+        time_child_elder, 
+        weights = wt06, 
+        probs = 0.5
+        )
+    ) |>  # pipe
+    ungroup() |>  # pipe 
+# Group rows for downstream summaries
+group_by(geo_level) |>  # pipe
+# Create or modify columns
+mutate(
+      sandwich_population_proportion = sandwich_population / 
+        sum(sandwich_population), 
+      date = as.Date(paste0(as.character(sel_year), "-01-01"))
+      ) |>  # pipe 
+# Filter rows by conditions
+filter(sandwich_all == "sandwich")
+  
+  i = i + 1
+}
+
+sandwich_stats_5yr <- bind_rows(sandwich_stats_5yr) |>  # pipe 
+# Select/reorder columns
+select(date, geo_level, sandwich_population, sandwich_population_proportion,
+         sandwich_time_total, sandwich_time_median)
+
+sandwich_stats_5yr$geo_level <- sprintf("%02d", as.numeric(sandwich_stats_5yr$geo_level))
+sandwich_stats_5yr$geo_level <- paste0("state", sandwich_stats_5yr$geo_level)
+```
+
+## Step 2
+
+```{r step_2_02, message=FALSE, warning=FALSE}
+sw <- sandwich_stats_5yr |>  # pipe
+# Group rows for downstream summaries
+group_by(date) |>  # pipe
+# Compute summary statistics
+summarise(sandwich_population = sum(sandwich_population),
+            sandwich_population_proportion = mean(sandwich_population_proportion, na.rm = TRUE),
+            sandwich_time_total = sum(sandwich_time_total),
+            sandwich_time_median = mean(sandwich_time_median, na.rm = TRUE)) |>  # pipe
+# Create or modify columns
+mutate(geo_level = "national")
+
+sandwich_stats_5yr <- rbind(sandwich_stats_5yr,sw)
+```
+
+## Step 3
+
+```{r step_3_03, message=FALSE, warning=FALSE}
+write.csv(sandwich_stats_5yr, "./app_data/metrics_sandwich_generation.csv", row.names = FALSE)
+
+check_sandwich_stats <- case_time |>  # pipe
+# Group rows for downstream summaries
+group_by(date, sandwich_all) |>  # pipe 
+# Compute summary statistics
+summarise(
+    population = sum(wt06/365),
+    time_total = sum(wt06/365*time_child_elder),
+    time_median = wtd.quantile(time_child_elder, weights = wt06, 
+                               probs = 0.5)
+    ) |>  # pipe 
+# Group rows for downstream summaries
+group_by(date) |>  # pipe 
+# Create or modify columns
+mutate(population_proportion = population/sum(population)) |>  # pipe 
+  ungroup() |>  # pipe 
+# Filter rows by conditions
+filter(sandwich_all == "sandwich")
+
+check_sandwich_stats <- check_sandwich_stats |>  # pipe
+# Create or modify columns
+mutate(
+    # averages 4 period beforehand skipping over missing years
+    population = slide_mean(population, before = 4, complete = TRUE),
+    population_proportion = slide_mean(population_proportion, before = 4, complete = TRUE),
+    time_total = slide_mean(time_total, before = 4, complete = TRUE),
+    time_median = slide_mean(time_median, before = 4, complete = TRUE)
+    )
+
+plt_trend <- function(df1, col1, df2, col2){
+  p <- ggplot() +
+    geom_line(data = df1, aes(x = date, y = get(col1)), 
+              colour = "steelblue", alpha = 0.8) +
+    geom_point(data = df1, aes(x = date, y = get(col1)), 
+               colour = "steelblue", alpha = 0.8) +
+    geom_line(data = df2, aes(x = date, y = get(col2)), 
+              colour = "grey", alpha = 0.8) +
+    geom_point(data = df2, aes(x = date, y = get(col2)), 
+               colour = "grey", alpha = 0.8) +
+    theme_minimal() +
+    theme(axis.title = element_blank()) +
+    scale_y_continuous(labels = comma) +
+    expand_limits(y = 0)  
+  
+  return(p)
+}
+
+plt_trend(sandwich_stats_5yr, "sandwich_population", 
+          check_sandwich_stats, "population") +
+  ggtitle("Sandwich Population")
+
+plt_trend(sandwich_stats_5yr, "sandwich_population_proportion", 
+          check_sandwich_stats, "population_proportion") +
+  ggtitle("Sandwich Pop Proportion")
+
+plt_trend(sandwich_stats_5yr, "sandwich_time_total", 
+          check_sandwich_stats, "time_total") +
+  ggtitle("Sandwich time median")
+
+plt_trend(sandwich_stats_5yr, "sandwich_time_median", 
+          check_sandwich_stats, "time_median") +
+  ggtitle("Sandwich time median")
+```

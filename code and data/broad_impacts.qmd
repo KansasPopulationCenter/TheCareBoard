@@ -1,0 +1,663 @@
+---
+title: "broad_impacts — annotated"
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    code-overflow: wrap
+    df-print: paged
+execute:
+  warning: false
+  message: false
+  echo: true
+editor: visual
+date: 2025-08-08
+---
+
+# Methods Overview
+
+```{r step_1_01, message=FALSE, warning=FALSE}
+source("load_defaults.R")
+min_year <- 1994
+
+us_gdp <- read.csv("./data/CSV/GdpByState.csv") %>%  # pipe
+  pivot_longer(
+    cols = starts_with("X"),
+    names_to = "year",
+    names_prefix = "X",
+    values_to = "gdp"
+  ) %>%  # pipe
+# Select/reorder columns
+select(GeoFips, year, gdp) %>%  # pipe
+# Create or modify columns
+mutate(year = as.integer(year))
+
+us_gdp$geo_level <- ifelse(
+  us_gdp$GeoFips == 0,
+  "national",
+  sprintf("state%02d", us_gdp$GeoFips / 1000)
+)
+
+us_gdp <- us_gdp %>%  # pipe
+# Create or modify columns
+mutate(gdp = gdp*1000000)
+
+asec <- read.csv("./data/CSV/ASECdata.csv") |>  # pipe
+  # incorporate HFLAG clause due to survey redesign in 2014
+  # https://blog.popdata.org/2014sample/
+# Filter rows by conditions
+filter(HFLAG == 1 | is.na(HFLAG)) |>  # pipe 
+# Filter rows by conditions
+filter(AGE >= 18) |>  # pipe
+# Filter rows by conditions
+filter(YEAR >= min_year) |>  # pipe
+# Select/reorder columns
+select(YEAR,
+         ASECWT,
+         UHRSWORKT,
+         INCWAGE,
+         empstat,
+         statefip,
+         occ_care_focus,
+         gender_parent,
+         STATEFIP,
+         occ_label) |>  # pipe
+  clean_names() |>  # pipe
+# Create or modify columns
+mutate(
+    date = as.Date(paste0(year, "-01-01")),
+    uhrsworkt = ifelse(uhrsworkt == 999, 0, uhrsworkt),
+    occ_type = ifelse(occ_care_focus == "none", "non-care", "care"),
+    overall = "overall",
+    geo_level = statefip_2
+  )
+
+get_formal_lfp <- function(df, demo_group) {
+  df |>  # pipe
+# Create or modify columns
+mutate(
+      category_id = demo_group,
+      subcategory_id = get(demo_group)
+    ) |>  # pipe
+# Group rows for downstream summaries
+group_by(date, geo_level, category_id, subcategory_id) |>  # pipe
+# Compute summary statistics
+summarise(
+      formal_care_labor_force = sum(
+        ifelse(
+          occ_type == "care" & empstat == "Employed",
+          asecwt, 0),
+        na.rm = TRUE
+      ),
+      total_weight = sum(asecwt, na.rm = TRUE),
+      formal_care_labor_force_proportion = formal_care_labor_force / total_weight,
+      .groups = "drop"
+    )
+}
+
+formal_lfp <- bind_rows(
+  get_formal_lfp(asec, "overall"),
+  get_formal_lfp(asec, "gender_parent"),
+  )
+
+formal_lfp$geo_level <- sprintf("%02d", as.numeric(formal_lfp$geo_level))
+formal_lfp$geo_level <- paste0("state", formal_lfp$geo_level)
+
+
+lfp <- formal_lfp |>  # pipe
+# Group rows for downstream summaries
+group_by(date, category_id, subcategory_id) |>  # pipe
+# Compute summary statistics
+summarise(formal_care_labor_force = sum(formal_care_labor_force),
+            total_weight = sum(total_weight),
+            formal_care_labor_force_proportion = mean(formal_care_labor_force_proportion, na.rm = TRUE)) |>  # pipe
+# Create or modify columns
+mutate(geo_level = "national")
+```
+
+## Step 2
+
+```{r step_2_02, message=FALSE, warning=FALSE}
+formal_lfp <- rbind(formal_lfp, lfp)
+
+get_formal_time <- function(df, demo_group) {
+  df <- asec |>  # pipe
+# Filter rows by conditions
+filter(uhrsworkt != 997) |>  # pipe 
+# Filter rows by conditions
+filter(empstat == "Employed") |>  # pipe 
+# Create or modify columns
+mutate(
+      category_id = demo_group,
+      subcategory_id = get(demo_group)
+      ) |>  # pipe
+# Group rows for downstream summaries
+group_by(date,geo_level,category_id, subcategory_id) |>  # pipe
+# Compute summary statistics
+summarise(
+      formal_care_time = sum(
+        ifelse(
+          occ_type == "care" & empstat == "Employed",
+          asecwt * uhrsworkt * 60 / 7,
+          0
+        )
+      ),
+      formal_care_time_proportion = formal_care_time /
+        sum(asecwt * uhrsworkt * 60 / 7)
+    )
+  
+  return(df)
+}
+
+formal_time <- bind_rows(
+  get_formal_time(asec, "overall"),
+  get_formal_time(asec, "gender_parent")
+)
+
+formal_time$geo_level <- sprintf("%02d", as.numeric(formal_time$geo_level))
+formal_time$geo_level <- paste0("state", formal_time$geo_level)
+
+
+time <- formal_time |>  # pipe
+# Group rows for downstream summaries
+group_by(date, category_id, subcategory_id) |>  # pipe
+# Compute summary statistics
+summarise(formal_care_time = sum(formal_care_time),
+            formal_care_time_proportion = mean(formal_care_time_proportion, na.rm = TRUE)) |>  # pipe
+# Create or modify columns
+mutate(geo_level = "national")
+
+formal_time_save <- rbind(formal_time, time)
+
+get_formal_time <- function(df, demo_group) {
+  df <- asec |>  # pipe
+# Filter rows by conditions
+filter(uhrsworkt != 997) |>  # pipe 
+# Filter rows by conditions
+filter(empstat == "Employed") |>  # pipe 
+# Create or modify columns
+mutate(
+      category_id = demo_group,
+      subcategory_id = get(demo_group)
+      ) |>  # pipe
+# Group rows for downstream summaries
+group_by(date,geo_level, occ_label,category_id, subcategory_id) |>  # pipe
+# Compute summary statistics
+summarise(
+      formal_care_time = sum(
+        ifelse(
+          occ_type == "care" & empstat == "Employed",
+          asecwt * uhrsworkt * 60 / 7,
+          0
+        )
+      ),
+      formal_care_time_proportion = formal_care_time /
+        sum(asecwt * uhrsworkt * 60 / 7)
+    )
+  
+  return(df)
+}
+
+formal_time <- bind_rows(
+  get_formal_time(asec, "overall"),
+  get_formal_time(asec, "gender_parent")
+)
+
+formal_time$geo_level <- sprintf("%02d", as.numeric(formal_time$geo_level))
+formal_time$geo_level <- paste0("state", formal_time$geo_level)
+
+
+time <- formal_time |>  # pipe
+# Group rows for downstream summaries
+group_by(date, occ_label, category_id, subcategory_id) |>  # pipe
+# Compute summary statistics
+summarise(formal_care_time = sum(formal_care_time),
+            formal_care_time_proportion = mean(formal_care_time_proportion, na.rm = TRUE)) |>  # pipe
+# Create or modify columns
+mutate(geo_level = "national")
+```
+
+## Step 3
+
+```{r step_3_03, message=FALSE, warning=FALSE}
+occ_time <- rbind(formal_time, time) %>%  # pipe
+# Filter rows by conditions
+filter(formal_care_time != 0) %>%  # pipe
+# Select/reorder columns
+select(-formal_care_time_proportion)
+
+asec <- read.csv("./data/CSV/ASECdata.csv") |>  # pipe
+# Filter rows by conditions
+filter(AGE >= 18) |>  # pipe
+# Filter rows by conditions
+filter(YEAR >= 1994) |>  # pipe
+# Filter rows by conditions
+filter(occ_care_focus != "none") |>  # pipe 
+# Filter rows by conditions
+filter(empstat == "Employed") |>  # pipe
+# Select/reorder columns
+select(YEAR, OCC2010, occ_label, UHRSWORKT, 
+         EARNWT, INCWAGE, occ_care_focus, ASECWT, STATEFIP) |>  # pipe 
+  clean_names()
+```
+
+## clean up names
+
+```{r clean_up_names_04, message=FALSE, warning=FALSE}
+# clean up names
+asec <- asec|>  # pipe 
+# Filter rows by conditions
+filter(uhrsworkt != 997) %>%  # pipe
+# Filter rows by conditions
+filter(uhrsworkt > 0) %>%  # pipe
+# Filter rows by conditions
+filter(uhrsworkt != 999) %>%  # pipe
+# Create or modify columns
+mutate(
+    activity_id = str_replace_all(
+      occ_label, "[^a-zA-Z0-9]+", "-") |>  # pipe 
+      str_to_lower(),
+    asecwt = asecwt/5,
+    activity_id = gsub("-$", "", activity_id)
+  ) |>  # pipe 
+  rename(
+    name = occ_label, 
+    care_focus = occ_care_focus,
+    geo_level = statefip
+    ) %>%  # pipe
+# Create or modify columns
+mutate(uhrsworkt = uhrsworkt*52,
+         hourly_rate = incwage/uhrsworkt) 
+
+
+med_wage <- asec |>  # pipe
+# Filter rows by conditions
+filter(incwage != 0 & incwage != 99999999) |>  # pipe 
+# Compute summary statistics
+summarise(
+      median_wage = wtd.quantile(
+      hourly_rate, 
+      weights = asecwt, 
+      probs = 0.5,
+      ),
+    .by = c(activity_id, year, geo_level, name, care_focus)
+  )
+
+
+med_wage$geo_level <- sprintf("%02d", as.numeric(med_wage$geo_level))
+med_wage$geo_level <- paste0("state", med_wage$geo_level)
+```
+
+## National Stats
+
+```{r national_stats_05, message=FALSE, warning=FALSE}
+## National Stats
+
+med_wage_n <- asec |>  # pipe
+# Filter rows by conditions
+filter(incwage != 0 & incwage != 99999999) |>  # pipe 
+# Compute summary statistics
+summarise(
+      median_wage = wtd.quantile(
+      hourly_rate, 
+      weights = asecwt, 
+      probs = 0.5
+      ),
+    .by = c(activity_id, year, name, care_focus)
+  )
+
+med_wage_n$geo_level <- "national"
+```
+
+## Group Together
+
+```{r group_together_06, message=FALSE, warning=FALSE}
+## Group Together
+
+med_wage <- rbind(med_wage, med_wage_n)
+
+occ_time <- occ_time %>%  # pipe
+# Create or modify columns
+mutate(year = year(date))
+```
+
+## Merge the datasets using left_join
+
+**Purpose.** This chunk (07) addresses the step: “Merge the datasets using left_join.” Light annotations have been added for clarity without modifying any object or variable names.
+
+```{r merge_the_datasets_using_left_join_07, message=FALSE, warning=FALSE}
+# Merge the datasets using left_join
+merged_data <- occ_time %>%  # pipe
+# Join datasets with left_join
+left_join(med_wage, by = c("occ_label" = "name", 
+                             "year" = "year", 
+                             "geo_level" = "geo_level"))
+
+formal_value <- merged_data %>%  # pipe
+# Group rows for downstream summaries
+group_by(date, geo_level, category_id, subcategory_id) %>%  # pipe
+# Compute summary statistics
+summarise(
+    formal_value = sum(formal_care_time/60*median_wage)
+  )
+
+formal_value <- formal_value %>%  # pipe
+# Create or modify columns
+mutate(year = as.integer(format(as.Date(date), "%Y")))
+
+formal_value <- formal_value %>%  # pipe
+# Join datasets with left_join
+left_join(us_gdp, by = c("year", "geo_level"))
+
+formal_value <- formal_value %>%  # pipe
+# Create or modify columns
+mutate(formal_value_proportion = formal_value*365 / gdp)
+```
+
+## Drop the unnecessary columns if desired
+
+```{r drop_the_unnecessary_columns_if_desired_08, message=FALSE, warning=FALSE}
+# Drop the unnecessary columns if desired
+formal_value <- formal_value %>%  # pipe
+# Select/reorder columns
+select(-GeoFips, -gdp, -year) %>%  # pipe
+# Filter rows by conditions
+filter(!is.na(formal_value_proportion))
+
+metrics_formal <- bind_rows(
+  formal_lfp, 
+  formal_time_save, 
+  formal_value
+) %>%  # pipe
+# Select/reorder columns
+select(-c(total_weight))
+
+
+
+write.csv(
+  metrics_formal, 
+  "./app_data/metrics_formal.csv", 
+  row.names = FALSE
+  )
+
+
+source("load_defaults.R")
+atus <- read.csv("./data/CSV/ATUSdata.csv") |>  # pipe 
+# Filter rows by conditions
+filter(activity != "Formal Work") |>  # pipe 
+# Filter rows by conditions
+filter(AGE >= 18) |>  # pipe
+# Filter rows by conditions
+filter(YEAR != 2020) |>  # pipe 
+# Select/reorder columns
+select(YEAR, CASEID, WT06, ACTIVITY, DURATION, SCC_ALL_LN, SEC_ALL_LN,
+         act_care_focus, activity, gender_parent, STATEFIP) |>  # pipe 
+  clean_names() |>  # pipe 
+  pivot_longer(
+    cols = c(duration, scc_all_ln, sec_all_ln),
+    names_to = "metric", 
+    values_to = "duration"
+  ) |>  # pipe   
+# Create or modify columns
+mutate(
+    duration = coalesce(duration, 0),
+    care_flag = case_when(
+      metric %in% c("scc_all_ln", "sec_all_ln") | 
+        act_care_focus != "non-care" ~ "care", 
+      TRUE ~ "non-care" 
+    ), 
+    overall = "overall",
+    geo_level = statefip
+  )
+
+case_year <- atus |>  # pipe 
+# Create or modify columns
+mutate(weight = wt06 / 365) |>  # pipe 
+# Compute summary statistics
+summarise(
+    total_time = sum(duration),
+    .by = c(year, caseid, geo_level, gender_parent, weight, care_flag)
+    ) |>  # pipe 
+# Create or modify columns
+mutate(overall = "overall")
+
+yr_range <- atus_yr_range(atus)
+
+get_informal_lfp <- function(demo_group) {
+  informal_lfp <- list()
+  i <- 1
+  
+  for (sel_year in yr_range$year) {
+    year_min <- yr_range$yr_start[i]
+```
+
+## calculate total population for the selected demo group, by state
+
+```{r calculate_total_population_for_the_selected_demo_group_by_state_09, message=FALSE, warning=FALSE}
+# calculate total population for the selected demo group, by state
+    tot_pop <- atus |>  # pipe
+# Filter rows by conditions
+filter(year >= year_min & year <= sel_year) |>  # pipe
+# Create or modify columns
+mutate(category_id = demo_group,
+             subcategory_id = get(demo_group)) |>  # pipe
+      distinct(year, caseid, wt06, geo_level, category_id, subcategory_id) |>  # pipe
+# Group rows for downstream summaries
+group_by(geo_level, category_id, subcategory_id) |>  # pipe
+# Compute summary statistics
+summarise(
+        total_population = sum(wt06 / 365 / 5), 
+        .groups = "drop"
+      )
+```
+
+## calculate population doing minimum 3 hours care work, by state
+
+```{r calculate_population_doing_minimum_3_hours_care_work_by_state_10, message=FALSE, warning=FALSE}
+# calculate population doing minimum 3 hours care work, by state
+    informal_lfp[[sel_year]] <- case_year |>  # pipe
+# Filter rows by conditions
+filter(year >= year_min & year <= sel_year) |>  # pipe
+# Filter rows by conditions
+filter(care_flag == "care" & total_time >= 3 * 60) |>  # pipe
+# Create or modify columns
+mutate(category_id = demo_group,
+             subcategory_id = get(demo_group)) |>  # pipe
+# Group rows for downstream summaries
+group_by(geo_level, category_id, subcategory_id) |>  # pipe
+# Compute summary statistics
+summarise(
+        informal_care_labor_force = sum(weight / 5),
+        .groups = "drop"
+      ) |>  # pipe
+# Join datasets with left_join
+left_join(tot_pop, by = c("geo_level", "category_id", "subcategory_id")) |>  # pipe
+# Create or modify columns
+mutate(
+        date = as.Date(paste0(as.character(sel_year), "-01-01")),
+        informal_care_labor_force_proportion = 
+          informal_care_labor_force / total_population
+      ) |>  # pipe
+      relocate(date)
+    
+    i <- i + 1
+  }
+  
+  df <- bind_rows(informal_lfp)
+  return(df)
+}
+```
+
+## Now calculate informal_lfp both overall and by gender_parent
+
+```{r now_calculate_informal_lfp_both_overall_and_by_gender_parent_11, message=FALSE, warning=FALSE}
+# Now calculate informal_lfp both overall and by gender_parent
+informal_lfp <- bind_rows(
+  get_informal_lfp("overall"),
+  get_informal_lfp("gender_parent")
+)
+
+
+informal_lfp$geo_level <- sprintf("%02d", as.numeric(informal_lfp$geo_level))
+informal_lfp$geo_level <- paste0("state", informal_lfp$geo_level)
+
+
+lfp <- informal_lfp |>  # pipe
+# Group rows for downstream summaries
+group_by(date, category_id, subcategory_id) |>  # pipe
+# Compute summary statistics
+summarise(informal_care_labor_force = sum(informal_care_labor_force),
+            total_population = sum(total_population),
+            informal_care_labor_force_proportion = mean(informal_care_labor_force_proportion, na.rm = TRUE)) |>  # pipe
+# Create or modify columns
+mutate(geo_level = "national")
+
+informal_lfp <- rbind(informal_lfp, lfp)
+
+get_informal_time <- function(demo_group) {
+  informal_time <- list()
+  i <- 1
+  
+  for (sel_year in yr_range$year) {
+    year_min <- yr_range$yr_start[i]
+    
+    informal_time[[sel_year]] <- case_year |>  # pipe
+# Filter rows by conditions
+filter(year >= year_min & year <= sel_year) |>  # pipe
+# Create or modify columns
+mutate(category_id = demo_group,
+             subcategory_id = get(demo_group)) |>  # pipe
+# Group rows for downstream summaries
+group_by(geo_level, care_flag, category_id, subcategory_id) |>  # pipe 
+# Compute summary statistics
+summarise(
+        informal_care_time = sum(total_time * weight / 5),
+        .groups = "drop"
+      ) |>  # pipe
+# Group rows for downstream summaries
+group_by(geo_level, category_id, subcategory_id) |>  # pipe
+# Create or modify columns
+mutate(
+        date = as.Date(paste0(as.character(sel_year), "-01-01")),
+        informal_care_time_proportion = informal_care_time / sum(informal_care_time)
+      ) |>  # pipe
+      relocate(date)
+    
+    i <- i + 1
+  }
+  
+  df <- bind_rows(informal_time)
+  return(df)
+}
+```
+
+## Now calculate informal_time both overall and by gender_parent
+
+```{r now_calculate_informal_time_both_overall_and_by_gender_parent_12, message=FALSE, warning=FALSE}
+# Now calculate informal_time both overall and by gender_parent
+informal_time_state <- bind_rows(
+  get_informal_time("overall"),
+  get_informal_time("gender_parent")
+)
+
+
+informal_time_state$geo_level <- sprintf("%02d", as.numeric(informal_time_state$geo_level))
+informal_time_state$geo_level <- paste0("state", informal_time_state$geo_level)
+```
+
+## National
+
+```{r national_13, message=FALSE, warning=FALSE}
+#National
+
+get_informal_time <- function(demo_group) {
+  informal_time <- list()
+  i <- 1
+  
+  for (sel_year in yr_range$year) {
+    year_min <- yr_range$yr_start[i]
+    
+    informal_time[[sel_year]] <- case_year |>  # pipe
+# Filter rows by conditions
+filter(year >= year_min & year <= sel_year) |>  # pipe
+# Create or modify columns
+mutate(category_id = demo_group,
+             subcategory_id = get(demo_group)) |>  # pipe
+# Group rows for downstream summaries
+group_by(care_flag, category_id, subcategory_id) |>  # pipe 
+# Compute summary statistics
+summarise(
+        informal_care_time = sum(total_time * weight / 5),
+        .groups = "drop"
+      ) |>  # pipe
+# Group rows for downstream summaries
+group_by(category_id, subcategory_id) |>  # pipe
+# Create or modify columns
+mutate(
+        date = as.Date(paste0(as.character(sel_year), "-01-01")),
+        informal_care_time_proportion = informal_care_time / sum(informal_care_time)
+      ) |>  # pipe
+      relocate(date)
+    
+    i <- i + 1
+  }
+  
+  df <- bind_rows(informal_time)
+  return(df)
+}
+
+
+informal_time <- bind_rows(
+  get_informal_time("overall"),
+  get_informal_time("gender_parent")
+)
+
+informal_time$geo_level <- "national"
+
+informal_time <- rbind(informal_time_state, informal_time)
+
+informal_value <- informal_time %>%  # pipe
+# Create or modify columns
+mutate(informal_value = informal_care_time/60*7.25) %>%  # pipe
+# Select/reorder columns
+select(-informal_care_time, -informal_care_time_proportion)
+
+informal_value <- informal_value %>%  # pipe
+# Create or modify columns
+mutate(year = as.integer(format(as.Date(date), "%Y")))
+
+informal_value <- informal_value %>%  # pipe
+# Join datasets with left_join
+left_join(us_gdp, by = c("year", "geo_level"))
+
+informal_value <- informal_value %>%  # pipe
+# Create or modify columns
+mutate(informal_value_proportion = informal_value*365 / gdp)
+```
+
+## Drop the unnecessary columns if desired
+
+```{r drop_the_unnecessary_columns_if_desired_14, message=FALSE, warning=FALSE}
+# Drop the unnecessary columns if desired
+informal_value <- informal_value %>%  # pipe
+# Select/reorder columns
+select(-GeoFips, -gdp, -year) %>%  # pipe
+# Filter rows by conditions
+filter(!is.na(informal_value_proportion))
+
+metrics_informal <- bind_rows(
+  informal_lfp, 
+  informal_time, 
+  informal_value) %>%  # pipe
+# Filter rows by conditions
+filter(care_flag == "care" | is.na(care_flag))|>  # pipe
+# Select/reorder columns
+select(-care_flag, -total_population)
+
+
+write.csv(
+  metrics_informal, 
+  "./app_data/metrics_informal.csv", 
+  row.names = FALSE
+  )
+```

@@ -1,0 +1,314 @@
+---
+title: "activity_informal"
+format: html
+editor: visual
+---
+
+## Overview
+
+## Load & Setup Data
+
+```{r chunk_01, message=FALSE, warning=FALSE}
+source("load_defaults.R")
+# load data
+atus <- read.csv("./data/CSV/ATUSdata.csv") |>  # pipe 
+# Filter rows by conditions
+filter(activity != "Formal Work") |>  # pipe   
+# Filter rows by conditions
+filter(YEAR >= 2018 & YEAR != 2020) |>  # pipe 
+# Filter rows by conditions
+filter(AGE >= 18) |>  # pipe
+# Select/reorder columns
+select(YEAR, CASEID, WT06, ACTIVITY, activity, act_care_focus, 
+         DURATION, SCC_ALL_LN, SEC_ALL_LN, STATEFIP) |>  # pipe 
+  clean_names() 
+
+# get most recent 5 year and clean up columns
+yr_range <- atus_yr_range(atus) |>  # pipe 
+# Filter rows by conditions
+filter(year == max(year))
+
+atus <- atus |>  # pipe 
+# Filter rows by conditions
+filter(year >= yr_range$yr_start & year <= yr_range$year) |>  # pipe 
+  rename(
+    care_focus = act_care_focus, 
+    activity_name = activity_2
+    ) |>  # pipe
+# Create or modify columns
+mutate(
+    activity_name = ifelse(
+      care_focus == "non-care", "non-care", activity_name), 
+    
+    activity_id = str_replace_all(
+      activity_name, "[^a-zA-Z0-9]+", "-") |>  # pipe 
+      str_to_lower(),
+    activity_id = gsub("-$", "", activity_id), 
+    geo_level = statefip,
+    weight = wt06/365/5
+  )
+```
+
+## Calculate Informal Stats
+
+```{r chunk_02, message=FALSE, warning=FALSE}
+case_stats <- bind_rows(
+  atus |>  # pipe
+# Compute summary statistics
+summarise(
+      total_time = sum(duration),
+      .by = c(caseid, weight, activity_id, geo_level, activity_name, care_focus)
+      ),
+
+  atus |>  # pipe
+# Create or modify columns
+mutate(
+      activity_id = "secondary-childcare",
+      activity_name = "Secondary Childcare",
+      care_focus = "developmental"
+    ) |>  # pipe
+# Compute summary statistics
+summarise(
+      total_time = sum(scc_all_ln),
+      .by = c(caseid, weight, activity_id, geo_level, activity_name, care_focus)
+      ) |>  # pipe
+# Filter rows by conditions
+filter(total_time > 0),
+
+  atus |>  # pipe
+# Create or modify columns
+mutate(
+      activity_id = "secondary-eldercare",
+      activity_name = "Secondary Eldercare",
+      care_focus = "health"
+    ) |>  # pipe
+# Compute summary statistics
+summarise(
+      total_time = sum(sec_all_ln),
+      .by = c(caseid, weight, activity_id, geo_level, activity_name, care_focus)
+      )  |>  # pipe
+# Filter rows by conditions
+filter(total_time > 0)
+  )
+
+
+activity_stats <- case_stats |>  # pipe
+# Compute summary statistics
+summarise(
+    provision_interval = sum(total_time*weight),
+    population = sum(weight),
+    .by = c(activity_id, geo_level, activity_name, care_focus)
+  ) |>  # pipe
+# Filter rows by conditions
+filter(care_focus != "non-care") |>  # pipe
+  arrange(activity_id)
+
+activity_stats$geo_level <- sprintf("%02d", as.numeric(activity_stats$geo_level))
+activity_stats$geo_level <- paste0("state", activity_stats$geo_level)
+
+## National
+
+case_stats <- bind_rows(
+  atus |>  # pipe
+# Compute summary statistics
+summarise(
+      total_time = sum(duration),
+      .by = c(caseid, weight, activity_id, activity_name, care_focus)
+      ),
+
+  atus |>  # pipe
+# Create or modify columns
+mutate(
+      activity_id = "secondary-childcare",
+      activity_name = "Secondary Childcare",
+      care_focus = "developmental"
+    ) |>  # pipe
+# Compute summary statistics
+summarise(
+      total_time = sum(scc_all_ln),
+      .by = c(caseid, weight, activity_id, activity_name, care_focus)
+      ) |>  # pipe
+# Filter rows by conditions
+filter(total_time > 0),
+
+  atus |>  # pipe
+# Create or modify columns
+mutate(
+      activity_id = "secondary-eldercare",
+      activity_name = "Secondary Eldercare",
+      care_focus = "health"
+    ) |>  # pipe
+# Compute summary statistics
+summarise(
+      total_time = sum(sec_all_ln),
+      .by = c(caseid, weight, activity_id, activity_name, care_focus)
+      )  |>  # pipe
+# Filter rows by conditions
+filter(total_time > 0)
+  )
+
+
+as <- case_stats |>  # pipe
+# Compute summary statistics
+summarise(
+    provision_interval = sum(total_time*weight),
+    population = sum(weight),
+    .by = c(activity_id, activity_name, care_focus)
+  ) |>  # pipe
+# Filter rows by conditions
+filter(care_focus != "non-care") |>  # pipe
+  arrange(activity_id)
+
+as$geo_level <- "national"
+
+activity_stats <- rbind(activity_stats, as)
+```
+
+### Median Shadow Wage
+
+```{r chunk_03, message=FALSE, warning=FALSE}
+act_cross <- read.csv("./data/CSV/Informal_Formal_Crosswalk.csv", fileEncoding = "latin1") |>  # pipe 
+  clean_names() |>  # pipe 
+# Select/reorder columns
+select(activity, code_formal) |>  # pipe 
+  unique() |>  # pipe 
+# Create or modify columns
+mutate(
+    activity = str_trim(activity),
+    occ_code_start = str_extract(code_formal, "^[^-]+") |>  # pipe as.numeric(),
+    occ_code_end = coalesce(
+      str_extract(code_formal, "(?<=-).*") |>  # pipe as.numeric(), 
+      occ_code_start
+      )
+  )
+```
+
+#### ASEC Wages
+
+```{r chunk_04, message=FALSE, warning=FALSE}
+# Load asec formal care activities
+asec <- read.csv("./data/CSV/ASECdata.csv") |>  # pipe
+# Filter rows by conditions
+filter(AGE >= 18) |>  # pipe
+# Filter rows by conditions
+filter(YEAR == max(YEAR)) |>  # pipe 
+# Filter rows by conditions
+filter(empstat == "Employed") |>  # pipe
+# Filter rows by conditions
+filter(INCWAGE != 0 & INCWAGE != 99999999) |>  # pipe
+# Select/reorder columns
+select(YEAR, OCC2010, occ_label, occ_care_focus, INCWAGE, ASECWT, STATEFIP) |>  # pipe 
+  clean_names() |>  # pipe 
+# Create or modify columns
+mutate(occ2010 = as.numeric(occ2010))
+```
+
+```{r chunk_05, message=FALSE, warning=FALSE}
+df <- list()
+activity <- act_cross$activity
+
+for (sel_activity in activity) {
+  codes <- act_cross %>%  # pipe
+# Filter rows by conditions
+filter(activity == sel_activity)
+  
+  df[[sel_activity]] <- asec %>%  # pipe
+# Filter rows by conditions
+filter(
+      occ2010 >= codes$occ_code_start &
+      occ2010 <= codes$occ_code_end
+    ) %>%  # pipe
+# Group rows for downstream summaries
+group_by(statefip) %>%  # pipe
+# Compute summary statistics
+summarise(
+      median_wage = wtd.quantile(incwage, weights = asecwt, probs = 0.5),
+      .groups = "drop"
+    ) %>%  # pipe
+# Create or modify columns
+mutate(activity_name = sel_activity) %>%  # pipe
+    relocate(activity_name, statefip) %>%  # pipe
+    rename(geo_level = statefip)
+}
+
+# Combine all activity-level results into one dataframe
+median_wage_states <- bind_rows(df)
+
+
+median_wage_states$geo_level <- sprintf("%02d", as.numeric(median_wage_states$geo_level))
+median_wage_states$geo_level <- paste0("state", median_wage_states$geo_level)
+
+# National
+
+df <- list()
+activity <- act_cross$activity
+
+for (sel_activity in activity) {
+  codes <- act_cross %>%  # pipe
+# Filter rows by conditions
+filter(activity == sel_activity)
+  
+  df[[sel_activity]] <- asec %>%  # pipe
+# Filter rows by conditions
+filter(
+      occ2010 >= codes$occ_code_start &
+      occ2010 <= codes$occ_code_end
+    ) %>%  # pipe
+# Compute summary statistics
+summarise(
+      median_wage = wtd.quantile(incwage, weights = asecwt, probs = 0.5),
+      .groups = "drop"
+    ) %>%  # pipe
+# Create or modify columns
+mutate(activity_name = sel_activity)
+}
+
+# Combine all activity-level results into one dataframe
+median_wage <- bind_rows(df)
+
+median_wage$geo_level = "national"
+
+median_wage <- rbind(median_wage_states, median_wage)
+```
+
+## Output Required Files
+
+```{r chunk_06, message=FALSE, warning=FALSE}
+activity_informal <- activity_stats |>  # pipe
+# Select/reorder columns
+select(activity_id, activity_name, care_focus, geo_level) |>  # pipe
+# Join datasets with left_join
+left_join(median_wage, by = c("activity_name", "geo_level")) |>  # pipe 
+  rename(
+    id = activity_id, 
+    name = activity_name
+    )  |>  # pipe
+# Select/reorder columns
+select(id, name, care_focus, median_wage, geo_level)
+
+activity_informal$median_wage[is.na(activity_informal$median_wage)] <- "NULL"
+
+
+write.csv(activity_informal, "./app_data/activity_informal.csv", 
+          row.names = FALSE)
+```
+
+### Activity Informal Datum
+
+```{r chunk_07, message=FALSE, warning=FALSE}
+activity_informal_datum <- activity_stats |>  # pipe
+# Create or modify columns
+mutate(
+    provider_attention = case_when(
+      activity_id == "secondary-childcare" ~ "passive_child",
+      activity_id == "secondary-eldercare" ~ "passive_elder",
+      TRUE ~ "active"
+      )
+    ) |>  # pipe
+# Select/reorder columns
+select(activity_id, geo_level, provider_attention, provision_interval, population)
+
+write.csv(activity_informal_datum, 
+          "./app_data/activity_informal_datum.csv", 
+          row.names = FALSE)
+```

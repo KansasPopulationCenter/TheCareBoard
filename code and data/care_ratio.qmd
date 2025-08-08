@@ -1,0 +1,382 @@
+---
+title: "care_ratio — annotated"
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    code-overflow: wrap
+    df-print: paged
+execute:
+  warning: false
+  message: false
+  echo: true
+editor: visual
+date: 2025-08-07
+---
+
+# Methods Overview
+
+```{r step_1_01, message=FALSE, warning=FALSE}
+library(dplyr)
+library(DescTools)
+library(lctools)
+library(tidycensus)
+library(tidyr)
+library(doParallel)
+library(foreach)
+library(purrr)
+
+source("load_defaults.R")
+
+DF <- read.csv('./data/CSV/Tractlevel_Employment.csv')
+DF$GEOID <- sprintf("%011s", as.character(DF$GEOID))
+DF <- DF %>%  # pipe
+# Create or modify columns
+mutate(
+    Educational_Services = ifelse(is.na(Educational_Services), 0, Educational_Services),
+    Health_Care = ifelse(is.na(Health_Care), 0, Health_Care),
+    Others = ifelse(is.na(Others), 0, Others)
+  )
+DF <- DF |>  # pipe
+# Create or modify columns
+mutate(
+    Care_Industry = Educational_Services + Health_Care + Others
+  )
+
+DF$STATEFP <- substr(DF$GEOID, 1, 2)
+DF$COUNTYFP <- substr(DF$GEOID, 3, 5)
+DF$STATEFP <- sprintf("%02d", as.numeric(DF$STATEFP))
+
+
+States <- unique(DF$STATEFP)
+
+census_api_key("bc4a1c0184ce6c385720174b31b312e5a703262d", install = TRUE, overwrite = TRUE)
+readRenviron("~/.Renviron")
+
+
+years <- 2014:2021
+
+employment_var <- "B23025_004"  # Civilian employed population 16+
+```
+
+## Loop over years and bind rows
+
+```{r loop_over_years_and_bind_rows_02, message=FALSE, warning=FALSE}
+# Loop over years and bind rows
+employment_all_years <- map_dfr(years, function(y) {
+  get_acs(
+    geography = "county",
+    variables = employment_var,
+    year = y,
+    survey = "acs5",
+    output = "wide"
+  ) %>%  # pipe
+# Create or modify columns
+mutate(year = y)
+})
+```
+
+## Optional: Keep only estimate (not MOE)
+
+```{r optional_keep_only_estimate_not_moe_03, message=FALSE, warning=FALSE}
+# Optional: Keep only estimate (not MOE)
+employment_estimates <- employment_all_years %>%  # pipe
+# Select/reorder columns
+select(GEOID, NAME, year, B23025_004E) %>%  # pipe
+  rename(employed = B23025_004E)
+
+
+employment_estimates$STATEFP <- substr(employment_estimates$GEOID, 1, 2)
+employment_estimates$COUNTYFP <- substr(employment_estimates$GEOID, 3, 5)
+```
+
+## Define all variable codes
+
+```{r define_all_variable_codes_04, message=FALSE, warning=FALSE}
+# Define all variable codes
+vars <- c(
+  total_population = "B01003_001",
+  male_under5 = "B01001_003",
+  female_under5 = "B01001_027",
+  male_5_9 = "B01001_004",
+  female_5_9 = "B01001_028",
+  male_10_14 = "B01001_005",
+  female_10_14 = "B01001_029",
+  male_15_17 = "B01001_006",
+  female_15_17 = "B01001_030",
+  male_75_79 = "B01001_023",
+  male_80_84 = "B01001_024",
+  male_85_up = "B01001_025",
+  female_75_79 = "B01001_047",
+  female_80_84 = "B01001_048",
+  female_85_up = "B01001_049",
+  total_disab = "C18108_001",
+  disab_total = "C18108_002"
+)
+```
+
+## Function to retrieve and process data
+
+```{r function_to_retrieve_and_process_data_05, message=FALSE, warning=FALSE}
+# Function to retrieve and process data
+get_county_demo <- function(y) {
+  df <- tryCatch({
+    get_acs(
+      geography = "county",
+      variables = vars,
+      year = y,
+      survey = "acs5",
+      output = "tidy"
+    ) %>%  # pipe
+# Create or modify columns
+mutate(year = y)
+  }, error = function(e) {
+    message(paste("Skipping year", y, "due to error:", e$message))
+    return(NULL)
+  })
+  return(df)
+}
+```
+
+## Get data for all years
+
+```{r get_data_for_all_years_06, message=FALSE, warning=FALSE}
+# Get data for all years
+county_demog <- map_dfr(years, get_county_demo)
+
+county_demog$STATEFP <- substr(county_demog$GEOID, 1, 2)
+county_demog$COUNTYFP <- substr(county_demog$GEOID, 3, 5)
+```
+
+## To understand the weights of different populations we need to use the market_Datum data
+
+```{r to_understand_the_weights_of_different_populations_we_need_to_use_the_market_datum_data_07, message=FALSE, warning=FALSE}
+#To understand the weights of different populations we need to use the market_Datum data
+market_datum <- fread("./app_data/market_datum.csv") |>  # pipe 
+# Group rows for downstream summaries
+group_by(age) |>  # pipe
+# Compute summary statistics
+summarise(
+    need = sum(need_interval)
+  ) %>%  # pipe
+  #Weight refers to for each age group, on a scale of 0-1 how much care is needed with 1 representing the highest need group.
+# Create or modify columns
+mutate(
+    weight = need/max(need)
+  )
+```
+
+## We normalize this weight creating a mean of 1 and a stnadard deviation of 1
+
+```{r we_normalize_this_weight_creating_a_mean_of_1_and_a_stnadard_deviation_of_1_08, message=FALSE, warning=FALSE}
+#We normalize this weight creating a mean of 1 and a stnadard deviation of 1
+market_datum$weight <- (market_datum$weight - mean(market_datum$weight, na.rm = TRUE)) / sd(market_datum$weight, na.rm = TRUE) + 1
+
+data <- read.csv("./data/CSV/CPSdata.csv") |>  # pipe
+# Filter rows by conditions
+filter(YEAR >= 2014) |>  # pipe
+# Filter rows by conditions
+filter(nilf_activity == "Homemaker") |>  # pipe
+# Select/reorder columns
+select(YEAR, month, nilf_activity, WTFINL, STATEFIP)
+
+data$STATEFIP <- sprintf("%02d", as.numeric(data$STATEFIP))
+```
+
+## DENOMINATOR
+
+```{r denominator_09, message=FALSE, warning=FALSE}
+##### DENOMINATOR
+
+Denominators = {}
+Years = {}
+State = {}
+
+for (st in States){
+  temp_demo_st <- county_demog |>  # pipe
+# Filter rows by conditions
+filter(STATEFP == st)
+for (yr in years) {
+  temp_demo <- temp_demo_st |>  # pipe
+# Filter rows by conditions
+filter(year == yr) 
+  
+  under5 <- temp_demo |>  # pipe
+# Filter rows by conditions
+filter(variable == "male_under5" | variable == "female_under5")
+  under5 <- sum(under5$estimate)
+  
+  under5_W <- market_datum |>  # pipe
+# Filter rows by conditions
+filter(age < 5)
+  under5_W <- mean(under5_W$weight)
+  
+  five_nine <- temp_demo |>  # pipe
+# Filter rows by conditions
+filter(variable == "male_5_9" | variable == "female_5_9")
+  five_nine <- sum(five_nine$estimate)
+    
+  five_nine_W <- market_datum |>  # pipe
+# Filter rows by conditions
+filter(age > 4 & age < 10)
+  five_nine_W <- mean(five_nine_W$weight)
+  
+  ten_fourteen <- temp_demo |>  # pipe
+# Filter rows by conditions
+filter(variable == "male_10_14" | variable == "female_10_14")
+  ten_fourteen <- sum(ten_fourteen$estimate)
+  
+  ten_fourteen_W <- market_datum |>  # pipe
+# Filter rows by conditions
+filter(age > 9 & age < 15)
+  ten_fourteen_W <- mean(ten_fourteen_W$weight)
+  
+  fifteen_seventeen <- temp_demo |>  # pipe
+# Filter rows by conditions
+filter(variable == "male_15_17" | variable == "female_15_17")
+  fifteen_seventeen <- sum(fifteen_seventeen$estimate)
+  
+  fifteen_seventeen_W <- market_datum |>  # pipe
+# Filter rows by conditions
+filter(age > 14 & age < 18)
+  fifteen_seventeen_W <- mean(fifteen_seventeen_W$weight)
+  
+  seventies <- temp_demo |>  # pipe
+# Filter rows by conditions
+filter(variable == "male_75_79" | variable == "female_75_79")
+  seventies <- sum(seventies$estimate)
+  
+  seventies_W <- market_datum |>  # pipe
+# Filter rows by conditions
+filter(age > 74 & age < 80)
+  seventies_W <- mean(seventies_W$weight)
+  
+  eighties <- temp_demo |>  # pipe
+# Filter rows by conditions
+filter(variable == "male_80_84" | variable == "female_80_84")
+  eighties <- sum(eighties$estimate)
+  
+  eighties_W <- market_datum |>  # pipe
+# Filter rows by conditions
+filter(age > 79 & age < 85)
+  eighties_W <- mean(eighties_W$weight)
+  
+  over85 <- temp_demo |>  # pipe
+# Filter rows by conditions
+filter(variable == "male_85_up" | variable == "female_85_up")
+  over85 <- sum(over85$estimate)
+  
+  over85_W <- market_datum |>  # pipe
+# Filter rows by conditions
+filter(age > 84)
+  over85_W <- mean(over85_W$weight)
+  
+  disabled <- temp_demo |>  # pipe
+# Filter rows by conditions
+filter(variable == "total_disab")
+  disabled <- sum(disabled$estimate)
+  
+  disableW <- max(market_datum$weight)
+  
+  Denom = under5*under5_W +
+    five_nine*five_nine_W +
+    ten_fourteen*ten_fourteen_W +
+    fifteen_seventeen*fifteen_seventeen_W +
+    seventies*seventies_W +
+    eighties*eighties_W +
+    over85*over85_W
+  
+  Denominators = append(Denominators, Denom)
+  Years = append(Years, yr)
+  State = append(State, st)
+}
+}
+```
+
+## NUMERATORS
+
+```{r numerators_10, message=FALSE, warning=FALSE}
+### NUMERATORS
+
+Numerators = {}
+Years = {}
+State = {}
+W = c(1.5, 0.5, 1)
+
+for (st in States) {
+  temp_st <- DF |>  # pipe
+# Filter rows by conditions
+filter(STATEFP == st)
+  temp_demo_st <- county_demog |>  # pipe
+# Filter rows by conditions
+filter(STATEFP == st)
+  temp_employ_st <- employment_estimates |>  # pipe
+# Filter rows by conditions
+filter(STATEFP == st)
+  cps_temp_st <- data |>  # pipe
+# Filter rows by conditions
+filter(STATEFIP == st)
+  for (yr in years) {
+    temp <- temp_st |>  # pipe
+# Filter rows by conditions
+filter(year == yr)
+    
+    temp_employ <- temp_employ_st |>  # pipe
+# Filter rows by conditions
+filter(year == yr)
+    
+    temp_demo <- temp_demo_st |>  # pipe
+# Filter rows by conditions
+filter(year == yr)
+    
+    cps_temp <- cps_temp_st %>%  # pipe
+# Filter rows by conditions
+filter(YEAR == yr)
+    
+    population <- temp_demo |>  # pipe
+# Filter rows by conditions
+filter(variable == "total_population")
+    population <- sum(population$estimate)
+    
+    careworkers <- sum(temp$Care_Industry, na.rm = TRUE)
+    
+    workingnoncare <- sum(temp_employ$employed)-careworkers
+      
+    Homemakers <- sum(cps_temp$WTFINL/length(unique(cps_temp$month)))
+    
+    Years = append(Years, yr)
+    print(yr)
+    State = append(State, st)
+    print(st)
+    Numer <- careworkers*W[1] + workingnoncare*W[2] + Homemakers*W[3]
+    print(Numer)
+    Numerators<- append(Numerators, Numer)
+  }
+}
+
+care_ratio <- data.frame(
+  date = as.Date(paste0(Years, "-01-01")), 
+  care_ratio = Numerators / Denominators,
+  geo_level = State
+)
+
+care_ratio$geo_level <- paste0("state", care_ratio$geo_level)
+```
+
+## National
+
+```{r national_11, message=FALSE, warning=FALSE}
+# National
+
+cr <- care_ratio |>  # pipe
+# Group rows for downstream summaries
+group_by(date) |>  # pipe
+# Compute summary statistics
+summarise(care_ratio = mean(care_ratio, na.rm = TRUE)) |>  # pipe
+# Create or modify columns
+mutate(geo_level = "national")
+
+care_ratio <- rbind(care_ratio,cr)
+
+write.csv(care_ratio, "./app_data/metrics_care_ratio.csv", row.names = FALSE)
+```

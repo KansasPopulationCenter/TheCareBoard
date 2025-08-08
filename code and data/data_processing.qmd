@@ -1,0 +1,143 @@
+---
+title: "02_data_processing"
+format: html
+editor: visual
+---
+
+## Setup
+
+The first step in this code file is to load some background files. The load_libraries.R file contains some general R libraries that are used through multiple scripts. Rather than loading them individually, we load them in one file that can be called as needed. The data_prep_functions.R file provides the various functions that are used to clean and convert the ATUS and CPS data. We offer various transformations to combine categories, rename categories, and change certain values for ease of interpretation. See the methodology file for more information about the specific transformations that we conduct.
+
+```{r}
+# Load required packages and custom functions
+source("load_libraries.R")
+source("data_prep_functions.R")
+
+# Load formal occupation codes and their care focus
+df_occ <- fread("./data/CSV/Formal_Occupation_Crosswalk.csv")  
+
+# Load activity codes and their care focus
+df_act <- fread("./data/CSV/ATUSActivityCrossover.csv") |> 
+  clean_names()
+
+# Define IPUMS CPS and ATUS DDI file paths
+ddi_cps <- "./data/IPUMS Pulls/cps_00425.xml"
+ddi_asec <- "./data/IPUMS Pulls/cps_00424.xml"
+ddi_atus <- "./data/IPUMS Pulls/atus_00032.xml"
+```
+
+## CPS
+
+The next code chunk below utilizes the ddi_cps file pulled from IPUMS to create our CPS monthly dataset. This chunk takes the CPS raw variables and then applies the transformations outlined in the data_prep_functions.R file. This chunk then joins the data to the formal occupations crosswalk file, which is used to identify care economy jobs. This file is output as a CSV file. Due to the size of this dataset, we do not output it as either a DTA or an Excel file.
+
+```{r}
+# Inform user that CPS microdata is being read
+message("Reading IPUMS CPS microdata...")
+
+# Read IPUMS CPS microdata
+micro_cps <- read_ipums_micro(ddi_cps)
+
+# Process CPS data with standardized recoding functions and join occupation metadata
+micro_cps <- micro_cps |> 
+  recode_all_common() |>          # Recode variables common across datasets
+  recode_asec_cps() |>            # Apply ASEC-specific recoding
+  recode_cps() |>                 # Apply CPS-specific recoding
+  select(any_of(col_order)) |>   # Select only desired columns (safe if some missing)
+  left_join(df_occ, by = c("OCC2010" = "code"))  # Join occupation labels
+
+# Export cleaned CPS data to CSV
+write.csv(micro_cps, "./data/CSV/CPSdata.csv", row.names = FALSE)
+```
+
+## ASEC
+
+The next code chunk below utilizes the ddi_asec file pulled from IPUMS to create our ASEC yearly dataset. This chunk takes the ASEC raw variables and then applies the transformations outlined in the data_prep_functions.R file. This chunk then joins the data to the formal occupations crosswalk file, which is used to identify care economy jobs. This file is output as a CSV file. Due to the size of this dataset, we do not output it as either a DTA or an Excel file.
+
+```{r}
+# Inform user that ASEC microdata is being read
+message("Reading IPUMS ASEC microdata...")
+
+# Read IPUMS ASEC microdata
+micro_asec <- read_ipums_micro(ddi_asec)
+
+# Process ASEC data with standardized recoding functions and join occupation metadata
+micro_asec <- micro_asec |> 
+  recode_all_common() |>          # Recode variables common across datasets
+  recode_asec_cps() |>            # Apply shared ASEC/CPS-specific recoding
+  recode_asec() |>                # Apply ASEC-specific transformations
+  select(any_of(col_order)) |>   # Select consistent column order
+  left_join(df_occ, by = c("OCC2010" = "code"))  # Join occupation labels
+
+# Export cleaned ASEC data to CSV
+write.csv(micro_asec, "./data/CSV/ASECdata.csv", row.names = FALSE)
+
+# Clean up memory
+rm(micro_asec)
+gc()
+```
+
+## ATUS
+
+The next code chunk is used to format the raw ATUS data. This is a little more complicated than the previous steps and occurs in three steps. The first code chunk does the same general activities as above, renaming and formatting variables to be consistent across datasets and joining a crossover file based on activities that have been labeled as care activities. We then join this ATUS data with the CPS data to pull certain variables about the respondents' employment from this. All respondents in the ATUS were in the CPS data and can be joined by the CPSIDP variable. We then export this file as a CSV file. Given the size of it we do not export this as an excel or DTA file.
+
+```{r}
+# Inform user that ATUS microdata is being read
+message("Reading IPUMS ATUS microdata...")
+
+# Read IPUMS ATUS microdata
+micro_atus <- read_ipums_micro(ddi_atus)
+
+# Apply standard recoding and join care activity crosswalk
+micro_atus <- micro_atus |> 
+  recode_all_common() |>                  # Recode variables common to all IPUMS files
+  recode_atus() |>                        # Apply ATUS-specific recodes
+  left_join(df_act, by = c("ACTIVITY" = "code")) |>  # Merge activity care-focus info
+  select(any_of(col_order)) |>           # Enforce column order
+  mutate(
+    act_care_focus = case_when(
+      developmental == 1 ~ "developmental",
+      daily_living == 1 ~ "daily_living", 
+      health == 1 ~ "health", 
+      TRUE ~ "non-care"
+    )
+  )
+
+# Inform user that CPS occupation data is being extracted for joining
+message("Extracting occupation care focus from CPS data...")
+
+
+# Get occupation care_focus labels from CPS data
+cps_occ <- micro_cps |> 
+  filter(YEAR >= min(micro_atus$YEAR) - 3) |>  # Use 3-year window before ATUS year
+  group_by(CPSIDP) |> 
+  filter(date == max(date)) |>                # Get latest available CPS record
+  ungroup() |> 
+  select(CPSIDP, date, occ_care_focus)
+
+# Clean up memory by removing large CPS data object
+rm(micro_cps)
+gc()
+
+# Define standard activity types
+act_types <- c("developmental", "health", "daily_living",
+               "paid_work", "formal_work", "child_care",
+               "elder_care", "householdcare", "selfcare",     
+               "leisure", "sleeping", "volunteering",
+               "education")
+
+# Merge occupation data and fill NA values with 0 in activity flags
+micro_atus <- micro_atus |> 
+  left_join(
+    cps_occ |> rename(cps_date = date), 
+    by = "CPSIDP"
+  ) |> 
+  mutate(
+    across(all_of(act_types), ~replace_na(., 0))  # Fill activity flags with 0 if missing
+  )
+
+# Export cleaned ATUS data
+write.csv(micro_atus, "./data/CSV/ATUSdata.csv", row.names = FALSE)
+```
+
+\
+With this done, we now have the cleaned data that can be used to develop the various statistics for the Care Board.

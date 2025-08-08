@@ -1,0 +1,815 @@
+---
+title: "Data Format Compilation"
+format: html
+editor: visual
+---
+
+# Expanded Data Compilation
+
+```{r}
+source("load_defaults.R")
+```
+
+## Care and Care Provision
+
+```{r}
+# List of all ages from 0 to 85
+age_list <- data.frame(age = seq(0, 85, by = 1))
+
+# Load and clean the data
+age_data <- read.csv("./data/CSV/ASECdata.csv") |>
+  select(YEAR, AGE, ASECWT) |>
+  clean_names()
+
+# Loop through each year and calculate population by age
+age_modified_all <- age_data |>
+  group_by(year, age) |>
+  summarise(population = sum(asecwt, na.rm = TRUE), .groups = "drop") |>
+  right_join(expand.grid(age = age_list$age, year = unique(age_data$year)), 
+             by = c("year", "age")) |>
+  mutate(population = coalesce(population, 0)) |>
+  arrange(year, age)
+
+write.csv(age_modified_all, "./data/CSV/market.csv", row.names = FALSE)
+write_dta(age_modified_all, "./data/DTA/market.dta")
+```
+
+## Care Provider Demographics
+
+```{r}
+asec <- read.csv("./data/CSV/ASECdata.csv") |>
+  filter(AGE >= 18) |> 
+  select(YEAR, OCC2010, empstat, occ_label, UHRSWORKT, EARNWT, INCWAGE, 
+         occ_care_focus, ASECWT, sex, gender_parent, poverty, empstat, race_ethnicity, prime_age) |> 
+  clean_names() 
+
+
+cp_population_ext <- asec |> 
+  mutate(
+    gender = str_to_lower(sex), 
+    provider_status = case_when(
+      gender_parent %in% c("Mothers", "Fathers") ~ "with_children",
+      gender_parent %in% c("Non-Mothers", "Non-Fathers") ~ "without_children",
+      TRUE ~ "other")
+  ) |> 
+  summarise(
+    population = sum(asecwt),
+    .by = c(year, prime_age, race_ethnicity, empstat, poverty,  gender, provider_status)
+  ) |> 
+  arrange(year, prime_age, race_ethnicity, empstat, poverty,  gender, provider_status)
+
+write.csv(cp_population_ext, "./data/CSV/care_provider_population.csv", 
+          row.names = FALSE)
+write_dta(cp_population_ext, "./data/DTA/care_provider_population.dta")
+```
+
+## Care Provider Data
+
+```{r}
+asec <- read.csv("./data/CSV/ASECdata.csv") |>
+  filter(AGE >= 18) |> 
+  select(YEAR, OCC2010, empstat, occ_label, UHRSWORKT, EARNWT, INCWAGE, 
+         occ_care_focus, ASECWT, sex, gender_parent, poverty, empstat, race_ethnicity, prime_age) |> 
+  clean_names() 
+
+# create columns required by the app
+cp_formal <- asec |> 
+  filter(empstat == "Employed") |>
+  mutate(
+    gender = str_to_lower(sex), 
+    provider_status = case_when(
+      gender_parent %in% c("Mothers", "Fathers") ~ "with_children",
+      gender_parent %in% c("Non-Mothers", "Non-Fathers") ~ "without_children",
+      TRUE ~ "other"
+    ), 
+    time_use = ifelse(occ_care_focus == "none", "non_care", "care"),
+    care_focus = occ_care_focus,
+    care_type	= "formal", 
+    provider_attention = "active"
+  ) 
+
+# summarise formal stats
+cp_formal <- cp_formal %>%
+  filter(uhrsworkt != 997) |> 
+  mutate(uhrsworkt = ifelse(uhrsworkt == 999, 0, uhrsworkt)) |> 
+  summarise(
+    population = sum(asecwt),
+    provision_interval = sum(uhrsworkt/7*60*asecwt), 
+    .by = c(year, prime_age, race_ethnicity, empstat, poverty, gender, provider_status, time_use, care_type, 
+            care_focus, provider_attention)
+  )
+
+
+##### INFORMAL
+
+
+atus <- read.csv("./data/CSV/ATUSdata.csv") |> 
+  filter(activity != "Formal Work") |> 
+  filter(AGE >= 18) |>
+  select(YEAR, CASEID, WT06, sex, gender_parent, act_care_focus, 
+         DURATION, SCC_ALL_LN, SEC_ALL_LN, prime_age, race_ethnicity, empstat, poverty) |> 
+  clean_names() 
+
+
+# prep secondary care time
+cp_informal <- atus |> 
+  pivot_longer(
+    cols = c(duration, scc_all_ln, sec_all_ln), 
+    names_to = "metric", 
+    values_to = "duration"
+  ) |> 
+  filter(!is.na(duration)) 
+
+# create columns required by the app
+cp_informal <- cp_informal |> 
+  mutate(
+    gender = str_to_lower(sex), 
+    provider_status = case_when(
+      gender_parent %in% c("Mothers", "Fathers") ~ "with_children",
+      TRUE ~ "without_children"
+    ), 
+    care_type	= "informal", 
+    provider_attention = case_when(
+      metric == "scc_all_ln" ~ "passive_child", 
+      metric == "sec_all_ln" ~ "passive_elder",
+      TRUE ~ "active"
+    ), 
+    care_focus = case_when(
+      metric == "scc_all_ln" ~ "developmental", 
+      metric == "sec_all_ln" ~ "health",
+      act_care_focus == "non-care" ~ "none", 
+      TRUE ~ act_care_focus
+    ), 
+    time_use = ifelse(care_focus == "none", "non_care", "care"),
+    weight = wt06/365
+  ) 
+
+# summarise formal stats
+cp_informal <- cp_informal |> 
+  summarise(
+    total_time = sum(duration), 
+    .by = c(year, caseid, race_ethnicity, empstat, poverty,prime_age, weight, gender, provider_status, time_use, 
+            care_type, care_focus, provider_attention)
+  ) |> 
+  summarise(
+    provision_interval = sum(total_time*weight/5),
+    population = sum(weight), 
+    .by = c(year, prime_age, race_ethnicity, empstat, poverty, gender, provider_status, time_use, 
+            care_type, care_focus, provider_attention)
+  )
+
+cp_combined <- bind_rows(
+  cp_formal, 
+  cp_informal
+) |> 
+  arrange(year, care_type, time_use, prime_age, race_ethnicity, empstat, poverty, gender, provider_status, care_focus)
+
+
+
+write.csv(cp_combined, "./data/CSV/care_provider_data.csv", 
+          row.names = FALSE)
+write_dta(cp_combined, "./data/DTA/care_provider_data.dta")
+```
+
+## Care Activities
+
+```{r}
+formal <- read.csv("./app_data/activity_formal.csv")
+formal_datum <- read.csv("./app_data/activity_formal_datum.csv")
+
+formal_datum <- formal_datum %>%
+  left_join(formal %>% select(id, name,  geo, median_wage),
+            by = c("activity_id" = "id", "geo" = "geo")) %>%
+  select(name, geo, median_wage, population, provision_interval) %>%
+  mutate(Type = "Paid")
+
+informal <- read.csv("./app_data/activity_informal.csv")
+informal_datum <- read.csv("./app_data/activity_informal_datum.csv")
+
+informal_datum <- informal_datum %>%
+  left_join(informal %>% select(id, name, geo_level, median_wage),
+            by = c("activity_id" = "id", "geo_level")) %>%
+  select(name, geo_level, median_wage, population, provision_interval) %>%
+  mutate(Type = "Unpaid") %>%
+  rename("geo" = "geo_level")
+
+activities <- rbind(formal_datum, informal_datum)
+
+write.csv(activities, "./data/CSV/activities.csv", 
+          row.names = FALSE)
+write_dta(activities, "./data/DTA/activities.dta")
+```
+
+## Care Ratios
+
+```{r}
+care_ratio <- read.csv("./app_data/metrics_care_ratio.csv")
+
+write.csv(care_ratio, "./data/CSV/care_ratio.csv", 
+          row.names = FALSE)
+write_dta(care_ratio, "./data/DTA/care_ratio.dta")
+```
+
+## Care GINI
+
+```{r}
+gini <- read.csv("./app_data/metrics_state_care_gini.csv")
+
+write.csv(gini, "./data/CSV/gini.csv", 
+          row.names = FALSE)
+write_dta(gini, "./data/DTA/gini.dta")
+```
+
+## Labor Force Participation
+
+```{r}
+cps <- read.csv("./data/CSV/CPSdata.csv") |>
+  # incorporate HFLAG clause due to survey redesign in 2014
+  # https://blog.popdata.org/2014sample/
+  filter(AGE >= 16) |>
+  filter(YEAR >= 1990) |>
+  select(YEAR,
+         month,
+         AGE,
+         WTFINL,
+         EMPSTAT,
+         gender_parent,
+         STATEFIP) |>
+  clean_names()
+
+lfpr_by_gender_parent <- cps %>%
+  filter(age >= 16) %>%  # Consider only those 16 and older
+  mutate(in_labor_force = ifelse(empstat %in% c(10, 12, 20), 1, 0)) %>%  # Mark those in labor force
+  group_by(year, month, gender_parent, STATEFIP) %>%
+  summarise(
+    total_population = sum(wtfinl, na.rm = TRUE),
+    labor_force = sum(wtfinl[in_labor_force == 1], na.rm = TRUE),
+    lfpr = labor_force / total_population * 100
+  ) %>%
+  ungroup()
+
+write.csv(lfpr_by_gender_parent, "./data/CSV/lfpbygenderparent.csv", row.names = FALSE)
+write_dta(lfpr_by_gender_parent, "./data/DTA/lfpbygenderparent.dta")
+```
+
+## Care Force Participation
+
+```{r}
+
+asec <- read.csv("./data/CSV/ASECdata.csv") |>
+  # incorporate HFLAG clause due to survey redesign in 2014
+  # https://blog.popdata.org/2014sample/
+  filter(HFLAG == 1 | is.na(HFLAG)) |> 
+  filter(AGE >= 18) |>
+  filter(YEAR >= min_year) |>
+  select(YEAR,
+         ASECWT,
+         UHRSWORKT,
+         INCWAGE,
+         empstat,
+         statefip,
+         occ_care_focus,
+         gender_parent,
+         STATEFIP,
+         occ_label) |>
+  clean_names() |>
+  mutate(
+    date = as.Date(paste0(year, "-01-01")),
+    uhrsworkt = ifelse(uhrsworkt == 999, 0, uhrsworkt),
+    occ_type = ifelse(occ_care_focus == "none", "non-care", "care"),
+    overall = "overall",
+    geo_level = statefip_2
+  ) 
+
+get_formal_lfp <- function(df, demo_group) {
+  df |>
+    mutate(
+      category_id = demo_group,
+      subcategory_id = get(demo_group)
+    ) |>
+    group_by(date, geo_level, category_id, subcategory_id) |>
+    summarise(
+      formal_care_labor_force = sum(
+        ifelse(
+          occ_type == "care" & empstat == "Employed",
+          asecwt, 0),
+        na.rm = TRUE
+      ),
+      total_weight = sum(asecwt, na.rm = TRUE),
+      formal_care_labor_force_proportion = formal_care_labor_force / total_weight,
+      .groups = "drop"
+    )
+}
+
+formal_lfp <- bind_rows(
+  get_formal_lfp(asec, "overall"),
+  get_formal_lfp(asec, "gender_parent"),
+  )
+
+formal_lfp$geo_level <- sprintf("%02d", as.numeric(formal_lfp$geo_level))
+formal_lfp$geo_level <- paste0("state", formal_lfp$geo_level)
+
+
+lfp <- formal_lfp |>
+  group_by(date, category_id, subcategory_id) |>
+  summarise(formal_care_labor_force = sum(formal_care_labor_force),
+            total_weight = sum(total_weight),
+            formal_care_labor_force_proportion = mean(formal_care_labor_force_proportion, na.rm = TRUE)) |>
+  mutate(geo_level = "national")
+
+formal_lfp <- rbind(formal_lfp, lfp)
+
+source("load_defaults.R")
+atus <- read.csv("./data/CSV/ATUSdata.csv") |> 
+  filter(activity != "Formal Work") |> 
+  filter(AGE >= 18) |>
+  filter(YEAR != 2020) |> 
+  select(YEAR, CASEID, WT06, ACTIVITY, DURATION, SCC_ALL_LN, SEC_ALL_LN,
+         act_care_focus, activity, gender_parent, STATEFIP) |> 
+  clean_names() |> 
+  pivot_longer(
+    cols = c(duration, scc_all_ln, sec_all_ln),
+    names_to = "metric", 
+    values_to = "duration"
+  ) |>   
+  mutate(
+    duration = coalesce(duration, 0),
+    care_flag = case_when(
+      metric %in% c("scc_all_ln", "sec_all_ln") | 
+        act_care_focus != "non-care" ~ "care", 
+      TRUE ~ "non-care" 
+    ), 
+    overall = "overall",
+    geo_level = statefip
+  )
+
+case_year <- atus |> 
+  mutate(weight = wt06 / 365) |> 
+  summarise(
+    total_time = sum(duration),
+    .by = c(year, caseid, geo_level, gender_parent, weight, care_flag)
+    ) |> 
+  mutate(overall = "overall")
+
+yr_range <- atus_yr_range(atus)
+
+get_informal_lfp <- function(demo_group) {
+  informal_lfp <- list()
+  i <- 1
+  
+  for (sel_year in yr_range$year) {
+    year_min <- yr_range$yr_start[i]
+    
+    # calculate total population for the selected demo group, by state
+    tot_pop <- atus |>
+      filter(year >= year_min & year <= sel_year) |>
+      mutate(category_id = demo_group,
+             subcategory_id = get(demo_group)) |>
+      distinct(year, caseid, wt06, geo_level, category_id, subcategory_id) |>
+      group_by(geo_level, category_id, subcategory_id) |>
+      summarise(
+        total_population = sum(wt06 / 365 / 5), 
+        .groups = "drop"
+      )
+    
+    # calculate population doing minimum 3 hours care work, by state
+    informal_lfp[[sel_year]] <- case_year |>
+      filter(year >= year_min & year <= sel_year) |>
+      filter(care_flag == "care" & total_time >= 3 * 60) |>
+      mutate(category_id = demo_group,
+             subcategory_id = get(demo_group)) |>
+      group_by(geo_level, category_id, subcategory_id) |>
+      summarise(
+        informal_care_labor_force = sum(weight / 5),
+        .groups = "drop"
+      ) |>
+      left_join(tot_pop, by = c("geo_level", "category_id", "subcategory_id")) |>
+      mutate(
+        date = as.Date(paste0(as.character(sel_year), "-01-01")),
+        informal_care_labor_force_proportion = 
+          informal_care_labor_force / total_population
+      ) |>
+      relocate(date)
+    
+    i <- i + 1
+  }
+  
+  df <- bind_rows(informal_lfp)
+  return(df)
+}
+
+# Now calculate informal_lfp both overall and by gender_parent
+informal_lfp <- bind_rows(
+  get_informal_lfp("overall"),
+  get_informal_lfp("gender_parent")
+)
+
+
+informal_lfp$geo_level <- sprintf("%02d", as.numeric(informal_lfp$geo_level))
+informal_lfp$geo_level <- paste0("state", informal_lfp$geo_level)
+
+
+lfp <- informal_lfp |>
+  group_by(date, category_id, subcategory_id) |>
+  summarise(informal_care_labor_force = sum(informal_care_labor_force),
+            total_population = sum(total_population),
+            informal_care_labor_force_proportion = mean(informal_care_labor_force_proportion, na.rm = TRUE)) |>
+  mutate(geo_level = "national")
+
+informal_lfp <- rbind(informal_lfp, lfp)
+
+care_lfp <- rbind(formal_lfp, informal_lfp)
+
+
+write.csv(care_lfp, "./data/CSV/care_force.csv", 
+          row.names = FALSE)
+write_dta(care_lfp, "./data/DTA/care_force.dta")
+```
+
+## Minutes of Care
+
+```{r}
+get_informal_time <- function(demo_group) {
+  informal_time <- list()
+  i <- 1
+  
+  for (sel_year in yr_range$year) {
+    year_min <- yr_range$yr_start[i]
+    
+    informal_time[[sel_year]] <- case_year |>
+      filter(year >= year_min & year <= sel_year) |>
+      mutate(category_id = demo_group,
+             subcategory_id = get(demo_group)) |>
+      group_by(geo_level, care_flag, category_id, subcategory_id) |> 
+      summarise(
+        informal_care_time = sum(total_time * weight / 5),
+        .groups = "drop"
+      ) |>
+      group_by(geo_level, category_id, subcategory_id) |>
+      mutate(
+        date = as.Date(paste0(as.character(sel_year), "-01-01")),
+        informal_care_time_proportion = informal_care_time / sum(informal_care_time)
+      ) |>
+      relocate(date)
+    
+    i <- i + 1
+  }
+  
+  df <- bind_rows(informal_time)
+  return(df)
+}
+
+# Now calculate informal_time both overall and by gender_parent
+informal_time_state <- bind_rows(
+  get_informal_time("overall"),
+  get_informal_time("gender_parent")
+)
+
+
+informal_time_state$geo_level <- sprintf("%02d", as.numeric(informal_time_state$geo_level))
+informal_time_state$geo_level <- paste0("state", informal_time_state$geo_level)
+
+#National
+
+get_informal_time <- function(demo_group) {
+  informal_time <- list()
+  i <- 1
+  
+  for (sel_year in yr_range$year) {
+    year_min <- yr_range$yr_start[i]
+    
+    informal_time[[sel_year]] <- case_year |>
+      filter(year >= year_min & year <= sel_year) |>
+      mutate(category_id = demo_group,
+             subcategory_id = get(demo_group)) |>
+      group_by(care_flag, category_id, subcategory_id) |> 
+      summarise(
+        informal_care_time = sum(total_time * weight / 5),
+        .groups = "drop"
+      ) |>
+      group_by(category_id, subcategory_id) |>
+      mutate(
+        date = as.Date(paste0(as.character(sel_year), "-01-01")),
+        informal_care_time_proportion = informal_care_time / sum(informal_care_time)
+      ) |>
+      relocate(date)
+    
+    i <- i + 1
+  }
+  
+  df <- bind_rows(informal_time)
+  return(df)
+}
+
+
+informal_time <- bind_rows(
+  get_informal_time("overall"),
+  get_informal_time("gender_parent")
+)
+
+informal_time$geo_level <- "national"
+
+informal_time <- rbind(informal_time_state, informal_time)
+
+get_formal_time <- function(df, demo_group) {
+  df <- asec |>
+    filter(uhrsworkt != 997) |> 
+    filter(empstat == "Employed") |> 
+    mutate(
+      category_id = demo_group,
+      subcategory_id = get(demo_group)
+      ) |>
+    group_by(date,geo_level,category_id, subcategory_id) |>
+    summarise(
+      formal_care_time = sum(
+        ifelse(
+          occ_type == "care" & empstat == "Employed",
+          asecwt * uhrsworkt * 60 / 7,
+          0
+        )
+      ),
+      formal_care_time_proportion = formal_care_time /
+        sum(asecwt * uhrsworkt * 60 / 7)
+    )
+  
+  return(df)
+}
+
+formal_time <- bind_rows(
+  get_formal_time(asec, "overall"),
+  get_formal_time(asec, "gender_parent")
+)
+
+formal_time$geo_level <- sprintf("%02d", as.numeric(formal_time$geo_level))
+formal_time$geo_level <- paste0("state", formal_time$geo_level)
+
+
+time <- formal_time |>
+  group_by(date, category_id, subcategory_id) |>
+  summarise(formal_care_time = sum(formal_care_time),
+            formal_care_time_proportion = mean(formal_care_time_proportion, na.rm = TRUE)) |>
+  mutate(geo_level = "national")
+
+formal_time_save <- rbind(formal_time, time)
+
+time <- rbind(formal_time_save, informal_time)
+
+write.csv(time, "./data/CSV/care_time.csv", 
+          row.names = FALSE)
+write_dta(time, "./data/DTA/care_time.dta")
+```
+
+## Value of Care
+
+```{r}
+informal_value <- informal_time %>%
+  mutate(informal_value = informal_care_time/60*7.25) %>%
+  select(-informal_care_time, -informal_care_time_proportion)
+
+informal_value <- informal_value %>%
+  mutate(year = as.integer(format(as.Date(date), "%Y")))
+
+informal_value <- informal_value %>%
+  left_join(us_gdp, by = c("year", "geo_level"))
+
+informal_value <- informal_value %>%
+  mutate(informal_value_proportion = informal_value*365 / gdp)
+
+# Drop the unnecessary columns if desired
+informal_value <- informal_value %>%
+  select(-GeoFips, -gdp, -year) %>%
+  filter(!is.na(informal_value_proportion))
+
+
+get_formal_time <- function(df, demo_group) {
+  df <- asec |>
+    filter(uhrsworkt != 997) |> 
+    filter(empstat == "Employed") |> 
+    mutate(
+      category_id = demo_group,
+      subcategory_id = get(demo_group)
+      ) |>
+    group_by(date,geo_level, occ_label,category_id, subcategory_id) |>
+    summarise(
+      formal_care_time = sum(
+        ifelse(
+          occ_type == "care" & empstat == "Employed",
+          asecwt * uhrsworkt * 60 / 7,
+          0
+        )
+      ),
+      formal_care_time_proportion = formal_care_time /
+        sum(asecwt * uhrsworkt * 60 / 7)
+    )
+  
+  return(df)
+}
+
+formal_time <- bind_rows(
+  get_formal_time(asec, "overall"),
+  get_formal_time(asec, "gender_parent")
+)
+
+formal_time$geo_level <- sprintf("%02d", as.numeric(formal_time$geo_level))
+formal_time$geo_level <- paste0("state", formal_time$geo_level)
+
+
+time <- formal_time |>
+  group_by(date, occ_label, category_id, subcategory_id) |>
+  summarise(formal_care_time = sum(formal_care_time),
+            formal_care_time_proportion = mean(formal_care_time_proportion, na.rm = TRUE)) |>
+  mutate(geo_level = "national")
+
+occ_time <- rbind(formal_time, time) %>%
+  filter(formal_care_time != 0) %>%
+  select(-formal_care_time_proportion)
+
+asec <- read.csv("./data/CSV/ASECdata.csv") |>
+  filter(AGE >= 18) |>
+  filter(YEAR >= 1994) |>
+  filter(occ_care_focus != "none") |> 
+  filter(empstat == "Employed") |>
+  select(YEAR, OCC2010, occ_label, UHRSWORKT, 
+         EARNWT, INCWAGE, occ_care_focus, ASECWT, STATEFIP) |> 
+  clean_names()
+
+# clean up names
+asec <- asec|> 
+  filter(uhrsworkt != 997) %>%
+  filter(uhrsworkt > 0) %>%
+  filter(uhrsworkt != 999) %>%
+  mutate(
+    activity_id = str_replace_all(
+      occ_label, "[^a-zA-Z0-9]+", "-") |> 
+      str_to_lower(),
+    asecwt = asecwt/5,
+    activity_id = gsub("-$", "", activity_id)
+  ) |> 
+  rename(
+    name = occ_label, 
+    care_focus = occ_care_focus,
+    geo_level = statefip
+    ) %>%
+  mutate(uhrsworkt = uhrsworkt*52,
+         hourly_rate = incwage/uhrsworkt) 
+
+
+med_wage <- asec |>
+  filter(incwage != 0 & incwage != 99999999) |> 
+  summarise(
+      median_wage = wtd.quantile(
+      hourly_rate, 
+      weights = asecwt, 
+      probs = 0.5,
+      ),
+    .by = c(activity_id, year, geo_level, name, care_focus)
+  )
+
+
+med_wage$geo_level <- sprintf("%02d", as.numeric(med_wage$geo_level))
+med_wage$geo_level <- paste0("state", med_wage$geo_level)
+  
+
+## National Stats
+
+med_wage_n <- asec |>
+  filter(incwage != 0 & incwage != 99999999) |> 
+  summarise(
+      median_wage = wtd.quantile(
+      hourly_rate, 
+      weights = asecwt, 
+      probs = 0.5
+      ),
+    .by = c(activity_id, year, name, care_focus)
+  )
+
+med_wage_n$geo_level <- "national"
+
+## Group Together
+
+med_wage <- rbind(med_wage, med_wage_n)
+
+occ_time <- occ_time %>%
+  mutate(year = year(date))
+
+# Merge the datasets using left_join
+merged_data <- occ_time %>%
+  left_join(med_wage, by = c("occ_label" = "name", 
+                             "year" = "year", 
+                             "geo_level" = "geo_level"))
+
+formal_value <- merged_data %>%
+  group_by(date, geo_level, category_id, subcategory_id) %>%
+  summarise(
+    formal_value = sum(formal_care_time/60*median_wage)
+  )
+
+formal_value <- formal_value %>%
+  mutate(year = as.integer(format(as.Date(date), "%Y")))
+
+formal_value <- formal_value %>%
+  left_join(us_gdp, by = c("year", "geo_level"))
+
+formal_value <- formal_value %>%
+  mutate(formal_value_proportion = formal_value*365 / gdp)
+
+# Drop the unnecessary columns if desired
+formal_value <- formal_value %>%
+  select(-GeoFips, -gdp, -year) %>%
+  filter(!is.na(formal_value_proportion))
+
+
+value <- rbind(formal_value, informal_value)
+
+write.csv(value, "./data/CSV/care_value.csv", 
+          row.names = FALSE)
+write_dta(value, "./data/DTA/care_value.dta")
+```
+
+## Sandwich Generation
+
+```{r}
+source("load_defaults.R")
+
+atus <- read.csv("./data/CSV/ATUSdata.csv") |> 
+  filter(activity != "Formal Work") |>
+  filter(YEAR >= 2011 & YEAR != 2020) |>
+  select(YEAR, date, CASEID, WT06, YNGCH, AGE, 
+         child_care, elder_care, DURATION,
+         SCC_ALL_LN, SEC_ALL_LN, STATEFIP) |> 
+  data.frame() |> 
+  clean_names() |>
+  rename(geo_level = statefip)
+
+yr_range <- atus_yr_range(atus)
+
+case_time <- atus |> 
+  group_by(year, geo_level, date, caseid, wt06, yngch, age) |> 
+  summarise(
+    time_child_care = sum(child_care*duration + scc_all_ln),
+    time_elder_care = sum(elder_care*duration + sec_all_ln),
+    time_child_elder = sum(time_child_care + time_elder_care)
+  ) |> 
+  ungroup() 
+  
+case_time <- case_time |> 
+  mutate(
+    sandwich_all = ifelse(
+      time_elder_care > 0 & yngch <= 10 & age >= 18,
+      "sandwich", "other")
+  )
+
+sandwich_stats_5yr <- list()
+i = 1
+
+for(sel_year in yr_range$year) {
+  year_min <- yr_range$yr_start[i]
+  
+  sandwich_stats_5yr[[sel_year]] <- case_time |>
+    filter(year >= year_min & year <= sel_year) |>
+    group_by(sandwich_all, geo_level) |>
+    summarise(
+      sandwich_population = sum(wt06/365)/5,
+      sandwich_time_total = sum(wt06/365*time_child_elder)/5/60,
+      sandwich_time_median = wtd.quantile(
+        time_child_elder, 
+        weights = wt06, 
+        probs = 0.5
+        )
+    ) |>
+    ungroup() |> 
+    group_by(geo_level) |>
+    mutate(
+      sandwich_population_proportion = sandwich_population / 
+        sum(sandwich_population), 
+      date = as.Date(paste0(as.character(sel_year), "-01-01"))
+      ) |> 
+    filter(sandwich_all == "sandwich")
+  
+  i = i + 1
+}
+
+sandwich_stats_5yr <- bind_rows(sandwich_stats_5yr) |> 
+  select(date, geo_level, sandwich_population, sandwich_population_proportion,
+         sandwich_time_total, sandwich_time_median)
+
+sandwich_stats_5yr$geo_level <- sprintf("%02d", as.numeric(sandwich_stats_5yr$geo_level))
+sandwich_stats_5yr$geo_level <- paste0("state", sandwich_stats_5yr$geo_level)
+
+
+sw <- sandwich_stats_5yr |>
+  group_by(date) |>
+  summarise(sandwich_population = sum(sandwich_population),
+            sandwich_population_proportion = mean(sandwich_population_proportion, na.rm = TRUE),
+            sandwich_time_total = sum(sandwich_time_total),
+            sandwich_time_median = mean(sandwich_time_median, na.rm = TRUE)) |>
+  mutate(geo_level = "national")
+
+sandwich_stats <- rbind(sandwich_stats_5yr,sw)
+
+
+write.csv(sandwich_stats, "./data/CSV/sandwich_stats.csv", 
+          row.names = FALSE)
+write_dta(sandwich_stats, "./data/DTA/sandwich_stats.dta")
+
+```

@@ -1,0 +1,40 @@
+"id","name","order"
+"gender","Gender",0
+"gender-parenthood","Gender & Parenthood",1
+"gender-race","Gender & Race",2
+"race-parenthood","Race & Parenthood",3
+"male","Male",5
+"female","Female",4
+"female-parent","Mothers",6
+"female-non-parent","Non-Mothers",7
+"male-parent","Fathers",8
+"male-non-parent","Non-Fathers",9
+"female-white","White Females",10
+"female-black","Black Females",11
+"female-hispan","Hispanic Females",12
+"female-asian","Asian Females",13
+"female-native","Native American Females",14
+"female-multi","Two-or-More Race Females",15
+"female-other","Other Race Females",16
+"male-white","White Males",17
+"male-black","Black Males",18
+"male-hispan","Hispanic Males",19
+"male-asian","Asian Males",20
+"male-native","Native American Males",21
+"male-multi","Two-or-More Race Males",22
+"male-other","Other Race Males",23
+"white-parent","White Parents",24
+"black-parent","Black Parents",25
+"hispan-parent","Hispanic Parents",26
+"asian-parent","Asian Parents",27
+"native-parent","Native American Parents",28
+"multi-parent","Two-or-More Race Parents",29
+"other-parent","Other Race Parents",30
+"white-non-parent","White Non-Parents",31
+"black-non-parent","Black Non-Parents",32
+"hispan-non-parent","Hispanic Non-Parents",33
+"asian-non-parent","Asian Non-Parents",34
+"native-non-parent","Native American Non-Parents",35
+"multi-non-parent","Two-or-More Race Non-Parents",36
+"other-non-parent","Other Race Non-Parents",37
+"other","Aggregated Insufficient Data",38

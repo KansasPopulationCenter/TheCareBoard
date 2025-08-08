@@ -1,0 +1,212 @@
+---
+title: "activity_formal"
+format: html
+editor: visual
+---
+
+# Overview
+
+This section provides all the code to analyze the paid activity data. We utilize this code to create a dataset with each paid occupation as a row and information about these occupations as the columns.
+
+## Load & Setup Data
+
+To analyze this data, we utilize the yearly ASEC data. For this analysis, we use a 5-year average of this data to help with data limitations at the state level. Due to sample size limitations, not all occupations are present in every state in the survey. The use of 5-year averages helps solve this issue by allowing more data to be analyzed.
+
+```{r chunk_01, message=FALSE, warning=FALSE}
+source("load_defaults.R")
+
+# Load asec formal care activities
+asec <- read.csv("./data/CSV/ASECdata.csv") |>  # pipe
+# Filter rows by conditions
+filter(AGE >= 18) |>  # pipe
+# Filter rows by conditions
+filter(YEAR >= 2020) |>  # pipe
+# Filter rows by conditions
+filter(occ_care_focus != "none") |>  # pipe 
+# Filter rows by conditions
+filter(empstat == "Employed") |>  # pipe
+# Select/reorder columns
+select(YEAR, OCC2010, occ_label, UHRSWORKT, 
+         EARNWT, INCWAGE, occ_care_focus, ASECWT, STATEFIP) |>  # pipe 
+  clean_names()
+
+# clean up names
+asec <- asec|>  # pipe 
+# Create or modify columns
+mutate(
+    uhrsworkt = ifelse(uhrsworkt == 999, 0, uhrsworkt), 
+    activity_id = str_replace_all(
+      occ_label, "[^a-zA-Z0-9]+", "-") |>  # pipe 
+      str_to_lower(),
+    asecwt = asecwt/5,
+    activity_id = gsub("-$", "", activity_id)
+  ) |>  # pipe 
+  rename(
+    name = occ_label, 
+    care_focus = occ_care_focus,
+    geo_level = statefip
+    )
+```
+
+## Calculate Statistics
+
+The code below is utilized to calculate the actual statistics from the ASEC data.
+
+```{r chunk_02, message=FALSE, warning=FALSE}
+act_formal_population <- asec |>  # pipe 
+# Compute summary statistics
+summarise(
+    population = sum(asecwt),
+    .by = c(activity_id, geo_level, name, care_focus)
+  )
+
+act_formal_time <- asec |>  # pipe 
+# Filter rows by conditions
+filter(uhrsworkt != 997) |>  # pipe 
+# Compute summary statistics
+summarise(
+    provision_interval = sum(asecwt*uhrsworkt*60/7),
+    .by = c(activity_id, geo_level, name, care_focus)
+  )
+
+
+act_formal_med_wage <- asec |>  # pipe
+# Filter rows by conditions
+filter(incwage != 0 & incwage != 99999999) |>  # pipe 
+# Compute summary statistics
+summarise(
+      median_wage = wtd.quantile(
+      incwage, 
+      weights = asecwt, 
+      probs = 0.5,
+      ),
+    .by = c(activity_id, geo_level, name, care_focus)
+  )
+
+act_formal_stats <- full_join(
+  act_formal_population, 
+  act_formal_time, 
+  by = c("activity_id", "geo_level", "name", "care_focus")
+  ) |>  # pipe 
+# Join datasets with full_join
+full_join(act_formal_med_wage, by = c("activity_id","geo_level", "name", "care_focus")) |>  # pipe
+  arrange(activity_id)
+
+act_formal_stats$geo_level <- sprintf("%02d", as.numeric(act_formal_stats$geo_level))
+act_formal_stats$geo_level <- paste0("state", act_formal_stats$geo_level)
+
+#Fill in NULLS for too few observations
+
+formal_count <- asec |>  # pipe
+# Compute summary statistics
+summarise(
+    count = n(),
+    .by = c(activity_id, geo_level, name, care_focus)
+  ) |>  # pipe
+# Filter rows by conditions
+filter(count < 10)
+
+formal_count$geo_level <- sprintf("%02d", as.numeric(formal_count$geo_level))
+formal_count$geo_level <- paste0("state", formal_count$geo_level)
+  
+
+## National Stats
+
+act_formal_population <- asec |>  # pipe 
+# Compute summary statistics
+summarise(
+    population = sum(asecwt),
+    .by = c(activity_id, name, care_focus)
+  )
+
+act_formal_time <- asec |>  # pipe 
+# Filter rows by conditions
+filter(uhrsworkt != 997) |>  # pipe 
+# Compute summary statistics
+summarise(
+    provision_interval = sum(asecwt*uhrsworkt*60/7),
+    .by = c(activity_id, name, care_focus)
+  )
+
+act_formal_med_wage <- asec |>  # pipe
+# Filter rows by conditions
+filter(incwage != 0 & incwage != 99999999) |>  # pipe 
+# Compute summary statistics
+summarise(
+      median_wage = wtd.quantile(
+      incwage, 
+      weights = asecwt, 
+      probs = 0.5
+      ),
+    .by = c(activity_id, name, care_focus)
+  )
+
+fs <- full_join(
+  act_formal_population, 
+  act_formal_time, 
+  by = c("activity_id", "name", "care_focus")
+  ) |>  # pipe 
+# Join datasets with full_join
+full_join(act_formal_med_wage, by = c("activity_id", "name", "care_focus")) |>  # pipe
+  arrange(activity_id)
+
+fs$geo_level <- "national"
+
+## Group Together
+
+act_formal_stats <- rbind(act_formal_stats, fs)
+
+act_formal_stats <- act_formal_stats %>%  # pipe
+# Create or modify columns
+mutate(
+    match_flag = paste(activity_id, geo_level) %in% 
+                 paste(formal_count$activity_id, formal_count$geo_level),
+    population = ifelse(match_flag, "null", as.character(population)),
+    provision_interval = ifelse(match_flag, "null", as.character(provision_interval)),
+    median_wage = ifelse(match_flag, "null", as.character(median_wage))
+  ) %>%  # pipe
+# Select/reorder columns
+select(-match_flag)
+```
+
+## Output Required Files
+
+This chunk outputs the required files.
+
+```{r chunk_03, message=FALSE, warning=FALSE}
+activity_formal <- act_formal_stats |>  # pipe 
+# Select/reorder columns
+select(activity_id, name, care_focus, median_wage, geo_level) |>  # pipe 
+  rename(id = activity_id,
+         geo = geo_level)
+
+activity_formal$median_wage[is.na(activity_formal$median_wage)] <- "null"
+
+activity_formal <- activity_formal %>%  # pipe
+# Create or modify columns
+mutate(id = paste(id, geo, sep = "-"))
+
+activity_formal <- activity_formal %>%  # pipe filter(median_wage != "null")
+
+write.csv(activity_formal, "./app_data/activity_formal.csv", 
+          row.names = FALSE)
+
+act_formal_stats <- act_formal_stats |>  # pipe
+  rename(geo = geo_level)
+
+activity_formal_datum <- act_formal_stats |>  # pipe 
+# Select/reorder columns
+select(activity_id, provision_interval, population, geo)
+
+activity_formal_datum <- activity_formal_datum %>%  # pipe
+# Create or modify columns
+mutate(activity_id = paste(activity_id, geo, sep = "-"))
+
+activity_formal_datum$population[is.na(activity_formal_datum$population)] <- "null"
+activity_formal_datum$provision_interval[is.na(activity_formal_datum$provision_interval)] <- "null"
+
+activity_formal_datum <- activity_formal_datum %>%  # pipe filter(population != "null")
+
+write.csv(activity_formal_datum, "./app_data/activity_formal_datum.csv", 
+          row.names = FALSE)
+```
