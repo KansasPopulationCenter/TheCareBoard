@@ -1,0 +1,564 @@
+---
+title: "Care Provider"
+format: html
+editor: visual
+---
+
+## Overview
+
+The following code chunks generate the datasets used for the *Categorizing Care* section and the Sankey diagram on the *What is the Care Economy* page. These datasets estimate time spent on caregiving across both paid and unpaid sectors. Estimates are derived from both formal (paid) and informal (unpaid) caregiving data sources, enabling analysis of the total time the population devotes to care provision.
+
+### Preliminaries
+
+The first code chunk loads the required packages and project defaults used throughout the analysis.
+
+```{r}
+source("load_defaults.R")
+```
+
+## Paid Hours
+
+Consistent with other components of the Care Economy, caregiving time is categorized into paid and unpaid hours. The following code chunks outline the methodology for estimating time allocated to paid caregiving activities.
+
+### Data Load
+
+We use the most recent year of data from the Annual Social and Economic Supplement (ASEC) to calculate time spent on paid caregiving activities. We load the ASEC dataset, keep only the most recent year, restrict to respondents aged 18+, and retain the variables required downstream.
+
+```{r}
+# Load ASEC data for formal (paid) care activities
+asec <- read.csv("./data/CSV/ASECdata.csv") |>
+  # Keep only the most recent survey year
+  filter(YEAR == max(YEAR)) |>
+  # Restrict to adults (18+)
+  filter(AGE >= 18) |>
+  # Keep only required variables for this workflow
+  select(
+    YEAR, OCC2010, empstat, occ_label, UHRSWORKT, EARNWT, INCWAGE,
+    occ_care_focus, ASECWT, sex, gender_parent, poverty, empstat,
+    race_ethnicity, prime_age, STATEFIP
+  ) |>
+  # Standardize column names to snake_case
+  clean_names() 
+```
+
+### State-Level Measurements
+
+Caregiving time is calculated at both the state and national levels. The next code chunk prepares state‑level estimates. We first filter to employed respondents to capture stable employment hours. We then align variable names and create harmonized fields used across the project. We also create a duplicate dataset (without the employment filter) used to compute state‑level population counts.
+
+```{r}
+cp_formal_state <- asec |>
+  # Keep only employed respondents for paid-care time estimates
+  filter(empstat == "Employed") |>
+  mutate(
+    # Harmonize key demographic and grouping variables
+    gender = str_to_lower(sex),
+    provider_status = case_when(
+      gender_parent %in% c("Mothers", "Fathers") ~ "with_children",
+      gender_parent %in% c("Non-Mothers", "Non-Fathers") ~ "without_children",
+      TRUE ~ "other"
+    ),
+    # Tag whether occupation has any care focus
+    time_use = ifelse(occ_care_focus == "none", "non_care", "care"),
+    care_focus = occ_care_focus,          # e.g., developmental, health, etc.
+    care_type = "formal",                 # formal = paid
+    provider_attention = "active",        # paid work is treated as active care
+    geo_level = statefip,                 # state FIPS (will be formatted later)
+    race = race_ethnicity
+  )
+
+cp_pop <- asec |>
+  # Duplicate (not restricted to employed) to compute population denominators by state
+  mutate(
+    gender = str_to_lower(sex),
+    provider_status = case_when(
+      gender_parent %in% c("Mothers", "Fathers") ~ "with_children",
+      gender_parent %in% c("Non-Mothers", "Non-Fathers") ~ "without_children",
+      TRUE ~ "other"
+    ),
+    time_use = ifelse(occ_care_focus == "none", "non_care", "care"),
+    care_focus = occ_care_focus,
+    care_type = "formal",
+    provider_attention = "active",
+    geo_level = statefip,
+    race = race_ethnicity
+  )
+```
+
+The next section generates the state‑level caregiving time. We use `uhrsworkt`, the usual number of hours worked per week. We remove records coded as “hours vary” and set “not in universe/not reported” to zero, then convert to minutes per day and weight to the population using `asecwt`. Estimates are produced by state, gender, parenthood status, and care type. We compute population counts separately (by state, gender, provider status) to avoid unnecessary breakdowns that could inflate counts.
+
+```{r}
+# Summarize paid-care time at the state level
+cp_summary <- cp_formal_state |>
+  # Remove "hours vary" (997) and set "not in universe / missing" (999) to 0
+  # (ASEC UHRSWORKT codes: 997 = hours vary; 999 = NIU/not reported)
+  filter(uhrsworkt != 997) |>
+  mutate(uhrsworkt = ifelse(uhrsworkt == 999, 0, uhrsworkt)) |>
+  # Convert weekly hours -> daily minutes, then apply person weight (asecwt)
+  summarise(
+    provision_interval = sum(uhrsworkt / 7 * 60 * asecwt),
+    .by = c(
+      geo_level, gender, provider_status, time_use, care_type,
+      care_focus, provider_attention
+    )
+  )
+
+# Format state FIPS as "stateXX"
+cp_summary$geo_level <- sprintf("%02d", as.numeric(cp_summary$geo_level))
+cp_summary$geo_level <- paste0("state", cp_summary$geo_level)
+
+# Compute state-level population denominators
+population_df <- cp_pop |>
+  summarise(
+    population = sum(asecwt),
+    .by = c(geo_level, gender, provider_status)
+  )
+
+population_df$geo_level <- sprintf("%02d", as.numeric(population_df$geo_level))
+population_df$geo_level <- paste0("state", population_df$geo_level)
+
+# Join time estimates with population denominators
+cp_formal_state <- cp_summary |>
+  left_join(population_df, by = c("geo_level", "gender", "provider_status"))
+
+```
+
+### Nation-Level Measures
+
+We now repeat the procedure at the national level by aggregating across states.
+
+```{r}
+cp_formal_nation <- asec |>
+  # Keep only employed for paid-care time estimates
+  filter(empstat == "Employed") |>
+  mutate(
+    gender = str_to_lower(sex),
+    provider_status = case_when(
+      gender_parent %in% c("Mothers", "Fathers") ~ "with_children",
+      gender_parent %in% c("Non-Mothers", "Non-Fathers") ~ "without_children",
+      TRUE ~ "other"
+    ),
+    time_use = ifelse(occ_care_focus == "none", "non_care", "care"),
+    care_focus = occ_care_focus,
+    care_type = "formal",
+    provider_attention = "active",
+    geo_level = "national",
+    race = race_ethnicity
+  )
+
+# Population denominators for national aggregation
+cp_pop <- asec |>
+  mutate(
+    gender = str_to_lower(sex),
+    provider_status = case_when(
+      gender_parent %in% c("Mothers", "Fathers") ~ "with_children",
+      gender_parent %in% c("Non-Mothers", "Non-Fathers") ~ "without_children",
+      TRUE ~ "other"
+    ),
+    time_use = ifelse(occ_care_focus == "none", "non_care", "care"),
+    care_focus = occ_care_focus,
+    care_type = "formal",
+    provider_attention = "active",
+    geo_level = "national",
+    race = race_ethnicity
+  )
+
+# Summarize paid-care time at the national level
+cp_summary <- cp_formal_nation |>
+  filter(uhrsworkt != 997) |>
+  mutate(uhrsworkt = ifelse(uhrsworkt == 999, 0, uhrsworkt)) |>
+  summarise(
+    provision_interval = sum(uhrsworkt / 7 * 60 * asecwt),
+    .by = c(
+      geo_level, gender, provider_status, time_use, care_type,
+      care_focus, provider_attention
+    )
+  )
+
+# National population denominators
+population_df <- cp_pop |>
+  summarise(
+    population = sum(asecwt),
+    .by = c(gender, provider_status)
+  )
+
+# Join time estimates with population denominators
+cp_formal_nation <- cp_summary |>
+  left_join(population_df, by = c("gender", "provider_status"))
+
+# Combine state and national paid-care datasets
+cp_formal <- rbind(cp_formal_state, cp_formal_nation)
+
+# Optional: inspect distributions
+cp_formal %>% skim()
+```
+
+## Unpaid Hours
+
+After calculating paid-care statistics, we calculate corresponding statistics for unpaid care using the American Time Use Survey (ATUS). We remove activities labeled as paid work, restrict to respondents aged 18+, and keep the five most recent years **excluding 2020** to avoid pandemic‑related anomalies while maintaining sample size.
+
+```{r}
+atus <- read.csv("./data/CSV/ATUSdata.csv") |>
+  # Exclude formal/paid work (already captured above)
+  filter(activity != "Formal Work") |>
+  # Adults only
+  filter(AGE >= 18) |>
+  # Keep the five most recent years and exclude 2020
+  filter(YEAR >= 2019 & YEAR != 2020) |>
+  # Retain required variables
+  select(
+    YEAR, CASEID, WT06, sex, gender_parent, race_ethnicity, act_care_focus,
+    DURATION, SCC_ALL_LN, SEC_ALL_LN, STATEFIP
+  ) |>
+  clean_names()
+
+# Determine most recent year range (helper; retained for bookkeeping/validation)
+yr_range <- atus_yr_range(atus) |>
+  filter(year == max(year))
+```
+
+### State Level Measurements
+
+As with paid care, we generate state‑level estimates for unpaid care. We first reshape the ATUS data so that **secondary** childcare and eldercare are treated as distinct activities, independent from the corresponding primary activity. For example, if someone cooks for one hour while also providing one hour of secondary childcare, we record **two** hours of caregiving: one hour of daily living care (primary) and one hour of developmental care (secondary).
+
+We then standardize variable names and create harmonized fields. We compute a daily person‑weight as `wt06 / 365 / 5`, which converts the ATUS annual person weight to an average day and scales it across the five‑year window.
+
+```{r}
+# Reshape to treat primary and secondary care as separate activity records
+cp_informal <- atus |>
+  pivot_longer(
+    cols = c(duration, scc_all_ln, sec_all_ln), # primary, secondary child, secondary elder
+    names_to = "metric",
+    values_to = "duration"
+  ) |>
+  # Drop rows with no recorded duration
+  filter(!is.na(duration))
+
+# Create harmonized variables used across the project
+cp_informal_state <- cp_informal |>
+  mutate(
+    gender = str_to_lower(sex),
+    provider_status = case_when(
+      gender_parent %in% c("Mothers", "Fathers") ~ "with_children",
+      gender_parent %in% c("Non-Mothers", "Non-Fathers") ~ "without_children",
+      TRUE ~ "other"
+    ),
+    care_type = "informal",  # informal = unpaid
+    # Label attention type based on metric (secondary care is "passive")
+    provider_attention = case_when(
+      metric == "scc_all_ln" ~ "passive_child",
+      metric == "sec_all_ln" ~ "passive_elder",
+      TRUE ~ "active"
+    ),
+    # Map activity domains; ensure "none" is preserved for non-care
+    care_focus = case_when(
+      metric == "scc_all_ln" ~ "developmental",
+      metric == "sec_all_ln" ~ "health",
+      act_care_focus == "non-care" ~ "none",
+      TRUE ~ act_care_focus
+    ),
+    time_use = ifelse(care_focus == "none", "non_care", "care"),
+    # Convert annual person weight to average daily weight across 5 years
+    weight = wt06 / 365 / 5,
+    geo_level = statefip,  # will format to "stateXX" later
+    race = race_ethnicity
+  ) |>
+  # Remove zero-duration rows (no contributed time)
+  filter(duration != 0)
+```
+
+We now compute individual‑level totals (summing each respondent’s caregiving minutes across activities) and then produce population‑level estimates by multiplying by the respondent’s daily weight. We group by state, gender, parenthood status, care type, and attention (primary vs secondary) to avoid mixing categories. Population counts are computed separately to prevent double counting across primary and secondary activities.
+
+```{r}
+# Step 1: Aggregate to the individual level within groups
+cp_summary <- cp_informal_state |>
+  summarise(
+    total_time = sum(duration),
+    weight = median(weight),  # median daily weight per person within group
+    .by = c(
+      year, caseid, geo_level, gender, provider_status, time_use,
+      care_type, care_focus, provider_attention
+    )
+  ) |>
+  # Step 2: Weight to the population within groups
+  summarise(
+    provision_interval = sum(total_time * weight),
+    .by = c(
+      geo_level, gender, provider_status, time_use,
+      care_type, care_focus, provider_attention
+    )
+  )
+
+# Format state FIPS as "stateXX"
+cp_summary$geo_level <- sprintf("%02d", as.numeric(cp_summary$geo_level))
+cp_summary$geo_level <- paste0("state", cp_summary$geo_level)
+
+# Compute state-level population denominators from ATUS (daily weight)
+cp_pop <- cp_informal_state |>
+  group_by(caseid) |>
+  summarise(
+    weight = median(weight),
+    geo_level = first(geo_level),
+    gender = first(gender),
+    provider_status = first(provider_status)
+  )
+
+population_df <- cp_pop |>
+  summarise(
+    population = sum(weight),
+    .by = c(geo_level, gender, provider_status)
+  )
+
+population_df$geo_level <- sprintf("%02d", as.numeric(population_df$geo_level))
+population_df$geo_level <- paste0("state", population_df$geo_level)
+
+# Join time estimates with population denominators
+cp_informal_state <- cp_summary |>
+  left_join(population_df, by = c("geo_level", "gender", "provider_status"))
+```
+
+### National Measurements
+
+We apply the same methodology to produce national unpaid‑care estimates by aggregating across states, then combine the national and state datasets.
+
+```{r}
+# Prepare national records with harmonized variables
+cp_informal_nation <- cp_informal |>
+  mutate(
+    gender = str_to_lower(sex),
+    provider_status = case_when(
+      gender_parent %in% c("Mothers", "Fathers") ~ "with_children",
+      gender_parent %in% c("Non-Mothers", "Non-Fathers") ~ "without_children",
+      TRUE ~ "other"
+    ),
+    care_type = "informal",
+    provider_attention = case_when(
+      metric == "scc_all_ln" ~ "passive_child",
+      metric == "sec_all_ln" ~ "passive_elder",
+      TRUE ~ "active"
+    ),
+    care_focus = case_when(
+      metric == "scc_all_ln" ~ "developmental",
+      metric == "sec_all_ln" ~ "health",
+      act_care_focus == "non-care" ~ "none",
+      TRUE ~ act_care_focus
+    ),
+    time_use = ifelse(care_focus == "none", "non_care", "care"),
+    weight = wt06 / 365 / 5,
+    geo_level = "national",
+    race = race_ethnicity
+  ) |>
+  filter(duration != 0)
+
+# Individual-level aggregation, then weight to the population
+cp_summary <- cp_informal_nation |>
+  summarise(
+    total_time = sum(duration),
+    weight = median(weight),
+    .by = c(
+      year, caseid, weight, geo_level, gender, provider_status, time_use,
+      care_type, care_focus, provider_attention
+    )
+  ) |>
+  summarise(
+    provision_interval = sum(total_time * weight),
+    .by = c(
+      geo_level, gender, provider_status, time_use,
+      care_type, care_focus, provider_attention
+    )
+  )
+
+# National population denominators (daily weight)
+cp_pop <- cp_informal_nation |>
+  group_by(caseid) |>
+  summarise(
+    weight = median(weight),
+    geo_level = first(geo_level),
+    gender = first(gender),
+    provider_status = first(provider_status)
+  )
+
+population_df <- cp_pop |>
+  summarise(
+    population = sum(weight),
+    .by = c(gender, provider_status)
+  )
+
+# Join time estimates with population denominators
+cp_informal_nation <- cp_summary |>
+  left_join(population_df, by = c("gender", "provider_status"))
+
+# Combine state and national unpaid-care datasets
+cp_informal <- rbind(cp_informal_state, cp_informal_nation)
+
+# Optional: inspect distributions
+cp_informal %>% skim()
+```
+
+## Output Required Files
+
+We combine the paid and unpaid caregiving datasets into a single dataset that represents time spent on different caregiving activities across demographic groups and geographies. We then select the required variables and export the table used by the application.
+
+```{r}
+cp_combined <- bind_rows(
+  cp_formal, 
+  cp_informal
+)  |>  # pipe to next step 
+  arrange(care_type, time_use, gender, provider_status, care_focus) %>%
+  # Select subset of columns
+select(geo_level, gender, provider_status, time_use, care_type,
+         care_focus, provider_attention, provision_interval, population) %>%
+  rename(geo = geo_level)%>%
+  # Filter rows based on conditions
+filter(population != "null")
+
+write.csv(cp_combined, "./app_data/care_provider_datum.csv", 
+          row.names = FALSE)
+
+
+```
+
+We create a separate dataframe, `cp_population`, which represents the population counts for each demographic group. This dataset is then exported as a CSV file for use in subsequent analyses.
+
+```{r}
+cp_population <- asec  |>  # pipe to next step 
+  # Create or modify columns
+mutate(
+    gender = str_to_lower(sex),
+    geo = statefip,
+    provider_status = case_when(
+      gender_parent %in% c("Mothers", "Fathers") ~ "with_children",
+      gender_parent %in% c("Non-Mothers", "Non-Fathers") ~ "without_children",
+      TRUE ~ "other")
+    ) |>  # pipe to next step 
+  # Aggregate data to compute summary statistics
+summarise(population = sum(asecwt), .by = c(geo, gender, provider_status))  |>  # pipe to next step 
+  arrange(gender, provider_status)
+
+cp_population$geo <- sprintf("%02d", as.numeric(cp_population$geo))
+cp_population$geo <- paste0("state", cp_population$geo)
+
+### NATIONAL LEVEL
+
+cp_population_national <- asec  |>  # pipe to next step 
+  # Create or modify columns
+mutate(
+    gender = str_to_lower(sex),
+    geo = statefip,
+    provider_status = case_when(
+      gender_parent %in% c("Mothers", "Fathers") ~ "with_children",
+      gender_parent %in% c("Non-Mothers", "Non-Fathers") ~ "without_children",
+      TRUE ~ "other")
+    ) |>  # pipe to next step 
+  # Aggregate data to compute summary statistics
+summarise(population = sum(asecwt), .by = c(gender, provider_status))  |>  # pipe to next step 
+  arrange(gender, provider_status)  |>  # pipe to next step
+  # Create or modify columns
+mutate(geo = "national")
+
+cp_population <- rbind(cp_population, cp_population_national)
+
+write.csv(cp_population, "./app_data/care_provider_population.csv", 
+          row.names = FALSE)
+```
+
+## Provider Datum Table
+
+```{r}
+cp_disp <- cp_combined |>
+  rename(
+    Geo = geo,
+    Gender = gender,
+    `Provider Status` = provider_status,
+    `Time Use` = time_use,
+    `Care Type` = care_type,
+    `Care Focus` = care_focus,
+    `Provider Attention` = provider_attention,
+    `Provision Interval` = provision_interval,
+    Population = population
+  )
+
+# Identify numeric columns for right-align & formatting
+num_cols <- c("Provision Interval", "Population")
+
+# Build the datatable
+datatable(
+  cp_disp,
+  rownames = FALSE,
+  filter = "top",                # per-column search inputs
+  extensions = c("Buttons", "FixedHeader", "ColReorder", "Responsive"),
+  options = list(
+    pageLength = 25,
+    lengthMenu = c(10, 25, 50, 100),
+    dom = "Bfrtip",              # Buttons, filter, table, pagination
+    buttons = list(
+      list(extend = "copy", title = "cp_combined"),
+      list(extend = "csv",  title = "cp_combined"),
+      list(extend = "excel",title = "cp_combined"),
+      list(extend = "print")
+    ),
+    fixedHeader = TRUE,          # sticky header when scrolling
+    colReorder = TRUE,
+    autoWidth = TRUE,
+    # Right-align numeric columns
+    columnDefs = list(
+      list(className = "dt-right", targets = which(names(cp_disp) %in% num_cols) - 1)
+    )
+  ),
+  caption = htmltools::tags$caption(
+    style = "caption-side: top; text-align:left; font-weight:600; font-size:1.05em; margin-bottom:8px;",
+    "Care Provision Summary (interactive: filter columns, reorder, and export)"
+  )
+) |>
+  # Format large numbers with commas for readability
+  formatCurrency(num_cols, currency = "", interval = 3, mark = ",")
+```
+
+## Provider Population Table
+
+```{r}
+# Presentation-friendly names
+cp_pop_disp <- cp_population |>
+  rename(
+    Geo = geo,
+    Gender = gender,
+    `Provider Status` = provider_status,
+    Population = population
+  )
+
+# Build interactive table
+datatable(
+  cp_pop_disp,
+  rownames = FALSE,
+  filter = "top",
+  extensions = c("Buttons", "FixedHeader", "ColReorder", "Responsive"),
+  options = list(
+    pageLength = 25,
+    lengthMenu = c(10, 25, 50, 100),
+    dom = "Bfrtip",
+    buttons = list(
+      list(extend = "copy",  title = "cp_population"),
+      list(extend = "csv",   title = "cp_population"),
+      list(extend = "excel", title = "cp_population"),
+      list(extend = "print")
+    ),
+    fixedHeader = TRUE,
+    colReorder = TRUE,
+    autoWidth = TRUE,
+    columnDefs = list(
+      list(className = "dt-right", targets = 3)  # right-align Population
+    )
+  ),
+  caption = htmltools::tags$caption(
+    style = "caption-side: top; text-align:left; font-weight:600; font-size:1.05em; margin-bottom:8px;",
+    "Population by Geo, Gender, and Provider Status (interactive)"
+  )
+) |>
+  formatCurrency("Population", currency = "", interval = 3, mark = ",")
+
+```
+
+## Data Sources
+
+Sarah Flood, Miriam King, Renae Rodgers, Steven Ruggles, J. Robert Warren, Daniel Backman, Annie Chen, Grace Cooper, Stephanie Richards, Megan Schouweiler, and Michael Westberry. IPUMS CPS: Version 12.0 \[dataset\]. Minneapolis, MN: IPUMS, 2024. https://doi.org/10.18128/D030.V12.0
+
+Sarah M. Flood, Liana C. Sayer, Daniel Backman, and Annie Chen. American Time Use Survey Data Extract Builder: Version 3.2 \[dataset\]. College Park, MD: University of Maryland and Minneapolis, MN: IPUMS, 2023. https://doi.org/10.18128/D060.V3.2
