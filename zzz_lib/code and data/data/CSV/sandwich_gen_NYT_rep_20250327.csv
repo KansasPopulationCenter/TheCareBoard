@@ -1,0 +1,502 @@
+"year","marst","race","sex","empstat","mean_n_child","median_n_child","mean_age","median_age","population"
+2015,"Married","Black","Female","Employed",1.8130297491883,2,38.7714387401499,39,113285.388429169
+2015,"Single-Never-Married","White","Male","NILF",1.83405371024249,2,30.6072749300719,29,31618.1920436126
+2015,"Separated, Widowed, or Divorced","Black","Male","Employed",1.35782828912499,1,34.5261291023667,32,13454.4534169458
+2015,"Married","White","Male","Employed",2.24246459605284,2,38.0496163938514,38,1417110.49774366
+2015,"Single-Never-Married","White","Female","Employed",1.75723288325591,2,29.3625569465609,28,240047.12375027
+2015,"Married","White","Female","NILF",2.50744638112088,2,35.0577121937066,35,903252.656250087
+2015,"Married","White","Female","Employed",2.16208167741154,2,36.7628750954693,36,1273113.11870269
+2015,"Separated, Widowed, or Divorced","White","Female","Unemployed",2.47511629178531,3,42.8497072260073,42,49636.9639184318
+2015,"Married","Black","Female","NILF",2.52338474728265,3,35.4988352348973,34,45789.2328364449
+2015,"Married","Asian/Pacific Island","Male","Employed",2.63068854705498,2,40.4051720307266,40,108934.112589835
+2015,"Married","White","Female","Unemployed",2.30720032890413,2,35.1265801382426,34,88842.9043071578
+2015,"Separated, Widowed, or Divorced","White","Female","Employed",2.33934654326366,2,37.2535378883384,37,162053.333390674
+2015,"Single-Never-Married","White","Female","NILF",1.49163634970444,1,29.6283899455744,29,82093.4880201512
+2015,"Married","White","Male","Unemployed",2.57923279299761,2,36.8998497469105,37,112833.185948946
+2015,"Single-Never-Married","White","Male","Employed",1.6930792005783,2,30.0032593583844,28,184951.407761898
+2015,"Separated, Widowed, or Divorced","Black","Female","NILF",2.12622610250533,2,42.1868301581944,46,8673.2606838
+2015,"Separated, Widowed, or Divorced","White","Male","Unemployed",1.35651125278683,1,37.0020582889154,36,12572.9198415523
+2015,"Separated, Widowed, or Divorced","White","Male","Employed",1.90730096622755,2,39.3128705141118,43,154245.271173445
+2015,"Separated, Widowed, or Divorced","Black","Male","Unemployed",2,2,47,47,1685.91982115123
+2015,"Separated, Widowed, or Divorced","Asian/Pacific Island","Male","Employed",3.75490168229981,4,51.9652609736622,56,9234.21763634137
+2015,"Single-Never-Married","Asian/Pacific Island","Female","Employed",2.26079882360823,1,31.8321131141693,27,30627.170308366
+2015,"Single-Never-Married","White","Female","Unemployed",1.44420317271192,1,31.2774840004149,27,78007.7300642252
+2015,"Married","Asian/Pacific Island","Female","Unemployed",1.98131542119801,2,38.2710669541532,39,10216.1752887885
+2015,"Single-Never-Married","Black","Female","Employed",1.9489375436758,1,27.898571383267,28,167375.691502298
+2015,"Married","Asian/Pacific Island","Female","Employed",1.76053857060712,2,37.9809063533552,39,88005.419896371
+2015,"Married","Black","Male","NILF",1.66217834217501,1,51.250183819183,49,32937.2820245392
+2015,"Married","Asian/Pacific Island","Female","NILF",2.4071668014011,2,35.603312720284,33,79046.4174552115
+2015,"Single-Never-Married","Black","Male","Employed",1.45958653011423,1,30.0887621313095,27,76204.2195284269
+2015,"Married","Black","Male","Employed",2.23407116105623,2,41.5938180246101,41,145218.174229832
+2015,"Separated, Widowed, or Divorced","Black","Female","Employed",2.57412699296422,2,33.2781080040493,35,34389.8346329052
+2015,"Separated, Widowed, or Divorced","White","Female","NILF",2.53011481379049,2,36.6120433902263,36,104086.318038816
+2015,"Married","White","Male","NILF",2.45234462227652,2,48.0010068265326,47,110880.930119247
+2015,"Single-Never-Married","Two or More Races","Female","Unemployed",1.48351664036922,1,20.4835166403692,20,11279.2865987792
+2015,"Married","American Indian","Male","Unemployed",1,1,47,47,1347.89128975342
+2015,"Single-Never-Married","White","Male","Unemployed",1,1,25.9244909761028,26,9920.60568648877
+2015,"Separated, Widowed, or Divorced","American Indian","Female","Employed",2.68792726511688,3,37.2482909395325,36,2561.03118558356
+2015,"Single-Never-Married","Black","Female","Unemployed",2.22525158882998,2,29.431085261811,28,92118.9227062449
+2015,"Separated, Widowed, or Divorced","White","Male","NILF",1.32068205815647,1,40.4018407511969,35,16209.964114251
+2015,"Married","Two or More Races","Male","Employed",2.31946230914082,1,48.0323782898879,45,10843.5007966838
+2015,"Married","Black","Male","Unemployed",3,3,38,38,5684.91422677863
+2015,"Separated, Widowed, or Divorced","Black","Female","Unemployed",1.54625700618123,1,38.8149719752751,41,7157.01489639397
+2015,"Married","Black","Female","Unemployed",3.35116486526239,3,35.3567146269423,37,13598.1813969841
+2015,"Married","American Indian","Male","Employed",3.31831331484301,3,41.3557056130437,40,14942.5362104175
+2015,"Single-Never-Married","Two or More Races","Female","Employed",2.06747296023833,3,28.0583749082137,31,11483.6999554049
+2015,"Single-Never-Married","American Indian","Male","Employed",2.72925995858713,2,34.8658989615162,30,10751.4917548263
+2015,"Separated, Widowed, or Divorced","Asian/Pacific Island","Female","Employed",2,2,47,47,568.726713837808
+2015,"Married","Two or More Races","Female","NILF",2.72603895062765,4,41.6526893918706,43,13861.0137957359
+2015,"Separated, Widowed, or Divorced","Two or More Races","Female","Employed",2.12340176892482,1,29.9957380504662,27,2903.64793829534
+2015,"Single-Never-Married","Black","Female","NILF",2.10221994797003,2,29.1002665982996,23,50449.9937797507
+2015,"Married","Asian/Pacific Island","Male","NILF",1.74758643271436,2,37.9613829234297,42,8069.04600389918
+2015,"Single-Never-Married","Asian/Pacific Island","Male","NILF",1,1,52,52,1661.1088958663
+2015,"Married","American Indian","Female","Employed",2.22693203755419,2,43.4855432259594,43,8555.07596067507
+2015,"Separated, Widowed, or Divorced","Asian/Pacific Island","Female","Unemployed",2,2,46,46,1378.31026932603
+2015,"Single-Never-Married","American Indian","Female","Unemployed",3.73207244142059,4,29.1962173242618,30,2865.87391902411
+2015,"Single-Never-Married","American Indian","Female","Employed",1.73316798548191,1,27.5235806291123,26,17868.061650897
+2015,"Married","American Indian","Male","NILF",4.34927267654051,4,41.095636059243,39,5118.62188772932
+2015,"Separated, Widowed, or Divorced","Asian/Pacific Island","Female","NILF",3,3,30,30,3720.15908702027
+2015,"Separated, Widowed, or Divorced","American Indian","Female","Unemployed",5,5,30,30,2363.06483501808
+2015,"Single-Never-Married","American Indian","Male","NILF",2,2,43,43,2351.48489258411
+2015,"Separated, Widowed, or Divorced","Two or More Races","Male","Employed",3,3,38,38,6911.72425121096
+2015,"Married","Two or More Races","Female","Employed",2.31639181352926,2,40.9241011171005,43,12140.1068212915
+2015,"Married","Asian/Pacific Island","Male","Unemployed",5,5,43,43,1302.22171906192
+2015,"Single-Never-Married","Two or More Races","Female","NILF",1,1,22,22,1631.7303610811
+2015,"Single-Never-Married","Asian/Pacific Island","Male","Employed",3,3,37,37,2382.59607676493
+2016,"Married","Asian/Pacific Island","Male","Employed",2.25454696266846,2,38.6172478653037,39,151932.91092897
+2016,"Married","White","Male","Employed",2.19956528788859,2,38.2858903669926,38,1505522.74635662
+2016,"Single-Never-Married","American Indian","Male","Employed",2.72925995858713,2,34.8658989615162,30,10751.4917548263
+2016,"Separated, Widowed, or Divorced","White","Female","Unemployed",2.45155467611277,2,39.0652749478168,42,51862.0785679485
+2016,"Married","White","Female","Employed",2.20433120422861,2,36.698484272155,36,1340782.19770032
+2016,"Separated, Widowed, or Divorced","White","Female","Employed",2.46272239875309,2,37.5360277335112,37,155223.075136396
+2016,"Separated, Widowed, or Divorced","Asian/Pacific Island","Female","Employed",5.42821564864504,6,37.5724069662261,36,3978.60985520219
+2016,"Single-Never-Married","White","Female","Employed",1.75793882175952,2,30.1070876482141,28,245091.773696228
+2016,"Married","White","Female","Unemployed",2.3499306659234,2,34.2073972967275,33,81293.3809478526
+2016,"Separated, Widowed, or Divorced","Black","Female","Employed",2.42376299563571,2,34.4448234525189,36,50879.2958184756
+2016,"Single-Never-Married","Black","Female","Employed",2.02235589808373,2,28.3270462917598,28,171311.105652856
+2016,"Married","White","Female","NILF",2.44455391645314,2,34.9210036672982,34,877100.724388074
+2016,"Single-Never-Married","White","Male","Unemployed",1,1,25.8457860812836,24,4857.50740328932
+2016,"Separated, Widowed, or Divorced","Black","Female","NILF",2.86078499677418,3,38.8580172736585,38,8372.21595416493
+2016,"Single-Never-Married","White","Female","NILF",1.63831360553422,1,30.0183847466308,31,99367.585394474
+2016,"Married","Asian/Pacific Island","Female","Employed",1.92645361289602,2,38.0227431263599,40,86691.6051355271
+2016,"Married","Black","Female","Employed",1.76774424514325,2,38.3068276806134,39,127127.411395985
+2016,"Married","Two or More Races","Female","NILF",2.61184060797288,2,41.5500281685911,41,16448.1333532827
+2016,"Separated, Widowed, or Divorced","White","Female","NILF",2.59444157134748,2,36.3012369290553,35,117911.239812389
+2016,"Single-Never-Married","White","Male","Employed",1.65776753368834,2,30.3657692191802,28,151615.579948395
+2016,"Single-Never-Married","Black","Male","Employed",1.27086453352529,1,28.8890780654483,26,73347.9803941852
+2016,"Single-Never-Married","Black","Female","Unemployed",1.96291913850446,1,29.012268951694,27,128178.787181824
+2016,"Single-Never-Married","Two or More Races","Female","Employed",1.970233840321,2,30.2404947819451,31,15406.2524386614
+2016,"Married","Two or More Races","Male","Employed",2.62281735697192,3,47.6252787357713,45,12767.603761309
+2016,"Separated, Widowed, or Divorced","White","Male","Employed",1.86816576470183,2,38.7327789775173,43,142223.035934337
+2016,"Married","Black","Female","NILF",2.68816267636724,3,35.5865907242655,34,21065.3191224444
+2016,"Separated, Widowed, or Divorced","Two or More Races","Female","Employed",2.12340176892482,1,29.9957380504662,27,2903.64793829534
+2016,"Single-Never-Married","Black","Female","NILF",2.10221994797003,2,29.1002665982996,23,50449.9937797507
+2016,"Married","White","Male","NILF",2.32638136931253,2,46.0204896180942,42,105181.6735447
+2016,"Married","Asian/Pacific Island","Male","NILF",3.42733685959777,3,43.8352344194929,44,19026.2551305419
+2016,"Married","Asian/Pacific Island","Female","NILF",2.40478042042758,2,36.6574617450844,33,75215.0716427156
+2016,"Married","White","Male","Unemployed",2.60734420516168,3,37.4010960722029,35,103521.225331942
+2016,"Married","Black","Male","Employed",2.55263878660111,2,42.0010092811438,44,135673.994040255
+2016,"Single-Never-Married","White","Male","NILF",1,1,29.8765341802758,34,14346.1344143967
+2016,"Married","Black","Male","NILF",1.68171116436355,1,54.6573887418741,49,25669.9305901425
+2016,"Separated, Widowed, or Divorced","Asian/Pacific Island","Male","Employed",1,1,37,37,754.430402648219
+2016,"Separated, Widowed, or Divorced","American Indian","Female","Employed",3,3,29.2645327737016,25,4544.42162871014
+2016,"Single-Never-Married","Asian/Pacific Island","Male","NILF",1,1,52,52,1661.1088958663
+2016,"Married","Asian/Pacific Island","Female","Unemployed",2.36070257498202,2,36.4428102999281,35,7367.7308626263
+2016,"Single-Never-Married","White","Female","Unemployed",1.51470843561764,1,34.1507031552991,28,61376.2660892504
+2016,"Separated, Widowed, or Divorced","White","Male","Unemployed",1.93428617126269,2,42.1199569328249,44,30547.6677002121
+2016,"Married","American Indian","Female","Employed",2.05088351417934,2,43.4158741934878,43,9988.25905843507
+2016,"Separated, Widowed, or Divorced","Asian/Pacific Island","Female","Unemployed",2,2,46,46,1378.31026932603
+2016,"Single-Never-Married","American Indian","Female","Unemployed",3.73207244142059,4,29.1962173242618,30,2865.87391902411
+2016,"Separated, Widowed, or Divorced","White","Male","NILF",1.63147534857531,1,38.4519783576301,35,18307.5448875731
+2016,"Single-Never-Married","American Indian","Female","Employed",1.78574929670362,1,27.8145204796944,28,22253.2333032619
+2016,"Married","American Indian","Male","Employed",2.23547804997426,2,43.5966999607368,44,12546.5410138899
+2016,"Married","American Indian","Male","NILF",4.34927267654051,4,41.095636059243,39,5118.62188772932
+2016,"Separated, Widowed, or Divorced","Asian/Pacific Island","Female","NILF",3,3,30,30,3720.15908702027
+2016,"Separated, Widowed, or Divorced","American Indian","Female","Unemployed",5,5,30,30,2363.06483501808
+2016,"Separated, Widowed, or Divorced","Black","Male","Employed",1.91574384275224,2,35.4094333248581,33,20027.6345104296
+2016,"Single-Never-Married","American Indian","Male","NILF",1.27766536187175,1,32.1649804280763,28,8468.7729025063
+2016,"Separated, Widowed, or Divorced","Two or More Races","Male","Employed",3,3,38,38,6911.72425121096
+2016,"Married","Two or More Races","Female","Employed",2.09264282516068,2,36.7726246174866,40,23608.883753114
+2016,"Single-Never-Married","Two or More Races","Female","Unemployed",2,2,21,21,5453.72276200329
+2016,"Married","Black","Female","Unemployed",3.4206294491216,4,36.7659085807096,33,9006.7719781463
+2016,"Married","Asian/Pacific Island","Male","Unemployed",1.96034718389766,1,39.9603471838977,39,5423.9622540537
+2016,"Single-Never-Married","Asian/Pacific Island","Female","Employed",4,4,46,46,8450.89915506575
+2016,"Separated, Widowed, or Divorced","Black","Female","Unemployed",1,1,41,41,5202.23013114466
+2016,"Single-Never-Married","Two or More Races","Female","NILF",1,1,22,22,1631.7303610811
+2016,"Single-Never-Married","Asian/Pacific Island","Male","Employed",3,3,37,37,2382.59607676493
+2016,"Separated, Widowed, or Divorced","Two or More Races","Male","Unemployed",2,2,50,50,1429.41280427069
+2016,"Single-Never-Married","Two or More Races","Male","Employed",1,1,22,22,20349.3605882252
+2016,"Single-Never-Married","Black","Male","NILF",1,1,35,35,2801.77904427452
+2016,"Married","Black","Male","Unemployed",2,2,36,36,11466.1493441452
+2017,"Married","White","Female","Employed",2.15065018123056,2,36.5503457694325,36,1345718.61715577
+2017,"Married","White","Female","NILF",2.39097605103494,2,34.6373195047171,34,960777.950070788
+2017,"Married","White","Male","Employed",2.14267367174377,2,38.4268261730936,38,1577742.09253708
+2017,"Single-Never-Married","Black","Female","Employed",2.08647191820002,2,28.4567631696572,28,207655.357397099
+2017,"Single-Never-Married","Black","Female","Unemployed",1.91271198395657,1,29.5947942352935,28,131792.859712082
+2017,"Single-Never-Married","White","Male","Employed",1.54187277455076,1,30.2498204017247,28,208751.382964668
+2017,"Separated, Widowed, or Divorced","White","Female","Employed",2.60928326015156,2,36.9964382146176,37,183767.341286323
+2017,"Married","Black","Female","Employed",1.78016833767238,2,38.7970607415468,39,136840.850830157
+2017,"Married","Black","Male","Employed",2.85349392889069,3,41.6647774806658,41,152278.414776593
+2017,"Single-Never-Married","White","Female","Employed",1.81086753153181,2,29.9843448370574,29,228777.457042781
+2017,"Married","White","Male","NILF",2.26676478143586,2,47.8812924145276,47,93738.3826814816
+2017,"Separated, Widowed, or Divorced","White","Male","Employed",1.93530457339676,2,38.485498902328,41,114933.827447398
+2017,"Married","Asian/Pacific Island","Female","Employed",1.898841523184,2,38.0575153183453,39,96325.2375628762
+2017,"Single-Never-Married","White","Female","Unemployed",1.68253367782935,2,32.1688629293057,28,93822.1855557627
+2017,"Married","White","Female","Unemployed",2.25612564224196,2,34.1958858420988,33,90641.060338309
+2017,"Single-Never-Married","White","Female","NILF",1.71868232185197,2,29.4272421934582,29,107925.546827598
+2017,"Separated, Widowed, or Divorced","White","Male","Unemployed",1.93428617126269,2,42.1199569328249,44,30547.6677002121
+2017,"Separated, Widowed, or Divorced","Black","Female","Employed",2.32553955802181,2,34.3272975146141,36,58953.9542989594
+2017,"Married","Asian/Pacific Island","Male","Employed",2.14666392940448,2,38.3846340963933,39,142753.115262378
+2017,"Single-Never-Married","Black","Female","NILF",1.49812869751576,1,27.9393356763189,24,55174.8013273266
+2017,"Single-Never-Married","White","Male","NILF",1.71361215376546,1,31.7382606485597,28,24674.2043765797
+2017,"Married","Black","Female","NILF",1.97095849618689,2,38.2448523197916,39,20406.6124242323
+2017,"Married","White","Male","Unemployed",2.96753688958166,3,37.5867949884787,35,71279.2809764022
+2017,"Separated, Widowed, or Divorced","White","Female","NILF",2.43832579934811,2,36.7596798555645,36,112291.920598034
+2017,"Single-Never-Married","White","Male","Unemployed",1,1,22.2405926223549,22,25473.1293283282
+2017,"Married","Asian/Pacific Island","Female","NILF",2.9987243907383,3,38.668436399874,37,76042.6425701304
+2017,"Married","American Indian","Female","Employed",2.05088351417934,2,43.4158741934878,43,9988.25905843507
+2017,"Married","Two or More Races","Female","NILF",3.48153738601362,4,38.8408750737065,43,14833.1565160148
+2017,"Separated, Widowed, or Divorced","White","Female","Unemployed",2.0976641068831,2,30.3381328001072,33,24212.9307516718
+2017,"Separated, Widowed, or Divorced","Asian/Pacific Island","Female","Unemployed",2,2,46,46,1378.31026932603
+2017,"Single-Never-Married","American Indian","Female","Unemployed",3.73207244142059,4,29.1962173242618,30,2865.87391902411
+2017,"Separated, Widowed, or Divorced","Black","Female","NILF",3,3,41.661714440746,46,6159.4851909326
+2017,"Separated, Widowed, or Divorced","White","Male","NILF",2.05185850237696,2,40.4633984561393,35,26424.6703139967
+2017,"Single-Never-Married","American Indian","Female","Employed",1.78574929670362,1,27.8145204796944,28,22253.2333032619
+2017,"Married","American Indian","Male","Employed",2.23547804997426,2,43.5966999607368,44,12546.5410138899
+2017,"Married","American Indian","Male","NILF",4.34927267654051,4,41.095636059243,39,5118.62188772932
+2017,"Separated, Widowed, or Divorced","Asian/Pacific Island","Female","NILF",3,3,30,30,3720.15908702027
+2017,"Married","Asian/Pacific Island","Male","NILF",3.7183307478911,5,45.9733571904755,49,16989.5184441058
+2017,"Single-Never-Married","American Indian","Male","Employed",2,2,27.2591802204905,25,6121.39191092274
+2017,"Married","Two or More Races","Male","Employed",1.99030908194646,1,48.5898738653775,54,10084.3996545907
+2017,"Separated, Widowed, or Divorced","American Indian","Female","Unemployed",5,5,30,30,2363.06483501808
+2017,"Separated, Widowed, or Divorced","Black","Male","Employed",1.74970739810923,1,33.0959733627097,33,29827.2571158422
+2017,"Single-Never-Married","Black","Male","Employed",1.32109958362292,1,30.6205467503776,26,74663.9954855655
+2017,"Single-Never-Married","American Indian","Male","NILF",1.27766536187175,1,32.1649804280763,28,8468.7729025063
+2017,"Single-Never-Married","Two or More Races","Female","Employed",1.49055918207036,1,29.8867101848443,24,10510.407046343
+2017,"Separated, Widowed, or Divorced","Two or More Races","Male","Employed",3,3,38,38,6911.72425121096
+2017,"Married","Black","Male","NILF",1,1,52.3554448199401,57,8079.85091928712
+2017,"Married","Two or More Races","Female","Employed",2.09264282516068,2,36.7726246174866,40,23608.883753114
+2017,"Single-Never-Married","Two or More Races","Female","Unemployed",2,2,21,21,5453.72276200329
+2017,"Married","Black","Female","Unemployed",3.20079854459007,4,36.8021323324258,33,10655.6470869523
+2017,"Married","Asian/Pacific Island","Male","Unemployed",1.96034718389766,1,39.9603471838977,39,5423.9622540537
+2017,"Single-Never-Married","Asian/Pacific Island","Female","Employed",4,4,46,46,8450.89915506575
+2017,"Separated, Widowed, or Divorced","Black","Female","Unemployed",1,1,41,41,5202.23013114466
+2017,"Married","Asian/Pacific Island","Female","Unemployed",2,2,35,35,4710.17136870247
+2017,"Single-Never-Married","Two or More Races","Female","NILF",1,1,22,22,1631.7303610811
+2017,"Separated, Widowed, or Divorced","Two or More Races","Female","Employed",4,4,35,35,1087.32107673863
+2017,"Single-Never-Married","Asian/Pacific Island","Male","Employed",3,3,37,37,2382.59607676493
+2017,"Separated, Widowed, or Divorced","American Indian","Female","Employed",3,3,25,25,2782.6184493326
+2017,"Separated, Widowed, or Divorced","Two or More Races","Male","Unemployed",2,2,50,50,1429.41280427069
+2017,"Single-Never-Married","Two or More Races","Male","Employed",1,1,22,22,20349.3605882252
+2017,"Single-Never-Married","Black","Male","NILF",1,1,35,35,2801.77904427452
+2017,"Married","Black","Male","Unemployed",2,2,36,36,11466.1493441452
+2017,"Separated, Widowed, or Divorced","Asian/Pacific Island","Female","Employed",4.56032048185536,6,34.5603204818554,36,5327.27549621973
+2017,"Separated, Widowed, or Divorced","Two or More Races","Male","NILF",3,3,40,40,3201.66230036548
+2017,"Married","Two or More Races","Male","Unemployed",3,3,28,28,2200.00338159507
+2017,"Single-Never-Married","American Indian","Female","NILF",2,2,28,28,6979.07458784329
+2018,"Married","White","Female","Employed",2.18309908171147,2,36.1543591025676,36,1408356.73505922
+2018,"Married","White","Male","Employed",2.15294896038731,2,38.4852940851939,38,1581171.24170222
+2018,"Married","White","Female","NILF",2.3924918036466,2,34.8058751042413,34,920222.429966888
+2018,"Single-Never-Married","White","Female","Employed",1.61647826499593,1,31.0657788906816,32,256536.985710728
+2018,"Single-Never-Married","Black","Male","Employed",1.43564151521753,1,30.8077993378472,27,77999.0043442093
+2018,"Married","Black","Male","Employed",3.08167824313849,3,41.0943989204521,39,155647.175058404
+2018,"Single-Never-Married","White","Male","Employed",1.56119913211674,1,29.9701792227076,28,219652.310448507
+2018,"Married","Asian/Pacific Island","Female","NILF",2.90171217186412,2,37.1554660012784,36,64419.6325007852
+2018,"Married","White","Male","NILF",2.14750684087548,2,51.3990900260493,50,102842.196201467
+2018,"Married","White","Female","Unemployed",2.00263995223507,2,34.5769757639161,33,85494.9537243348
+2018,"Single-Never-Married","American Indian","Male","NILF",1.27766536187175,1,32.1649804280763,28,8468.7729025063
+2018,"Single-Never-Married","White","Female","Unemployed",1.64477331735866,2,31.6618546164699,29,108664.956377497
+2018,"Single-Never-Married","Two or More Races","Female","Employed",1.49055918207036,1,29.8867101848443,24,10510.407046343
+2018,"Single-Never-Married","White","Female","NILF",1.52434768766621,1,28.0431212695669,27,121433.661132758
+2018,"Married","Asian/Pacific Island","Female","Employed",1.70505247143628,2,36.2615235673692,35,96615.7465147496
+2018,"Married","Asian/Pacific Island","Male","Employed",1.68368062690254,2,39.0465774489608,38,128335.628955749
+2018,"Separated, Widowed, or Divorced","White","Male","Employed",1.99626133955774,2,40.3741703142285,43,88176.3608388148
+2018,"Separated, Widowed, or Divorced","White","Female","Employed",2.41562641006757,2,36.3312463665905,35,187291.978632664
+2018,"Single-Never-Married","Black","Female","NILF",1.61631107682678,1,28.1446245746403,24,53627.7309528197
+2018,"Separated, Widowed, or Divorced","White","Female","NILF",2.26852734897065,2,36.1489379166075,35,100731.183147301
+2018,"Married","White","Male","Unemployed",2.59947292410204,3,40.6166000506963,45,44575.8221256871
+2018,"Single-Never-Married","American Indian","Male","Employed",2,2,30,30,2765.86550540548
+2018,"Separated, Widowed, or Divorced","Two or More Races","Male","Employed",3,3,38,38,6911.72425121096
+2018,"Single-Never-Married","Black","Female","Employed",1.8781857506417,2,29.5372505929149,28,215270.730689424
+2018,"Separated, Widowed, or Divorced","White","Female","Unemployed",2.09792887168843,2,29.5791644350466,33,23311.1599352066
+2018,"Married","Black","Female","Employed",1.7146340039736,2,38.3360377449313,39,153797.213116666
+2018,"Married","Black","Male","NILF",1,1,52.3554448199401,57,8079.85091928712
+2018,"Single-Never-Married","Black","Female","Unemployed",1.81613556919456,1,31.82640103784,31,95791.4583152126
+2018,"Married","Two or More Races","Female","Employed",2.06934726045599,2,37.0812551303266,38,31539.7273864449
+2018,"Separated, Widowed, or Divorced","Black","Male","Employed",1.72965744049885,1,32.3026006751044,33,27615.1184059392
+2018,"Single-Never-Married","American Indian","Female","Employed",1.32565217533906,1,26.5292453672984,26,18424.7677276658
+2018,"Single-Never-Married","Two or More Races","Female","Unemployed",1.36028169282764,1,26.1177464573788,29,15137.385192126
+2018,"Married","Black","Female","Unemployed",3.20079854459007,4,36.8021323324258,33,10655.6470869523
+2018,"Single-Never-Married","American Indian","Female","Unemployed",4,4,30,30,2098.02731670356
+2018,"Separated, Widowed, or Divorced","Black","Female","Employed",2.29478803980574,2,35.0108299625651,36,48982.8930188345
+2018,"Married","Black","Female","NILF",2.21184217470473,2,41.4375858266805,43,23131.5033302121
+2018,"Married","Asian/Pacific Island","Male","Unemployed",1.97715415303011,2,40.8248603582625,42,9414.20023032822
+2018,"Married","Two or More Races","Male","Employed",2.5504999267938,3,35.8486606451847,42,9070.54849405973
+2018,"Single-Never-Married","Asian/Pacific Island","Female","Employed",4,4,46,46,8450.89915506575
+2018,"Separated, Widowed, or Divorced","White","Male","NILF",2.5511715126384,3,39.3794799690818,45,17918.7239552953
+2018,"Separated, Widowed, or Divorced","Black","Female","Unemployed",1,1,41,41,5202.23013114466
+2018,"Married","American Indian","Male","Employed",2,2,41.2277385358763,44,8175.66427158904
+2018,"Married","Asian/Pacific Island","Female","Unemployed",2,2,35,35,4710.17136870247
+2018,"Married","American Indian","Male","NILF",5,5,45,45,1787.79476692603
+2018,"Single-Never-Married","Two or More Races","Female","NILF",1,1,22,22,1631.7303610811
+2018,"Married","American Indian","Female","Employed",1.36753917865805,1,29.2723646454505,22,14618.2631879364
+2018,"Separated, Widowed, or Divorced","Two or More Races","Female","Employed",4,4,35,35,1087.32107673863
+2018,"Married","Two or More Races","Female","NILF",2.94327865742867,2,34.5229450350489,39,7277.63961145041
+2018,"Single-Never-Married","Asian/Pacific Island","Male","Employed",1.13510652200683,1,27.6755326100341,27,35269.8898820674
+2018,"Separated, Widowed, or Divorced","White","Male","Unemployed",2,2,42.4800735473857,44,28540.2634966362
+2018,"Separated, Widowed, or Divorced","American Indian","Female","Employed",3,3,25,25,2782.6184493326
+2018,"Single-Never-Married","White","Male","NILF",1.8931410582089,2,33.4334567655359,38,19714.4806699748
+2018,"Married","Asian/Pacific Island","Male","NILF",4.10830719131457,5,48.2881588995514,49,12917.2628668121
+2018,"Separated, Widowed, or Divorced","Two or More Races","Male","Unemployed",2,2,50,50,1429.41280427069
+2018,"Separated, Widowed, or Divorced","Black","Female","NILF",3.31759235040796,3,38.023337041436,38,15447.874677349
+2018,"Single-Never-Married","Two or More Races","Male","Employed",1,1,22,22,20349.3605882252
+2018,"Single-Never-Married","Black","Male","NILF",1,1,35,35,2801.77904427452
+2018,"Married","Black","Male","Unemployed",2,2,36,36,11466.1493441452
+2018,"Separated, Widowed, or Divorced","Asian/Pacific Island","Female","Employed",4.56032048185536,6,34.5603204818554,36,5327.27549621973
+2018,"Single-Never-Married","White","Male","Unemployed",1,1,22,22,22408.8058359836
+2018,"Separated, Widowed, or Divorced","Two or More Races","Male","NILF",3,3,40,40,3201.66230036548
+2018,"Married","Two or More Races","Male","Unemployed",3,3,28,28,2200.00338159507
+2018,"Single-Never-Married","American Indian","Female","NILF",2,2,28,28,6979.07458784329
+2018,"Single-Never-Married","Asian/Pacific Island","Female","Unemployed",2,2,39,39,6783.44496046192
+2018,"Separated, Widowed, or Divorced","Black","Male","Unemployed",1,1,41,41,3023.64862283014
+2019,"Married","White","Female","NILF",2.42811884439136,2,35.1160986699881,34,826295.604791212
+2019,"Separated, Widowed, or Divorced","White","Female","Employed",2.65354708825649,3,36.4960223714549,36,214439.113785756
+2019,"Married","White","Female","Employed",2.17940280496631,2,36.5532989100969,36,1416752.7195756
+2019,"Separated, Widowed, or Divorced","White","Female","NILF",2.38973527970306,2,38.6787896290621,38,79986.9445715074
+2019,"Married","White","Male","Employed",2.17415827685702,2,38.6554973502452,38,1550351.83281889
+2019,"Single-Never-Married","White","Female","Employed",1.5451915217779,1,31.1831067034086,32,284108.08475779
+2019,"Separated, Widowed, or Divorced","White","Male","Employed",1.75400258713633,2,38.8579734022323,36,86190.5787682893
+2019,"Married","Black","Male","Employed",3.18565763775532,3,39.7970393447118,39,136065.266682713
+2019,"Single-Never-Married","Black","Female","Employed",1.86778082217892,2,29.7314005596679,28,242972.966038748
+2019,"Single-Never-Married","White","Male","Employed",1.46567794336401,1,29.2070143900121,27,229173.505592643
+2019,"Separated, Widowed, or Divorced","White","Male","NILF",2.5511715126384,3,39.3794799690818,45,17918.7239552953
+2019,"Single-Never-Married","White","Female","Unemployed",1.74301741691555,2,31.7613795015871,29,85743.7644782586
+2019,"Married","White","Male","NILF",2.39258114276524,2,43.0942017567773,39,102350.823922887
+2019,"Separated, Widowed, or Divorced","Black","Male","Employed",1.95502559638001,1,32.8073649389316,33,28968.1671886942
+2019,"Separated, Widowed, or Divorced","Black","Female","Employed",2.50432114121896,2,34.5005673555143,36,54845.1623809737
+2019,"Single-Never-Married","Black","Female","Unemployed",1.73853056546406,1,31.8455620957576,31,93524.6120841644
+2019,"Single-Never-Married","American Indian","Female","Employed",1.47357607731182,1,28.3350420788633,29,9259.6984147863
+2019,"Married","Asian/Pacific Island","Female","NILF",3.14651131632965,3,38.1039319651529,37,52268.7323708115
+2019,"Separated, Widowed, or Divorced","Black","Female","Unemployed",1,1,41,41,5202.23013114466
+2019,"Married","Black","Female","Employed",1.67398598038168,2,38.0070518541666,40,169663.421904447
+2019,"Married","White","Female","Unemployed",1.94682674441382,2,33.4770393607078,33,73696.053674377
+2019,"Married","American Indian","Male","Employed",2,2,41.2277385358763,44,8175.66427158904
+2019,"Single-Never-Married","Black","Male","Employed",1.59756563401105,1,32.2180642961571,27,79006.1047609671
+2019,"Married","Asian/Pacific Island","Female","Unemployed",2,2,35,35,4710.17136870247
+2019,"Married","Asian/Pacific Island","Female","Employed",1.82876791847584,2,36.5464957195881,36,107352.921719396
+2019,"Single-Never-Married","White","Female","NILF",1.4997677841382,1,28.1237365884552,28,127406.09026971
+2019,"Married","Asian/Pacific Island","Male","Employed",1.69260574298053,2,39.3995969859551,40,116174.683701627
+2019,"Married","American Indian","Male","NILF",5,5,45,45,1787.79476692603
+2019,"Single-Never-Married","Two or More Races","Female","NILF",1,1,22,22,1631.7303610811
+2019,"Single-Never-Married","Black","Female","NILF",2.07608709679408,2,31.1069113550154,32,41110.5047616088
+2019,"Married","Two or More Races","Female","Employed",2.10258816891094,2,35.5163023364142,38,21320.1357719671
+2019,"Separated, Widowed, or Divorced","White","Female","Unemployed",2.10366137807844,2,29.829900837967,33,22022.0455537052
+2019,"Married","American Indian","Female","Employed",1.44677664515211,1,29.8646635442303,22,16712.0181413474
+2019,"Separated, Widowed, or Divorced","Two or More Races","Female","Employed",4,4,35,35,1087.32107673863
+2019,"Married","Two or More Races","Female","NILF",2.94327865742867,2,34.5229450350489,39,7277.63961145041
+2019,"Single-Never-Married","Asian/Pacific Island","Male","Employed",1.13510652200683,1,27.6755326100341,27,35269.8898820674
+2019,"Separated, Widowed, or Divorced","White","Male","Unemployed",1.78269506224273,2,37.9900896958518,44,49980.2200575293
+2019,"Married","White","Male","Unemployed",2.48451824028227,2,45.0017391376259,48,31416.9009728153
+2019,"Separated, Widowed, or Divorced","American Indian","Female","Employed",3,3,25,25,2782.6184493326
+2019,"Single-Never-Married","White","Male","NILF",1.8931410582089,2,33.4334567655359,38,19714.4806699748
+2019,"Married","Asian/Pacific Island","Male","NILF",4.10830719131457,5,48.2881588995514,49,12917.2628668121
+2019,"Married","Black","Male","NILF",3.59447903515936,4,28.4331257890438,26,21355.6141519956
+2019,"Single-Never-Married","Two or More Races","Female","Employed",1.61636518949174,2,31.7800170844092,36,8365.13283323507
+2019,"Married","Two or More Races","Male","Employed",2.24181578573971,2,33.5095409770941,32,13257.8160081973
+2019,"Separated, Widowed, or Divorced","Two or More Races","Male","Unemployed",2,2,50,50,1429.41280427069
+2019,"Married","Asian/Pacific Island","Male","Unemployed",1.49189454468262,1,40.4756836340479,39,8111.9785112663
+2019,"Separated, Widowed, or Divorced","Black","Female","NILF",3.31759235040796,3,38.023337041436,38,15447.874677349
+2019,"Married","Black","Female","Unemployed",2,2,42.5148283494444,46,4258.00433011342
+2019,"Single-Never-Married","Two or More Races","Male","Employed",1,1,22,22,20349.3605882252
+2019,"Single-Never-Married","American Indian","Male","NILF",1,1,28,28,6117.28800992219
+2019,"Single-Never-Married","Black","Male","NILF",1,1,35,35,2801.77904427452
+2019,"Married","Black","Male","Unemployed",2,2,36,36,18570.5801037222
+2019,"Separated, Widowed, or Divorced","Asian/Pacific Island","Female","Employed",4.56032048185536,6,34.5603204818554,36,5327.27549621973
+2019,"Single-Never-Married","White","Male","Unemployed",1,1,22,22,22408.8058359836
+2019,"Married","Black","Female","NILF",2.25349687204144,2,40.9337362651394,39,19330.5263698121
+2019,"Separated, Widowed, or Divorced","Two or More Races","Male","NILF",3,3,40,40,3201.66230036548
+2019,"Married","Two or More Races","Male","Unemployed",3,3,28,28,2200.00338159507
+2019,"Single-Never-Married","American Indian","Female","NILF",2,2,28,28,6979.07458784329
+2019,"Single-Never-Married","Asian/Pacific Island","Female","Unemployed",2,2,39,39,6783.44496046192
+2019,"Separated, Widowed, or Divorced","Black","Male","Unemployed",1,1,41,41,3023.64862283014
+2019,"Single-Never-Married","Two or More Races","Female","Unemployed",1,1,29,29,9683.66243012274
+2019,"Single-Never-Married","Two or More Races","Male","Unemployed",2,2,36,36,4077.02366577534
+2019,"Separated, Widowed, or Divorced","Asian/Pacific Island","Male","Employed",2,2,41,41,10652.2546044696
+2021,"Single-Never-Married","White","Female","Employed",1.52082475848906,1,31.4237234111397,32,241679.99724764
+2021,"Separated, Widowed, or Divorced","White","Male","Employed",1.61069786830797,1,37.5723213924733,36,76389.3782629951
+2021,"Married","White","Female","NILF",2.50709897976984,2,34.6594636989078,34,712788.910654878
+2021,"Married","White","Male","Employed",2.15737833732505,2,38.6444334950273,38,1482530.00345769
+2021,"Married","Asian/Pacific Island","Male","Employed",1.60160128057608,2,38.2845644483819,37,144495.698362229
+2021,"Single-Never-Married","Black","Female","Employed",1.91370027512484,2,30.2351224791814,30,202145.407060726
+2021,"Separated, Widowed, or Divorced","White","Male","Unemployed",1.78269506224273,2,37.9900896958518,44,49980.2200575293
+2021,"Married","White","Female","Employed",2.21613253980893,2,36.0359930654414,36,1294299.08626856
+2021,"Married","White","Male","Unemployed",2.39715752581984,2,45.0014255636613,48,38327.5163753934
+2021,"Separated, Widowed, or Divorced","American Indian","Female","Employed",3,3,25,25,2782.6184493326
+2021,"Single-Never-Married","White","Male","NILF",1.8931410582089,2,33.4334567655359,38,19714.4806699748
+2021,"Married","American Indian","Female","Employed",1.76619752524253,1,34.5098915700805,40,30456.4078415025
+2021,"Married","Asian/Pacific Island","Female","NILF",2.98193495380186,2,39.3883097095566,39,34930.7563385452
+2021,"Married","Two or More Races","Female","Employed",1.72669336935124,2,36.5880651014615,38,24419.9060975984
+2021,"Separated, Widowed, or Divorced","White","Female","NILF",2.44170986560992,2,37.6317422444479,41,63412.731687446
+2021,"Married","American Indian","Male","Employed",2.53269622473337,3,33.8787717300659,25,9411.7602661989
+2021,"Separated, Widowed, or Divorced","White","Female","Employed",2.76904472042424,3,36.2112906455515,36,199713.101485592
+2021,"Single-Never-Married","White","Female","NILF",1.60672505038928,1,27.9265977537464,27,148245.562015503
+2021,"Married","White","Female","Unemployed",1.92413412900904,2,33.7666716850323,33,70961.0567195945
+2021,"Married","Asian/Pacific Island","Male","NILF",4.26641703797551,5,45.5773503836683,49,15701.3330495688
+2021,"Single-Never-Married","Black","Female","Unemployed",1.38607288217412,1,30.1560222545727,26,62385.7284896285
+2021,"Married","Black","Male","Employed",3.07719387559584,3,40.8509104425884,40,152450.404715481
+2021,"Married","Black","Female","Employed",1.98307862775213,2,38.2997689998748,40,191510.679286583
+2021,"Married","Black","Male","NILF",3.30049158851171,4,32.0022721818515,26,26183.2366692027
+2021,"Single-Never-Married","American Indian","Female","Employed",1.83826759379383,2,30.6173240620617,29,5231.23127367781
+2021,"Single-Never-Married","Two or More Races","Female","Employed",1.30946749870943,1,28.4041424858038,25,16660.8018786542
+2021,"Married","Two or More Races","Male","Employed",2.80022489182807,2,34.5145183119557,32,21235.6422205112
+2021,"Separated, Widowed, or Divorced","Black","Female","Employed",2.41439402289585,2,38.4765900637456,38,49776.8668650323
+2021,"Single-Never-Married","White","Female","Unemployed",1.7549403937252,2,28.770087079426,27,78488.8007819879
+2021,"Married","Asian/Pacific Island","Female","Employed",1.85171640990297,2,36.606047710943,36,103986.28267879
+2021,"Single-Never-Married","Black","Male","Employed",1.84203501174866,2,36.7176684516837,40,41192.643583554
+2021,"Single-Never-Married","White","Male","Employed",1.46370573026081,1,29.9467139076228,30,176813.30365798
+2021,"Separated, Widowed, or Divorced","Two or More Races","Male","Unemployed",2,2,50,50,1429.41280427069
+2021,"Married","White","Male","NILF",2.70633422035773,2,41.1585926095417,38,134816.008460326
+2021,"Married","Asian/Pacific Island","Male","Unemployed",1.49189454468262,1,40.4756836340479,39,8111.9785112663
+2021,"Separated, Widowed, or Divorced","Black","Male","Employed",2.20978727191623,1,34.8835648402596,33,28362.3754990214
+2021,"Separated, Widowed, or Divorced","White","Female","Unemployed",2.12578771566146,2,29.1532487855729,19,18148.3190007781
+2021,"Separated, Widowed, or Divorced","White","Male","NILF",3,3,39.9317828158176,45,11298.3847437425
+2021,"Separated, Widowed, or Divorced","Black","Female","NILF",3.31759235040796,3,38.023337041436,38,15447.874677349
+2021,"Married","Black","Female","Unemployed",2,2,42.5148283494444,46,4258.00433011342
+2021,"Single-Never-Married","Two or More Races","Male","Employed",1.47324550376805,1,26.7324550376806,22,26657.0174031879
+2021,"Married","Two or More Races","Female","NILF",3.14042624794695,4,33.5872293883449,28,6019.54061851616
+2021,"Single-Never-Married","American Indian","Male","NILF",1,1,28,28,6117.28800992219
+2021,"Single-Never-Married","Black","Male","NILF",1,1,35,35,2801.77904427452
+2021,"Married","Black","Male","Unemployed",2,2,36,36,18570.5801037222
+2021,"Separated, Widowed, or Divorced","Asian/Pacific Island","Female","Employed",3.22417872984409,3,34.6682981749237,32,13881.7696659523
+2021,"Single-Never-Married","White","Male","Unemployed",1,1,22,22,22408.8058359836
+2021,"Married","Black","Female","NILF",2.25349687204144,2,40.9337362651394,39,19330.5263698121
+2021,"Separated, Widowed, or Divorced","Two or More Races","Male","NILF",3,3,40,40,3201.66230036548
+2021,"Married","Two or More Races","Male","Unemployed",3,3,28,28,2200.00338159507
+2021,"Single-Never-Married","American Indian","Female","NILF",2,2,28,28,6979.07458784329
+2021,"Single-Never-Married","Black","Female","NILF",2.01478675317387,2,31.4643383783377,32,41171.4633307271
+2021,"Single-Never-Married","Asian/Pacific Island","Female","Unemployed",2,2,39,39,6783.44496046192
+2021,"Separated, Widowed, or Divorced","Black","Male","Unemployed",1,1,41,41,3023.64862283014
+2021,"Single-Never-Married","Asian/Pacific Island","Male","Employed",1,1,27,27,32887.2938053025
+2021,"Single-Never-Married","Two or More Races","Female","Unemployed",1,1,29,29,9683.66243012274
+2021,"Single-Never-Married","Two or More Races","Male","Unemployed",2,2,36,36,4077.02366577534
+2021,"Separated, Widowed, or Divorced","Asian/Pacific Island","Male","Employed",2,2,41,41,10652.2546044696
+2021,"Separated, Widowed, or Divorced","American Indian","Female","NILF",2,2,41,41,6053.51642848603
+2021,"Separated, Widowed, or Divorced","Two or More Races","Female","Employed",3,3,50,50,2560.46937688164
+2021,"Separated, Widowed, or Divorced","Two or More Races","Male","Employed",1,1,33,33,2764.10254870575
+2021,"Single-Never-Married","Asian/Pacific Island","Female","Employed",1,1,26,26,6649.62174197205
+2022,"Married","White","Male","Employed",2.1994931580188,2,38.8620326593856,38,1351349.92261132
+2022,"Married","Black","Female","Employed",2.15127219442505,2,38.4110512798662,40,169413.494905001
+2022,"Married","White","Female","Employed",2.22067033596218,2,36.320148678686,36,1146488.01726171
+2022,"Single-Never-Married","White","Female","NILF",1.49554959142953,1,27.0021445785105,25,106229.769680713
+2022,"Married","Black","Male","Employed",2.66776181994619,3,39.0350447260838,39,133103.075704745
+2022,"Single-Never-Married","White","Female","Employed",1.41211295888142,1,31.8725890393841,32,195604.659812658
+2022,"Married","White","Female","NILF",2.57973718218925,2,35.930594806639,35,725615.058582517
+2022,"Separated, Widowed, or Divorced","White","Female","Employed",2.7801127678625,3,35.9217930904398,36,178813.099240995
+2022,"Single-Never-Married","White","Male","Unemployed",1,1,22,22,22408.8058359836
+2022,"Married","Asian/Pacific Island","Male","Employed",1.74786312929005,2,38.8031991377432,36,120913.153978179
+2022,"Single-Never-Married","White","Male","Employed",1.60438990136247,1,30.2558452657297,32,190307.796775812
+2022,"Single-Never-Married","Black","Female","Employed",1.88675931703106,2,30.8051845550226,33,181615.471861881
+2022,"Married","Black","Female","NILF",2.25349687204144,2,40.9337362651394,39,19330.5263698121
+2022,"Married","Black","Female","Unemployed",2,2,37,37,1648.87510880603
+2022,"Married","White","Female","Unemployed",2.01042837223006,2,33.4078360780835,33,59530.3308715808
+2022,"Single-Never-Married","White","Male","NILF",1.98548899383434,2,34.4088460952529,38,17867.0814568022
+2022,"Separated, Widowed, or Divorced","Black","Male","Employed",2.08129796797858,2,39.7107933096994,44,28425.9962740181
+2022,"Married","White","Male","NILF",2.55484528948678,2,40.1778297947979,38,171624.706980296
+2022,"Married","Asian/Pacific Island","Female","Employed",1.77652027687639,2,37.6952085557235,36,105155.326915493
+2022,"Married","Asian/Pacific Island","Female","NILF",2.5629872259997,2,40.2198013924368,40,41146.8329558334
+2022,"Separated, Widowed, or Divorced","Two or More Races","Male","NILF",3,3,40,40,3201.66230036548
+2022,"Single-Never-Married","Black","Female","Unemployed",1.52883400965783,2,32.9855238118776,38,25581.7266607753
+2022,"Separated, Widowed, or Divorced","White","Male","Employed",1.32836477391303,1,36.7248536932726,36,78588.3246597655
+2022,"Married","Two or More Races","Female","NILF",4,4,28,28,3432.42106096932
+2022,"Separated, Widowed, or Divorced","White","Female","NILF",2.24693934939311,2,40.5226776068819,42,43012.3285621025
+2022,"Single-Never-Married","Black","Male","Employed",3.34771936247411,4,42.5661232848352,48,82618.6566197896
+2022,"Single-Never-Married","White","Female","Unemployed",1.7338526482205,2,28.7801464447772,28,76112.617254623
+2022,"Separated, Widowed, or Divorced","White","Male","NILF",3,3,45,45,8117.12542642356
+2022,"Married","Two or More Races","Male","Unemployed",3,3,28,28,2200.00338159507
+2022,"Single-Never-Married","American Indian","Female","NILF",2,2,28,28,6979.07458784329
+2022,"Separated, Widowed, or Divorced","Asian/Pacific Island","Female","Employed",2.25947175383652,2,35.1397544348093,32,12927.1666090849
+2022,"Separated, Widowed, or Divorced","Black","Female","Employed",2.51878097591766,2,39.6527934225725,33,30083.5987630849
+2022,"Single-Never-Married","Black","Female","NILF",1.95296125023173,2,32.4108427451853,32,43842.5545494592
+2022,"Married","Two or More Races","Female","Employed",1.71498524722296,2,41.5560958295003,38,17614.1251760822
+2022,"Married","White","Male","Unemployed",1.33296133268254,1,35.738594610292,42,32699.4489567381
+2022,"Single-Never-Married","Asian/Pacific Island","Female","Unemployed",2,2,39,39,6783.44496046192
+2022,"Separated, Widowed, or Divorced","Black","Female","NILF",3.3911616346631,3,38.3060603840428,43,12542.4540466816
+2022,"Married","American Indian","Female","Employed",1.80403278829199,1,34.0906452593295,40,29023.2247437425
+2022,"Married","Two or More Races","Male","Employed",2.45706975715019,2,34.7188334524256,37,30164.6304265611
+2022,"Separated, Widowed, or Divorced","Black","Male","Unemployed",1,1,41,41,3023.64862283014
+2022,"Separated, Widowed, or Divorced","White","Female","Unemployed",2.44778076437242,2,44.6566577068827,46,5098.10999452548
+2022,"Single-Never-Married","Asian/Pacific Island","Male","Employed",1,1,27,27,32887.2938053025
+2022,"Married","Asian/Pacific Island","Male","NILF",3.34738402958039,5,39.6104638816784,33,4744.12392292603
+2022,"Married","Asian/Pacific Island","Male","Unemployed",2,2,42,42,3990.23797627452
+2022,"Single-Never-Married","Two or More Races","Female","Unemployed",1,1,29,29,9683.66243012274
+2022,"Single-Never-Married","Two or More Races","Female","Employed",1,1,25,25,11504.8251947737
+2022,"Single-Never-Married","Two or More Races","Male","Unemployed",2,2,36,36,4077.02366577534
+2022,"Separated, Widowed, or Divorced","White","Male","Unemployed",1.49342487808457,1,32.0131502438309,33,21439.9565608932
+2022,"Married","Black","Male","Unemployed",2,2,36,36,7104.43075957699
+2022,"Separated, Widowed, or Divorced","Asian/Pacific Island","Male","Employed",2,2,41,41,10652.2546044696
+2022,"Married","Black","Male","NILF",3.2340750948036,4,34.3914410762867,26,29931.5622059036
+2022,"Separated, Widowed, or Divorced","American Indian","Female","NILF",2,2,41,41,6053.51642848603
+2022,"Single-Never-Married","American Indian","Female","Employed",1,1,39,39,846.059621312877
+2022,"Married","American Indian","Male","Employed",3,3,25,25,5013.60916189973
+2022,"Separated, Widowed, or Divorced","Two or More Races","Female","Employed",3,3,50,50,2560.46937688164
+2022,"Separated, Widowed, or Divorced","Two or More Races","Male","Employed",1,1,33,33,2764.10254870575
+2022,"Single-Never-Married","Asian/Pacific Island","Female","Employed",1,1,26,26,6649.62174197205
+2022,"Single-Never-Married","Two or More Races","Male","Employed",3,3,42,42,6307.65681496274
+2022,"Single-Never-Married","American Indian","Male","NILF",6,6,39,39,9916.2736902674
+2022,"Married","American Indian","Female","NILF",4,4,38,38,2469.66832459452
+2022,"Single-Never-Married","Black","Male","NILF",1,1,53,53,6311.4153956252
+2023,"Married","White","Male","Employed",2.23705259175989,2,38.5243589573753,38,1372197.58988419
+2023,"Married","White","Female","Employed",2.29832178415873,2,36.4658812163143,36,1117681.75102836
+2023,"Single-Never-Married","White","Female","Unemployed",1.53609563934463,2,29.0478087938242,28,43666.6977881107
+2023,"Single-Never-Married","Black","Female","Employed",1.70243750456653,2,30.5834409110507,29,188805.113430222
+2023,"Married","Black","Female","NILF",4.37506402208706,5,42.7813367419399,44,30013.7752198126
+2023,"Married","Black","Male","Employed",2.29575347751115,2,41.4486643500974,41,140973.415868053
+2023,"Married","White","Female","NILF",2.6646061086547,2,36.7561504177204,36,622997.858675782
+2023,"Single-Never-Married","Black","Female","NILF",2.6760041735584,2,38.7924247083983,36,24928.4913820351
+2023,"Married","Asian/Pacific Island","Female","Employed",1.8154903028274,2,38.2265324041929,37,89162.8041627003
+2023,"Separated, Widowed, or Divorced","White","Female","Employed",2.31024551563893,2,34.3939569616509,36,225975.159325593
+2023,"Separated, Widowed, or Divorced","White","Male","Employed",1.32382151403943,1,41.0067580139327,40,98518.9321959901
+2023,"Married","Two or More Races","Female","Employed",2.41690641257556,2,43.5391025798654,45,34282.3575323699
+2023,"Married","White","Female","Unemployed",2.10245610445063,1,33.4645100017744,33,43468.682780503
+2023,"Married","White","Male","NILF",2.62737855374357,2,42.3090732628474,38,187489.995343197
+2023,"Single-Never-Married","White","Male","Employed",1.71230786230896,1,30.9971751223609,32,112927.130649307
+2023,"Married","White","Male","Unemployed",1.68641656652208,1,36.4300967495434,39,41498.1221760148
+2023,"Single-Never-Married","Asian/Pacific Island","Female","Unemployed",2,2,39,39,6783.44496046192
+2023,"Separated, Widowed, or Divorced","Black","Female","NILF",3.3911616346631,3,38.3060603840428,43,12542.4540466816
+2023,"Single-Never-Married","White","Female","Employed",1.54200501310196,1,33.3484569427917,32,223018.989874136
+2023,"Married","American Indian","Female","Employed",1.80403278829199,1,34.0906452593295,40,29023.2247437425
+2023,"Single-Never-Married","White","Female","NILF",1.36093105995346,1,27.1555964586332,25,79953.87562288
+2023,"Single-Never-Married","Black","Female","Unemployed",1.52261957856023,2,31.9048325712205,39,11107.0373644411
+2023,"Married","Two or More Races","Male","Employed",2.45706975715019,2,34.7188334524256,37,30164.6304265611
+2023,"Separated, Widowed, or Divorced","Black","Male","Unemployed",1,1,41,41,3023.64862283014
+2023,"Separated, Widowed, or Divorced","White","Female","Unemployed",2.44778076437242,2,44.6566577068827,46,5098.10999452548
+2023,"Single-Never-Married","Asian/Pacific Island","Male","Employed",1,1,27,27,32887.2938053025
+2023,"Married","Asian/Pacific Island","Male","NILF",3.34738402958039,5,39.6104638816784,33,4744.12392292603
+2023,"Married","Asian/Pacific Island","Male","Employed",1.80599558248765,2,38.4055696179749,36,117217.227687852
+2023,"Separated, Widowed, or Divorced","White","Female","NILF",1.94774275708062,2,39.1941213789964,38,30366.1778816137
+2023,"Married","Asian/Pacific Island","Male","Unemployed",2,2,42,42,3990.23797627452
+2023,"Married","Black","Female","Employed",2.29594372802939,2,38.006411697879,40,162620.1596664
+2023,"Married","Asian/Pacific Island","Female","NILF",1.88435383828573,2,38.6370735713876,38,55892.4388315151
+2023,"Single-Never-Married","Two or More Races","Female","Unemployed",1,1,29,29,9683.66243012274
+2023,"Single-Never-Married","Black","Male","Employed",3.02363616938228,4,38.1680669577229,32,117989.09114488
+2023,"Separated, Widowed, or Divorced","Black","Female","Employed",2.79464264176104,3,43.1904148105126,39,19640.0216968493
+2023,"Separated, Widowed, or Divorced","Black","Male","Employed",2.43428023870561,2,45.6784535551837,49,18626.3736686055
+2023,"Single-Never-Married","Two or More Races","Female","Employed",1,1,25,25,11504.8251947737
+2023,"Single-Never-Married","Two or More Races","Male","Unemployed",2,2,36,36,4077.02366577534
+2023,"Separated, Widowed, or Divorced","White","Male","Unemployed",1.49342487808457,1,32.0131502438309,33,21439.9565608932
+2023,"Married","Black","Male","Unemployed",2,2,36,36,7104.43075957699
+2023,"Separated, Widowed, or Divorced","Asian/Pacific Island","Male","Employed",2,2,41,41,10652.2546044696
+2023,"Married","Black","Male","NILF",3.54084804214038,4,35.5394667328199,26,36224.3910691622
+2023,"Separated, Widowed, or Divorced","Asian/Pacific Island","Female","Employed",2.04010042969366,2,37.3723571101669,39,13810.2133566625
+2023,"Separated, Widowed, or Divorced","American Indian","Female","NILF",2,2,41,41,6053.51642848603
+2023,"Single-Never-Married","American Indian","Female","Employed",1,1,39,39,846.059621312877
+2023,"Married","American Indian","Male","Employed",3,3,25,25,5013.60916189973
+2023,"Separated, Widowed, or Divorced","Two or More Races","Female","Employed",3,3,50,50,2560.46937688164
+2023,"Separated, Widowed, or Divorced","Two or More Races","Male","Employed",1,1,33,33,2764.10254870575
+2023,"Single-Never-Married","Asian/Pacific Island","Female","Employed",2.09407849414262,3,33.111510211927,39,14680.3485709918
+2023,"Single-Never-Married","Two or More Races","Male","Employed",3,3,40.3853431357249,39,13659.4104066405
+2023,"Single-Never-Married","American Indian","Male","NILF",6,6,39,39,9916.2736902674
+2023,"Married","American Indian","Female","NILF",4,4,38,38,2469.66832459452
+2023,"Single-Never-Married","Black","Male","NILF",1,1,53,53,6311.4153956252
+2023,"Single-Never-Married","White","Male","NILF",1.70707011418905,2,27.7070701141891,28,33356.8177179995
+2023,"Married","Two or More Races","Female","NILF",1,1,27,27,9945.55082989863

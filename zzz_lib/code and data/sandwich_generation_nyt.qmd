@@ -1,0 +1,275 @@
+---
+title: "sandwich_generation"
+format: html
+editor: visual
+---
+
+## Sandwich Generation
+
+## Data Setup
+
+### Load Data
+
+```{r}
+source("load_defaults.R")
+
+atus <- read.csv("./data/CSV/ATUSdata.csv") |> 
+  filter(YEAR >= 2011 & YEAR != 2020) |>
+  select(YEAR, date, CASEID, WT06, YNGCH, AGE, sex, gender_parent, 
+         nchild, empstat, marst, race, 
+         paid_work, child_care, elder_care, 
+         householdcare, education, leisure,
+         selfcare, sleeping, DURATION,
+         SCC_ALL_LN, SEC_ALL_LN) |> 
+  data.frame() |> 
+  clean_names() 
+
+yr_range <- atus_yr_range(atus)
+```
+
+### Summarise Time Spent by CaseID
+
+```{r}
+case_time <- atus |> 
+  group_by(year, date, caseid, wt06, yngch, age, sex, 
+           gender_parent, nchild, empstat, marst, race) |> 
+  summarise(
+    paid_work = sum(paid_work*duration), 
+    child_care = sum(child_care*duration + scc_all_ln),
+    elder_care = sum(elder_care*duration + sec_all_ln),
+    householdcare = sum(householdcare*duration), 
+    education = sum(education*duration), 
+    leisure = sum(leisure*duration), 
+    selfcare = sum(selfcare*duration), 
+    sleeping = sum(sleeping*duration)
+  ) |> 
+  ungroup() |> 
+  mutate(
+    sandwich_flag = ifelse(
+      elder_care > 0 & yngch <= 10 & age >= 18,
+      "sandwich", "non-sandwich")
+  )  |>
+  mutate(
+    eldercare_flag = ifelse(
+      elder_care > 0 & age >= 18,
+      "eldercare", "non-eldercare"
+    )
+  )
+```
+
+## Calc Sandwich Stats
+
+### Function Calc Mean and Median Time
+
+```{r}
+calc_sandwich_stats <- function(df){
+  sandwich_stats_5yr <- list()
+  i = 1
+  
+  for(sel_year in yr_range$year) {
+    year_min <- yr_range$yr_start[i]
+    
+    sandwich_stats_5yr[[sel_year]] <- df |>
+      filter(year >= year_min & year <= sel_year) |>
+      summarise(
+        population = sum(wt06/365)/5, 
+       
+        mean_paid_work = wtd.mean(paid_work, wt06), 
+        mean_child_care = wtd.mean(child_care, wt06), 
+        mean_elder_care = wtd.mean(elder_care, wt06), 
+        mean_housework = wtd.mean(householdcare, wt06), 
+        mean_education = wtd.mean(education, wt06), 
+        mean_leisure = wtd.mean(leisure, wt06), 
+        mean_personal = wtd.mean(selfcare, wt06), 
+        mean_sleeping = wtd.mean(sleeping, wt06), 
+        
+        median_paid_work = wtd.quantile(
+          paid_work, weights = wt06, probs = 0.5), 
+        median_child_care = wtd.quantile(
+          child_care, weights = wt06, probs = 0.5), 
+        median_elder_care = wtd.quantile(
+          elder_care, weights = wt06, probs = 0.5), 
+        median_housework = wtd.quantile(
+          householdcare, weights = wt06, probs = 0.5),  
+        median_education = wtd.quantile(
+          education, weights = wt06, probs = 0.5), 
+        median_leisure = wtd.quantile(
+          leisure, weights = wt06, probs = 0.5), 
+        median_personal = wtd.quantile(
+          selfcare, weights = wt06, probs = 0.5), 
+        median_sleeping = wtd.quantile(
+          sleeping, weights = wt06, probs = 0.5),
+        
+        .by = c(demo_category, demo_subcategory)
+      ) |> 
+      mutate(year = sel_year) |> 
+      relocate(year)
+    
+    i = i + 1
+  }
+  
+  sandwich_stats_5yr <- bind_rows(sandwich_stats_5yr)
+  return(sandwich_stats_5yr)
+}
+```
+
+### Define Demographic Groups
+
+```{r}
+criteria_sw <- 'sandwich_flag == "sandwich"'
+criteria_nsw <- 'sandwich_flag != "sandwich"'
+
+criteria_eld <- 'eldercare_flag == "eldercare"'
+criteria_neld <- 'eldercare_flag != "eldercare"'
+
+criteria_employed <- 'empstat == "Employed"'
+criteria_nilf <- 'empstat == "NILF"'
+criteria_1hr <- 'paid_work > 60'
+
+criteria_female <- 'sex == "Female"'
+criteria_male <- 'sex == "Male"'
+
+criteria_mothers <- 'gender_parent == "Mothers"'
+criteria_fathers <- 'gender_parent == "Fathers"'
+criteria_childlesswomen <- 'gender_parent == "Childless Women"'
+criteria_childlessmen <- 'gender_parent == "Childless Men"'
+
+demo_list = list(
+  "sw-all" = criteria_sw,
+  "sw-employed" = paste(
+    criteria_sw, criteria_employed, sep = " & "),
+  "sw-nilf" = paste(
+    criteria_sw, criteria_nilf, sep = " & "),
+  "sw-work-1hrmin" =  paste(
+    criteria_sw, criteria_1hr, sep = " & "),
+    
+  "sw-female-all" = paste(
+    criteria_sw, criteria_female, sep = " & "),
+  "sw-female-employed" = paste(criteria_sw,
+    criteria_employed, criteria_female, sep = " & "),
+  "sw-female-nilf" = paste(criteria_sw,
+    criteria_nilf, criteria_female, sep = " & "),
+  "sw-female-work-1hrmin" = paste(criteria_sw,
+    criteria_1hr, criteria_female, sep = " & "),
+  
+  "sw-male-all" = paste(
+    criteria_sw, criteria_male, sep = " & "),
+  "sw-male-employed" = paste(criteria_sw,
+    criteria_employed, criteria_male, sep = " & "),
+  "sw-male-nilf" = paste(criteria_sw,
+    criteria_nilf, criteria_male, sep = " & "),
+  "sw-male-work-1hrmin" = paste(criteria_sw,
+    criteria_1hr, criteria_male, sep = " & "),
+  
+  "sw-fathers" = paste(criteria_sw, criteria_fathers, sep = " & "),
+  "nsw-fathers" = paste(criteria_nsw, criteria_fathers, sep = " & "),
+  
+  "sw-mothers" = paste(criteria_sw, criteria_mothers, sep = " & "),
+  "nsw-mothers" = paste(criteria_nsw, criteria_mothers, sep = " & "),
+  
+  "sw-childlessmen" = paste(criteria_sw, criteria_childlessmen, sep = " & "),
+  "nsw-childlessmen" = paste(criteria_nsw, criteria_childlessmen, sep = " & "),
+  
+  "sw-childlesswomen" = paste(criteria_sw, criteria_childlesswomen, sep = " & "),
+  "nsw-childlesswomen" = paste(criteria_nsw, criteria_childlesswomen, sep = " & "),
+  
+  "nsw-eldercare-childlesswomen" = paste(criteria_nsw, criteria_eld, criteria_childlesswomen, sep = " & "),
+  "nsw-eldercare-childlessmen" = paste(criteria_nsw, criteria_eld, criteria_childlessmen, sep = " & ")
+)
+```
+
+### Calculate All Groups
+
+```{r}
+sandwich_stats <- list()
+i = 1
+
+for (sel_demo in demo_list) {
+  demo_name <- names(demo_list)[i]
+  print(parse_expr(sel_demo))
+  
+  subset <- case_time |>
+    mutate(demo_category = demo_name) |>
+    mutate(demo_subcategory = ifelse(!!parse_expr(sel_demo), 
+                               demo_name, "other")) 
+  
+  sandwich_stats[[sel_demo]] <- calc_sandwich_stats(subset)
+  
+  i = i + 1
+}
+
+sandwich_stats <- bind_rows(sandwich_stats)
+date <- Sys.Date() |> as.character() |> str_replace_all("-", "")
+write.csv(sandwich_stats, paste0("sandwich_gen_", date, ".csv"), row.names = FALSE)
+```
+
+#### Plot
+
+```{r}
+df_plot <- sandwich_stats |> 
+  pivot_longer(
+    cols = -c(year, demo_category, demo_subcategory), 
+    names_to = 'metric', 
+    values_to = 'value'
+  ) |> 
+  mutate(
+    type = str_extract(metric, "mean|median"), 
+    activity = str_replace_all(metric, "mean_|median_", "") |>
+      str_replace_all("_", " ") |> 
+      str_to_title()
+  )
+
+ggplot(
+  data = df_plot |> 
+    filter(metric != "population") |> 
+    filter(demo_subcategory != "other"),
+    #filter(str_detect(demo_category, "nsw")) 
+  aes(x = year, y = value, colour = demo_category)
+) +
+  geom_line() +
+  geom_point() +
+  facet_grid(type~activity) +
+  theme_minimal() +
+  theme(axis.title = element_blank())
+```
+
+### Sandwich Demographics
+
+```{r}
+sw_only <- case_time |> 
+  filter(sandwich_flag == "sandwich")
+
+
+get_sw_demo <- function(df){
+  sw_demo_5yr <- list()
+  i = 1
+  
+  for (sel_year in yr_range$year) {
+    year_min <- yr_range$yr_start[i]
+    
+    sw_demo_5yr[[sel_year]] <- df |>
+      filter(year >= year_min & year <= sel_year) |>
+      summarise(
+        mean_n_child = weighted.mean(nchild, wt06),
+        median_n_child = wtd.quantile(nchild, weights = wt06, probs = 0.5),
+        mean_age = weighted.mean(age, wt06),
+        median_age = wtd.quantile(age, weights = wt06, probs = 0.5),
+        population = sum(wt06/365)/5, 
+        .by = c(marst, race, sex, empstat)
+      ) |>
+      mutate(year = sel_year) |>
+      relocate(year)
+    
+    i = i + 1
+  }
+  
+  sw_demo_5yr <- bind_rows(sw_demo_5yr)
+  return(sw_demo_5yr)
+}
+
+sw_demo_final <- get_sw_demo(sw_only) |> 
+  bind_rows()
+
+write.csv(sw_demo_final, paste0("data/CSV/sandwich_gen_NYT_rep_", date, ".csv"), row.names = FALSE)
+write_dta(sw_demo_final, paste0("data/Dta/sandwich_gen_NYT_rep_", date, ".dta"))
+```
