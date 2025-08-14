@@ -30,8 +30,9 @@ age_modified_all <- age_data |>
   mutate(population = coalesce(population, 0)) |>
   arrange(year, age)
 
-write.csv(age_modified_all, "./data/CSV/market.csv", row.names = FALSE)
-write_dta(age_modified_all, "./data/DTA/market.dta")
+write.csv(age_modified_all, "./data/CSV/need_provision_data.csv", row.names = FALSE)
+write_dta(age_modified_all, "./data/Dta/need_provision_data.dta")
+write_xlsx(age_modified_all, "./data/Excel/need_provision_data.xlsx")
 ```
 
 ## Care Provider Demographics
@@ -60,7 +61,8 @@ cp_population_ext <- asec |>
 
 write.csv(cp_population_ext, "./data/CSV/care_provider_population.csv", 
           row.names = FALSE)
-write_dta(cp_population_ext, "./data/DTA/care_provider_population.dta")
+write_dta(cp_population_ext, "./data/Dta/care_provider_population.dta")
+write_xlsx(cp_population_ext, "./data/Excel/need_provision_data.xlsx")
 ```
 
 ## Care Provider Data
@@ -166,9 +168,10 @@ cp_combined <- bind_rows(
 
 
 
-write.csv(cp_combined, "./data/CSV/care_provider_data.csv", 
+write.csv(cp_combined, "./data/CSV/care_provider_datum.csv", 
           row.names = FALSE)
-write_dta(cp_combined, "./data/DTA/care_provider_data.dta")
+write_dta(cp_combined, "./data/Dta/care_provider_datum.dta")
+write_xlsx(cp_combined, "./data/Excel/care_provider_datum.xlsx")
 ```
 
 ## Care Activities
@@ -195,9 +198,10 @@ informal_datum <- informal_datum %>%
 
 activities <- rbind(formal_datum, informal_datum)
 
-write.csv(activities, "./data/CSV/activities.csv", 
+write.csv(activities, "./data/CSV/final_activity.csv", 
           row.names = FALSE)
-write_dta(activities, "./data/DTA/activities.dta")
+write_dta(activities, "./data/Dta/final_activity.dta")
+write_xlsx(activities, "./data/Excel/final_activity.xlsx")
 ```
 
 ## Care Ratios
@@ -205,9 +209,10 @@ write_dta(activities, "./data/DTA/activities.dta")
 ```{r}
 care_ratio <- read.csv("./app_data/metrics_care_ratio.csv")
 
-write.csv(care_ratio, "./data/CSV/care_ratio.csv", 
+write.csv(care_ratio, "./data/CSV/metrics_care_ratio.csv", 
           row.names = FALSE)
-write_dta(care_ratio, "./data/DTA/care_ratio.dta")
+write_dta(care_ratio, "./data/Dta/metrics_care_ratio.dta")
+write_xlsx(care_ratio, "./data/Excel/metrics_care_ratio.xlsx")
 ```
 
 ## Care GINI
@@ -215,9 +220,10 @@ write_dta(care_ratio, "./data/DTA/care_ratio.dta")
 ```{r}
 gini <- read.csv("./app_data/metrics_state_care_gini.csv")
 
-write.csv(gini, "./data/CSV/gini.csv", 
+write.csv(gini, "./data/CSV/metrics_national_care_gini.csv", 
           row.names = FALSE)
-write_dta(gini, "./data/DTA/gini.dta")
+write_dta(gini, "./data/Dta/metrics_national_care_gini.dta")
+write_xlsx(gini, "./data/Excel/metrics_national_care_gini.xlsx")
 ```
 
 ## Labor Force Participation
@@ -240,7 +246,7 @@ cps <- read.csv("./data/CSV/CPSdata.csv") |>
 lfpr_by_gender_parent <- cps %>%
   filter(age >= 16) %>%  # Consider only those 16 and older
   mutate(in_labor_force = ifelse(empstat %in% c(10, 12, 20), 1, 0)) %>%  # Mark those in labor force
-  group_by(year, month, gender_parent, STATEFIP) %>%
+  group_by(year, month, gender_parent, statefip) %>%
   summarise(
     total_population = sum(wtfinl, na.rm = TRUE),
     labor_force = sum(wtfinl[in_labor_force == 1], na.rm = TRUE),
@@ -249,7 +255,8 @@ lfpr_by_gender_parent <- cps %>%
   ungroup()
 
 write.csv(lfpr_by_gender_parent, "./data/CSV/lfpbygenderparent.csv", row.names = FALSE)
-write_dta(lfpr_by_gender_parent, "./data/DTA/lfpbygenderparent.dta")
+write_dta(lfpr_by_gender_parent, "./data/Dta/lfpbygenderparent.dta")
+write_xlsx(lfpr_by_gender_parent, "./data/Excel/lfpbygenderparent.xlsx")
 ```
 
 ## Care Force Participation
@@ -261,7 +268,7 @@ asec <- read.csv("./data/CSV/ASECdata.csv") |>
   # https://blog.popdata.org/2014sample/
   filter(HFLAG == 1 | is.na(HFLAG)) |> 
   filter(AGE >= 18) |>
-  filter(YEAR >= min_year) |>
+  filter(YEAR >= 1990) |>
   select(YEAR,
          ASECWT,
          UHRSWORKT,
@@ -289,14 +296,14 @@ get_formal_lfp <- function(df, demo_group) {
     ) |>
     group_by(date, geo_level, category_id, subcategory_id) |>
     summarise(
-      formal_care_labor_force = sum(
+      care_labor_force = sum(
         ifelse(
           occ_type == "care" & empstat == "Employed",
           asecwt, 0),
         na.rm = TRUE
       ),
-      total_weight = sum(asecwt, na.rm = TRUE),
-      formal_care_labor_force_proportion = formal_care_labor_force / total_weight,
+      total_population = sum(asecwt, na.rm = TRUE),
+      care_labor_force_proportion = care_labor_force / total_population,
       .groups = "drop"
     )
 }
@@ -312,9 +319,9 @@ formal_lfp$geo_level <- paste0("state", formal_lfp$geo_level)
 
 lfp <- formal_lfp |>
   group_by(date, category_id, subcategory_id) |>
-  summarise(formal_care_labor_force = sum(formal_care_labor_force),
-            total_weight = sum(total_weight),
-            formal_care_labor_force_proportion = mean(formal_care_labor_force_proportion, na.rm = TRUE)) |>
+  summarise(care_labor_force = sum(care_labor_force),
+            total_population = sum(total_population),
+            care_labor_force_proportion = mean(care_labor_force_proportion, na.rm = TRUE)) |>
   mutate(geo_level = "national")
 
 formal_lfp <- rbind(formal_lfp, lfp)
@@ -380,14 +387,14 @@ get_informal_lfp <- function(demo_group) {
              subcategory_id = get(demo_group)) |>
       group_by(geo_level, category_id, subcategory_id) |>
       summarise(
-        informal_care_labor_force = sum(weight / 5),
+        care_labor_force = sum(weight / 5),
         .groups = "drop"
       ) |>
       left_join(tot_pop, by = c("geo_level", "category_id", "subcategory_id")) |>
       mutate(
         date = as.Date(paste0(as.character(sel_year), "-01-01")),
-        informal_care_labor_force_proportion = 
-          informal_care_labor_force / total_population
+        care_labor_force_proportion = 
+          care_labor_force / total_population
       ) |>
       relocate(date)
     
@@ -411,19 +418,23 @@ informal_lfp$geo_level <- paste0("state", informal_lfp$geo_level)
 
 lfp <- informal_lfp |>
   group_by(date, category_id, subcategory_id) |>
-  summarise(informal_care_labor_force = sum(informal_care_labor_force),
+  summarise(care_labor_force = sum(care_labor_force),
             total_population = sum(total_population),
-            informal_care_labor_force_proportion = mean(informal_care_labor_force_proportion, na.rm = TRUE)) |>
+            care_labor_force_proportion = mean(care_labor_force_proportion, na.rm = TRUE)) |>
   mutate(geo_level = "national")
 
 informal_lfp <- rbind(informal_lfp, lfp)
 
+informal_lfp$type <- "Unpaid"
+formal_lfp$type <- "Paid"
+  
 care_lfp <- rbind(formal_lfp, informal_lfp)
 
 
-write.csv(care_lfp, "./data/CSV/care_force.csv", 
+write.csv(care_lfp, "./data/CSV/care_force_data.csv", 
           row.names = FALSE)
-write_dta(care_lfp, "./data/DTA/care_force.dta")
+write_dta(care_lfp, "./data/Dta/care_force_data.dta")
+write_xlsx(care_lfp, "./data/Excel/care_force_data.xlsx")
 ```
 
 ## Minutes of Care
@@ -554,9 +565,10 @@ formal_time_save <- rbind(formal_time, time)
 
 time <- rbind(formal_time_save, informal_time)
 
-write.csv(time, "./data/CSV/care_time.csv", 
+write.csv(time, "./data/CSV/care_force_time_data.csv", 
           row.names = FALSE)
-write_dta(time, "./data/DTA/care_time.dta")
+write_dta(time, "./data/Dta/care_force_time_data.dta")
+write_xlsx(time, "./data/Excel/care_force_time_data.xlsx")
 ```
 
 ## Value of Care
@@ -568,6 +580,28 @@ informal_value <- informal_time %>%
 
 informal_value <- informal_value %>%
   mutate(year = as.integer(format(as.Date(date), "%Y")))
+
+us_gdp <- read.csv("./data/CSV/GdpByState.csv") %>%  # pipe
+  pivot_longer(
+    cols = starts_with("X"),
+    names_to = "year",
+    names_prefix = "X",
+    values_to = "gdp"
+  ) %>%  # pipe
+# Select/reorder columns
+select(GeoFips, year, gdp) %>%  # pipe
+# Create or modify columns
+mutate(year = as.integer(year))
+
+us_gdp$geo_level <- ifelse(
+  us_gdp$GeoFips == 0,
+  "national",
+  sprintf("state%02d", us_gdp$GeoFips / 1000)
+)
+
+us_gdp <- us_gdp %>%  # pipe
+# Create or modify columns
+mutate(gdp = gdp*1000000)
 
 informal_value <- informal_value %>%
   left_join(us_gdp, by = c("year", "geo_level"))
@@ -719,11 +753,29 @@ formal_value <- formal_value %>%
   filter(!is.na(formal_value_proportion))
 
 
-value <- rbind(formal_value, informal_value)
+# Update column names for formal_value
+formal_value <- formal_value %>%
+  rename(
+    value = formal_value,
+    value_proportion = formal_value_proportion
+  ) %>%
+  mutate(type = "Paid")
 
-write.csv(value, "./data/CSV/care_value.csv", 
+# Update column names for informal_value
+informal_value <- informal_value %>%
+  rename(
+    value = informal_value,
+    value_proportion = informal_value_proportion
+  ) %>%
+  mutate(type = "Unpaid")
+
+# Bind them together
+value <- bind_rows(formal_value, informal_value)
+
+write.csv(value, "./data/CSV/care_force_value_data.csv", 
           row.names = FALSE)
-write_dta(value, "./data/DTA/care_value.dta")
+write_dta(value, "./data/DTA/care_force_value_data.dta")
+write_xlsx(value, "./data/Excel/care_force_value_data.xlsx")
 ```
 
 ## Sandwich Generation
@@ -808,8 +860,8 @@ sw <- sandwich_stats_5yr |>
 sandwich_stats <- rbind(sandwich_stats_5yr,sw)
 
 
-write.csv(sandwich_stats, "./data/CSV/sandwich_stats.csv", 
+write.csv(sandwich_stats, "./data/CSV/sandwichstats.csv", 
           row.names = FALSE)
-write_dta(sandwich_stats, "./data/DTA/sandwich_stats.dta")
-
+write_dta(sandwich_stats, "./data/Dta/sandwichstats.dta")
+write_xlsx(sandwich_stats, "./data/Excel/sandwich_stats.xlsx")
 ```

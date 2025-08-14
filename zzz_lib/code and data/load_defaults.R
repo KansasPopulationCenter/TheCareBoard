@@ -13,7 +13,8 @@ pacman::p_load(
   rlang,
   skimr,
   DT,
-  scales
+  scales,
+  writexl
 )
 
 options(scipen = 999)
