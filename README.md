@@ -1,69 +1,76 @@
-# Care Board Data Repository
-[Download ZIP file of all data & code](https://bit.ly/DataLibraryZip)
+# The Care Board
 
-The Care Board (https://thecareboard.org) is a dashboard of statistics on the care economy.
-This repository contains replication code, statistical tables, data crosswalks, and microdata compiled from IPUMS ATUS, IPUMS CPS, and IPUMS CPS-ASEC to support researchers, policymakers, and the public. 
+**Data and methods for understanding the U.S. care economy.**
 
-## How to Download Data 
+The Care Board measures paid and unpaid care across households, labor markets, and places. This repository contains the aggregate tables used by [thecareboard.org](https://thecareboard.org/), dashboard metadata, and the available R/Quarto methodology and analysis code. The project is based at the Kansas Population Center, Institute for Policy & Social Research, University of Kansas.
 
-All data displayed on The Care Board can be downloaded freely.
-Each dataset in the repository is available in multiple formats (.csv, .xlsx, .dta).
-Users can navigate to individual files in the tables below to access and download the data. 
+[Explore the dashboard](https://thecareboard.org/) · [Browse the data](app_data/) · [Read the methodology](docs/METHODOLOGY.md) · [Understand the tables](docs/DATA_DICTIONARY.md) · [Pipeline restoration](docs/PIPELINE_RESTORATION.md)
 
-If you use our data, we ask that you cite: 
+## Repository status
 
-Misty Heggeness, Joseph Bommarito, and Lucie Prewitt. The Care Board: Version 1.0 [dataset]. Lawrence, KS: Kansas Population Center, 2025. https://thecareboard.org.  
-If you have any questions or require additional data support, please refer to our documentation [Methodology](https://rpubs.com/joseph_bommarito363/1291991) or contact careboard@ku.edu. 
+This snapshot contains **22 aggregate data and metadata files**, **14 current pipeline documents**, and one legacy analysis. All eight previously missing scripts, their supporting helpers, three crosswalks, request sample lists, and the GDP input have been restored. Installed R/Python dependencies are captured; external source payloads, a clean dependency restore, and a verified full build remain necessary for complete replication. The supplied tables can be used directly; full regeneration requires the additions listed in [Reproducibility](docs/REPRODUCIBILITY.md).
 
-# Statistical Tables
-|Name | Description |  .csv file | .xlsx file | .dta file | Notes | Data Sources|
-|----------------------------------------------------------------|-------------------------------------------------------------------------------------------|------------|------------|-----------|-------|-------------|
-|Table 1: Care and Care Provision |Information about the amount of time a person receives care and time spent providing care | [Care and Provision CSV](https://bit.ly/NeedProvisionCSV)  | [Care and Provision Excel](https://bit.ly/NeedProvisionXLSX) | [Care and Provision DTA](https://bit.ly/NeedProvisionDTA) | 2007 onward 5 year rolling averages. | [IPUMS ATUS](https://timeuse.ipums.org/) |
-|Table 2: Care Provider Demographics   | Demographic information on who is providing (formal and informal) care  | [Provider Demographic CSV](https://bit.ly/ProvidersDemographicsCSV) | [Provider Demographic Excel](https://bit.ly/ProvidersDemographicsXLSX) | [Provider Demographic DTA](https://bit.ly/ProvidersDemographicsDTA) | 1990 onward | [IPUMS ASEC](https://cps.ipums.org/cps/) |
-|Table 3: Care Provider Data | Statistics related to the population and time use of different care provider groups | [Provider Data CSV](https://bit.ly/CareProviderDatumCSV) | [Provider Data Excel](https://bit.ly/CareProviderDatumXLSX) | [Provider Data DTA](https://bit.ly/CareProviderDatumDTA) | 2024 for Formal, 2023 for Informal.| [IPUMS ASEC](https://cps.ipums.org/cps/), [IPUMS ATUS](https://timeuse.ipums.org/) |
-|Table 4: Care Activities | Data for formal and informal care activities including population of providers and time spent across the US population | [Care Activities CSV](https://bit.ly/ActivitiesCSV) | [Care Activities Excel](https://bit.ly/ActivitiesXLSX) | [Care Activities DTA](https://bit.ly/ActivitiesDTA) | 2024 for Formal, 2023 for Informal. | [IPUMS ASEC](https://cps.ipums.org/cps/), [IPUMS ATUS](https://timeuse.ipums.org/) |
-|Table 5: Care Ratios |Ratios of care provision to need ability in the US | [Care Ratio CSV](https://bit.ly/CareRatioCSV) | [Care Ratio Excel](https://bit.ly/CareRatioXLSX) | [Care Ratio DTA](https://bit.ly/CareRatioDTA) | 2020 onward at the national level. | [5 year ACS](https://usa.ipums.org/usa/), [IPUMS ASEC](https://cps.ipums.org/cps/), [IPUMS ATUS](https://timeuse.ipums.org/), [Longitudinal Employer-Household Dynamics, Workplace Area Characteristics](https://lehd.ces.census.gov/data/) |
-|Table 6: Care Gini Coefficients |GINI Index coefficients calculated for care inequality measures | [GINI CSV](https://bit.ly/GINICSV) | [GINI Excel](https://bit.ly/GINIXLSX) | [GINI DTA](https://bit.ly/GINIDTA) | Provides stats at the national (2015 onward) and state level (2016 onward). | [Longitudinal Employer-Household Dynamics, Workplace Area Characteristics](https://lehd.ces.census.gov/data/) |
-|Table 7: Labor Force Participation by Gender and Parental Status|Replication of BLS Labor Force Participation statistics broken out by gender and parenthood status | [LFP by Gender and Parenthood CSV](https://bit.ly/BLSGenderParenthoodCSV) | [LFP by Gender and Parenthood Excel](https://bit.ly/BLSGenderParenthoodXLSX) | [LFP by Gender and Parenthood DTA](https://bit.ly/BLSGenderParenthoodDTA) | For years 1990 and onward for paid, and 2007 and onward for unpaid. | [IPUMS ASEC](https://cps.ipums.org/cps/) and [IPUMS ATUS](https://timeuse.ipums.org/) |
-|Table 8: Care Force Participation by Gender and Parental Status |Number and proportion of individuals providing formal and informal care work to others  | [Care Labor Force CSV](https://bit.ly/CareforceCSV) | [Care Labor Force Excel](https://bit.ly/CareforceXLSX) | [Care Labor Force DTA](https://bit.ly/CareforceDTA) | Provides labor force participation for gender and parent combinations for those aged 16+ for years 1990 onward. | [IPUMS CPS Monthly Survey](https://cps.ipums.org/cps/)|
-|Table 9: Sandwich Generation                                    |Data related to individuals engaged in caring for children and engaged in elder care       |[Sandwich Generation CSV](https://bit.ly/SandwichCSV)|[Sandwich Generation Excel](https://bit.ly/SandwichXLSX)|[Sandwich Generation DTA](https://bit.ly/SandwichDTA)|Calculates the number of people aged 18+ who are "sandwiched," 2015 onward, and the time these people spend on caregiving. |[IPUMS ATUS](https://timeuse.ipums.org/)|
-|Table 10: Value of Care                                          |Estimates of the value of care activities in the economy across formal and informal caregiving | [Value of Care CSV](https://bit.ly/CareforceValueCSV) | [Value of Care Excel](https://bit.ly/CareforceValueXLSX) | [Value of Care DTA](https://bit.ly/CareforceValueDTA) | For years 1994 and onward for formal, and 2007 and onward for informal. | [IPUMS ASEC](https://cps.ipums.org/cps/) and [IPUMS ATUS](https://timeuse.ipums.org/) |
-|Table 11: Minutes of Care | Total minutes spent in caregiving across formal and informal sectors | [Time Spent in Care CSV](https://bit.ly/CareforceTimeCSV) | [Time Spent in Care Excel](https://bit.ly/CareforceTimeXLSX) | [Time Spent in Care DTA](https://bit.ly/CareforceTimeDTA) | For years 1994 and onward for formal, and 2007 and onward for informal. | [IPUMS ASEC](https://cps.ipums.org/cps/) and [IPUMS ATUS](https://timeuse.ipums.org/) |
+**Version 2.0.0 is scheduled for public release on October 12, 2026** in the [existing repository](https://github.com/KansasPopulationCenter/TheCareBoard). The folder was organized on October 5, 2026; the supplied estimates were not recalculated. See the [release record](docs/releases/2.0.0/README.md) for status and file checksums, and [reference periods](docs/REFERENCE_PERIODS.md) for indicator coverage and source windows. This repository contains the data pipeline; website frontend source is maintained separately.
 
+The owner selected a sync of the current snapshot on October 6, 2026, with methodological review and corrections deferred. Known discrepancies remain documented. Existing historical material under `Previous Versions/` and `zzz_lib/` is retained at its original repository paths. See [Snapshot sync scope](docs/SNAPSHOT_SYNC.md).
 
-# Data Crosswalks
-|Name| Description| .csv file | .xlsx file    | Notes |
-|-----------------------------------------------------------------|-------------------------------------------------------------------------------------------|-----------|---------------|-----------|
-|Crosswalk-Formal Jobs to Care Focus                   |Links between care focus and OCC2010 codes                                                 | [Formal Occupation CW CSV](https://bit.ly/FormalOccs_CrossoverCSV) |[Fomral Occupation CW Excel](https://bit.ly/FormalOccs_CrossoverXLXS) | SOC codes obtained from IPUMS CPS OCC2010 variable. |
-|Crosswalk-Informal Care Activities to Care Focus      |Links between care focus and ATUS activities |  [Informal Activities CW CSV](https://bit.ly/ATUSActivityCrossoverCSV) | [Informal Activities CW Excel](https://bit.ly/ATUSActivityCrossoverXLSX) | ATUS activity codes obtained from IPUMS ATUS Activity variable. |
-|Crosswalk-Formal Jobs to Informal Activities          |Links between OCC2010 codes and ATUS activities                                            | [Informal to Formal CW CSV](https://bit.ly/InformalFormalCrosswalkCSV) | [Informal to Formal CW Excel](https://bit.ly/InformalFormalCrosswalkXLSX) | SOC codes obtained from IPUMS CPS OCC2010 variable, Activity codes obtained from IPUMS ATUS Activity variable.|
+## Available data
 
-# Micro Data
-|Name | Description | Code Files | XML Files | DAT Files| Source |
-|-----|-------------|------------|-----------|----------|--------|
-|ATUS Activities| Activity structured data from ATUS |  | [ATUS Data Metadata](https://bit.ly/ATUSActivityMetaDataXML) | [ATUS Data Zip](https://bit.ly/ATUSActivityMetaDataDAT) | [IPUMS ATUS](https://timeuse.ipums.org/) |
-|ATUS Hierarchical| Hierarchical structured data from ATUS |  | [Hierarchical Data Metadata](https://bit.ly/ATUSHierarchicalMetaDataXML) | [Hierarchical Data Zip](https://bit.ly/ATUSHierarchicalMetaDataDAT) | [IPUMS ATUS](https://timeuse.ipums.org/)
-|Micro Data Download | Code to use IPUMS API to download ASEC and CPS Monthly data | [CPS and ASEC Download](https://bit.ly/MicroDataDownloadR) |  | | [IPUMS CPS](https://cps.ipums.org/cps/) |
-|Micro Data Cleaning Functions| Functions used to clean ATUS, ASEC, and CPS Monthly data | [CPS and ASEC Download](https://bit.ly/MicroDataPrepR) |  | | [IPUMS CPS](https://cps.ipums.org/cps/) |
-|Micro Data Processing | Code to Process and format Micro Data from ATUS, ASEC, and CPS Monthly data | [CPS and ASEC Processing](https://bit.ly/MicroDataProcessingR) |  | | [IPUMS CPS](https://cps.ipums.org/cps/) |
+| Topic | Files in `app_data/` |
+| --- | --- |
+| Care needs and provision | `market.csv`, `market_datum.csv` |
+| Paid care activities | `activity_formal.csv`, `activity_formal_datum.csv` |
+| Unpaid care activities | `activity_informal.csv`, `activity_informal_datum.csv` |
+| Care providers | `provider.csv`, `provider_datum.csv`, `care_provider_population.csv`, `care_provider_datum.csv` |
+| Broader economic impacts | `metrics_formal.csv`, `metrics_informal.csv` |
+| Household measures | `metrics_maternal_power.csv`, `metrics_priviledge.csv`, `metrics_sandwich_generation.csv` |
+| Geographic care resources | `metrics_state_care_gini.csv` |
+| Dashboard metadata | `provider_category.csv`, `provider_category.xlsx`, `provider_group.xlsx`, `metric_tables.xlsx`, `metric_labels.csv`, `source.csv` |
 
-# Code
-|Name                         | Description|.R file| Notes |
-|-----------------------------|------------|-------|------|
-| Formal Activities | Code compiling statistics related to formal care activities | https://bit.ly/ActivityFormalR | Code feeds into the Voronoi chart of the Care Economy section. |
-| Informal Activities | Code compiling statistics related to informal care activities | https://bit.ly/ActivityInformalR |  Code feeds into the Voronoi chart of the Care Economy section. |
-| Broad Impacts | Code compiling statistics related to the broad impacts section | https://bit.ly/BroadImpactsR | Code feeds into the Broad Impacts section. |
-|Care Providers | Code compiling statistics on the people providing care | https://bit.ly/CareProvidersR |  Code feeds into the Chord chart of the Care Economy section. |
-|Care Ratio | Code calculating the Care Ratio | https://bit.ly/CareRatioR |  Code feeds the Care Ratio card on the Flow of Care section. |
-|GINI | Code calculating Care GINI Coefficients | https://bit.ly/GiniCoefficientR| Code feeds the GINI card on the Flor of Care section.  |
-|Sandwich | Code calculating Sandwich generation stats | https://bit.ly/SandwichGenerationR | Code feeds the Sandwich generation charts on the Flow of Care Section |
-|Population Information | Code reporting data on the population, including age | https://bit.ly/AgeR | Code feeds into the care provision area chart of the Care Economy section. |
-|Care and Provision | Code calculating the need and provision of care | https://bit.ly/NeedProvisionR |  Code feeds into the care provision area chart of the Care Economy section. |
+Download individual CSVs from `app_data/` or clone/download the repository. Public tables need no database connection. Read the [table catalog](docs/DATA_DICTIONARY.md) for schemas, reference periods, populations, and units before comparing indicators. Missing values are not automatically zero. January 1 date labels identify reporting periods rather than establishing literal January observations; tables without dates need their source/release notes.
 
-# Replication Data
-|Name                         | Description| .xlsx file| Code|Data Sources|
-|-----------------------------|------------|----------|------|------------|
-|Time Use for Parents         |Data on daily weekday and weekend time use for parents, including by gender and sandwich generation. This data was used in a New York Times opinion piece published on April 30, 2025, by Jess Grose. | [Time Use for Parents](https://bit.ly/TimeUseforParents) | [Time Use for Parents R file](https://github.com/KansasPopulationCenter/TheCareBoard/raw/refs/heads/main/zzz_lib/code%20and%20data/sandwich_generation_nyt.qmd) | [IPUMS ATUS](https://timeuse.ipums.org/) |  
+The spelling of `metrics_priviledge.csv` and `bargainin_power.qmd` is retained for compatibility with existing consumers.
 
+## Project layout
 
-    
+```text
+TheCareBoard_Master.qmd      Master methodology and ordered pipeline
+_quarto.yml                 Render scope and computation/output directories
+analysis/                   Available analyses and warehouse-upload logic
+  legacy/                   Superseded care-ratio analysis
+R/                          Shared R helpers
+app_data/                   Dashboard aggregate tables and metadata
+config/                     Credential-free database example
+data/                       Input-access manifest; source payloads excluded
+docs/                       Methodology, data catalog, and publishing guides
+scripts/                    Structural repository checks
+renv.lock, requirements.txt Captured R and Python dependencies
+renv/                       R environment activation; local libraries ignored
+generated/                  Local rendered documents; ignored by Git
+local_only/                 Credentials, notes, drafts, media, backups; ignored
+```
+
+## Preview the methodology
+
+See [Software environment](docs/ENVIRONMENT.md) for R 4.4.0, the captured R/Python dependencies, and setup. Restore the R packages before using Quarto. Run from the repository root:
+
+```powershell
+quarto render TheCareBoard_Master.qmd --to html -P execute_pipeline:false -P run_ipums_download:false -P run_database_upload:false
+```
+
+Output goes to `generated/`. The master defaults to documentation mode and labels missing sections. This preview does not regenerate or validate statistical estimates. Individual analytic QMDs can execute when rendered directly; see [Reproducibility](docs/REPRODUCIBILITY.md) before using them. PDF output additionally needs TeX.
+
+Run structural checks with Python 3.9 or newer and no third-party Python packages:
+
+```powershell
+python scripts/check_repository.py
+python scripts/check_repository.py --pipeline
+```
+
+The second command also checks pipeline inputs. All scripts and helpers are present; it reports source payloads absent from CB even when they are available in the owner's external storage. Make authorized inputs available at the expected paths before a full build. [Source input records](docs/SOURCE_INPUTS.md) distinguish confirmed input metadata from pending external fingerprints. Neither command runs analyses, submits extracts, or connects to the warehouse.
+
+## Citation and contributions
+
+Copyright (c) 2026 Kansas Population Center, University of Kansas. Project code is available under the [MIT License](LICENSE); project-created aggregate data, metadata, and written methodology are available under [CC BY 4.0](LICENSES/CC-BY-4.0.txt). Both allow commercial reuse subject to their notice/attribution requirements. Code within QMD documents uses MIT; their narrative text uses CC BY 4.0. See [citation and licensing](docs/LICENSE_AND_CITATION.md) for scope and credit, and [CITATION.cff](CITATION.cff) for citation metadata. Source-data terms remain separate.
+
+Read [CONTRIBUTING.md](CONTRIBUTING.md) before changing measures or metadata. Project questions: [careboard@ku.edu](mailto:careboard@ku.edu). Maintainers preparing a public upload should use the [GitHub upload guide](docs/GITHUB_UPLOAD_GUIDE.md) and [file-by-file manifest](docs/FILE_MANIFEST.csv).

@@ -1,0 +1,16 @@
+# Captured 2026-10-06 from the Python interpreter discovered by R/reticulate.
+# Target: Python 3.11.14. Includes required transitive packages.
+# Current installation capture; historical release build and clean restore unverified.
+contourpy==1.2.0
+cycler==0.11.0
+fonttools==4.25.0
+kiwisolver==1.4.4
+matplotlib==3.8.0
+numpy==1.26.4
+packaging==23.1
+pandas==1.5.3
+Pillow==12.0.0
+pyparsing==3.0.9
+python-dateutil==2.8.2
+pytz==2023.3.post1
+six==1.16.0

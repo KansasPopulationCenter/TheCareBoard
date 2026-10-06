@@ -1,0 +1,333 @@
+{
+  "snapshot_prepared": "2026-10-05",
+  "note": "Observed supplied snapshot; not recalculated. Counts/periods are descriptive, not completeness guarantees.",
+  "files": {
+    "activity_formal.csv": {
+      "kind": "csv",
+      "columns": [
+        "id",
+        "name",
+        "care_focus",
+        "median_wage",
+        "geo"
+      ],
+      "observed_rows": 1299,
+      "date_min": "",
+      "date_max": "",
+      "sha256": "e02cf4381fe4dff838ba53363d1a6a1b17442a241e3eece8ee9e76202f43c7e1",
+      "description": "Paid-care activity classification and wages"
+    },
+    "activity_formal_datum.csv": {
+      "kind": "csv",
+      "columns": [
+        "activity_id",
+        "provision_interval",
+        "population",
+        "geo"
+      ],
+      "observed_rows": 1299,
+      "date_min": "",
+      "date_max": "",
+      "sha256": "5257541c924d352230f8427bf61e4d1faa12bfa25779d72c40049a345eba6cac",
+      "description": "Paid-care activity time and populations"
+    },
+    "activity_informal.csv": {
+      "kind": "csv",
+      "columns": [
+        "id",
+        "name",
+        "care_focus",
+        "median_wage",
+        "geo_level"
+      ],
+      "observed_rows": 3052,
+      "date_min": "",
+      "date_max": "",
+      "sha256": "4caa4178ecd38b0293993aee694b75813a14310aef4e2a5656333d4d8dd2bcec",
+      "description": "Unpaid-care activity classification and wages"
+    },
+    "activity_informal_datum.csv": {
+      "kind": "csv",
+      "columns": [
+        "activity_id",
+        "geo_level",
+        "provider_attention",
+        "provision_interval",
+        "population"
+      ],
+      "observed_rows": 3052,
+      "date_min": "",
+      "date_max": "",
+      "sha256": "2e9004ede4e291b5c3d55eaa13989af67f9669b77a5e4820b39bb0c3a573cbfa",
+      "description": "Unpaid-care activity attention, time, and populations"
+    },
+    "care_provider_datum.csv": {
+      "kind": "csv",
+      "columns": [
+        "geo",
+        "gender",
+        "provider_status",
+        "time_use",
+        "care_type",
+        "care_focus",
+        "provider_attention",
+        "provision_interval",
+        "population"
+      ],
+      "observed_rows": 2919,
+      "date_min": "",
+      "date_max": "",
+      "sha256": "311746da374e2287cf15f2db5282a9fa0daffbe78775d7f46ba8402bd1143d93",
+      "description": "Care-provider flows and time by demographic group"
+    },
+    "care_provider_population.csv": {
+      "kind": "csv",
+      "columns": [
+        "geo",
+        "gender",
+        "provider_status",
+        "population"
+      ],
+      "observed_rows": 312,
+      "date_min": "",
+      "date_max": "",
+      "sha256": "c5f97a23d1523984ee6ee928eb8bf0fc6a4e462cdf9b7848cbce9496889631d1",
+      "description": "Care-provider group population denominators"
+    },
+    "market.csv": {
+      "kind": "csv",
+      "columns": [
+        "age",
+        "population"
+      ],
+      "observed_rows": 82,
+      "date_min": "",
+      "date_max": "",
+      "sha256": "7588c12009c7bbf59d0d4b7f1032eba0f1ae12b510adc58f48f726d185e6bc39",
+      "description": "Population by age"
+    },
+    "market_datum.csv": {
+      "kind": "csv",
+      "columns": [
+        "age",
+        "care_focus",
+        "need_interval",
+        "provision_interval"
+      ],
+      "observed_rows": 258,
+      "date_min": "",
+      "date_max": "",
+      "sha256": "5ae05c13685ebe0e4400810001d430c90a82b6eb4bab0f5df7c86125a4c4d70c",
+      "description": "Care need and provision by age"
+    },
+    "metric_labels.csv": {
+      "kind": "csv",
+      "columns": [
+        "id",
+        "metric_id",
+        "category_id",
+        "subcategory_id",
+        "type",
+        "label"
+      ],
+      "observed_rows": 33,
+      "date_min": "",
+      "date_max": "",
+      "sha256": "68fe819b99469946a4c8575fdb9dce478fe005992e91549cebd6f10701c6b96c",
+      "description": "Dashboard metric labels and display types"
+    },
+    "metrics_formal.csv": {
+      "kind": "csv",
+      "columns": [
+        "date",
+        "geo_level",
+        "category_id",
+        "subcategory_id",
+        "formal_care_labor_force",
+        "formal_care_labor_force_proportion",
+        "formal_care_time",
+        "formal_care_time_proportion",
+        "formal_value",
+        "formal_value_proportion",
+        "mothers_labor_force_participation",
+        "fathers_labor_force_participation",
+        "mothers_labor_force_participation_proportion",
+        "fathers_labor_force_participation_proportion"
+      ],
+      "observed_rows": 36552,
+      "date_min": "1990-01-01",
+      "date_max": "2026-01-01",
+      "sha256": "3454fd98195619ecb1d577cb75d2d094afc5c72d3b0f74eb1d6643f25d9d15fd",
+      "description": "Paid-care workforce, time, value, parental labor indicators"
+    },
+    "metrics_informal.csv": {
+      "kind": "csv",
+      "columns": [
+        "date",
+        "geo_level",
+        "category_id",
+        "subcategory_id",
+        "informal_care_labor_force",
+        "informal_care_labor_force_proportion",
+        "informal_care_time",
+        "informal_care_time_proportion",
+        "informal_value",
+        "informal_value_proportion",
+        "mothers_care_absence",
+        "fathers_care_absence",
+        "mothers_care_absence_proportion",
+        "fathers_care_absence_proportion",
+        "mothers_nilf_care",
+        "fathers_nilf_care",
+        "mothers_nilf_care_proportion",
+        "fathers_nilf_care_proportion"
+      ],
+      "observed_rows": 30567,
+      "date_min": "1994-01-01",
+      "date_max": "2026-01-01",
+      "sha256": "f1f65bae4089636ae9953af22eb68d6bacd9c40c11b930a70302f74d12437458",
+      "description": "Unpaid-care workforce, time, value, parental care/labor indicators"
+    },
+    "metrics_maternal_power.csv": {
+      "kind": "csv",
+      "columns": [
+        "share_of_income",
+        "date",
+        "geo_level"
+      ],
+      "observed_rows": 1872,
+      "date_min": "1990-01-01",
+      "date_max": "2025-01-01",
+      "sha256": "057a246974aa8ac0494fbc0f91fe12c1e4460182aad0ff2d586d5af1190d4704",
+      "description": "Mothers' within-couple wage/salary income shares"
+    },
+    "metrics_priviledge.csv": {
+      "kind": "csv",
+      "columns": [
+        "date",
+        "geo_level",
+        "care_privileged_population",
+        "care_privileged_population_proportion"
+      ],
+      "observed_rows": 936,
+      "date_min": "2007-01-01",
+      "date_max": "2025-01-01",
+      "sha256": "f534868e8b73953a04170bc2372a71425121c49b4eac97694ef85fccb45ff6c9",
+      "description": "Care-privileged adult population and proportion"
+    },
+    "metrics_sandwich_generation.csv": {
+      "kind": "csv",
+      "columns": [
+        "date",
+        "geo_level",
+        "sandwich_population",
+        "sandwich_population_proportion",
+        "sandwich_time_total",
+        "sandwich_time_median"
+      ],
+      "observed_rows": 306,
+      "date_min": "2019-01-01",
+      "date_max": "2025-01-01",
+      "sha256": "fdb5f4b469e5aff298362b38ba030bb9e3c807aef3906de57d95ae0b3e756d7a",
+      "description": "Sandwich caregiving population and time"
+    },
+    "metrics_state_care_gini.csv": {
+      "kind": "csv",
+      "columns": [
+        "gini",
+        "lq",
+        "cares",
+        "date",
+        "geo_level"
+      ],
+      "observed_rows": 703,
+      "date_min": "2010-01-01",
+      "date_max": "2023-01-01",
+      "sha256": "2f457f1940eaee8c0ad2740cc665aa2ddee95d40de8bbbf8f65bbf72107e77fc",
+      "description": "Care-job Gini, location quotient, and CaRES"
+    },
+    "provider.csv": {
+      "kind": "csv",
+      "columns": [
+        "geo_level",
+        "category_id",
+        "subcategory_id",
+        "population"
+      ],
+      "observed_rows": 1606,
+      "date_min": "",
+      "date_max": "",
+      "sha256": "ff31b539190ea7c249d4d8799ab6763bf6e8b7869cc74c97d7ec12fa277fcb84",
+      "description": "Provider demographics and population"
+    },
+    "provider_category.csv": {
+      "kind": "csv",
+      "columns": [
+        "id",
+        "name",
+        "order"
+      ],
+      "observed_rows": 39,
+      "date_min": "",
+      "date_max": "",
+      "sha256": "c248a59e7f9b12a1388bc30fff429531191276045f1ec78a55fd1fff41747f59",
+      "description": "Provider category definitions and display order"
+    },
+    "provider_datum.csv": {
+      "kind": "csv",
+      "columns": [
+        "geo_level",
+        "category_id",
+        "subcategory_id",
+        "care_type",
+        "care_focus",
+        "provider_attention",
+        "provision_interval",
+        "population"
+      ],
+      "observed_rows": 11018,
+      "date_min": "",
+      "date_max": "",
+      "sha256": "0b5969ff1c3acd8088dcd560d217ab2377d370c0e36960be982aa7463093be07",
+      "description": "Provider time/populations by care type, focus, and attention"
+    },
+    "source.csv": {
+      "kind": "csv",
+      "columns": [
+        "id",
+        "text",
+        "url"
+      ],
+      "observed_rows": 8,
+      "date_min": "",
+      "date_max": "",
+      "sha256": "72873a407a5ed829b62480571bc310f19f04fb7b967cc86bcf08f7c1210c0b62",
+      "description": "Dashboard source and explanatory notes"
+    },
+    "metric_tables.xlsx": {
+      "kind": "xlsx",
+      "sheets": [
+        "metric",
+        "metric_group"
+      ],
+      "sha256": "bd7a34959f6ee8efe0c972a71143169ed3b9cfa902f6d46a4d87140b92236e49",
+      "description": "Metric metadata used by the warehouse upload"
+    },
+    "provider_category.xlsx": {
+      "kind": "xlsx",
+      "sheets": [
+        "provider_category"
+      ],
+      "sha256": "3f18ca5d1da0c57658521aec863b02ab4db5796f68700772b3f7457227ca9794",
+      "description": "Provider category metadata workbook"
+    },
+    "provider_group.xlsx": {
+      "kind": "xlsx",
+      "sheets": [
+        "Sheet1"
+      ],
+      "sha256": "bb20c7f36ba8e1c98fb3c0f62740bfbf6b2e1f9334e00057cdbffa777c3e6ea6",
+      "description": "Provider demographic group metadata"
+    }
+  }
+}

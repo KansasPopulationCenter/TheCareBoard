@@ -1,0 +1,604 @@
+---
+title: "Unpaid Care Activity Methodology"
+format:
+  html:
+    toc: true
+    code-overflow: wrap
+    df-print: paged
+  pdf:
+    toc: true
+execute:
+  warning: false
+  message: false
+editor: visual
+---
+
+# Overview
+
+This file builds the unpaid activity tables used by The Care Board to describe informal care work at the activity level. Each row represents an unpaid activity and geography, with measures of time spent, participation, care focus, and an imputed replacement wage. The website uses these outputs alongside the paid activity tables so users can compare formal and informal care work with a common structure.
+
+The estimates are built from American Time Use Survey activity records processed in `data_processing.qmd`. ATUS is designed to measure how people allocate time across daily activities, which makes it the main data source for unpaid household and caregiving work. The file uses a five-year pooled window and excludes 2020 because ATUS data collection was interrupted during the early COVID-19 pandemic. Replacement wages are assigned through the project crosswalk that links unpaid activities to related paid care occupations.
+
+**Outputs.** This workflow writes `activity_informal` and `activity_informal_datum` to `app_data/` for the website upload. It also writes matching replication files to `data/CSV/`, `data/Dta/`, and `data/Excel/`.
+
+**Key sources.** The source microdata come from IPUMS ATUS and the BLS American Time Use Survey. See the [IPUMS ATUS citation guidance](https://www.atusdata.org/atus/citation.shtml), the BLS [ATUS calculation handbook](https://www.bls.gov/opub/hom/atus/calculation.htm), and the BLS note on the [2020 ATUS COVID-19 data collection disruption](https://www.bls.gov/tus/notices/2021/covid19.htm).
+
+## Introduction and Literature Context
+
+Unpaid care is economically essential but often absent from labor-market statistics because it occurs inside households and families. The [BLS American Time Use Survey](https://www.bls.gov/tus/) is designed to measure daily activities, making it the best federal source for estimating care work that is not paid through the market. The ILO's work on [unpaid domestic and care work measurement](https://ilostat.ilo.org/topics/unpaid-work/measuring-unpaid-domestic-and-care-work/) emphasizes that time-use data are necessary for understanding gender inequality, household production, and the true scale of care provision.
+
+This file converts ATUS activity records into app-ready unpaid care activity tables. It keeps the distinction between primary care activities and secondary care responsibilities because passive supervision, eldercare, and household support can be policy-relevant even when they are not the respondent's main reported activity.
+
+## Methodological Decisions
+
+| Decision | Implementation | Rationale |
+|---|---|---|
+| Unpaid-care universe | Adults age 18+ in ATUS activity records, excluding formal work | Focuses on nonmarket activity time. |
+| Five-year pooling | Use recent ATUS years while excluding 2020 | Improves state reliability and avoids the pandemic collection disruption. |
+| Weighting | Use ATUS daily weights divided to daily-equivalent measures where needed | Follows BLS time-use weighting logic for population daily time estimates. |
+| Replacement wage | Map unpaid activities to formal occupation ranges and calculate median wages from ASEC | Provides a transparent market-comparison value without claiming unpaid care is identical to paid work. |
+
+## Policy Implications
+
+Unpaid care activity statistics show where families are absorbing work that might otherwise require paid services, public programs, or employer supports. These estimates can inform caregiver tax credits, respite programs, paid leave, child care and eldercare investments, and workforce policies that recognize how unpaid care constrains labor-force participation. They also help communicate that unpaid care is not a private inconvenience; it is infrastructure that supports the formal economy.
+
+## Load & Setup Data
+
+To analyze this data, we utilize the yearly ATUS data. For this analysis, we use a 5-year average of this data to help with data limitations at the state level. The workflow selects the five most recent available ATUS survey years after excluding 2020; with the current input, these are 2021, 2022, 2023, 2024, and 2025. We exclude the year 2020 from the analysis because the ATUS survey was severely disrupted due to the COVID-19 pandemic. For earlier windows that cross 2020, five survey years can span six calendar years. Additionally, due to sample size limitations, not all activities are present in every state in the survey. The use of 5-year averages helps solve this issue by allowing more data to be analyzed.
+
+The code below loads the ATUS data, filters only to include people aged 18 and over, and only individuals employed in the unpaid care economy. We then provide simple transformations of the variables to rename them to fit the standardized format needed for implementation in The Care Board.
+
+```{r unpaid activity setup, message=FALSE, warning=FALSE}
+source("R/load_defaults.R")
+# load data
+atus <- read.csv("./data/CSV/ATUSdata.csv") |>  # pipe 
+# Filter rows by conditions
+filter(activity != "Formal Work") |>  
+# Filter rows by conditions
+filter(YEAR >= 2018 & YEAR != 2020) |>
+# Filter rows by conditions
+filter(AGE >= 18) |>  # pipe
+# Select/reorder columns
+select(YEAR, CASEID, WT06, ACTIVITY, activity, act_care_focus, 
+         DURATION, SCC_ALL_LN, SEC_ALL_LN, STATEFIP) |>
+  clean_names() 
+
+# get most recent 5 year and clean up columns
+yr_range <- atus_yr_range(atus) |>
+# Filter rows by conditions
+filter(year == max(year))
+
+atus <- atus |>  
+# Filter rows by conditions
+filter(year >= yr_range$yr_start & year <= yr_range$year) |>
+  rename(
+    care_focus = act_care_focus, 
+    activity_name = activity_2
+    ) |>
+# Create or modify columns
+mutate(
+    activity_name = ifelse(
+      care_focus == "non-care", "non-care", activity_name), 
+    
+    activity_id = str_replace_all(
+      activity_name, "[^a-zA-Z0-9]+", "-") |>  # pipe 
+      str_to_lower(),
+    activity_id = gsub("-$", "", activity_id), 
+    geo_level = statefip,
+    weight = wt06/365/5
+  )
+```
+
+::: callout-note
+#### Code Explanation
+
+This chunk sources `R/load_defaults.R` so the later code has the required functions, defaults, and shared helpers. It reads `./data/CSV/ATUSdata.csv` into memory and prepares those inputs for the transformations that follow. Technically, it uses `filter()`, `mutate()`, `select()`, `rename()`, `clean_names()` to restrict the analytic universe, create derived variables, reshape records, join lookup tables, and/or aggregate weighted statistics. The main objects created or updated here are `atus`, `yr_range`, `care_focus`, `activity_name`, `activity_id`.
+:::
+
+
+## Calculate Unpaid Stats
+
+The code below is utilized to calculate the actual statistics from the ATUS data. To calculate the population of people employed in each care job, we group by activity and geography and sum the weight variable. For each activity, we then calculate the amount of time spent in that activity by utilizing the duration variable, which represents the respondent's answer to the question of how many hours they usually work in a week.
+
+We repeat this code twice, first grouping all observations by states and then grouping all observations across the nation. For each grouping, we also calculate a variable called count, which represents the number of people in that grouping. This will be used to filter out cases where we do not have enough data to get good estimates.
+
+```{r Unpaid Activity Stats, message=FALSE, warning=FALSE}
+case_stats <- bind_rows(
+  atus |>  # pipe
+# Compute summary statistics
+summarise(
+      total_time = sum(duration),
+      .by = c(caseid, weight, activity_id, geo_level, activity_name, care_focus)
+      ),
+
+  atus |>  # pipe
+# Create or modify columns
+mutate(
+      activity_id = "secondary-childcare",
+      activity_name = "Secondary Childcare",
+      care_focus = "developmental"
+    ) |>  # pipe
+# Compute summary statistics
+summarise(
+      total_time = sum(scc_all_ln),
+      .by = c(caseid, weight, activity_id, geo_level, activity_name, care_focus)
+      ) |>  # pipe
+# Filter rows by conditions
+filter(total_time > 0),
+
+  atus |>  # pipe
+# Create or modify columns
+mutate(
+      activity_id = "secondary-eldercare",
+      activity_name = "Secondary Eldercare",
+      care_focus = "health"
+    ) |>  # pipe
+# Compute summary statistics
+summarise(
+      total_time = sum(sec_all_ln),
+      .by = c(caseid, weight, activity_id, geo_level, activity_name, care_focus)
+      )  |>  # pipe
+# Filter rows by conditions
+filter(total_time > 0)
+  )
+```
+
+::: callout-note
+#### Code Explanation
+
+Technically, it uses `filter()`, `mutate()`, `summarise()`, `bind_rows()` to restrict the analytic universe, create derived variables, reshape records, join lookup tables, and/or aggregate weighted statistics. The statistical work in this chunk calculates weighted counts, rates, rolling values, medians, changes over time, or inequality measures used in the published indicators. The main objects created or updated here are `case_stats`, `total_time`, `.by`, `activity_id`, `activity_name`.
+:::
+
+```{r, message=FALSE, warning=FALSE}
+activity_stats <- case_stats |>  # pipe
+# Compute summary statistics
+summarise(
+    provision_interval = sum(total_time*weight),
+    population = sum(weight),
+    .by = c(activity_id, geo_level, activity_name, care_focus)
+  ) |>  # pipe
+# Filter rows by conditions
+filter(care_focus != "non-care") |>  # pipe
+  arrange(activity_id)
+
+activity_stats$geo_level <- sprintf("%02d", as.numeric(activity_stats$geo_level))
+activity_stats$geo_level <- paste0("state", activity_stats$geo_level)
+
+## National
+
+case_stats <- bind_rows(
+  atus |>  # pipe
+# Compute summary statistics
+summarise(
+      total_time = sum(duration),
+      .by = c(caseid, weight, activity_id, activity_name, care_focus)
+      ),
+
+  atus |>  # pipe
+# Create or modify columns
+mutate(
+      activity_id = "secondary-childcare",
+      activity_name = "Secondary Childcare",
+      care_focus = "developmental"
+    ) |>  # pipe
+# Compute summary statistics
+summarise(
+      total_time = sum(scc_all_ln),
+      .by = c(caseid, weight, activity_id, activity_name, care_focus)
+      ) |>  # pipe
+# Filter rows by conditions
+filter(total_time > 0),
+
+  atus |>  # pipe
+# Create or modify columns
+mutate(
+      activity_id = "secondary-eldercare",
+      activity_name = "Secondary Eldercare",
+      care_focus = "health"
+    ) |>  # pipe
+# Compute summary statistics
+summarise(
+      total_time = sum(sec_all_ln),
+      .by = c(caseid, weight, activity_id, activity_name, care_focus)
+      )  |>  # pipe
+# Filter rows by conditions
+filter(total_time > 0)
+  )
+```
+
+::: callout-note
+#### Code Explanation
+
+Technically, it uses `filter()`, `mutate()`, `summarise()`, `arrange()`, `bind_rows()` to restrict the analytic universe, create derived variables, reshape records, join lookup tables, and/or aggregate weighted statistics. The statistical work in this chunk calculates weighted counts, rates, rolling values, medians, changes over time, or inequality measures used in the published indicators. The main objects created or updated here are `activity_stats`, `provision_interval`, `population`, `.by`, `case_stats`.
+:::
+
+```{r, message=FALSE, warning=FALSE}
+as <- case_stats |>  # pipe
+# Compute summary statistics
+summarise(
+    provision_interval = sum(total_time*weight),
+    population = sum(weight),
+    .by = c(activity_id, activity_name, care_focus)
+  ) |>  # pipe
+# Filter rows by conditions
+filter(care_focus != "non-care") |>  # pipe
+  arrange(activity_id)
+
+as$geo_level <- "national"
+
+activity_stats <- rbind(activity_stats, as)
+```
+
+::: callout-note
+#### Code Explanation
+
+Technically, it uses `filter()`, `summarise()`, `arrange()` to restrict the analytic universe, create derived variables, reshape records, join lookup tables, and/or aggregate weighted statistics. The statistical work in this chunk calculates weighted counts, rates, rolling values, medians, changes over time, or inequality measures used in the published indicators. The main objects created or updated here are `as`, `provision_interval`, `population`, `.by`, `activity_stats`.
+:::
+
+
+## Median Shadow Wage
+
+For each of the activities in the data, we then calculate what we call a shadow wage. This represents an attempt to understand how much money, similar activities to this, make in the paid economic sector. For example the unpaid activity of childcare would be paired with childcare jobs in the paid sector and we would see what the median salary is for those paird jobs. To create the pairings we utilize the informal_formal_Crosswalk file which pairs each unpaid activity with one or more paid activities. For each unpaid activity we then filter the data calculated in the activity_formal section to get the wages of the related activities. We utilize the average wage of this group as the shadow wage of the unpaid economy.
+
+The first step is to load in the activity crosswalk and make some general transformations.
+
+### Crosswalk
+
+```{r unpaid_shadow_wage_crosswalk, message=FALSE, warning=FALSE}
+act_cross <- read.csv("./data/CSV/Informal_Formal_Crosswalk.csv", fileEncoding = "latin1") |> 
+  clean_names() |> 
+  select(activity, code_formal) |> 
+  unique() |> 
+  mutate(
+    activity = str_trim(activity),
+    occ_code_start = str_extract(code_formal, "^[^-]+") |> as.numeric(),
+    occ_code_end = coalesce(
+      str_extract(code_formal, "(?<=-).*") |> as.numeric(), 
+      occ_code_start
+      )
+  )
+```
+
+::: callout-note
+#### Code Explanation
+
+It reads `./data/CSV/Informal_Formal_Crosswalk.csv` into memory and prepares those inputs for the transformations that follow. Technically, it uses `mutate()`, `select()`, `clean_names()` to restrict the analytic universe, create derived variables, reshape records, join lookup tables, and/or aggregate weighted statistics. The main objects created or updated here are `act_cross`, `activity`, `occ_code_start`, `occ_code_end`.
+:::
+
+
+```{r unpaid_shadow_wage_crosswalk_view, message=FALSE, warning=FALSE, eval=knitr::is_html_output()}
+# Prep display data: rename + (conditionally) coerce to numeric
+act_cross_disp <- act_cross |>
+  rename(
+    Activity = activity,
+    `Formal Code` = code_formal,
+    `Occupation Code (Start)` = occ_code_start,
+    `Occupation Code (End)`   = occ_code_end
+  ) |>
+  mutate(
+    across(
+      c(`Occupation Code (Start)`, `Occupation Code (End)`),
+      \(x) if (is.numeric(x)) x else parse_number(x)
+    )
+  )
+
+# Numeric columns
+num_cols <- c("Occupation Code (Start)", "Occupation Code (End)")
+
+DT::datatable(
+  act_cross_disp,
+  rownames = FALSE,
+  filter = "top",
+  extensions = c("Buttons", "FixedHeader", "ColReorder", "Responsive"),
+  options = list(
+    pageLength = 25,
+    lengthMenu = c(10, 25, 50, 100),
+    dom = "Bfrtip",
+    buttons = list(
+      list(extend = "copy",  title = "act_cross"),
+      list(extend = "csv",   title = "act_cross"),
+      list(extend = "excel", title = "act_cross"),
+      list(extend = "print")
+    ),
+    fixedHeader = TRUE,
+    colReorder = TRUE,
+    autoWidth = TRUE,
+    columnDefs = list(
+      list(
+        className = "dt-right",
+        targets = which(names(act_cross_disp) %in% num_cols) - 1
+      )
+    )
+  ),
+  caption = htmltools::tags$caption(
+    style = "caption-side: top; text-align:left; font-weight:600; font-size:1.05em; margin-bottom:8px;",
+    "Activity Crosswalk (interactive: filter columns, reorder, and export)"
+  )
+) |>
+  formatCurrency(num_cols, currency = "", interval = 3, mark = ",", digits = 0)
+```
+
+::: callout-note
+#### Code Explanation
+
+Technically, it uses `mutate()`, `rename()` to restrict the analytic universe, create derived variables, reshape records, join lookup tables, and/or aggregate weighted statistics. The display code builds a diagnostic plot, publication figure, static table, or interactive HTML table from the objects created earlier. The main objects created or updated here are `act_cross_disp`, `Activity`, `num_cols`, `rownames`, `filter`.
+:::
+
+
+#### ASEC Wages
+
+We then replicate the code from the activity formal section to paid the unpaid activities with wages. For a more detailed explanation of the first half of this code see the details in the activity_formal section. The second half of this code uses the above crosswalk and inputs the median wage calculated for the paired activities into the unpaid activity.
+
+```{r informal_chunk_04, message=FALSE, warning=FALSE}
+# Load asec formal care activities
+asec <- read.csv("./data/CSV/ASECdata.csv") |>
+  filter(AGE >= 18) |>
+  filter(YEAR == max(YEAR)) |> 
+  filter(empstat == "Employed") |>
+  filter(INCWAGE != 0 & INCWAGE != 99999999) |>
+  select(YEAR, OCC2010, occ_label, occ_care_focus, INCWAGE, ASECWT, STATEFIP) |> 
+  clean_names() |> 
+  mutate(occ2010 = as.numeric(occ2010))
+
+df <- list()
+activity <- act_cross$activity
+
+for (sel_activity in activity) {
+  codes <- act_cross %>%
+    filter(activity == sel_activity)
+  
+  df[[sel_activity]] <- asec %>%
+    filter(
+      occ2010 >= codes$occ_code_start &
+      occ2010 <= codes$occ_code_end
+    ) %>%
+    group_by(statefip) %>%
+    summarise(
+      median_wage = wtd.quantile(incwage, weights = asecwt, probs = 0.5),
+      .groups = "drop"
+    ) %>%
+    mutate(activity_name = sel_activity) %>%
+    relocate(activity_name, statefip) %>%
+    rename(geo_level = statefip)
+}
+
+# Combine all activity-level results into one dataframe
+median_wage_states <- bind_rows(df)
+
+
+median_wage_states$geo_level <- sprintf("%02d", as.numeric(median_wage_states$geo_level))
+median_wage_states$geo_level <- paste0("state", median_wage_states$geo_level)
+```
+
+::: callout-note
+#### Code Explanation
+
+It reads `./data/CSV/ASECdata.csv` into memory and prepares those inputs for the transformations that follow. Technically, it uses `filter()`, `mutate()`, `select()`, `rename()`, `clean_names()`, `group_by()`, `summarise()`, `bind_rows()`, `relocate()` to restrict the analytic universe, create derived variables, reshape records, join lookup tables, and/or aggregate weighted statistics. The iteration step loops across years, states, datasets, categories, or demographic groups and binds the repeated results into a single analysis table. The statistical work in this chunk calculates weighted counts, rates, rolling values, medians, changes over time, or inequality measures used in the published indicators.
+:::
+
+```{r, message=FALSE, warning=FALSE}
+# National
+
+df <- list()
+activity <- act_cross$activity
+
+for (sel_activity in activity) {
+  codes <- act_cross %>%
+    filter(activity == sel_activity)
+  
+  df[[sel_activity]] <- asec %>%
+    filter(
+      occ2010 >= codes$occ_code_start &
+      occ2010 <= codes$occ_code_end
+    ) %>%
+    summarise(
+      median_wage = wtd.quantile(incwage, weights = asecwt, probs = 0.5),
+      .groups = "drop"
+    ) %>%
+    mutate(activity_name = sel_activity)
+}
+
+# Combine all activity-level results into one dataframe
+median_wage <- bind_rows(df)
+
+median_wage$geo_level = "national"
+
+median_wage <- rbind(median_wage_states, median_wage)
+```
+
+::: callout-note
+#### Code Explanation
+
+Technically, it uses `filter()`, `mutate()`, `summarise()`, `bind_rows()` to restrict the analytic universe, create derived variables, reshape records, join lookup tables, and/or aggregate weighted statistics. The iteration step loops across years, states, datasets, categories, or demographic groups and binds the repeated results into a single analysis table. The statistical work in this chunk calculates weighted counts, rates, rolling values, medians, changes over time, or inequality measures used in the published indicators. The main objects created or updated here are `df`, `activity`, `codes`, `median_wage`, `.groups`.
+:::
+
+
+# Output Required Files
+
+The code below outputs the datasets into a format to be used on The Care Board.
+
+## Activity Informal
+
+Finally we can output the files by creating our two datasets . The first dataset called activity_informal is presented below following the code which exports it. The activity informal dataset is used to compile some specific details about each unpaid activity. For now the only detail is the shadow wage value.
+
+```{r unpaid informal output, message=FALSE, warning=FALSE}
+activity_informal <- activity_stats |>  # pipe
+# Select/reorder columns
+select(activity_id, activity_name, care_focus, geo_level) |>  # pipe
+# Join datasets with left_join
+left_join(median_wage, by = c("activity_name", "geo_level")) |>  # pipe 
+  rename(
+    id = activity_id, 
+    name = activity_name
+    )  |>  # pipe
+# Select/reorder columns
+select(id, name, care_focus, median_wage, geo_level)
+
+activity_informal$median_wage[is.na(activity_informal$median_wage)] <- "NULL"
+
+
+write_careboard_outputs(
+  activity_informal,
+  "activity_informal",
+  app_path = "./app_data/activity_informal.csv"
+)
+```
+
+::: callout-note
+#### Code Explanation
+
+Technically, it uses `select()`, `rename()`, `left_join()` to restrict the analytic universe, create derived variables, reshape records, join lookup tables, and/or aggregate weighted statistics. It writes the resulting table through the shared export helper, producing app-facing files and/or replication copies in CSV, Stata, and Excel formats. The main objects created or updated here are `activity_informal`, `id`, `name`, `app_path`.
+:::
+
+
+```{r unpaid informal view, message=FALSE, warning=FALSE, eval=knitr::is_html_output()}
+
+# Prep display data: rename + parse wage
+activity_informal_disp <- activity_informal |>
+  rename(
+    ID = id,
+    Name = name,
+    `Care Focus` = care_focus,
+    `Median Annual Earnings ($)` = median_wage,
+    `Geo Level` = geo_level
+  ) |>
+  mutate(
+    `Median Annual Earnings ($)` = parse_number(`Median Annual Earnings ($)`)
+  )
+
+# Numeric columns
+num_cols <- c("Median Annual Earnings ($)")
+
+# Build the datatable
+DT::datatable(
+  activity_informal_disp,
+  rownames = FALSE,
+  filter = "top",
+  extensions = c("Buttons", "FixedHeader", "ColReorder", "Responsive"),
+  options = list(
+    pageLength = 25,
+    lengthMenu = c(10, 25, 50, 100),
+    dom = "Bfrtip",
+    buttons = list(
+      list(extend = "copy",  title = "activity_informal"),
+      list(extend = "csv",   title = "activity_informal"),
+      list(extend = "excel", title = "activity_informal"),
+      list(extend = "print")
+    ),
+    fixedHeader = TRUE,
+    colReorder = TRUE,
+    autoWidth = TRUE,
+    columnDefs = list(
+      list(
+        className = "dt-right",
+        targets = which(names(activity_informal_disp) %in% num_cols) - 1
+      )
+    )
+  ),
+  caption = htmltools::tags$caption(
+    style = "caption-side: top; text-align:left; font-weight:600; font-size:1.05em; margin-bottom:8px;",
+    "Informal Activity Summary (interactive: filter columns, reorder, and export)"
+  )
+) |>
+  # Format with commas + 2 decimals
+  formatCurrency(num_cols, currency = "", interval = 3, mark = ",", digits = 2)
+```
+
+::: callout-note
+#### Code Explanation
+
+Technically, it uses `mutate()`, `rename()` to restrict the analytic universe, create derived variables, reshape records, join lookup tables, and/or aggregate weighted statistics. The display code builds a diagnostic plot, publication figure, static table, or interactive HTML table from the objects created earlier. The main objects created or updated here are `activity_informal_disp`, `ID`, `Name`, `num_cols`, `rownames`.
+:::
+
+
+### Activity Informal Datum
+
+Finally we output the activity informal datum file which includes information about the population of people involved in each unpaid activity as well as the time spent across the population on this activity.
+
+```{r informal_chunk_07, message=FALSE, warning=FALSE}
+activity_informal_datum <- activity_stats |>  # pipe
+# Create or modify columns
+mutate(
+    provider_attention = case_when(
+      activity_id == "secondary-childcare" ~ "passive_child",
+      activity_id == "secondary-eldercare" ~ "passive_elder",
+      TRUE ~ "active"
+      )
+    ) |>  # pipe
+# Select/reorder columns
+select(activity_id, geo_level, provider_attention, provision_interval, population)
+
+write_careboard_outputs(
+  activity_informal_datum,
+  "activity_informal_datum",
+  app_path = "./app_data/activity_informal_datum.csv"
+)
+```
+
+::: callout-note
+#### Code Explanation
+
+Technically, it uses `mutate()`, `select()` to restrict the analytic universe, create derived variables, reshape records, join lookup tables, and/or aggregate weighted statistics. It writes the resulting table through the shared export helper, producing app-facing files and/or replication copies in CSV, Stata, and Excel formats. The main objects created or updated here are `activity_informal_datum`, `provider_attention`, `activity_id`, `app_path`.
+:::
+
+
+```{r informal_datum_view, message=FALSE, warning=FALSE, eval=knitr::is_html_output()}
+
+# Prep display data: rename + safely coerce numerics
+activity_informal_datum_disp <- activity_informal_datum |>
+  rename(
+    `Activity ID`        = activity_id,
+    `Geo Level`          = geo_level,
+    `Provider Attention` = provider_attention,
+    `Provision Interval` = provision_interval,
+    Population           = population
+  ) |>
+  mutate(
+    across(
+      c(`Provision Interval`, Population),
+      \(x) if (is.numeric(x)) x else parse_number(x)
+    )
+  )
+
+# Numeric columns
+num_cols <- c("Provision Interval", "Population")
+
+DT::datatable(
+  activity_informal_datum_disp,
+  rownames = FALSE,
+  filter = "top",
+  extensions = c("Buttons", "FixedHeader", "ColReorder", "Responsive"),
+  options = list(
+    pageLength = 25,
+    lengthMenu = c(10, 25, 50, 100),
+    dom = "Bfrtip",
+    buttons = list(
+      list(extend = "copy",  title = "activity_informal_datum"),
+      list(extend = "csv",   title = "activity_informal_datum"),
+      list(extend = "excel", title = "activity_informal_datum"),
+      list(extend = "print")
+    ),
+    fixedHeader = TRUE,
+    colReorder  = TRUE,
+    autoWidth   = TRUE,
+    columnDefs  = list(
+      list(
+        className = "dt-right",
+        targets = which(names(activity_informal_datum_disp) %in% num_cols) - 1
+      )
+    )
+  ),
+  caption = htmltools::tags$caption(
+    style = "caption-side: top; text-align:left; font-weight:600; font-size:1.05em; margin-bottom:8px;",
+    "Informal Activity (Datum) - interactive: filter columns, reorder, and export"
+  )
+) |>
+  # Big integers; no decimals
+  formatCurrency(num_cols, currency = "", interval = 3, mark = ",", digits = 0)
+```
+
+::: callout-note
+#### Code Explanation
+
+Technically, it uses `mutate()`, `rename()` to restrict the analytic universe, create derived variables, reshape records, join lookup tables, and/or aggregate weighted statistics. The display code builds a diagnostic plot, publication figure, static table, or interactive HTML table from the objects created earlier. The main objects created or updated here are `activity_informal_datum_disp`, `Population`, `num_cols`, `rownames`, `filter`.
+:::

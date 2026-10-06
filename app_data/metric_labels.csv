@@ -1,0 +1,34 @@
+id,metric_id,category_id,subcategory_id,type,label
+care-gini:::ratio,care-gini,,,ratio,Inequality in the distribution of care jobs
+care-ratio:::ratio,care-ratio,,,ratio,Metric combining inequality with general resource wealth.
+formal-care-labor-force:::count,formal-care-labor-force,,,count,# in Care Force
+formal-care-labor-force:::percent,formal-care-labor-force,,,percent,% of All Adults
+formal-care-time:::interval,formal-care-time,,,interval,Hours per Day
+formal-care-time:::percent,formal-care-time,,,percent,% of Formal Hours per Day
+formal-value:::dollar,formal-value,,,dollar,$ per Day
+formal-value:::percent,formal-value,,,percent,% of the Economy
+informal-care-labor-force:::count,informal-care-labor-force,,,count,# in Care Force
+informal-care-labor-force:::percent,informal-care-labor-force,,,percent,% of All Adults
+informal-care-time:::interval,informal-care-time,,,interval,Hours per Day
+informal-care-time:::percent,informal-care-time,,,percent,% of Informal Hours per Day
+informal-value:::dollar,informal-value,,,dollar,$ per Day
+informal-value:::percent,informal-value,,,percent,% of the Economy
+sandwich-population:::count,sandwich-population,,,count,# of Adults
+sandwich-population:::percent,sandwich-population,,,percent,% of All Adults
+sandwich-time:::count,sandwich-time,,,count,Hours per Day
+sandwich-time:::interval,sandwich-time,,,interval,Median Time per Day per Caregiver
+mothers-labor-force-participation:::count,mothers-labor-force-participation,,,count,# in Labor Force
+mothers-labor-force-participation:::percent,mothers-labor-force-participation,,,percent,% in Labor Force
+mothers-care-absence:::count,mothers-care-absence,,,count,# Taking Time Off
+mothers-care-absence:::percent,mothers-care-absence,,,percent,% Taking Time off
+fathers-labor-force-participation:::count,fathers-labor-force-participation,,,count,# in Labor Force
+fathers-labor-force-participation:::percent,fathers-labor-force-participation,,,percent,% in Labor Force
+fathers-care-absence:::count,fathers-care-absence,,,count,# Taking Time Off
+fathers-care-absence:::percent,fathers-care-absence,,,percent,% Taking Time off
+mothers-nilf-care:::count,mothers-nilf-care,,,count,# NILF for care
+mothers-nilf-care:::percent,mothers-nilf-care,,,percent,% NILF for care
+fathers-nilf-care:::count,fathers-nilf-care,,,count,# NILF for care
+fathers-nilf-care:::percent,fathers-nilf-care,,,percent,% NILF for care
+maternal-bargaining-power:::ratio,maternal-bargaining-power,,,ratio,Mother's share of parents' combined wage and salary income
+care-privilege:::count,care-privilege,,,count,# of Adults
+care-privilege:::percent,care-privilege,,,percent,% of All Adults

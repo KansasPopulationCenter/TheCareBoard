@@ -1,0 +1,241 @@
+﻿---
+title: "Market"
+format:
+  html:
+    toc: true
+    code-overflow: wrap
+    df-print: paged
+  pdf:
+    toc: true
+execute:
+  warning: false
+  message: false
+editor: visual
+---
+
+The country's current age distribution represents the baseline demand for care by life stage. Understanding the shape of age profiles helps forecast shifts in service needs over time. This analysis uses the ASEC dataset to construct a national age distribution. Due to privacy and sample-size constraints, we collapse the upper tail:
+
+-   **80** represents individuals aged **80-84**
+
+-   **85** represents individuals aged **85+**
+
+# Overview
+
+This file builds the age distribution that anchors The Care Board's market and care-need calculations. The output is intentionally simple: one row per age bin with a population estimate. `market_datum.qmd` expands this table across care focus categories and adds estimates of care need and care provision. Together, these files support the market logic used in care demand, care supply, and care-ratio views.
+
+**Outputs.** This workflow writes `market` to `app_data/` for the website and to `data/CSV/`, `data/Dta/`, and `data/Excel/` for replication.
+
+**Key sources.** The source microdata come from CPS ASEC via IPUMS CPS. See the Census Bureau's [CPS ASEC documentation](https://www.census.gov/data/datasets/time-series/demo/cps/cps-asec.html).
+
+## Introduction and Literature Context
+
+Age structure is one of the simplest and most powerful predictors of care demand. Children, working-age adults, and older adults have different expected needs for developmental care, health care, and daily-living support. The Care Board starts its market model with the national age distribution because all later need and provision estimates are anchored to the number of people at each life stage.
+
+The ASEC is appropriate for this step because it provides nationally representative person weights and age in a file already used throughout the paid-care pipeline. This document intentionally produces a narrow output: a complete age-by-population table that can be audited before more complex assumptions are added in `market_datum.qmd`.
+
+## Methodological Decisions
+
+| Decision | Implementation | Rationale |
+|---|---|---|
+| Source | Use the most recent cleaned ASEC file | Keeps the baseline age profile aligned with the rest of the Care Board release. |
+| Age bins | Keep ages 0-79 as single years; collapse 80-84 into 80 and 85+ into 85 | Maintains detail while protecting sparse upper-tail age cells. |
+| Weighting | Sum ASEC person weights within each age bin | Produces a population-level denominator rather than a sample count. |
+| Output | Write `market.csv` before estimating care needs | Allows the age baseline to be checked independently. |
+
+## Policy Implications
+
+Population aging and child population shifts change the scale and mix of care infrastructure a community needs. A transparent age baseline helps policymakers connect demographic change to workforce planning, service capacity, Medicaid and long-term-services planning, child care demand, and local economic development.
+
+### Preliminaries
+
+This chunk loads shared defaults (packages, themes, helper options) used throughout the project. It expects `R/load_defaults.R` to attach packages such as **tidyverse**, **janitor**, **ggplot2**, and **scales** that are used below.
+
+```{r market setup, message=FALSE, warning=FALSE}
+source("R/load_defaults.R")
+```
+
+::: callout-note
+#### Code Explanation
+
+This chunk sources `R/load_defaults.R` so the later code has the required functions, defaults, and shared helpers.
+:::
+
+
+### Load and Prepare Current-Year ASEC Data
+
+This section constructs a complete age index (single-year bins through 79, plus 80 for ages 80-84 and 85 for ages 85+), loads the most recent ASEC microdata snapshot, aggregates person weights to obtain population by age, ensures that all age bins are present (filling missing bins as zero), and writes a clean CSV used by the app.
+
+We create the set of age bins used in the analysis: 0-79 as single years, **80** (80-84), and **85** (85+).
+
+```{r market prepare_data, message=FALSE, warning=FALSE}
+# Age bins: 0..79 (single-year), 80 = 80-84, 85 = 85+
+age_index <- tibble(age = c(0:79, 80, 85))
+```
+
+::: callout-note
+#### Code Explanation
+
+The main objects created or updated here are `age_index`.
+:::
+
+
+### Load ASEC data
+
+We load the ASEC microdata, keep the latest survey year, and retain only the variables needed for weighting.
+
+```{r market Load data, message=FALSE, warning=FALSE}
+# Load latest ASEC microdata and keep only age and person weight
+age_data <- read.csv("./data/CSV/ASECdata.csv") |>
+  filter(YEAR == max(YEAR)) |>
+  select(AGE, ASECWT) |>
+  clean_names()    # -> age, asecwt
+```
+
+::: callout-note
+#### Code Explanation
+
+It reads `./data/CSV/ASECdata.csv` into memory and prepares those inputs for the transformations that follow. Technically, it uses `filter()`, `select()`, `clean_names()` to restrict the analytic universe, create derived variables, reshape records, join lookup tables, and/or aggregate weighted statistics. The main objects created or updated here are `age_data`.
+:::
+
+
+### Create Population Estimates
+
+We align ASEC ages to the analysis bins (collapse 81-84 -> 80; 85+ -> 85), then sum weights to obtain nationally representative population estimates by age.
+
+```{r market Summarise Data, message=FALSE, warning=FALSE}
+# Collapse upper-tail ages to match published bins
+#  - 81-84  -> 80
+#  - 85+    -> 85
+age_binned <- age_data |>
+  mutate(
+    age = case_when(
+      age >= 85 ~ 85L,
+      age >= 81 & age <= 84 ~ 80L,
+      TRUE ~ as.integer(age)
+    )
+  )
+
+# Sum person weights to obtain population counts by age bin
+age_pop <- age_binned |>
+  group_by(age) |>
+  summarise(population = sum(asecwt, na.rm = TRUE), .groups = "drop")
+
+# Complete join so all bins (including empty ones) appear; fill missing with 0
+age_modified <- age_index |>
+  full_join(age_pop, by = "age") |>
+  arrange(age)
+```
+
+::: callout-note
+#### Code Explanation
+
+Technically, it uses `mutate()`, `group_by()`, `summarise()`, `arrange()`, `full_join()` to restrict the analytic universe, create derived variables, reshape records, join lookup tables, and/or aggregate weighted statistics. The statistical work in this chunk calculates weighted counts, rates, rolling values, medians, changes over time, or inequality measures used in the published indicators. The main objects created or updated here are `age_binned`, `age`, `age_pop`, `age_modified`.
+:::
+
+
+### Write data
+
+We export the processed age distribution for use in the application.
+
+```{r market Write Data, message=FALSE, warning=FALSE}
+# Save processed data for the app and replication archive
+write_careboard_outputs(
+  age_modified,
+  "market",
+  app_path = "./app_data/market.csv"
+)
+```
+
+::: callout-note
+#### Code Explanation
+
+It writes the resulting table through the shared export helper, producing app-facing files and/or replication copies in CSV, Stata, and Excel formats. The main objects created or updated here are `app_path`.
+:::
+
+
+### Data Check
+
+The plot below shows the distribution of the estimations of age within our data. This distribution can be used to check that the results that were exported make sense and fit with a general understanding of the age distributions.
+
+```{r market view_plot, message=FALSE, warning=FALSE, fig.width=8, fig.height=4}
+# Plot a simple age distribution from a data frame with columns `age` and `population`
+plt_dist <- function(df) {
+  p <- ggplot() +
+    geom_col(
+      data = df,
+      aes(x = age, y = population)
+    ) +
+    theme_minimal() +
+    theme(axis.title = element_blank()) +
+    scale_y_continuous(labels = scales::comma) +
+    ggtitle(label = paste(
+      "total population:",
+      scales::comma(sum(age_modified$population))
+    ))
+
+  return(p)
+}
+
+# Render the plot
+plt_dist(age_modified)
+```
+
+::: callout-note
+#### Code Explanation
+
+It defines `plt_dist()`, which encapsulates repeated logic used by later chunks. The statistical work in this chunk calculates weighted counts, rates, rolling values, medians, changes over time, or inequality measures used in the published indicators. The display code builds a diagnostic plot, publication figure, static table, or interactive HTML table from the objects created earlier. The main objects created or updated here are `plt_dist`, `p`, `data`.
+:::
+
+
+## Market Data
+
+The table below shows the final table with the ages and the population and provides a link to download it.
+
+```{r market data view, eval=knitr::is_html_output()}
+age_disp <- age_modified |>
+  rename(Age = age, Population = population)
+
+# Compute valid 0-based targets dynamically
+targets_right <- seq_along(age_disp) - 1  # c(0, 1)
+
+datatable(
+  age_disp,
+  rownames = FALSE,
+  filter = "top",
+  extensions = c("Buttons", "FixedHeader", "ColReorder", "Responsive"),
+  options = list(
+    pageLength = 25,
+    lengthMenu = c(10, 25, 50, 100),
+    dom = "Bfrtip",
+    buttons = list(
+      list(extend = "copy",  title = "age_modified"),
+      list(extend = "csv",   title = "age_modified"),
+      list(extend = "excel", title = "age_modified"),
+      list(extend = "print")
+    ),
+    fixedHeader = TRUE,
+    colReorder = TRUE,
+    autoWidth = TRUE,
+    columnDefs = list(
+      list(className = "dt-right", targets = targets_right)
+    )
+  ),
+  caption = htmltools::tags$caption(
+    style = "caption-side: top; text-align:left; font-weight:600; font-size:1.05em; margin-bottom:8px;",
+    "Population by Single Year of Age (interactive)"
+  )
+) |>
+  formatRound("Age", digits = 0) |>
+  formatCurrency("Population", currency = "", interval = 3, mark = ",")
+```
+
+::: callout-note
+#### Code Explanation
+
+Technically, it uses `rename()` to restrict the analytic universe, create derived variables, reshape records, join lookup tables, and/or aggregate weighted statistics. The display code builds a diagnostic plot, publication figure, static table, or interactive HTML table from the objects created earlier. The main objects created or updated here are `age_disp`, `targets_right`, `rownames`, `filter`, `extensions`.
+:::
+
+
+## Data Sources
+
+Sarah Flood, Miriam King, Renae Rodgers, Steven Ruggles, J. Robert Warren, Daniel Backman, Annie Chen, Grace Cooper, Stephanie Richards, Megan Schouweiler, and Michael Westberry. IPUMS CPS: Version 12.0 \[dataset\]. Minneapolis, MN: IPUMS, 2024. https://doi.org/10.18128/D030.V12.0

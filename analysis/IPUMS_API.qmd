@@ -1,0 +1,215 @@
+﻿---
+title: "IPUMS API Data Download"
+format:
+  html:
+    toc: true
+    code-overflow: wrap
+    df-print: paged
+  pdf:
+    toc: true
+execute:
+  eval: false
+  warning: false
+  message: false
+editor: visual
+---
+
+## Overview
+
+This file documents the one-time IPUMS extract workflow used to obtain the raw CPS Monthly and CPS ASEC files that feed The Care Board. It is part of the reproducibility record, not a routine website build step. The document is configured with `execute: eval: false` so it can be rendered to PDF without submitting new API requests.
+
+When the extract needs to be refreshed, run the chunks interactively. The setup chunk checks for an `IPUMS_API_KEY` environment variable; if it is not already set, it asks the user to enter the key in the terminal and waits for the response. The download chunk writes the `.dat.gz` and `.xml` files directly into `data/IPUMS Pulls/`, where `data_processing.qmd` reads them. After a refresh, update the `ddi_cps` and `ddi_asec` paths in the setup chunk of `data_processing.qmd` to the new `cps_00NNN.xml` filenames the loop prints.
+
+**Outputs.** This workflow downloads raw IPUMS extract files. It does not create website-ready CSV, Stata, or Excel files directly; those are created by `data_processing.qmd` after the raw extracts are cleaned and harmonized.
+
+**Key sources.** The IPUMS API workflow follows the `ipumsr` [API documentation for R users](https://tech.popdata.org/ipumsr/articles/ipums-api.html). Users of the resulting data should follow [IPUMS CPS citation guidance](https://cps.ipums.org/cps/citation.shtml).
+
+## Introduction and Literature Context
+
+Public data infrastructure is part of the methodology. The Care Board relies on IPUMS because it provides harmonized CPS and ASEC microdata, stable metadata, and reproducible extract definitions. That matters for public policy research: when the same extract can be recreated, users can audit whether estimates reflect measurement choices rather than hidden data handling.
+
+This file is intentionally separated from routine statistic generation. Downloading raw extracts is an upstream step, while `data_processing.qmd` is the cleaning step and the statistic files are the measurement step. Keeping those responsibilities separate makes the public release easier to replicate and easier to update when new survey years become available.
+
+## Methodological Decisions
+
+| Decision | Implementation | Rationale |
+|---|---|---|
+| Credential handling | Prompt for the IPUMS key at runtime when `IPUMS_API_KEY` is unset | Keeps public code free of private credentials. |
+| Extract definition | Store sample IDs and variable lists in code and CSV inputs | Documents exactly what raw survey content is requested. |
+| Execution default | Keep `execute: eval: false` | Prevents accidental API submissions during PDF rendering. |
+| Downstream handoff | Download `.xml` and `.dat.gz` files straight into `data/IPUMS Pulls/` | Gives `data_processing.qmd` a stable raw-data location with no manual move step. |
+
+## Policy Implications
+
+Credential-free, reproducible data pulls are important for public trust. They let researchers, agencies, and community partners rebuild the Care Board inputs without exposing private API keys or relying on undocumented local files. That transparency is especially important when the resulting statistics may inform workforce, family, and care-infrastructure decisions.
+
+This file uses the **IPUMS API** to programmatically download the CPS microdata used to produce The Care Board statistics. All code chunks in this file are set to `eval=FALSE` and are not executed when the file is rendered. They are intended to be run once - either manually in an R script or by setting `eval=TRUE` temporarily - to download and save the raw IPUMS data files. Subsequent files in the pipeline read from those saved files directly.
+
+If you wish to replicate The Care Board data without re-downloading from IPUMS, skip this file entirely and use the `.xml` and `.dat` files already stored in the `data/IPUMS Pulls/` folder.
+
+## Data Sources
+
+The two datasets downloaded here are the **CPS Monthly** and the **CPS ASEC**, both accessed through IPUMS CPS.
+
+The **Current Population Survey (CPS)** is a monthly survey of approximately 60,000 households conducted jointly by the U.S. Census Bureau and the Bureau of Labor Statistics (BLS). It is the primary source of national labor force statistics, including employment, unemployment, and workforce participation.
+
+The **Current Population Survey Annual Social and Economic Supplement (CPS ASEC)** is a yearly supplement to the monthly CPS, conducted each March. It expands the monthly sample with additional oversampled households to improve estimates for specific population subgroups. While the monthly CPS focuses on labor force characteristics, the ASEC collects detailed information on income, poverty, and health insurance coverage, making it the primary source for official U.S. poverty estimates and income distribution statistics. The Care Board uses the CPS ASEC to compile earnings and income data for workers in the formal care economy.
+
+## IPUMS and API Access
+
+**IPUMS (Integrated Public Use Microdata Series)** is a project maintained by the Minnesota Population Center at the University of Minnesota. It provides harmonized microdata from national and international surveys and censuses, making large-scale individual- and household-level data accessible and comparable across time and geography.
+
+IPUMS CPS data is available through a free API key. The code below never stores a project API key in the public repository. It uses a terminal prompt when no `IPUMS_API_KEY` environment variable is available.
+
+When using this data, please cite IPUMS CPS as follows:
+
+> Sarah Flood, Miriam King, Renae Rodgers, Steven Ruggles, J. Robert Warren, Daniel Backman, Annie Chen, Grace Cooper, Stephanie Richards, Megan Schouweiler, and Michael Westberry. *IPUMS CPS: Version 12.0* [dataset]. Minneapolis, MN: IPUMS, 2024. <https://doi.org/10.18128/D030.V12.0>
+
+## Setup
+
+The chunk below loads the required libraries and registers the user's IPUMS API key for the current R session. The shared helper first checks `IPUMS_API_KEY`; if that variable is empty, it asks for the key in the terminal.
+
+```{r Setup}
+source("R/load_libraries.R")
+register_ipums_api_key(save = FALSE)
+```
+
+::: callout-note
+#### Code Explanation
+
+This chunk sources `R/load_libraries.R` so the later code has the required functions, defaults, and shared helpers. This chunk registers an API key through the shared terminal-prompt helper, which keeps credentials out of the public QMD while still allowing the data pull to run interactively.
+:::
+
+
+## Samples
+
+IPUMS CPS organizes data into discrete sample IDs that correspond to specific survey months and supplements. The sample ID lists used here are stored as CSV files in the `data/CSV/` folder. The ASEC list contains only the annual March supplement samples; the CPS list contains all monthly survey samples across the relevant years.
+
+```{r Samples}
+samples_asec <- read.csv("./data/CSV/ASECSampleIDs.csv")$ASEC_Sample_IDs
+samples_cps  <- read.csv("./data/CSV/CPSSampleIDs.csv")$CPS_Sample_IDs
+```
+
+::: callout-note
+#### Code Explanation
+
+It reads `./data/CSV/ASECSampleIDs.csv`, `./data/CSV/CPSSampleIDs.csv` into memory and prepares those inputs for the transformations that follow. The main objects created or updated here are `samples_asec`, `samples_cps`.
+:::
+
+
+## Variables
+
+The chunk below defines which variables to request from IPUMS for each dataset. Variables are grouped into three lists:
+
+- **`var_common`**: Variables present in both the monthly CPS and the CPS ASEC, covering demographics, geography, employment, and family structure.
+- **`var_asec`**: Extends `var_common` with ASEC-specific variables, primarily income, earnings weights, and poverty status.
+- **`var_cps`**: Extends `var_common` with monthly CPS-specific variables, primarily detailed workforce classification, earnings, and care-related indicators.
+
+```{r Variables}
+var_common <- c(
+  "PERNUM",
+  "REGION",
+  "STATEFIP",
+  "SEX",
+  "RACE",
+  "HISPAN",
+  "AGE",
+  "EDUC",
+  "MARST",
+  "MOMLOC",
+  "POPLOC",
+  "FAMSIZE",
+  "NCHILD",
+  "YNGCH",
+  "IND1990",
+  "OCC2010",
+  "EMPSTAT",
+  "WKSTAT",
+  "AHRSWORKT",
+  "ABSENT",
+  "WHYABSNT"
+)
+
+var_asec <- c(
+  var_common,
+  "EARNWT",
+  "UHRSWORKT",
+  "INCWAGE",
+  "POVERTY"
+)
+
+var_cps <- c(
+  var_common,
+  "LABFORCE",
+  "SPLOC",
+  "COMPWT",
+  "TELWRKPAY",
+  "WHYPTLWK",
+  "EARNWEEK2",
+  "EARNWT",
+  "CLASSWKR",
+  "DIFFCARE",
+  "NILFACT"
+)
+```
+
+::: callout-note
+#### Code Explanation
+
+The main objects created or updated here are `var_common`, `var_asec`, `var_cps`.
+:::
+
+
+## Download
+
+The chunk below submits extract requests to the IPUMS API for both the CPS ASEC and monthly CPS datasets and downloads the resulting files. The loop iterates over both datasets, creates an extract definition using the samples and variables defined above, submits the request, waits for IPUMS to process it, and then downloads the output files straight into `data/IPUMS Pulls/`, where `data_processing.qmd` reads them.
+
+Three details matter when re-running this loop. `wait_for_extract()` already polls the API on a backoff schedule, so no manual `Sys.sleep()` is needed between steps. Its default timeout is three hours, which is not enough for the monthly CPS extract - that request spans roughly 440 samples and produces a file over 1.5 GB - so the timeout is raised to eight hours. Finally, the loop prints the extract number for each dataset, because those numbers become the `cps_00NNN` filenames that must be pasted into the setup chunk of `data_processing.qmd`.
+
+```{r Download}
+out_dir <- "./data/IPUMS Pulls"
+dir.create(out_dir, recursive = TRUE, showWarnings = FALSE)
+
+data_sets <- c("asec", "cps")
+
+for (sel_data_set in data_sets) {
+
+  # Define the extract
+  cps_ext_def <- define_extract_micro(
+    collection  = "cps",
+    description = "Care Variable Extract",
+    samples     = get(paste0("samples_", sel_data_set)),
+    variables   = get(paste0("var_",     sel_data_set))
+  )
+
+  # Submit, then poll until IPUMS finishes building the extract. The monthly
+  # CPS request routinely runs past the three-hour default, so allow eight.
+  cps_ext_submitted <- submit_extract(cps_ext_def)
+  cps_ext_complete  <- wait_for_extract(
+    cps_ext_submitted,
+    timeout_seconds = 28800
+  )
+
+  # Download the .dat.gz and .xml directly into the folder data_processing.qmd
+  # reads from, so there is no manual file-moving step.
+  filepath <- download_extract(
+    cps_ext_complete,
+    download_dir = out_dir,
+    overwrite    = TRUE
+  )
+
+  print(paste0(
+    sel_data_set, " data downloaded as cps_",
+    formatC(cps_ext_complete$number, width = 5, flag = "0"),
+    " -> ", paste(filepath, collapse = ", ")
+  ))
+}
+
+print("API download complete.")
+```
+
+::: callout-note
+#### Code Explanation
+
+The iteration step loops across the two datasets, defines and submits an extract for each, waits for IPUMS to build it, and downloads the raw files directly into `data/IPUMS Pulls/`. `define_extract_micro(collection = "cps", ...)` replaces the older `define_extract_cps()`, which has been deprecated since ipumsr 0.8.0. The main objects created or updated here are `out_dir`, `data_sets`, `cps_ext_def`, `cps_ext_submitted`, `cps_ext_complete`, `filepath`.
+:::

@@ -1,0 +1,248 @@
+﻿---
+title: "Data Processing and Harmonization"
+format:
+  html:
+    toc: true
+    code-overflow: wrap
+    df-print: paged
+  pdf:
+    toc: true
+execute:
+  warning: false
+  message: false
+editor: visual
+---
+
+## Setup
+
+This file is the bridge between raw IPUMS extracts and the analytic datasets used by The Care Board. It reads the downloaded CPS Monthly, CPS ASEC, and ATUS files, applies shared recoding functions, joins project crosswalks, and writes cleaned microdata that downstream statistic files can read directly.
+
+The cleaning functions in `R/data_prep_functions.R` harmonize labels across surveys, create demographic categories, classify care occupations and activities, and keep a common column order. This makes the later statistic files easier to read because they can focus on measurement choices rather than repeated raw-data cleaning.
+
+**Outputs.** This workflow writes `CPSdata`, `ASECdata`, and `ATUSdata` to `data/CSV/`, `data/Dta/`, and `data/Excel/`. The Excel files may be split across sheets by the shared export helper when a table exceeds Excel's row limit.
+
+**Key sources.** The source files are IPUMS extracts from CPS, CPS ASEC, and ATUS. See the [IPUMS CPS citation guidance](https://cps.ipums.org/cps/citation.shtml), [IPUMS ATUS citation guidance](https://www.atusdata.org/atus/citation.shtml), and the `ipumsr` [API workflow documentation](https://tech.popdata.org/ipumsr/articles/ipums-api.html).
+
+## Introduction and Literature Context
+
+The Care Board combines labor-force, income, time-use, and demographic data in order to make care work visible across paid and unpaid settings. That requires a common analytic foundation. The [Current Population Survey](https://www.census.gov/programs-surveys/cps.html) provides the core monthly labor-force measures; the [CPS ASEC](https://www.census.gov/data/datasets/time-series/demo/cps/cps-asec.html) adds annual earnings, hours, poverty, and employment detail; and the [American Time Use Survey](https://www.bls.gov/tus/) records daily activity time. The broader care-economy literature emphasizes that care policy depends on seeing these domains together because unpaid household care, paid care employment, and labor-market outcomes are interdependent.
+
+This processing file is therefore a methodological control point. It documents how raw IPUMS extracts are converted into a consistent set of cleaned microdata files before any public statistics are calculated. The harmonization decisions made here determine which populations are included downstream, how demographic groups are labeled, and how care occupations and activities are identified.
+
+## Methodological Decisions
+
+| Decision | Implementation | Rationale |
+|---|---|---|
+| Use IPUMS harmonized extracts | Read DDI files through `ipumsr::read_ipums_micro()` | Preserves metadata and reduces survey-specific coding differences. |
+| Standardize demographics once | Apply shared recode functions from `R/data_prep_functions.R` | Keeps race/ethnicity, sex, parenthood, age, and labor-status definitions consistent across all statistics. |
+| Separate paid and unpaid classifications | Join occupation and activity crosswalks separately | Paid care is identified through occupations; unpaid care is identified through time-use activities. |
+| Write replication formats | Export CSV, Stata, and Excel files | Supports public review by researchers using different statistical tools. |
+
+## Policy Implications
+
+Transparent preprocessing matters because policy conclusions can change when definitions shift. A consistent data foundation allows users to compare care employment, unpaid time, wages, labor-force participation, and demographic burden without wondering whether each statistic silently used a different universe. For policy audiences, that makes the Care Board useful as a public accountability tool: the same cleaned files can support workforce planning, caregiving supports, state comparisons, and future replication.
+
+```{r}
+# Load required packages and custom functions
+source("R/load_libraries.R")
+source("R/data_prep_functions.R")
+
+# Load formal occupation codes and their care focus
+df_occ <- fread("./data/CSV/FormalOccs_Crossover.csv")  
+
+# Load activity codes and their care focus
+df_act <- fread("./data/CSV/ATUSActivityCrossover.csv") |> 
+  clean_names()
+
+# Define IPUMS CPS and ATUS DDI file paths
+ddi_cps <- "./data/IPUMS Pulls/cps_00453.xml"
+ddi_asec <- "./data/IPUMS Pulls/cps_00452.xml"
+ddi_atus <- "./data/IPUMS Pulls/atus_00035.xml"
+ddi_atus_eldercare <- "./data/IPUMS Pulls/atus_00036.xml"
+
+# Upper year bound for the ASEC and CPS extracts.
+#
+# Historically this held both surveys back to the latest year with a matching
+# ATUS release, so the three surveys stayed aligned. Raised to 2026 so the
+# monthly CPS series carries the Jan-Aug 2026 months now available from IPUMS;
+# broad_impacts.qmd consumes CPSdata monthly (grouped by date), so a partial
+# year adds months rather than distorting an annual total.
+#
+# This is a no-op for ASEC, which still ends at 2025 - the 2026 ASEC has not
+# been released. ATUS still ends at 2025, so ATUS-to-CPS comparisons should
+# continue to be drawn on or before 2025.
+max_asec_cps_year <- 2026
+```
+
+::: callout-note
+#### Code Explanation
+
+This chunk sources `R/load_libraries.R`, `R/data_prep_functions.R` so the later code has the required functions, defaults, and shared helpers. It reads `./data/CSV/FormalOccs_Crossover.csv`, `./data/CSV/ATUSActivityCrossover.csv`, `./data/IPUMS Pulls/cps_00453.xml`, `./data/IPUMS Pulls/cps_00452.xml` and other referenced files into memory and prepares those inputs for the transformations that follow. Technically, it uses `clean_names()` to restrict the analytic universe, create derived variables, reshape records, join lookup tables, and/or aggregate weighted statistics. The main objects created or updated here are `df_occ`, `df_act`, `ddi_cps`, `ddi_asec`, `ddi_atus`.
+:::
+
+
+## CPS
+
+The next code chunk utilizes the CPS DDI file pulled from IPUMS to create the monthly CPS dataset. It applies the transformations defined in `R/data_prep_functions.R` and joins the formal occupation crosswalk used to identify care economy jobs. The cleaned file is exported in CSV, Stata, and Excel formats for replication.
+
+```{r}
+# Release memory held by lookup tables created during R/data_prep_functions.R sourcing
+rm(list = ls(pattern = "^lookup"))
+gc()
+
+# Inform user that CPS microdata is being read
+message("Reading IPUMS CPS microdata...")
+
+# Read IPUMS CPS microdata
+micro_cps <- read_ipums_micro(ddi_cps)
+
+# Process CPS data with standardized recoding functions and join occupation metadata
+micro_cps <- micro_cps |> 
+  recode_all_common() |>          # Recode variables common across datasets
+  recode_asec_cps() |>            # Apply ASEC-specific recoding
+  recode_cps() |>                 # Apply CPS-specific recoding
+  filter(YEAR <= max_asec_cps_year) |>
+  select(any_of(col_order)) |>   # Select only desired columns (safe if some missing)
+  left_join(df_occ, by = c("OCC2010" = "code"))  # Join occupation labels
+
+# Export cleaned CPS data (CSV only; microdata is too large for Stata/Excel)
+write_careboard_outputs(micro_cps, "CPSdata", dta = FALSE, excel = FALSE)
+```
+
+::: callout-note
+#### Code Explanation
+
+It imports source data into memory using the survey, spreadsheet, database, directory, or API reader shown in the code. Technically, it uses `filter()`, `select()`, `left_join()` to restrict the analytic universe, create derived variables, reshape records, join lookup tables, and/or aggregate weighted statistics. It writes the resulting table through the shared export helper, producing app-facing files and/or replication copies in CSV, Stata, and Excel formats. The main objects created or updated here are `micro_cps`.
+:::
+
+
+## ASEC
+
+The next code chunk utilizes the ASEC DDI file pulled from IPUMS to create the annual ASEC dataset. It applies the shared transformations and joins the formal occupation crosswalk used to identify care economy jobs. The cleaned file is exported in CSV, Stata, and Excel formats for replication.
+
+```{r}
+# Inform user that ASEC microdata is being read
+message("Reading IPUMS ASEC microdata...")
+
+# Read IPUMS ASEC microdata
+micro_asec <- read_ipums_micro(ddi_asec)
+
+# Process ASEC data with standardized recoding functions and join occupation metadata
+micro_asec <- micro_asec |> 
+  recode_all_common() |>          # Recode variables common across datasets
+  recode_asec_cps() |>            # Apply shared ASEC/CPS-specific recoding
+  recode_asec() |>                # Apply ASEC-specific transformations
+  filter(YEAR <= max_asec_cps_year) |>
+  select(any_of(col_order)) |>   # Select consistent column order
+  left_join(df_occ, by = c("OCC2010" = "code"))  # Join occupation labels
+
+# Export cleaned ASEC data (CSV only; microdata is too large for Stata/Excel)
+write_careboard_outputs(micro_asec, "ASECdata", dta = FALSE, excel = FALSE)
+
+# Clean up memory
+rm(micro_asec)
+gc()
+```
+
+::: callout-note
+#### Code Explanation
+
+It imports source data into memory using the survey, spreadsheet, database, directory, or API reader shown in the code. Technically, it uses `filter()`, `select()`, `left_join()` to restrict the analytic universe, create derived variables, reshape records, join lookup tables, and/or aggregate weighted statistics. It writes the resulting table through the shared export helper, producing app-facing files and/or replication copies in CSV, Stata, and Excel formats. The main objects created or updated here are `micro_asec`.
+:::
+
+
+## ATUS
+
+Eldercare recipient characteristics come from the separate hierarchical extract
+`atus_00036`. Its recipient roster covers the prior-three-month care period, not
+individual diary activities. We retain `atus_00035` as the activity source and add
+one set of respondent features to every activity row, preserving diary time and
+weights. `eldercare_provider` cleans `ECPRIOR` to 1/0/NA, regardless of diary-day
+minutes. Up to five recipients retain separate age, relationship, and household
+fields; relationship indicators can identify more than one category per provider.
+See [ATUS_ELDERCARE.md](../docs/ATUS_ELDERCARE.md) for the variable dictionary, source
+coding details, and the ATUS-only refresh command. That command adds these fields
+to an existing cleaned CSV without rerunning CPS, ASEC, or aggregate statistics.
+
+The next code chunk is used to format the raw ATUS data. This is a little more complicated than the previous steps and occurs in three steps. The first code chunk does the same general activities as above, renaming and formatting variables to be consistent across datasets and joining a crossover file based on activities that have been labeled as care activities. We then join this ATUS data with the CPS data to pull certain variables about the respondents' employment from this. All respondents in the ATUS were in the CPS data and can be joined by the CPSIDP variable. We then export this file as a CSV file. Given the size of it we do not export this as an excel or DTA file.
+
+```{r}
+# Inform user that ATUS microdata is being read
+message("Reading IPUMS ATUS microdata...")
+
+# Read IPUMS ATUS microdata
+micro_atus <- read_ipums_micro(ddi_atus)
+
+# Apply standard recoding and join care activity crosswalk
+micro_atus <- micro_atus |> 
+  recode_all_common() |>                  # Recode variables common to all IPUMS files
+  recode_atus() |>                        # Apply ATUS-specific recodes
+  left_join(df_act, by = c("ACTIVITY" = "code")) |>  # Merge activity care-focus info
+  select(any_of(col_order)) |>           # Enforce column order
+  mutate(
+    act_care_focus = case_when(
+      developmental == 1 ~ "developmental",
+      daily_living == 1 ~ "daily_living", 
+      health == 1 ~ "health", 
+      TRUE ~ "non-care"
+    )
+  )
+
+# Inform user that CPS occupation data is being extracted for joining
+message("Extracting occupation care focus from CPS data...")
+
+
+# Get occupation care_focus labels from CPS data
+cps_occ <- micro_cps |> 
+  filter(YEAR >= min(micro_atus$YEAR) - 3) |>  # Use 3-year window before ATUS year
+  group_by(CPSIDP) |> 
+  filter(date == max(date)) |>                # Get latest available CPS record
+  ungroup() |> 
+  select(CPSIDP, date, occ_care_focus)
+
+# Clean up memory by removing large CPS data object
+rm(micro_cps)
+gc()
+
+# Define standard activity types
+act_types <- c("developmental", "health", "daily_living",
+               "paid_work", "formal_work", "child_care",
+               "elder_care", "householdcare", "selfcare",     
+               "leisure", "sleeping", "volunteering",
+               "education")
+```
+
+::: callout-note
+#### Code Explanation
+
+It imports source data into memory using the survey, spreadsheet, database, directory, or API reader shown in the code. Technically, it uses `filter()`, `mutate()`, `select()`, `group_by()`, `left_join()` to restrict the analytic universe, create derived variables, reshape records, join lookup tables, and/or aggregate weighted statistics. The main objects created or updated here are `micro_atus`, `act_care_focus`, `developmental`, `daily_living`, `health`.
+:::
+
+```{r}
+# Merge occupation data and fill NA values with 0 in activity flags
+micro_atus <- micro_atus |> 
+  left_join(
+    cps_occ |> rename(cps_date = date), 
+    by = "CPSIDP"
+  ) |> 
+  mutate(
+    across(all_of(act_types), ~replace_na(., 0))  # Fill activity flags with 0 if missing
+  )
+
+# Append respondent features after the existing activity and employment joins.
+# This preserves all old columns and avoids multiplying rows by recipients.
+micro_atus <- add_atus_eldercare(micro_atus, read_atus_eldercare(ddi_atus_eldercare))
+
+# Export cleaned ATUS data (CSV only; microdata is too large for Stata/Excel)
+write_careboard_outputs(micro_atus, "ATUSdata", dta = FALSE, excel = FALSE)
+```
+
+::: callout-note
+#### Code Explanation
+
+Technically, it uses `mutate()`, `rename()`, `left_join()` to restrict the analytic universe, create derived variables, reshape records, join lookup tables, and/or aggregate weighted statistics. It writes the resulting table through the shared export helper, producing app-facing files and/or replication copies in CSV, Stata, and Excel formats. The main objects created or updated here are `micro_atus`, `by`.
+:::
+
+
+\
+With this done, we now have the cleaned data that can be used to develop the various statistics for the Care Board.

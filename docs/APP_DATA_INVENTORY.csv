@@ -1,0 +1,23 @@
+file,kind,bytes,sha256,rows,date_min,date_max,description
+activity_formal.csv,csv,130415,e02cf4381fe4dff838ba53363d1a6a1b17442a241e3eece8ee9e76202f43c7e1,1299,,,Paid-care activity classification and wages
+activity_formal_datum.csv,csv,104712,5257541c924d352230f8427bf61e4d1faa12bfa25779d72c40049a345eba6cac,1299,,,Paid-care activity time and populations
+activity_informal.csv,csv,269350,4caa4178ecd38b0293993aee694b75813a14310aef4e2a5656333d4d8dd2bcec,3052,,,Unpaid-care activity classification and wages
+activity_informal_datum.csv,csv,248942,2e9004ede4e291b5c3d55eaa13989af67f9669b77a5e4820b39bb0c3a573cbfa,3052,,,"Unpaid-care activity attention, time, and populations"
+care_provider_datum.csv,csv,304575,311746da374e2287cf15f2db5282a9fa0daffbe78775d7f46ba8402bd1143d93,2919,,,Care-provider flows and time by demographic group
+care_provider_population.csv,csv,13569,c5f97a23d1523984ee6ee928eb8bf0fc6a4e462cdf9b7848cbce9496889631d1,312,,,Care-provider group population denominators
+market.csv,csv,1231,7588c12009c7bbf59d0d4b7f1032eba0f1ae12b510adc58f48f726d185e6bc39,82,,,Population by age
+market_datum.csv,csv,11788,5ae05c13685ebe0e4400810001d430c90a82b6eb4bab0f5df7c86125a4c4d70c,258,,,Care need and provision by age
+metric_labels.csv,csv,2690,68fe819b99469946a4c8575fdb9dce478fe005992e91549cebd6f10701c6b96c,33,,,Dashboard metric labels and display types
+metric_tables.xlsx,xlsx,16202,bd7a34959f6ee8efe0c972a71143169ed3b9cfa902f6d46a4d87140b92236e49,,,,Metric metadata used by the warehouse upload
+metrics_formal.csv,csv,4035240,3454fd98195619ecb1d577cb75d2d094afc5c72d3b0f74eb1d6643f25d9d15fd,36552,1990-01-01,2026-01-01,"Paid-care workforce, time, value, parental labor indicators"
+metrics_informal.csv,csv,3872196,f1f65bae4089636ae9953af22eb68d6bacd9c40c11b930a70302f74d12437458,30567,1994-01-01,2026-01-01,"Unpaid-care workforce, time, value, parental care/labor indicators"
+metrics_maternal_power.csv,csv,74777,057a246974aa8ac0494fbc0f91fe12c1e4460182aad0ff2d586d5af1190d4704,1872,1990-01-01,2025-01-01,Mothers' within-couple wage/salary income shares
+metrics_priviledge.csv,csv,53246,f534868e8b73953a04170bc2372a71425121c49b4eac97694ef85fccb45ff6c9,936,2007-01-01,2025-01-01,Care-privileged adult population and proportion
+metrics_sandwich_generation.csv,csv,24292,fdb5f4b469e5aff298362b38ba030bb9e3c807aef3906de57d95ae0b3e756d7a,306,2019-01-01,2025-01-01,Sandwich caregiving population and time
+metrics_state_care_gini.csv,csv,52751,2f457f1940eaee8c0ad2740cc665aa2ddee95d40de8bbbf8f65bbf72107e77fc,703,2010-01-01,2023-01-01,"Care-job Gini, location quotient, and CaRES"
+provider.csv,csv,84435,ff31b539190ea7c249d4d8799ab6763bf6e8b7869cc74c97d7ec12fa277fcb84,1606,,,Provider demographics and population
+provider_category.csv,csv,1502,c248a59e7f9b12a1388bc30fff429531191276045f1ec78a55fd1fff41747f59,39,,,Provider category definitions and display order
+provider_category.xlsx,xlsx,10155,3f18ca5d1da0c57658521aec863b02ab4db5796f68700772b3f7457227ca9794,,,,Provider category metadata workbook
+provider_datum.csv,csv,1162879,0b5969ff1c3acd8088dcd560d217ab2377d370c0e36960be982aa7463093be07,11018,,,"Provider time/populations by care type, focus, and attention"
+provider_group.xlsx,xlsx,9764,bb20c7f36ba8e1c98fb3c0f62740bfbf6b2e1f9334e00057cdbffa777c3e6ea6,,,,Provider demographic group metadata
+source.csv,csv,2271,72873a407a5ed829b62480571bc310f19f04fb7b967cc86bcf08f7c1210c0b62,8,,,Dashboard source and explanatory notes

@@ -1,0 +1,23 @@
+cff-version: 1.2.0
+message: "Version 2.0.0 is scheduled for public release on October 12, 2026. Please cite the version used and record its release tag or commit. See docs/LICENSE_AND_CITATION.md and docs/releases/2.0.0/README.md."
+title: "The Care Board"
+type: dataset
+version: "2.0.0"
+# Planned publication date; confirm against the actual release when published.
+date-released: "2026-10-12"
+license: CC-BY-4.0
+authors:
+  - family-names: Heggeness
+    given-names: Misty
+  - family-names: Bommarito
+    given-names: Joseph
+  - family-names: Prewitt
+    given-names: Lucie
+url: "https://thecareboard.org/"
+repository-code: "https://github.com/KansasPopulationCenter/TheCareBoard"
+keywords:
+  - care economy
+  - unpaid care
+  - paid care
+  - time use
+  - caregiving

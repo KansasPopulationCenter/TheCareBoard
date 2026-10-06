@@ -1,0 +1,527 @@
+---
+title: "Care Resource Equity Methodology"
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    code-overflow: wrap
+    df-print: paged
+  pdf:
+    toc: true
+    toc-depth: 3
+execute:
+  warning: false
+  message: false
+  echo: true
+editor: visual
+date: 2026-07-22
+---
+
+# Overview
+
+This file builds the Care Board's state-level care-resource equity metrics. It replaces the earlier single Care Gini output with three related measures drawn from the CaRES framework described in Ahn and Bommarito's 2026 paper, *Beyond "care deserts": a new metric for mapping formal care employment equity in the United States*.
+
+The paper calculates separate measures for health care, education, and daily living. For The Care Board, the three care sectors are combined into one care-employment measure before the state and national metrics are calculated. The combined care measure uses the LODES Workplace Area Characteristics industry fields for Educational Services (`CNS15`), Health Care and Social Assistance (`CNS16`), and Accommodation and Food Services (`CNS18`).
+
+The three output columns are:
+
+-   **gini**: a population-weighted Gini coefficient that measures whether care jobs are evenly distributed across census tracts inside a state.
+-   **lq**: a combined care Location Quotient that measures whether care jobs make up a larger or smaller share of a state's employment than they do nationally.
+-   **cares**: the Care Resource Equity Score, calculated as standardized Gini minus standardized LQ and then linearly rescaled to a 0-1 display range. Higher values indicate states with higher internal inequality and/or lower relative care-employment concentration.
+
+**Outputs.** This workflow writes `metrics_state_care_gini` to `app_data/` for the website and to `data/CSV/`, `data/Dta/`, and `data/Excel/` for replication. The file now contains `gini`, `lq`, `cares`, `date`, and `geo_level`.
+
+**Key sources.** The employment data come from the Census LEHD/LODES Workplace Area Characteristics file. The population denominator comes from tract-level ACS five-year total population estimates downloaded from IPUMS NHGIS, with each year matched to the ACS five-year file ending in that year. The method follows the Care Gini, LQ, and CaRES logic from Ahn and Bommarito (2026).
+
+## Methodological Decisions
+
+| Decision | Implementation | Rationale |
+|------------------------|------------------------|------------------------|
+| Care industry definition | Sum `CNS15`, `CNS16`, and `CNS18` from WAC | Combines education, health care, and daily living into one Care Board measure. |
+| Geographic unit | Aggregate WAC blocks to census tracts, then calculate state and national metrics | Uses tract-level neighborhood variation while producing state-level website metrics. |
+| Population denominator | Use tract-level ACS five-year total population | Matches the paper's Gini denominator and the principle that care jobs should align with where people live. |
+| LQ denominator | Use total workplace employment from WAC (`C000`) | Measures care employment specialization relative to each state's overall workplace economy. |
+| CaRES scaling | Standardize Gini and LQ across state-year observations, calculate `z_gini - z_lq`, then rescale with `(cares_raw + 4) / 8` clipped to 0-1 | Places inequality and concentration on a common scale before combining them, while matching the Care Board page's 0-1 metric display range. |
+| Time period | Use the overlap between available WAC and NHGIS population years | Updates the paper's window through the latest WAC year currently in the project data while respecting available ACS population inputs. |
+
+## Policy Implications
+
+The Care Gini, LQ, and CaRES score describe different care-resource problems. A state can have care jobs that are evenly distributed but scarce overall, abundant but concentrated in a few places, or both scarce and uneven. Showing all three measures lets the Care Board distinguish access problems caused by internal spatial concentration from problems caused by low care-employment concentration relative to the national economy.
+
+# Setup
+
+The first chunk loads shared project helpers and defines small functions used throughout the file. The workflow is intentionally local-file based; it does not pull LODES or ACS data from APIs during execution.
+
+```{r cares setup, message=FALSE, warning=FALSE}
+source("R/load_defaults.R")
+
+wac_path <- "./data/CSV/workforce_area_characteristics.csv"
+population_candidates <- c(
+  "./data/CSV/nhgis_populationbytract.csv",
+  "./data/CSV/nighis_populationbytract.csv",
+  "./data/CSV/Tractlevel_totalpop_acs_2009_2023.csv",
+  "./data/CSV/tractlevel_totalpop_acs_2009_2023.csv",
+  "./data/CSV/Tractlevel_Employment.csv"
+)
+
+requested_years <- 2009:2023
+care_industry_cols <- c("CNS15", "CNS16", "CNS18")
+territory_fips <- c("60", "66", "69", "72", "78")
+
+format_state_geo <- function(state_fips) {
+  paste0("state", stringr::str_pad(as.character(state_fips), 2, pad = "0"))
+}
+
+weighted_gini <- function(x, weights) {
+  ok <- !is.na(x) & !is.na(weights) & weights > 0
+  x <- as.numeric(x[ok])
+  weights <- as.numeric(weights[ok])
+
+  if (length(x) < 2 || sum(weights) <= 0 || sum(x * weights) <= 0) {
+    return(NA_real_)
+  }
+
+  ord <- order(x)
+  x <- x[ord]
+  weights <- weights[ord]
+
+  cum_weights <- cumsum(weights)
+  total_weight <- sum(weights)
+  total_weighted_x <- sum(x * weights)
+
+  sum(weights * x * (2 * cum_weights - weights - total_weight)) /
+    (total_weight * total_weighted_x)
+}
+
+z_against_state_panel <- function(x, state_x) {
+  center <- mean(state_x, na.rm = TRUE)
+  spread <- stats::sd(state_x, na.rm = TRUE)
+
+  if (is.na(spread) || spread == 0) {
+    return(rep(NA_real_, length(x)))
+  }
+
+  (x - center) / spread
+}
+
+read_population_data <- function(path, requested_years) {
+  population_raw <- data.table::fread(
+    path,
+    colClasses = list(character = c("GEOID", "geoid", "NHGISCODE")),
+    showProgress = FALSE
+  ) |>
+    as_tibble() |>
+    clean_names()
+
+  if ("geoid" %in% names(population_raw) && "year" %in% names(population_raw)) {
+    if (!"total_pop" %in% names(population_raw) && "b01001_001e" %in% names(population_raw)) {
+      population_raw <- population_raw |>
+        rename(total_pop = b01001_001e)
+    }
+
+    if (!"total_pop" %in% names(population_raw) && "totalpop" %in% names(population_raw)) {
+      population_raw <- population_raw |>
+        rename(total_pop = totalpop)
+    }
+
+    population_required <- c("geoid", "year", "total_pop")
+    missing_population <- setdiff(population_required, names(population_raw))
+
+    if (length(missing_population) > 0) {
+      stop(
+        "Population file is missing required columns: ",
+        paste(missing_population, collapse = ", "),
+        call. = FALSE
+      )
+    }
+
+    return(
+      population_raw |>
+        transmute(
+          geoid = stringr::str_pad(as.character(geoid), 11, pad = "0"),
+          year = as.integer(year),
+          total_pop = as.numeric(total_pop)
+        )
+    )
+  }
+
+  nhgis_gjoin_cols <- names(population_raw)[str_detect(names(population_raw), "^gjoin\\d{4}$")]
+  nhgis_pop_cols <- names(population_raw)[str_detect(names(population_raw), "^av0aa\\d{3}$")]
+
+  if (
+    length(nhgis_gjoin_cols) == 0 ||
+    length(nhgis_pop_cols) == 0 ||
+    !all(c("statefp", "countyfp", "tracta") %in% names(population_raw))
+  ) {
+    stop(
+      "Population file is not recognized. Use a long file with GEOID, year, total_pop ",
+      "or the NHGIS wide tract file with GJOINYYYY and AV0AA estimate columns.",
+      call. = FALSE
+    )
+  }
+
+  nhgis_year_map <- tibble(
+    year = as.integer(str_extract(sort(nhgis_gjoin_cols), "\\d{4}")),
+    gjoin_col = sort(nhgis_gjoin_cols),
+    pop_col = sort(nhgis_pop_cols)
+  ) |>
+    filter(year %in% requested_years)
+
+  if (nrow(nhgis_year_map) == 0) {
+    stop("NHGIS population file has no years in the requested analysis range.", call. = FALSE)
+  }
+
+  purrr::map_dfr(seq_len(nrow(nhgis_year_map)), function(i) {
+    gjoin_col <- nhgis_year_map$gjoin_col[i]
+    pop_col <- nhgis_year_map$pop_col[i]
+
+    population_raw |>
+      transmute(
+        geoid = paste0(
+          stringr::str_pad(as.character(statefp), 2, pad = "0"),
+          stringr::str_pad(as.character(countyfp), 3, pad = "0"),
+          stringr::str_pad(as.character(tracta), 6, pad = "0")
+        ),
+        year = nhgis_year_map$year[i],
+        gjoin = .data[[gjoin_col]],
+        total_pop = as.numeric(.data[[pop_col]])
+      ) |>
+      filter(!is.na(total_pop), total_pop >= 0, !is.na(gjoin), gjoin != "")
+  })
+}
+```
+
+::: callout-note
+#### Code Explanation
+
+This chunk sources `R/load_defaults.R`, sets the input paths, defines the requested analysis years, identifies the three WAC care-industry columns, and creates helper functions for geography formatting, population-weighted Gini calculation, CaRES z-score scaling, and population-file standardization.
+:::
+
+# Data Inputs
+
+## Check Required Files
+
+The WAC file supplies workplace employment by block and year. The population file supplies ACS tract total population by year. The preferred population input is the NHGIS tract file, `nhgis_populationbytract.csv`; the workflow also accepts the current uploaded spelling, `nighis_populationbytract.csv`, or a long file with `GEOID`, `year`, and `total_pop`.
+
+```{r cares check files, message=FALSE, warning=FALSE}
+if (!file.exists(wac_path)) {
+  stop("Missing WAC file: ", wac_path, call. = FALSE)
+}
+
+population_path <- population_candidates[file.exists(population_candidates)][1]
+
+if (is.na(population_path)) {
+  stop(
+    "Missing ACS tract population data. Add ",
+    "./data/CSV/nhgis_populationbytract.csv, or a long tract population file ",
+    "with GEOID, year, and total_pop columns.",
+    call. = FALSE
+  )
+}
+```
+
+::: callout-note
+#### Code Explanation
+
+This chunk verifies that the local WAC file exists and locates the local tract-population file. It stops early with a specific message if the population denominator needed for the paper methodology is not present.
+:::
+
+## Load and Aggregate WAC Employment
+
+The WAC source is block-level. This chunk aggregates blocks to tract-year rows, creates a combined care-employment count from `CNS15`, `CNS16`, and `CNS18`, and keeps total workplace employment from `C000` for the LQ denominator.
+
+```{r cares load wac, message=FALSE, warning=FALSE}
+wac_available <- names(data.table::fread(wac_path, nrows = 0))
+wac_required <- c("w_geocode", "year", "C000", care_industry_cols)
+missing_wac <- setdiff(wac_required, wac_available)
+
+if (length(missing_wac) > 0) {
+  stop(
+    "WAC file is missing required columns: ",
+    paste(missing_wac, collapse = ", "),
+    call. = FALSE
+  )
+}
+
+wac_tract <- data.table::fread(
+  wac_path,
+  select = wac_required,
+  colClasses = list(character = "w_geocode"),
+  showProgress = FALSE
+)
+
+wac_tract <- wac_tract[
+  year %in% requested_years,
+  .(
+    total_employment = sum(C000, na.rm = TRUE),
+    care_employment = sum(CNS15 + CNS16 + CNS18, na.rm = TRUE)
+  ),
+  by = .(
+    geoid = substr(w_geocode, 1, 11),
+    year
+  )
+]
+
+wac_tract <- wac_tract[
+  !substr(geoid, 1, 2) %in% territory_fips
+]
+
+wac_state_year_coverage <- as_tibble(wac_tract) |>
+  mutate(geo_level = format_state_geo(substr(geoid, 1, 2))) |>
+  group_by(year, geo_level) |>
+  summarise(
+    total_workplace_employment = sum(total_employment, na.rm = TRUE),
+    .groups = "drop"
+  ) |>
+  filter(total_workplace_employment > 0)
+```
+
+::: callout-note
+#### Code Explanation
+
+It reads `./data/CSV/workforce_area_characteristics.csv`, keeps only the WAC columns required for the measure, aggregates block records to tract-year records, and removes U.S. territories outside the app's state geography.
+:::
+
+## Load Tract Population
+
+The Gini coefficient compares the distribution of care jobs with where people live, so tract population is required even for tracts with zero care employment.
+
+```{r cares load population, message=FALSE, warning=FALSE}
+population_tract <- read_population_data(population_path, requested_years) |>
+  filter(
+    year %in% requested_years,
+    !substr(geoid, 1, 2) %in% territory_fips
+  ) |>
+  distinct(geoid, year, .keep_all = TRUE)
+
+available_years <- intersect(
+  sort(unique(wac_tract$year)),
+  sort(unique(population_tract$year))
+)
+
+if (length(available_years) == 0) {
+  stop(
+    "WAC and population files have no overlapping years in the requested range.",
+    call. = FALSE
+  )
+}
+
+excluded_years <- setdiff(requested_years, available_years)
+
+wac_tract <- wac_tract[year %in% available_years]
+population_tract <- population_tract |>
+  filter(year %in% available_years)
+```
+
+::: callout-note
+#### Code Explanation
+
+It reads the local ACS tract-population file, converts the NHGIS wide extract or a long tract-population file into `geoid`, `year`, and `total_pop`, removes territories, and keeps the years available in both the WAC and population files.
+:::
+
+## Create Tract Analysis Panel
+
+Population records are kept even when WAC has no matching care jobs so that zero-employment tracts remain in the Gini denominator.
+
+```{r cares tract panel, message=FALSE, warning=FALSE}
+tract_panel_raw <- population_tract |>
+  left_join(
+    as_tibble(wac_tract),
+    by = c("geoid", "year")
+  ) |>
+  mutate(
+    state_fips = substr(geoid, 1, 2),
+    geo_level = format_state_geo(state_fips)
+  ) |>
+  semi_join(wac_state_year_coverage, by = c("year", "geo_level")) |>
+  filter(total_pop > 0)
+
+joined_state_year_coverage <- tract_panel_raw |>
+  group_by(year, geo_level) |>
+  summarise(
+    matched_workplace_employment = sum(total_employment, na.rm = TRUE),
+    .groups = "drop"
+  ) |>
+  filter(matched_workplace_employment > 0)
+
+tract_panel <- tract_panel_raw |>
+  semi_join(joined_state_year_coverage, by = c("year", "geo_level")) |>
+  mutate(
+    total_employment = replace_na(total_employment, 0),
+    care_employment = replace_na(care_employment, 0)
+  )
+
+coverage_check <- tract_panel |>
+  group_by(year) |>
+  summarise(
+    tracts = n(),
+    states_with_wac = n_distinct(geo_level),
+    care_jobs = sum(care_employment, na.rm = TRUE),
+    .groups = "drop"
+  )
+
+analysis_years <- tibble(
+  available_years = paste(available_years, collapse = ", "),
+  excluded_requested_years = if_else(
+    length(excluded_years) == 0,
+    "none",
+    paste(excluded_years, collapse = ", ")
+  ),
+  population_source = population_path
+)
+```
+
+::: callout-note
+#### Code Explanation
+
+This chunk joins tract population to tract employment, converts missing employment to zero, creates state geography labels, removes zero-population tracts, and creates small coverage and analysis-year tables for audit checks.
+:::
+
+# Metric Creation
+
+## Care Gini
+
+The Care Gini is calculated within each state and year using tract-level care employment and tract population weights. The national row uses all tracts in the same year.
+
+```{r cares gini, message=FALSE, warning=FALSE}
+state_gini <- tract_panel |>
+  group_by(year, geo_level) |>
+  summarise(
+    gini = weighted_gini(care_employment, total_pop),
+    .groups = "drop"
+  )
+
+national_gini <- tract_panel |>
+  group_by(year) |>
+  summarise(
+    gini = weighted_gini(care_employment, total_pop),
+    .groups = "drop"
+  ) |>
+  mutate(geo_level = "national")
+```
+
+::: callout-note
+#### Code Explanation
+
+Technically, it uses `group_by()` and `summarise()` to calculate population-weighted Gini coefficients for each state-year and national-year. Higher values mean care jobs are more concentrated in a smaller set of tracts relative to population.
+:::
+
+## Care Location Quotient
+
+The combined Care LQ compares a state's care-employment share with the national care-employment share in the same year.
+
+```{r cares lq, message=FALSE, warning=FALSE}
+state_lq_base <- tract_panel |>
+  group_by(year, geo_level) |>
+  summarise(
+    care_employment = sum(care_employment, na.rm = TRUE),
+    total_employment = sum(total_employment, na.rm = TRUE),
+    .groups = "drop"
+  )
+
+national_lq_base <- state_lq_base |>
+  group_by(year) |>
+  summarise(
+    national_care_employment = sum(care_employment, na.rm = TRUE),
+    national_total_employment = sum(total_employment, na.rm = TRUE),
+    .groups = "drop"
+  )
+
+state_lq <- state_lq_base |>
+  left_join(national_lq_base, by = "year") |>
+  mutate(
+    lq = (care_employment / total_employment) /
+      (national_care_employment / national_total_employment)
+  ) |>
+  select(year, geo_level, lq)
+
+national_lq <- national_lq_base |>
+  transmute(
+    year,
+    geo_level = "national",
+    lq = 1
+  )
+```
+
+::: callout-note
+#### Code Explanation
+
+This chunk calculates the Location Quotient. Values above 1 indicate that care jobs make up a larger share of the local workplace economy than they do nationally; values below 1 indicate underrepresentation relative to the national care-employment share.
+:::
+
+## CaRES Score
+
+CaRES combines inequality and concentration by standardizing Gini and LQ on the state-year panel and subtracting standardized LQ from standardized Gini. The raw score is then linearly transformed to the 0-1 display range used by the Distribution of Care page. Higher values indicate worse care-resource equity: higher spatial inequality, lower care-employment concentration, or both.
+
+```{r cares score, message=FALSE, warning=FALSE}
+state_metrics <- state_gini |>
+  inner_join(state_lq, by = c("year", "geo_level"))
+
+national_metrics <- national_gini |>
+  inner_join(national_lq, by = c("year", "geo_level"))
+
+scoring_reference <- state_metrics
+
+metrics_state_care_gini <- bind_rows(
+  state_metrics,
+  national_metrics
+) |>
+  mutate(
+    z_gini = z_against_state_panel(gini, scoring_reference$gini),
+    z_lq = z_against_state_panel(lq, scoring_reference$lq),
+    cares_raw = z_gini - z_lq,
+    cares = pmin(pmax((cares_raw + 4) / 8, 0), 1),
+    date = as.Date(paste0(year, "-01-01"))
+  ) |>
+  select(gini, lq, cares, date, geo_level) |>
+  arrange(date, geo_level)
+```
+
+::: callout-note
+#### Code Explanation
+
+Technically, it joins the Gini and LQ tables, uses the state-year rows as the scoring reference distribution, calculates standardized Gini and LQ values, creates `cares_raw = z_gini - z_lq`, rescales that raw score into `cares` on a clipped 0-1 range, and prepares the final app-facing table.
+:::
+
+# Data Export
+
+The final table is written to the same app data location used by the previous Care Gini workflow. It now contains all three care-resource equity measures in one file.
+
+```{r cares write outputs, message=FALSE, warning=FALSE}
+write_careboard_outputs(
+  metrics_state_care_gini,
+  "metrics_state_care_gini",
+  app_path = "./app_data/metrics_state_care_gini.csv"
+)
+```
+
+::: callout-note
+#### Code Explanation
+
+It writes the resulting table through the shared export helper, producing the app-facing CSV and replication copies in CSV, Stata, and Excel formats.
+:::
+
+# Data Views
+
+These final chunks provide lightweight audit views for render-time inspection.
+
+```{r cares coverage view, message=FALSE, warning=FALSE}
+analysis_years
+coverage_check
+```
+
+::: callout-note
+#### Code Explanation
+
+This chunk displays the available analysis years, omitted requested years, population source, and the number of tract rows, state geographies, and care jobs available by year after the tract panel is assembled.
+:::
+
+```{r cares metric preview, message=FALSE, warning=FALSE}
+head(metrics_state_care_gini)
+```
+
+::: callout-note
+#### Code Explanation
+
+This chunk displays the first rows of the completed Care Gini, LQ, and CaRES output so the table shape can be checked after rendering.
+:::

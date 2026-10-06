@@ -1,0 +1,244 @@
+---
+title: "The Care Board Master Methodology and Pipeline"
+subtitle: "Kansas Population Center, Institute for Policy & Social Research, University of Kansas"
+format:
+  pdf:
+    toc: true
+    toc-depth: 3
+  html:
+    toc: true
+    toc-depth: 3
+execute:
+  warning: false
+  message: false
+params:
+  execute_pipeline: false
+  run_ipums_download: false
+  run_database_upload: false
+---
+
+# Purpose
+
+This master document assembles the available Care Board methodology and code. The default `execute_pipeline: false` includes the available analyses for documentation without recalculating their outputs. Missing sections are labeled explicitly. All 14 current pipeline documents and their required helpers are present. See [Reproducibility](docs/REPRODUCIBILITY.md) for external source inputs and verification limits, and [Software environment](docs/ENVIRONMENT.md) for captured dependency versions and setup.
+
+After restoring and verifying those inputs, setting `execute_pipeline: true` evaluates the analytic QMD files in dependency order and writes updated outputs to `app_data/` and the replication folders under `data/`. The master stops before executing the analyses when a selected pipeline script is missing. Run commands from the repository root; `_quarto.yml` keeps computation paths relative to that root and writes rendered documents to `generated/`.
+
+This version adds the Household Bargaining Power metrics and replaces the previous care ratio panel with the Care Resource Equity Score (CaRES). The Distribution of Care workflow now produces a combined Care Gini, a combined Care Location Quotient (LQ), and a bounded 0-1 CaRES score in `metrics_state_care_gini.csv`; the database upload uses the Gini and CaRES fields while retaining LQ in the CSV export for analysis.
+
+Two steps are intentionally opt-in. `IPUMS_API.qmd` submits external IPUMS extract jobs and should be run only when the raw extracts need to be refreshed. `_database_upload.qmd` deletes and reloads warehouse tables and should be run only by a credentialed maintainer immediately before publication. Set `run_ipums_download: true` or `run_database_upload: true` only when those actions are intended.
+
+# Required Inputs
+
+For a full refresh from raw IPUMS extracts and supporting source files, place these files in the release folder before rendering this master document.
+
+| Path | Role |
+|---|---|
+| `data/IPUMS Pulls/cps_00453.xml` and matching `.dat.gz` | Raw monthly CPS extract referenced by the recovered `data_processing.qmd`. |
+| `data/IPUMS Pulls/cps_00452.xml` and matching `.dat.gz` | Raw CPS ASEC extract referenced by the recovered `data_processing.qmd`, including the Maternal Bargaining Power workflow. |
+| `data/IPUMS Pulls/atus_00035.xml` and matching `.dat.gz` | Raw ATUS extract used by `data_processing.qmd`, including the Care Privilege workflow. |
+| `data/IPUMS Pulls/atus_00029.xml` and matching `.dat.gz` | ATUS relationship extract used by `market_datum.qmd`. |
+| `data/IPUMS Pulls/atus_00036.xml` and matching `.dat.gz` | Eldercare recipient roster attached during preprocessing. Its prior-three-month reference period differs from diary-day care time; see `docs/ATUS_ELDERCARE.md`. |
+| `data/CSV/FormalOccs_Crossover.csv` | Paid-care occupation crosswalk. |
+| `data/CSV/ATUSActivityCrossover.csv` | Unpaid-care activity crosswalk. |
+| `data/CSV/GdpByState.csv` | BEA state GDP input for broad impacts valuation. |
+| `data/CSV/Informal_Formal_Crosswalk.csv` | Replacement-wage crosswalk between unpaid activities and formal occupations. |
+| `data/CSV/workforce_area_characteristics.csv` | LODES workplace-area characteristics input used to measure care employment for Care Gini, LQ, and CaRES. |
+| `data/CSV/nhgis_populationbytract.csv` or `data/CSV/nighis_populationbytract.csv` | IPUMS NHGIS ACS 5-year tract population input used as the population denominator for Care Gini, LQ, and CaRES. The workflow accepts both the intended spelling and the currently uploaded spelling. |
+| `data/CSV/resident_area_characteristics.csv` | LODES resident-area characteristics file retained with the GINI paper documentation; it is not required by the current state-level Care Board CaRES calculation. |
+| `data/CSV/Tractlevel_Employment.csv` | Legacy tract-level care employment file retained as a fallback input for older care-ratio/Gini workflows. |
+| `local_only/research/care_privilege_atus_privilege_focus.docx` | Local research reference for Care Privilege. Publication status has not been established, so the Word document is excluded from Git. The public implementation is in `analysis/bargainin_power.qmd`; this Word file is not read by the calculations. |
+| `data/CSV/ASECSampleIDs.csv` | Optional input for `IPUMS_API.qmd` when requesting a fresh CPS ASEC extract. |
+| `data/CSV/CPSSampleIDs.csv` | Optional input for `IPUMS_API.qmd` when requesting a fresh monthly CPS extract. |
+
+If you are not reprocessing raw IPUMS extracts, provide the cleaned files generated by `data_processing.qmd`: `data/CSV/CPSdata.csv`, `data/CSV/ASECdata.csv`, and `data/CSV/ATUSdata.csv`.
+
+The `app_data/` folder also contains static app metadata used during provider and database upload steps: `provider_group.xlsx`, `provider_category.xlsx`, `metric_tables.xlsx`, `metric_labels.csv`, and `source.csv`. Keep those files in `app_data/` unless the website metadata structure changes.
+
+# Updated Metric Files
+
+The app-facing metric files below are the main release outputs affected by the current update.
+
+| File | Measures | Notes |
+|---|---|---|
+| `app_data/metrics_state_care_gini.csv` | `gini`, `lq`, `cares` | Replaces the earlier care-gini-only output. `gini` is the combined Care Gini, `lq` is the combined Care LQ retained in the CSV export, and `cares` is the 0-1 scaled CaRES score used in place of the old care ratio panel during upload. |
+| `app_data/metrics_maternal_power.csv` | `share_of_income` | Adds Maternal Bargaining Power for married mother-father households with children, reported by year and geography. |
+| `app_data/metrics_priviledge.csv` | `care_privileged_population`, `care_privileged_population_proportion` | Adds Care Privilege counts and proportions by year and geography. The file stem keeps the requested spelling used by the app workflow. |
+| `app_data/metrics_sandwich_generation.csv` | Sandwich generation counts and proportions | Continues to support the Distribution of Care page alongside the new bargaining-power section. |
+
+`analysis/legacy/care_ratio.qmd` and any prior `metrics_care_ratio` outputs are legacy artifacts in this release. The active database upload maps the scaled `cares` field from `metrics_state_care_gini.csv` into the existing care-ratio metric slot so the website infrastructure can display the replacement panel without a schema change.
+
+# Run Order
+
+```{r master-setup, include=FALSE}
+options(knitr.duplicate.label = "allow")
+knitr::opts_chunk$set(
+  echo = TRUE,
+  warning = FALSE,
+  message = FALSE
+)
+
+strip_yaml <- function(lines) {
+  if (length(lines) >= 2 && trimws(lines[1]) == "---") {
+    yaml_end <- which(trimws(lines[-1]) == "---")[1] + 1
+    if (!is.na(yaml_end)) {
+      return(lines[-seq_len(yaml_end)])
+    }
+  }
+  lines
+}
+
+demote_headings <- function(lines) {
+  in_chunk <- FALSE
+  vapply(lines, function(line) {
+    if (grepl("^```", line)) {
+      in_chunk <<- !in_chunk
+      return(line)
+    }
+    if (!in_chunk && grepl("^#{1,5}\\s+", line)) {
+      return(paste0("#", line))
+    }
+    line
+  }, character(1))
+}
+
+force_eval_false <- function(lines) {
+  out <- character()
+  for (line in lines) {
+    out <- c(out, line)
+    if (grepl("^```\\{", line)) {
+      out <- c(out, "#| eval: false")
+    }
+  }
+  out
+}
+
+read_child_body <- function(file, execute = TRUE) {
+  lines <- readLines(file, warn = FALSE)
+  lines <- strip_yaml(lines)
+  lines <- demote_headings(lines)
+  if (!isTRUE(execute)) {
+    lines <- force_eval_false(lines)
+  }
+  paste(lines, collapse = "\n")
+}
+
+render_child_qmd <- function(file, title, execute = TRUE) {
+  cat("\n\n\\newpage\n\n")
+  cat("# ", title, "\n\n", sep = "")
+  if (!file.exists(file)) {
+    cat("*Missing section: `", file, "` is not included in this repository snapshot. No methodology or output regeneration is claimed for this section.*\n\n", sep = "")
+    return(invisible(NULL))
+  }
+  cat(
+    if (execute) {
+      "*Execution status: code chunks are evaluated in this master render.*\n\n"
+    } else {
+      "*Execution status: code chunks are included for documentation but not evaluated in this master render.*\n\n"
+    }
+  )
+
+  child_env <- new.env(parent = globalenv())
+  child_text <- read_child_body(file, execute = execute)
+  child_output <- knitr::knit_child(text = child_text, envir = child_env, quiet = TRUE)
+  cat(child_output, sep = "\n")
+}
+
+pipeline_files <- data.frame(
+  file = paste0("analysis/", c(
+    "IPUMS_API.qmd", "data_processing.qmd", "market.qmd", "market_datum.qmd",
+    "activity_formal.qmd", "activity_informal.qmd", "care_provider.qmd",
+    "provider.qmd", "broad_impacts.qmd", "gini.qmd", "sandwich_generation.qmd",
+    "bargainin_power.qmd", "parental_labor_monitor.qmd", "_database_upload.qmd"
+  )),
+  title = c(
+    "Raw IPUMS Download", "Data Processing and Harmonization", "Market Age Baseline",
+    "Market Need and Provision Estimates", "Paid Care Activity Statistics",
+    "Unpaid Care Activity Statistics", "Care Provider Flow Statistics",
+    "Provider Demographic Statistics", "Broad Impacts Statistics",
+    "Care Resource Equity Statistics", "Sandwich Generation Statistics",
+    "Household Bargaining Power Statistics", "Parental Labor Monitor",
+    "Database Upload Documentation"
+  ),
+  execute = c(
+    isTRUE(params$execute_pipeline) && isTRUE(params$run_ipums_download),
+    rep(isTRUE(params$execute_pipeline), 12),
+    isTRUE(params$execute_pipeline) && isTRUE(params$run_database_upload)
+  ),
+  stringsAsFactors = FALSE
+)
+
+missing_selected <- pipeline_files$file[pipeline_files$execute & !file.exists(pipeline_files$file)]
+if (length(missing_selected)) {
+  stop("Selected pipeline scripts are missing: ", paste(missing_selected, collapse = ", "),
+       ". See docs/REPRODUCIBILITY.md. No child analysis has run.", call. = FALSE)
+}
+if (any(pipeline_files$execute)) {
+  source("R/load_defaults.R")
+}
+```
+
+::: callout-note
+#### Code Explanation
+
+This chunk defines the document-assembly helpers and ordered pipeline. It checks selected scripts before any child analysis runs. Only an execution-enabled build sources `R/load_defaults.R`; a documentation-only build uses base R and `knitr` and does not install the analytic packages.
+:::
+
+
+```{r run-order-table, echo=FALSE}
+run_table <- data.frame(
+  File = pipeline_files$file,
+  Section = pipeline_files$title,
+  Availability = ifelse(file.exists(pipeline_files$file), "Present", "Missing"),
+  Execution = ifelse(pipeline_files$execute, "Runs", "Documentation only")
+)
+knitr::kable(run_table)
+```
+
+::: callout-note
+#### Code Explanation
+
+This table shows which scripts are available and whether their code is selected for execution. A documentation-only render labels missing sections rather than claiming that their calculations were reproduced.
+:::
+
+
+# Methodology and Code
+
+```{r run-children, results='asis'}
+for (i in seq_len(nrow(pipeline_files))) {
+  render_child_qmd(
+    file = pipeline_files$file[[i]],
+    title = pipeline_files$title[[i]],
+    execute = pipeline_files$execute[[i]]
+  )
+}
+```
+
+::: callout-note
+#### Code Explanation
+
+The iteration step loops across years, states, datasets, categories, or demographic groups and binds the repeated results into a single analysis table. The main objects created or updated here are `file`, `title`, `execute`.
+:::
+
+
+# Generated Output Inventory
+
+The table below lists app-facing files currently present after the render. In a full execution, these should reflect the newly generated outputs from the pipeline.
+
+```{r output-inventory, echo=FALSE}
+if (dir.exists("app_data")) {
+  app_outputs <- list.files("app_data", pattern = "\\.(csv|xlsx)$", full.names = FALSE)
+  output_tbl <- data.frame(
+    file = sort(app_outputs),
+    stringsAsFactors = FALSE
+  )
+  knitr::kable(output_tbl)
+} else {
+  cat("`app_data/` was not found.")
+}
+```
+
+::: callout-note
+#### Code Explanation
+
+It imports source data into memory using the survey, spreadsheet, database, directory, or API reader shown in the code. The display code builds a diagnostic plot, publication figure, static table, or interactive HTML table from the objects created earlier. The main objects created or updated here are `app_outputs`, `output_tbl`, `file`, `stringsAsFactors`.
+:::

@@ -1,0 +1,494 @@
+﻿---
+title: "Parental Labor Monitor"
+format:
+  pdf:
+    papersize: letter
+    geometry: "top=0.2in, bottom=0.2in, left=0.2in, right=0.2in"
+    include-in-header:
+      text: |
+        \pagenumbering{gobble}
+execute:
+  echo: false
+  warning: false
+  message: false
+  fig-width: 8.1
+  fig-height: 10.6
+---
+
+## Overview
+
+This document is a publication-style monitor rather than a website upload table. It summarizes monthly CPS labor-market trends for mothers, fathers, non-mothers, and non-fathers, then renders a one-page PDF and social media image. The monitor helps The Care Board team communicate recent changes in labor force participation, employment, unemployment, and not-in-labor-force status for parental groups.
+
+The calculations use cleaned CPS Monthly data from `data_processing.qmd`. The same gender-parenthood definitions used elsewhere in the project are applied here so the report stays consistent with the broader impacts metrics on the website.
+
+**Outputs.** This workflow writes the rendered PDF and social image. It also writes `parental_labor_monitor_monthly` and `parental_labor_monitor_current` to `data/CSV/`, `data/Dta/`, and `data/Excel/` so the report data can be replicated outside the figure.
+
+**Key sources.** The source microdata come from IPUMS CPS and the BLS/Census Current Population Survey, the primary U.S. household survey for monthly labor-force statistics.
+
+## Introduction and Literature Context
+
+Parenthood shapes labor-market participation because care responsibilities affect availability for paid work, job search, hours, and absences. Monthly CPS data make it possible to monitor these patterns close to real time, while the Care Board's shared gender-parenthood definitions allow the monitor to stay consistent with broader indicators in the public site.
+
+This document is designed as a communication product as well as an analytic output. It summarizes current labor-force conditions for mothers, fathers, non-mothers, and non-fathers in a one-page PDF, then saves the underlying monthly and current tables for replication.
+
+## Methodological Decisions
+
+| Decision | Implementation | Rationale |
+|---|---|---|
+| Source | Use cleaned monthly CPS records | Supports timely labor-market monitoring. |
+| Population | Adults age 18+ in four gender-parenthood groups | Focuses on comparisons most relevant to parental labor-force constraints. |
+| Metrics | Labor force participation, employment, unemployment, and NILF status | Captures both participation and job outcomes. |
+| Design | Render a one-page KU-colored PDF and social image | Makes the statistic usable for public communication and dissemination. |
+
+## Policy Implications
+
+Parental labor-market monitoring can inform child care policy, paid leave, employer flexibility, and family economic security programs. Tracking parents and non-parents side by side helps show whether changes are broad labor-market movements or care-related differences affecting parents specifically.
+
+```{r data-prep}
+library(data.table)
+library(dplyr)
+library(lubridate)
+library(reticulate)
+source("R/load_defaults.R")
+
+# Ensure required Python packages are installed in the active environment
+required_py <- c("pandas", "matplotlib", "numpy")
+missing_py  <- required_py[!sapply(required_py, py_module_available)]
+if (length(missing_py) > 0) py_install(missing_py, pip = TRUE)
+
+# Load CPS microdata (only columns needed)
+cps <- fread(
+    "./data/CSV/CPSdata.csv",
+    select = c("date", "WTFINL", "labforce", "STATEFIP",
+               "gender_parent", "AGE", "empstat")
+  ) |>
+  as.data.frame() |>
+  filter(STATEFIP > 0, STATEFIP <= 56) |>
+  mutate(date = as.Date(date))
+
+# Restrict to adults 18+, four parental groups, civilian population
+cps_adults <- cps |>
+  filter(AGE >= 18) |>
+  filter(gender_parent %in% c("Mothers", "Fathers", "Non-Mothers", "Non-Fathers")) |>
+  filter(labforce %in% c("In the Labor Force", "Not in the Labor Force"))
+
+# Monthly national aggregates by group
+monthly_stats <- cps_adults |>
+  mutate(
+    employed   = (empstat == "Employed"),
+    unemployed = (empstat == "Unemployed"),
+    nilf       = (labforce == "Not in the Labor Force")
+  ) |>
+  group_by(date, gender_parent) |>
+  summarise(
+    n_employed   = sum(WTFINL * employed,   na.rm = TRUE),
+    n_unemployed = sum(WTFINL * unemployed, na.rm = TRUE),
+    n_nilf       = sum(WTFINL * nilf,       na.rm = TRUE),
+    n_total      = sum(WTFINL,              na.rm = TRUE),
+    .groups = "drop"
+  ) |>
+  mutate(
+    # LFP rate: share of civilian pop in labor force
+    lfp_rate   = (n_employed + n_unemployed) / n_total * 100,
+    # Employment rate: share of civilian pop that is employed
+    emp_rate   = n_employed / n_total * 100,
+    # Unemployment rate: share of labor force that is unemployed (BLS definition)
+    unemp_rate = n_unemployed / (n_total - n_nilf) * 100,
+    # NILF rate: share of civilian pop not in labor force
+    nilf_rate  = n_nilf / n_total * 100
+  ) |>
+  arrange(gender_parent, date)
+```
+
+::: callout-note
+#### Code Explanation
+
+This chunk loads `data.table`, `dplyr`, `lubridate`, `reticulate` package(s) and sources `R/load_defaults.R` so the later code has the required functions, defaults, and shared helpers. It reads `./data/CSV/CPSdata.csv` into memory and prepares those inputs for the transformations that follow. Technically, it uses `filter()`, `mutate()`, `group_by()`, `summarise()`, `arrange()` to restrict the analytic universe, create derived variables, reshape records, join lookup tables, and/or aggregate weighted statistics. The iteration step loops across years, states, datasets, categories, or demographic groups and binds the repeated results into a single analysis table.
+:::
+
+```{r}
+# Month-over-month and year-over-year changes
+monthly_stats <- monthly_stats |>
+  group_by(gender_parent) |>
+  arrange(date) |>
+  mutate(
+    lfp_mom   = lfp_rate   - lag(lfp_rate,   1),
+    lfp_yoy   = lfp_rate   - lag(lfp_rate,  12),
+    emp_mom   = emp_rate   - lag(emp_rate,   1),
+    emp_yoy   = emp_rate   - lag(emp_rate,  12),
+    unemp_mom = unemp_rate - lag(unemp_rate, 1),
+    unemp_yoy = unemp_rate - lag(unemp_rate,12),
+    nilf_mom  = nilf_rate  - lag(nilf_rate,  1),
+    nilf_yoy  = nilf_rate  - lag(nilf_rate, 12)
+  ) |>
+  ungroup()
+
+# Latest-month snapshot and full trend history
+latest_date   <- max(monthly_stats$date)
+latest_label  <- format(latest_date, "%B %Y")
+current_stats <- monthly_stats |> filter(date == latest_date)
+trend_data    <- monthly_stats |>
+  mutate(date_str = as.character(date))
+
+write_careboard_outputs(monthly_stats, "parental_labor_monitor_monthly")
+write_careboard_outputs(current_stats, "parental_labor_monitor_current")
+```
+
+::: callout-note
+#### Code Explanation
+
+Technically, it uses `filter()`, `mutate()`, `group_by()`, `arrange()` to restrict the analytic universe, create derived variables, reshape records, join lookup tables, and/or aggregate weighted statistics. The statistical work in this chunk calculates weighted counts, rates, rolling values, medians, changes over time, or inequality measures used in the published indicators. It writes the resulting table through the shared export helper, producing app-facing files and/or replication copies in CSV, Stata, and Excel formats. The main objects created or updated here are `monthly_stats`, `lfp_mom`, `lfp_yoy`, `emp_mom`, `emp_yoy`.
+:::
+
+
+```{python newsletter}
+#| fig-pos: "H"
+
+import pandas as pd
+import textwrap
+import numpy as np
+import matplotlib
+import matplotlib.pyplot as plt
+import matplotlib.gridspec as gridspec
+import matplotlib.dates as mdates
+import matplotlib.ticker as mticker
+from matplotlib.patches import Rectangle
+import warnings
+warnings.filterwarnings("ignore")
+
+matplotlib.rcParams.update({
+    "font.family":    "DejaVu Sans",
+    "axes.axisbelow": True,
+    "axes.grid":      True,
+    "grid.color":     "#E5E7EB",
+    "grid.linewidth": 0.5,
+})
+
+# Brand palette
+# Primary colors use the University of Kansas brand palette.
+KU_BLUE   = "#0051BA"
+KU_RED    = "#E8000D"
+KU_YELLOW = "#FFC82D"
+KU_GRAY   = "#85898A"
+NAVY      = KU_BLUE
+TEAL      = KU_BLUE
+TEAL_DARK = "#003F8F"
+LIGHT_BG  = "#F5F8FB"
+RULE_CLR  = "#D9DEE2"
+MID_GRAY  = KU_GRAY
+DARK_GR   = "#1E293B"
+WHITE     = "#FFFFFF"
+POS_CLR   = "#166534"   # green - increase
+NEG_CLR   = "#991B1B"   # red   - decrease
+STAG_CLR  = "#B45309"   # amber - rounds to 0.0 (stagnation)
+
+# One KU primary or secondary tone per parental/non-parental pair
+GROUP_COLORS = {
+    "Mothers":     KU_RED,
+    "Non-Mothers": "#B0000A",
+    "Fathers":     KU_BLUE,
+    "Non-Fathers": "#4B83D8",
+}
+GROUP_ORDER = ["Mothers", "Non-Mothers", "Fathers", "Non-Fathers"]
+
+# Higher-is-better flag determines sign coloring
+def _rounds_to_zero(val):
+    """True when the displayed value will read 0.0."""
+    return round(abs(val), 1) == 0.0
+
+def chg_color(val, metric=None):
+    """Green = up, red = down, amber = rounds to 0.0."""
+    if pd.isna(val):
+        return MID_GRAY
+    if _rounds_to_zero(val):
+        return STAG_CLR
+    return POS_CLR if val > 0 else NEG_CLR
+
+def fmt_chg(val):
+    if pd.isna(val):
+        return "-"
+    if _rounds_to_zero(val):
+        return "- 0.0pp"
+    sign = "^" if val > 0 else "v"
+    return f"{sign} {abs(val):.1f}pp"
+
+# Ingest R data
+current = pd.DataFrame(r.current_stats)
+trend   = pd.DataFrame(r.trend_data)
+trend["date"] = pd.to_datetime(trend["date_str"])
+
+# Safely unpack scalar R string
+raw_label = r.latest_label
+latest_lbl = raw_label[0] if isinstance(raw_label, (list, np.ndarray)) else str(raw_label)
+
+# Figure scaffold
+fig = plt.figure(figsize=(8.1, 10.6), facecolor=WHITE)
+
+gs = gridspec.GridSpec(
+    4, 1, figure=fig,
+    height_ratios=[0.065, 0.235, 0.590, 0.085],
+    hspace=0.09,
+    top=0.998, bottom=0.002, left=0.022, right=0.978
+)
+
+# -----------------------------------------------------------------------------
+# HEADER
+# -----------------------------------------------------------------------------
+ax_hdr = fig.add_subplot(gs[0])
+ax_hdr.set_facecolor(NAVY)
+ax_hdr.set_xlim(0, 1)
+ax_hdr.set_ylim(0, 1)
+ax_hdr.axis("off")
+
+# Left: branding
+ax_hdr.text(0.013, 0.76, "THE CARE BOARD",
+    color=TEAL, fontsize=8, fontweight="bold", va="center",
+    transform=ax_hdr.transAxes, fontstyle="normal",
+    fontfamily="DejaVu Sans")
+ax_hdr.text(0.013, 0.24, "Parental Labor Force Monitor",
+    color=WHITE, fontsize=15, fontweight="bold", va="center",
+    transform=ax_hdr.transAxes)
+
+# Right: data currency + subtitle
+ax_hdr.text(0.987, 0.76, f"Data through {latest_lbl}",
+    color=TEAL, fontsize=7.5, ha="right", va="center",
+    transform=ax_hdr.transAxes)
+ax_hdr.text(0.987, 0.24,
+    "Adults 18+ | National estimates | Current Population Survey",
+    color="#8BAFC8", fontsize=6.5, ha="right", va="center",
+    transform=ax_hdr.transAxes)
+
+# Thin teal rule along header bottom
+ax_hdr.add_patch(Rectangle((0, 0), 1, 0.045,
+    transform=ax_hdr.transAxes, facecolor=TEAL, clip_on=False))
+
+# -----------------------------------------------------------------------------
+# KPI CARDS  (one per group)
+# -----------------------------------------------------------------------------
+gs_kpi = gridspec.GridSpecFromSubplotSpec(
+    1, 4, subplot_spec=gs[1], wspace=0.035
+)
+
+SECONDARY_METRICS = [
+    ("Employed",    "emp_rate",   "emp_mom",   "emp_yoy"),
+    ("Unemployed",  "unemp_rate", "unemp_mom", "unemp_yoy"),
+    ("Not in LF",   "nilf_rate",  "nilf_mom",  "nilf_yoy"),
+]
+
+def draw_card(ax, group, row, fs=1.0):
+    """Render one KPI card onto ax. fs scales all font sizes."""
+    gc = GROUP_COLORS[group]
+    ax.set_facecolor(LIGHT_BG)
+    ax.set_xlim(0, 1); ax.set_ylim(0, 1); ax.axis("off")
+    ax.add_patch(Rectangle((0, 0.875), 1, 0.125,
+        transform=ax.transAxes, facecolor=gc, clip_on=False))
+    ax.text(0.5, 0.937, group, color=WHITE, fontsize=9.5*fs, fontweight="bold",
+        ha="center", va="center", transform=ax.transAxes)
+    ax.text(0.5, 0.755, f"{row['lfp_rate']:.1f}%",
+        color=gc, fontsize=23*fs, fontweight="bold",
+        ha="center", va="center", transform=ax.transAxes)
+    ax.text(0.5, 0.665, "Labor Force Participation",
+        color=MID_GRAY, fontsize=6.5*fs, ha="center", va="center",
+        transform=ax.transAxes)
+    mv = row["lfp_mom"]; yv = row["lfp_yoy"]
+    ax.text(0.26, 0.592, fmt_chg(mv), color=chg_color(mv), fontsize=8*fs,
+        fontweight="bold", ha="center", va="center", transform=ax.transAxes)
+    ax.text(0.26, 0.524, "vs. prior mo.", color=MID_GRAY, fontsize=5.2*fs,
+        ha="center", va="center", transform=ax.transAxes)
+    ax.text(0.74, 0.592, fmt_chg(yv), color=chg_color(yv), fontsize=8*fs,
+        fontweight="bold", ha="center", va="center", transform=ax.transAxes)
+    ax.text(0.74, 0.524, "vs. prior yr.", color=MID_GRAY, fontsize=5.2*fs,
+        ha="center", va="center", transform=ax.transAxes)
+    ax.plot([0.05, 0.95], [0.475, 0.475], color=RULE_CLR,
+        linewidth=0.7, transform=ax.transAxes, clip_on=False)
+    ax.text(0.56, 0.436, "%",   color=MID_GRAY, fontsize=5*fs, ha="center",
+        va="center", transform=ax.transAxes)
+    ax.text(0.75, 0.436, "MoM", color=MID_GRAY, fontsize=5*fs, ha="center",
+        va="center", transform=ax.transAxes)
+    ax.text(0.92, 0.436, "YoY", color=MID_GRAY, fontsize=5*fs, ha="center",
+        va="center", transform=ax.transAxes)
+    y_slots = [0.360, 0.252, 0.145]
+    for (label, met, mom_c, yoy_c), yp in zip(SECONDARY_METRICS, y_slots):
+        v = row[met]; m = row[mom_c]; y = row[yoy_c]
+        ax.text(0.05, yp, label, color=DARK_GR, fontsize=5.8*fs,
+            va="center", transform=ax.transAxes)
+        ax.text(0.56, yp, f"{v:.1f}%", color=gc, fontsize=7*fs,
+            fontweight="bold", ha="center", va="center", transform=ax.transAxes)
+        ax.text(0.75, yp, fmt_chg(m), color=chg_color(m), fontsize=5.5*fs,
+            ha="center", va="center", transform=ax.transAxes)
+        ax.text(0.92, yp, fmt_chg(y), color=chg_color(y), fontsize=5.5*fs,
+            ha="center", va="center", transform=ax.transAxes)
+        ax.plot([0.05, 0.95], [yp - 0.048, yp - 0.048],
+            color="#EAECEE", linewidth=0.4,
+            transform=ax.transAxes, clip_on=False)
+    ax.add_patch(Rectangle((0, 0), 0.022, 0.875,
+        transform=ax.transAxes, facecolor=gc, alpha=0.20, clip_on=False))
+
+for ci, group in enumerate(GROUP_ORDER):
+    ax = fig.add_subplot(gs_kpi[ci])
+    row = current[current["gender_parent"] == group].iloc[0]
+    draw_card(ax, group, row, fs=1.0)
+
+# -----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
+gs_mid = gridspec.GridSpecFromSubplotSpec(
+    3, 1, subplot_spec=gs[2], hspace=0.45
+)
+
+CHART_DEFS = [
+    ("Labor Force Participation Rate", "lfp_rate"),
+    ("Employment Rate",                "emp_rate"),
+    ("Unemployment Rate",              "unemp_rate"),
+]
+
+def style_ax(ax):
+    ax.set_facecolor(LIGHT_BG)
+    for sp in ["top", "right"]:
+        ax.spines[sp].set_visible(False)
+    ax.spines["left"].set_color(RULE_CLR)
+    ax.spines["bottom"].set_color(RULE_CLR)
+    ax.tick_params(colors=MID_GRAY, labelsize=5.5, length=2, width=0.6)
+    ax.yaxis.grid(True)
+    ax.xaxis.grid(False)
+
+for ci, (title, metric) in enumerate(CHART_DEFS):
+    ax = fig.add_subplot(gs_mid[ci])
+    style_ax(ax)
+
+    for group in GROUP_ORDER:
+        sub = trend[trend["gender_parent"] == group].sort_values("date")
+        ax.plot(sub["date"], sub[metric],
+            color=GROUP_COLORS[group], linewidth=1.7, label=group, zorder=3)
+        if len(sub):
+            last = sub.iloc[-1]
+            ax.scatter(last["date"], last[metric],
+                color=GROUP_COLORS[group], s=24, zorder=5, edgecolors=WHITE,
+                linewidths=0.5)
+
+    ax.set_title(f"{title} (%)",
+        color=NAVY, fontsize=7.5, fontweight="bold", pad=5, loc="left",
+        x=0.03)
+    n_years = (trend["date"].max() - trend["date"].min()).days / 365
+    yr_interval = max(1, int(n_years / 8))   # ~8 tick marks regardless of span
+    ax.xaxis.set_major_formatter(mdates.DateFormatter("%Y"))
+    ax.xaxis.set_major_locator(mdates.YearLocator(yr_interval))
+    ax.yaxis.set_major_formatter(mticker.FormatStrFormatter("%.0f"))
+    plt.setp(ax.xaxis.get_majorticklabels(), fontsize=5.2, ha="center",
+             color=MID_GRAY)
+    plt.setp(ax.yaxis.get_majorticklabels(), fontsize=5.2, color=MID_GRAY)
+
+    # Legend on the first panel only
+    if ci == 0:
+        handles = [
+            plt.Line2D([0], [0], color=GROUP_COLORS[g], linewidth=1.8, label=g)
+            for g in GROUP_ORDER
+        ]
+        ax.legend(handles=handles, fontsize=5.5, frameon=True, framealpha=0.95,
+            edgecolor=RULE_CLR, loc="upper left", ncol=4,
+            handlelength=1.5, columnspacing=0.7, labelcolor=DARK_GR,
+            borderpad=0.5)
+
+# -----------------------------------------------------------------------------
+# FOOTER  (full-width About / methodology strip)
+# -----------------------------------------------------------------------------
+ax_foot = fig.add_subplot(gs[3])
+ax_foot.set_facecolor(NAVY)
+ax_foot.set_xlim(0, 1)
+ax_foot.set_ylim(0, 1)
+ax_foot.axis("off")
+
+# Teal top-border accent
+ax_foot.add_patch(Rectangle((0, 0.88), 1, 0.12,
+    transform=ax_foot.transAxes, facecolor=TEAL, clip_on=False))
+
+methodology_raw = (
+    "The Bureau of Labor Statistics does not publish labor force statistics disaggregated by parental status. "
+    "This monitor fills that gap using BLS methodology applied to CPS microdata - tracking employment, unemployment, "
+    "and participation for mothers, fathers, non-mothers, and non-fathers among adults 18+. "
+    "Estimates use person-level final weights (WTFINL); parental status is identified from the CPS household roster."
+)
+# Pre-wrap at ~115 chars so matplotlib renders clean line breaks in the PDF
+methodology = textwrap.fill(methodology_raw, width=115)
+ax_foot.text(0.012, 0.82, methodology,
+    color="#8BAFC8", fontsize=5.2, va="top",
+    transform=ax_foot.transAxes, linespacing=1.4)
+
+ax_foot.text(0.012, 0.08,
+    "Kansas Population Center | thecareboard.org | careboard@ku.edu",
+    color=TEAL, fontsize=5.5, fontweight="bold",
+    ha="left", va="bottom", transform=ax_foot.transAxes)
+
+plt.show()
+```
+
+::: callout-note
+#### Code Explanation
+
+It defines `_rounds_to_zero()`, `chg_color()`, `fmt_chg()`, `draw_card()`, `style_ax()`, which encapsulates repeated logic used by later chunks. The iteration step loops across years, states, datasets, categories, or demographic groups and binds the repeated results into a single analysis table. The display code builds a diagnostic plot, publication figure, static table, or interactive HTML table from the objects created earlier. The main objects created or updated here are `KU_BLUE`, `KU_RED`, `KU_YELLOW`, `KU_GRAY`, `NAVY`.
+:::
+
+
+```{python social-png}
+#| include: false
+
+# 2x2 grid: Mothers TL, Fathers TR, Non-Mothers BL, Non-Fathers BR
+SOCIAL_GRID = [
+    ("Mothers",     0, 0),
+    ("Fathers",     0, 1),
+    ("Non-Mothers", 1, 0),
+    ("Non-Fathers", 1, 1),
+]
+FS = 1.9  # font scale relative to newsletter cards
+
+fig_s = plt.figure(figsize=(10, 10), facecolor=WHITE)
+gs_s = gridspec.GridSpec(
+    3, 1, figure=fig_s,
+    height_ratios=[1, 13, 1],
+    hspace=0.04,
+    top=0.998, bottom=0.002, left=0.02, right=0.98
+)
+
+# Header
+ax_s_hdr = fig_s.add_subplot(gs_s[0])
+ax_s_hdr.set_facecolor(NAVY); ax_s_hdr.set_xlim(0, 1); ax_s_hdr.set_ylim(0, 1); ax_s_hdr.axis("off")
+ax_s_hdr.text(0.013, 0.76, "THE CARE BOARD",
+    color=TEAL, fontsize=11, fontweight="bold", va="center", transform=ax_s_hdr.transAxes)
+ax_s_hdr.text(0.013, 0.24, "Parental Labor Force Monitor",
+    color=WHITE, fontsize=19, fontweight="bold", va="center", transform=ax_s_hdr.transAxes)
+ax_s_hdr.text(0.987, 0.76, f"Data through {latest_lbl}",
+    color=TEAL, fontsize=9, ha="right", va="center", transform=ax_s_hdr.transAxes)
+ax_s_hdr.text(0.987, 0.24,
+    "Adults 18+ | National estimates | Current Population Survey",
+    color="#8BAFC8", fontsize=7.5, ha="right", va="center", transform=ax_s_hdr.transAxes)
+ax_s_hdr.add_patch(Rectangle((0, 0), 1, 0.045,
+    transform=ax_s_hdr.transAxes, facecolor=TEAL, clip_on=False))
+
+# 2x2 cards
+gs_s_cards = gridspec.GridSpecFromSubplotSpec(
+    2, 2, subplot_spec=gs_s[1], wspace=0.035, hspace=0.035
+)
+for group, ri, ci in SOCIAL_GRID:
+    ax = fig_s.add_subplot(gs_s_cards[ri, ci])
+    row = current[current["gender_parent"] == group].iloc[0]
+    draw_card(ax, group, row, fs=FS)
+
+# Footer
+ax_s_foot = fig_s.add_subplot(gs_s[2])
+ax_s_foot.set_facecolor(NAVY); ax_s_foot.set_xlim(0, 1); ax_s_foot.set_ylim(0, 1); ax_s_foot.axis("off")
+ax_s_foot.add_patch(Rectangle((0, 0.88), 1, 0.12,
+    transform=ax_s_foot.transAxes, facecolor=TEAL, clip_on=False))
+ax_s_foot.text(0.5, 0.42,
+    "Kansas Population Center | thecareboard.org | careboard@ku.edu",
+    color=TEAL, fontsize=7, fontweight="bold",
+    ha="center", va="center", transform=ax_s_foot.transAxes)
+
+fig_s.savefig("parental_labor_monitor_social.png", dpi=150, bbox_inches="tight", facecolor=WHITE)
+plt.close(fig_s)
+```
+
+::: callout-note
+#### Code Explanation
+
+It saves the rendered figure output to disk for publication or social sharing. The display code builds a diagnostic plot, publication figure, static table, or interactive HTML table from the objects created earlier. The main objects created or updated here are `SOCIAL_GRID`, `FS`, `fig_s`, `gs_s`, `height_ratios`.
+:::

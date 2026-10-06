@@ -1,0 +1,6 @@
+project:
+  type: default
+  output-dir: generated
+  execute-dir: project
+  render:
+    - TheCareBoard_Master.qmd
