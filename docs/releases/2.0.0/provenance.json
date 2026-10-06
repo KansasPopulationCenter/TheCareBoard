@@ -55,6 +55,12 @@
   "methodological_review_status": "deferred_by_owner_until_after_snapshot_sync",
   "methodological_review_deferral_date": "2026-10-06",
   "snapshot_sync_scope": "Current code, source notes, and supplied app_data; no methodological corrections or recalculation",
+  "snapshot_branch": "careboard-2.0.0-snapshot",
+  "snapshot_branch_url": "https://github.com/KansasPopulationCenter/TheCareBoard/tree/careboard-2.0.0-snapshot",
+  "snapshot_uploaded_date": "2026-10-06",
+  "snapshot_pull_request_url": "https://github.com/KansasPopulationCenter/TheCareBoard/pull/2",
+  "snapshot_pull_request_draft": true,
+  "snapshot_pull_request_merged": false,
   "source_snapshot_file_count": 23,
   "verified_source_fingerprint_count": 18,
   "pending_source_checksums": [

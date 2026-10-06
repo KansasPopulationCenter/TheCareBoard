@@ -75,24 +75,24 @@ docs/CROSSWALKS.md,UPLOAD,"Public repository documentation, configuration, or st
 docs/DATA_DICTIONARY.md,UPLOAD,"Public repository documentation, configuration, or structural check",8723
 docs/ENVIRONMENT.md,UPLOAD,"Public repository documentation, configuration, or structural check",5321
 docs/FILE_MANIFEST.csv,UPLOAD,"Public repository documentation, configuration, or structural check",
-docs/GITHUB_UPLOAD_GUIDE.md,UPLOAD,"Public repository documentation, configuration, or structural check",8832
+docs/GITHUB_UPLOAD_GUIDE.md,UPLOAD,"Public repository documentation, configuration, or structural check",9094
 docs/LICENSE_AND_CITATION.md,UPLOAD,"Public repository documentation, configuration, or structural check",5577
 docs/METHODOLOGY.md,UPLOAD,"Public repository documentation, configuration, or structural check",6111
 docs/PIPELINE_RESTORATION.md,UPLOAD,"Public repository documentation, configuration, or structural check",4219
 docs/README.md,UPLOAD,"Public repository documentation, configuration, or structural check",1891
 docs/REFERENCE_PERIODS.md,UPLOAD,"Public repository documentation, configuration, or structural check",13165
-docs/REPOSITORY_PREPARATION.md,UPLOAD,"Public repository documentation, configuration, or structural check",9023
+docs/REPOSITORY_PREPARATION.md,UPLOAD,"Public repository documentation, configuration, or structural check",9596
 docs/REPRODUCIBILITY.md,UPLOAD,"Public repository documentation, configuration, or structural check",5870
-docs/SNAPSHOT_SYNC.md,UPLOAD,"Public repository documentation, configuration, or structural check",2023
+docs/SNAPSHOT_SYNC.md,UPLOAD,"Public repository documentation, configuration, or structural check",2420
 docs/SOURCE_INPUTS.md,UPLOAD,"Public repository documentation, configuration, or structural check",5673
 docs/app_data_schema.json,UPLOAD,"Public repository documentation, configuration, or structural check",9822
 docs/crosswalk_schema.json,UPLOAD,"Public repository documentation, configuration, or structural check",1443
-docs/releases/2.0.0/README.md,UPLOAD,"Public repository documentation, configuration, or structural check",4478
+docs/releases/2.0.0/README.md,UPLOAD,"Public repository documentation, configuration, or structural check",4768
 docs/releases/2.0.0/environment.json,UPLOAD,"Public repository documentation, configuration, or structural check",2654
 docs/releases/2.0.0/file_checksums.csv,UPLOAD,"Public repository documentation, configuration, or structural check",11742
 docs/releases/2.0.0/input_provenance.json,UPLOAD,"Public repository documentation, configuration, or structural check",1109
 docs/releases/2.0.0/metric_reference_periods.csv,UPLOAD,"Public repository documentation, configuration, or structural check",34067
-docs/releases/2.0.0/provenance.json,UPLOAD,"Public repository documentation, configuration, or structural check",4925
+docs/releases/2.0.0/provenance.json,UPLOAD,"Public repository documentation, configuration, or structural check",5311
 docs/releases/2.0.0/table_reference_periods.csv,UPLOAD,"Public repository documentation, configuration, or structural check",9258
 docs/source_extracts.json,UPLOAD,"Public repository documentation, configuration, or structural check",16505
 generated/TheCareBoard_Master.html,DO_NOT_UPLOAD,Generated/previously rendered artifact; review current render before separate release,393080
@@ -124,10 +124,10 @@ local_only/credentials/db_connect.r,DO_NOT_UPLOAD,Local database connection deta
 local_only/notes/CareBoardNotes.docx,DO_NOT_UPLOAD,Internal project notes,22898
 local_only/preparation/IPUMS_API.qmd.inspection.txt,DO_NOT_UPLOAD,Local preparation audit or original backup,5549
 local_only/preparation/MIT-template.txt,DO_NOT_UPLOAD,Local preparation audit or original backup,1078
-local_only/preparation/__pycache__/github_access.cpython-312.pyc,DO_NOT_UPLOAD,Local preparation audit or original backup,4543
+local_only/preparation/__pycache__/github_access.cpython-312.pyc,DO_NOT_UPLOAD,Local preparation audit or original backup,4627
 local_only/preparation/audit_repository.py,DO_NOT_UPLOAD,Local preparation audit or original backup,13085
 local_only/preparation/build_environment_record.py,DO_NOT_UPLOAD,Local preparation audit or original backup,3621
-local_only/preparation/build_release_record.py,DO_NOT_UPLOAD,Local preparation audit or original backup,18432
+local_only/preparation/build_release_record.py,DO_NOT_UPLOAD,Local preparation audit or original backup,18830
 local_only/preparation/capture_r_environment.R,DO_NOT_UPLOAD,Local preparation audit or original backup,1894
 local_only/preparation/check_master_guard.R,DO_NOT_UPLOAD,Local preparation audit or original backup,2148
 local_only/preparation/cleanup_ignore_check.ps1,DO_NOT_UPLOAD,Local preparation audit or original backup,599
@@ -142,9 +142,10 @@ local_only/preparation/finalize_license.py,DO_NOT_UPLOAD,Local preparation audit
 local_only/preparation/finalize_restoration_records.py,DO_NOT_UPLOAD,Local preparation audit or original backup,7227
 local_only/preparation/finish_input_fingerprints.py,DO_NOT_UPLOAD,Local preparation audit or original backup,5969
 local_only/preparation/gini.qmd.inspection.txt,DO_NOT_UPLOAD,Local preparation audit or original backup,16861
-local_only/preparation/github_access.py,DO_NOT_UPLOAD,Local preparation audit or original backup,2788
+local_only/preparation/github_access.py,DO_NOT_UPLOAD,Local preparation audit or original backup,2849
+local_only/preparation/github_access_status.json,DO_NOT_UPLOAD,Local preparation audit or original backup,184
 local_only/preparation/github_pull_request.md,DO_NOT_UPLOAD,Local preparation audit or original backup,1260
-local_only/preparation/github_snapshot_status.json,DO_NOT_UPLOAD,Local preparation audit or original backup,3765
+local_only/preparation/github_snapshot_status.json,DO_NOT_UPLOAD,Local preparation audit or original backup,4075
 local_only/preparation/github_whitespace_report.txt,DO_NOT_UPLOAD,Local preparation audit or original backup,17293910
 local_only/preparation/hash_release_inputs.py,DO_NOT_UPLOAD,Local preparation audit or original backup,4784
 local_only/preparation/input_fingerprint_guard.json,DO_NOT_UPLOAD,Local preparation audit or original backup,9662
@@ -186,7 +187,7 @@ local_only/preparation/prepare_input_release.py,DO_NOT_UPLOAD,Local preparation 
 local_only/preparation/prepare_repository.py,DO_NOT_UPLOAD,Local preparation audit or original backup,38592
 local_only/preparation/probe_source_reader.py,DO_NOT_UPLOAD,Local preparation audit or original backup,597
 local_only/preparation/provider.qmd.inspection.txt,DO_NOT_UPLOAD,Local preparation audit or original backup,33277
-local_only/preparation/publish_github_snapshot.py,DO_NOT_UPLOAD,Local preparation audit or original backup,2589
+local_only/preparation/publish_github_snapshot.py,DO_NOT_UPLOAD,Local preparation audit or original backup,3103
 local_only/preparation/python_chunk_review.json,DO_NOT_UPLOAD,Local preparation audit or original backup,302
 local_only/preparation/python_environment.json,DO_NOT_UPLOAD,Local preparation audit or original backup,1280
 local_only/preparation/quarto_inspect.json,DO_NOT_UPLOAD,Local preparation audit or original backup,29902

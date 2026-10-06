@@ -1,6 +1,6 @@
 # GitHub upload guide
 
-CB is organized for a public data-and-methods update to the [existing repository](https://github.com/KansasPopulationCenter/TheCareBoard). The owner selected that repository for Version 2.0.0, scheduled for October 12, 2026. CB was not a Git repository when inspected. Nothing has been pushed, and the remote repository has not been changed. Preserve its history and coordinate changes to paths used by the dashboard or other consumers.
+CB is organized for a public data-and-methods update to the [existing repository](https://github.com/KansasPopulationCenter/TheCareBoard). The owner selected that repository for Version 2.0.0, scheduled for October 12, 2026. The 101-file snapshot was pushed on October 6, 2026 to [careboard-2.0.0-snapshot](https://github.com/KansasPopulationCenter/TheCareBoard/tree/careboard-2.0.0-snapshot), with [draft pull request #2](https://github.com/KansasPopulationCenter/TheCareBoard/pull/2). The default `main` branch and existing historical paths were retained. No formal release or release tag was created. CB itself remains the preparation folder; the separate clone is held in ignored local storage.
 
 ## Upload
 

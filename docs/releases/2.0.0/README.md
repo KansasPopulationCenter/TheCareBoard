@@ -1,6 +1,6 @@
 # The Care Board — Version 2.0.0 release record
 
-**Status: scheduled.** The owner approved public availability on **October 12, 2026**. This record was prepared on October 5, 2026; publication, a GitHub release, and a release tag have not been performed by this preparation work.
+**Formal release status: scheduled.** The owner approved the release for **October 12, 2026**. This record was prepared on October 5, 2026. The current snapshot was uploaded to an update branch on October 6, 2026 with [draft pull request #2](https://github.com/KansasPopulationCenter/TheCareBoard/pull/2); the pull request is not merged, and no formal GitHub release or release tag has been created.
 
 | Item | Recorded value |
 | --- | --- |
@@ -36,4 +36,4 @@ The preparation date, planned release date, CSV reporting labels, ASEC income re
 3. Commit the finalized files in the existing repository. Create `v2.0.0` from the approved commit and publish the GitHub release on the actual publication date. Record the full tagged commit hash in the GitHub release description or an archive record alongside the snapshot, avoiding a self-referential commit hash inside the commit itself.
 4. Preserve this version's records and historical releases when preparing later versions. Add a DOI only if one is registered for the corresponding release/archive.
 
-No GitHub changes, release tags, commits, or DOI registrations were performed as part of this folder preparation.
+The current snapshot has been committed and pushed to the update branch, with a draft pull request. Release tags, a formal GitHub release, and DOI registrations have not been created. See [Snapshot sync scope](../../SNAPSHOT_SYNC.md).
