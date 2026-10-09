@@ -1,6 +1,8 @@
 # Local files and generated documents
 /local_only/
 /generated/
+# Owner's Bitly import export; its public short links are incorporated in README.md.
+/bitly_link_crossover.csv
 .quarto/
 _freeze/
 *_files/

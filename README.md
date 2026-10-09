@@ -16,20 +16,86 @@ The owner selected a sync of the current snapshot on October 6, 2026, with metho
 
 ## Available data
 
-| Topic | Files in `app_data/` |
-| --- | --- |
-| Care needs and provision | `market.csv`, `market_datum.csv` |
-| Paid care activities | `activity_formal.csv`, `activity_formal_datum.csv` |
-| Unpaid care activities | `activity_informal.csv`, `activity_informal_datum.csv` |
-| Care providers | `provider.csv`, `provider_datum.csv`, `care_provider_population.csv`, `care_provider_datum.csv` |
-| Broader economic impacts | `metrics_formal.csv`, `metrics_informal.csv` |
-| Household measures | `metrics_maternal_power.csv`, `metrics_priviledge.csv`, `metrics_sandwich_generation.csv` |
-| Geographic care resources | `metrics_state_care_gini.csv` |
-| Dashboard metadata | `provider_category.csv`, `provider_category.xlsx`, `provider_group.xlsx`, `metric_tables.xlsx`, `metric_labels.csv`, `source.csv` |
+[Browse the version 2.0.0 data library](https://bit.ly/CareBoard2DataLibrary) · [View the version 2.0.0 release](https://bit.ly/CareBoard2Release)
 
-Download individual CSVs from `app_data/` or clone/download the repository. Public tables need no database connection. Read the [table catalog](docs/DATA_DICTIONARY.md) for schemas, reference periods, populations, and units before comparing indicators. Missing values are not automatically zero. January 1 date labels identify reporting periods rather than establishing literal January observations; tables without dates need their source/release notes.
+The named links below target the fixed **Version 2.0.0** snapshot. They become available when the `v2.0.0` tag and GitHub release are published.
+
+### Statistical data
+
+| Topic | Contents | Download |
+| --- | --- | --- |
+| Population by age | Population counts by age | [Population by age CSV](https://bit.ly/CareBoard2PopulationByAgeCSV) |
+| Care needs and provision | Care need and provision by age and care focus | [Care needs and provision CSV](https://bit.ly/CareBoard2CareNeedsProvisionCSV) |
+| Paid care activity definitions | Care focus and wages for paid care activities | [Paid care activities CSV](https://bit.ly/CareBoard2PaidCareActivitiesCSV) |
+| Paid care activity time and population | Time and population for paid care activities | [Paid care activity time and population CSV](https://bit.ly/CareBoard2PaidCareActivityTimePopulationCSV) |
+| Unpaid care activity definitions | Care focus and wages for unpaid care activities | [Unpaid care activities CSV](https://bit.ly/CareBoard2UnpaidCareActivitiesCSV) |
+| Unpaid care activity time and population | Care attention, time, and population for unpaid activities | [Unpaid care activity time and population CSV](https://bit.ly/CareBoard2UnpaidCareActivityTimePopulationCSV) |
+| Provider demographics | Demographic groups and provider population | [Provider demographics CSV](https://bit.ly/CareBoard2ProviderDemographicsCSV) |
+| Provider care time and population | Provider time and population by care type, focus, and attention | [Provider care time and population CSV](https://bit.ly/CareBoard2ProviderCareTimePopulationCSV) |
+| Care-provider group populations | Population denominators for care-provider groups | [Care-provider population CSV](https://bit.ly/CareBoard2CareProviderPopulationCSV) |
+| Care-provider flows and time | Care-provider time and population by demographic group | [Care-provider flows and time CSV](https://bit.ly/CareBoard2CareProviderFlowsCSV) |
+| Paid care economic and labor metrics | Paid care workforce, time, value, and parental labor indicators | [Paid care metrics CSV](https://bit.ly/CareBoard2PaidCareMetricsCSV) |
+| Unpaid care economic and labor metrics | Unpaid care workforce, time, value, and parental care/labor indicators | [Unpaid care metrics CSV](https://bit.ly/CareBoard2UnpaidCareMetricsCSV) |
+| Maternal income shares | Mothers' within-couple wage and salary income shares | [Maternal income shares CSV](https://bit.ly/CareBoard2MaternalIncomeShareCSV) |
+| Care privilege | Care-privileged adult population and proportion | [Care privilege CSV](https://bit.ly/CareBoard2CarePrivilegeCSV) |
+| Sandwich caregiving | Sandwich caregiving population and time | [Sandwich generation CSV](https://bit.ly/CareBoard2SandwichGenerationCSV) |
+| Geographic care resources | Care-job Gini, location quotient, and CaRES | [Care-job Gini and CaRES CSV](https://bit.ly/CareBoard2StateCareGiniCaRESCSV) |
+
+### Dashboard metadata
+
+| Metadata | Contents | Download |
+| --- | --- | --- |
+| Provider categories | Category definitions and display order | [Provider categories CSV](https://bit.ly/CareBoard2ProviderCategoriesCSV) · [Provider categories Excel](https://bit.ly/CareBoard2ProviderCategoriesXLSX) |
+| Provider groups | Provider demographic group metadata | [Provider groups Excel](https://bit.ly/CareBoard2ProviderGroupsXLSX) |
+| Metric definitions | Metric and metric-group metadata | [Metric metadata Excel](https://bit.ly/CareBoard2MetricMetadataXLSX) |
+| Metric labels | Dashboard labels and display types | [Metric labels CSV](https://bit.ly/CareBoard2MetricLabelsCSV) |
+| Data sources | Dashboard source and explanatory notes | [Data sources CSV](https://bit.ly/CareBoard2DataSourcesCSV) |
+
+Public tables need no database connection. Read the [table catalog](docs/DATA_DICTIONARY.md) for schemas, reference periods, populations, and units before comparing indicators. Missing values are not automatically zero. January 1 date labels identify reporting periods rather than establishing literal January observations; tables without dates need their source/release notes.
 
 The spelling of `metrics_priviledge.csv` and `bargainin_power.qmd` is retained for compatibility with existing consumers.
+
+### Data crosswalks
+
+| Topic | Contents | Download |
+| --- | --- | --- |
+| Care activities to care focus | ATUS activity codes and care classifications | [Activity-to-care crosswalk CSV](https://bit.ly/CareBoard2ActivityCareCrosswalkCSV) |
+| Occupations to care focus | Occupation codes and care classifications | [Occupation-to-care crosswalk CSV](https://bit.ly/CareBoard2OccupationCareCrosswalkCSV) |
+| Occupations to care activities | Links between occupation codes and ATUS activities | [Occupation-to-activity crosswalk CSV](https://bit.ly/CareBoard2OccupationActivityCrosswalkCSV) |
+
+## Documentation and code
+
+### Methodology and documentation
+
+| Topic | Contents | Open or download |
+| --- | --- | --- |
+| Methodology | Written methodology overview | [Read the methodology](https://bit.ly/CareBoard2Methods) |
+| Data dictionary | Table schemas, populations, and units | [Read the data dictionary](https://bit.ly/CareBoard2DataDictionary) |
+| Reference periods | Reporting labels and source windows | [Read the reference periods](https://bit.ly/CareBoard2ReferencePeriods) |
+| Crosswalk guide | Crosswalk structure and interpretation | [Read the crosswalk guide](https://bit.ly/CareBoard2CrosswalkGuide) |
+| Reproduction guide | Inputs, execution safeguards, and replication limits | [Read the reproduction guide](https://bit.ly/CareBoard2ReproductionGuide) |
+| Master methodology source | Master methodology and ordered pipeline | [Master methodology QMD](https://bit.ly/CareBoard2MasterMethodologyQMD) |
+
+### Pipeline code
+
+These links provide Quarto source documents. For environment setup and execution safeguards, see [Reproducibility](docs/REPRODUCIBILITY.md).
+
+| Topic | Contents | Source |
+| --- | --- | --- |
+| IPUMS downloads | IPUMS extraction and download requests | [IPUMS download code QMD](https://bit.ly/CareBoard2IPUMSDownloadQMD) |
+| Microdata processing | Prepare the analysis input data | [Microdata processing code QMD](https://bit.ly/CareBoard2MicrodataProcessingQMD) |
+| Population by age | Compile population-by-age statistics | [Population by age code QMD](https://bit.ly/CareBoard2PopulationByAgeQMD) |
+| Care needs and provision | Compile care need and provision statistics | [Care needs and provision code QMD](https://bit.ly/CareBoard2CareNeedsProvisionQMD) |
+| Paid care activities | Compile paid care activity statistics | [Paid care activities code QMD](https://bit.ly/CareBoard2PaidCareActivitiesQMD) |
+| Unpaid care activities | Compile unpaid care activity statistics | [Unpaid care activities code QMD](https://bit.ly/CareBoard2UnpaidCareActivitiesQMD) |
+| Provider demographics | Compile provider demographics and care statistics | [Provider demographics code QMD](https://bit.ly/CareBoard2ProviderDemographicsQMD) |
+| Care-provider groups | Compile care-provider group populations and time | [Care-provider groups code QMD](https://bit.ly/CareBoard2CareProviderFlowsQMD) |
+| Broader economic impacts | Compile workforce, time, value, and parental labor metrics | [Broader impacts code QMD](https://bit.ly/CareBoard2BroadImpactsQMD) |
+| Maternal income shares and care privilege | Compile maternal income share and care-privilege indicators | [Maternal income share and care privilege code QMD](https://bit.ly/CareBoard2MaternalIncomeShareQMD) |
+| Sandwich caregiving | Compile sandwich-generation statistics | [Sandwich generation code QMD](https://bit.ly/CareBoard2SandwichGenerationQMD) |
+| Care-job Gini and CaRES | Compile geographic care-job inequality and CaRES | [Care-job Gini and CaRES code QMD](https://bit.ly/CareBoard2StateCareGiniCaRESQMD) |
+| Parental labor monitor | Compile parental labor monitor statistics | [Parental labor monitor code QMD](https://bit.ly/CareBoard2ParentalLaborMonitorQMD) |
+| Warehouse upload | Load prepared data and metadata into the warehouse | [Warehouse upload code QMD](https://bit.ly/CareBoard2WarehouseUploadQMD) |
 
 ## Project layout
 

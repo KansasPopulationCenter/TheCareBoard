@@ -2,7 +2,7 @@ path,decision,reason,bytes
 .Rprofile,UPLOAD,"Public repository documentation, configuration, or structural check",27
 .gitattributes,UPLOAD,"Public repository documentation, configuration, or structural check",217
 .github/pull_request_template.md,UPLOAD,"Public repository documentation, configuration, or structural check",541
-.gitignore,UPLOAD,"Public repository documentation, configuration, or structural check",1062
+.gitignore,UPLOAD,"Public repository documentation, configuration, or structural check",1175
 .quarto/_freeze/TheCareBoard_Master/execute-results/html.json,DO_NOT_UPLOAD,"Public repository documentation, configuration, or structural check",131931
 .quarto/project-cache/c44321c6e285a7352dc006e5e7851b1e,DO_NOT_UPLOAD,"Public repository documentation, configuration, or structural check",28027
 .quarto/project-cache/deno-kv-file,DO_NOT_UPLOAD,"Public repository documentation, configuration, or structural check",36864
@@ -17,7 +17,7 @@ R/data_prep_functions.R,UPLOAD,Available analysis/methodology source,21370
 R/load_defaults.R,UPLOAD,Available analysis/methodology source,3808
 R/load_libraries.R,UPLOAD,Available analysis/methodology source,4113
 R/refresh_atus_eldercare.R,UPLOAD,Available analysis/methodology source,5627
-README.md,UPLOAD,"Public repository documentation, configuration, or structural check",6856
+README.md,UPLOAD,"Public repository documentation, configuration, or structural check",13806
 TheCareBoard_Master.qmd,UPLOAD,"Public repository documentation, configuration, or structural check",12823
 _quarto.yml,UPLOAD,"Public repository documentation, configuration, or structural check",112
 analysis/IPUMS_API.qmd,UPLOAD,Available analysis/methodology source,11599
@@ -59,6 +59,7 @@ app_data/provider_category.xlsx,UPLOAD,Public aggregate data or required dashboa
 app_data/provider_datum.csv,UPLOAD,Public aggregate data or required dashboard metadata/documentation,1162879
 app_data/provider_group.xlsx,UPLOAD,Public aggregate data or required dashboard metadata/documentation,9764
 app_data/source.csv,UPLOAD,Public aggregate data or required dashboard metadata/documentation,2271
+bitly_link_crossover.csv,DO_NOT_UPLOAD,Local Bitly import export; public download links are incorporated in README.md,12703
 config/db_connect.example.R,UPLOAD,Credential-free connection example,1386
 config/r-packages.txt,UPLOAD,Selected R dependency list,184
 data/CSV/ASECSampleIDs.csv,UPLOAD,"Allowlisted small public crosswalk, request sample list, or aggregate GDP input",488
@@ -89,7 +90,7 @@ docs/app_data_schema.json,UPLOAD,"Public repository documentation, configuration
 docs/crosswalk_schema.json,UPLOAD,"Public repository documentation, configuration, or structural check",1443
 docs/releases/2.0.0/README.md,UPLOAD,"Public repository documentation, configuration, or structural check",4768
 docs/releases/2.0.0/environment.json,UPLOAD,"Public repository documentation, configuration, or structural check",2654
-docs/releases/2.0.0/file_checksums.csv,UPLOAD,"Public repository documentation, configuration, or structural check",11742
+docs/releases/2.0.0/file_checksums.csv,UPLOAD,"Public repository documentation, configuration, or structural check",11743
 docs/releases/2.0.0/input_provenance.json,UPLOAD,"Public repository documentation, configuration, or structural check",1109
 docs/releases/2.0.0/metric_reference_periods.csv,UPLOAD,"Public repository documentation, configuration, or structural check",34067
 docs/releases/2.0.0/provenance.json,UPLOAD,"Public repository documentation, configuration, or structural check",5311
@@ -122,10 +123,22 @@ generated/restored_pipeline/market_datum.pdf,DO_NOT_UPLOAD,Generated/previously 
 generated/restored_pipeline/provider.pdf,DO_NOT_UPLOAD,Generated/previously rendered artifact; review current render before separate release,105593
 local_only/credentials/db_connect.r,DO_NOT_UPLOAD,Local database connection details; never publish,203
 local_only/notes/CareBoardNotes.docx,DO_NOT_UPLOAD,Internal project notes,22898
+local_only/outputs/careboard-release-links-20261006/CareBoard_2.0.0_Link_Planner.xlsx,DO_NOT_UPLOAD,"Local publishing planner, preview, or supporting artifact",26524
+local_only/outputs/careboard-release-links-20261006/build_link_planner.mjs,DO_NOT_UPLOAD,"Local publishing planner, preview, or supporting artifact",6854
+local_only/outputs/careboard-release-links-20261006/build_link_planner.py,DO_NOT_UPLOAD,"Local publishing planner, preview, or supporting artifact",9843
+local_only/outputs/careboard-release-links-20261006/destination_urls_preview.png,DO_NOT_UPLOAD,"Local publishing planner, preview, or supporting artifact",49095
+local_only/outputs/careboard-release-links-20261006/edit_link_planner.py,DO_NOT_UPLOAD,"Local publishing planner, preview, or supporting artifact",11482
+local_only/outputs/careboard-release-links-20261006/link_records.json,DO_NOT_UPLOAD,"Local publishing planner, preview, or supporting artifact",96321
+local_only/outputs/careboard-release-links-20261006/mapping_urls_preview.png,DO_NOT_UPLOAD,"Local publishing planner, preview, or supporting artifact",28110
+local_only/outputs/careboard-release-links-20261006/new_destinations_preview.png,DO_NOT_UPLOAD,"Local publishing planner, preview, or supporting artifact",60688
+local_only/outputs/careboard-release-links-20261006/old_mapping_preview.png,DO_NOT_UPLOAD,"Local publishing planner, preview, or supporting artifact",61781
+local_only/outputs/careboard-release-links-20261006/recommended_names.json,DO_NOT_UPLOAD,"Local publishing planner, preview, or supporting artifact",3212
+local_only/outputs/careboard-release-links-20261006/recommended_names_preview.png,DO_NOT_UPLOAD,"Local publishing planner, preview, or supporting artifact",42787
 local_only/preparation/IPUMS_API.qmd.inspection.txt,DO_NOT_UPLOAD,Local preparation audit or original backup,5549
 local_only/preparation/MIT-template.txt,DO_NOT_UPLOAD,Local preparation audit or original backup,1078
 local_only/preparation/__pycache__/github_access.cpython-312.pyc,DO_NOT_UPLOAD,Local preparation audit or original backup,4627
-local_only/preparation/audit_repository.py,DO_NOT_UPLOAD,Local preparation audit or original backup,13085
+local_only/preparation/audit_repository.py,DO_NOT_UPLOAD,Local preparation audit or original backup,13394
+local_only/preparation/bitly_redirect_check_20261009.json,DO_NOT_UPLOAD,Local preparation audit or original backup,23089
 local_only/preparation/build_environment_record.py,DO_NOT_UPLOAD,Local preparation audit or original backup,3621
 local_only/preparation/build_release_record.py,DO_NOT_UPLOAD,Local preparation audit or original backup,18830
 local_only/preparation/capture_r_environment.R,DO_NOT_UPLOAD,Local preparation audit or original backup,1894
@@ -184,6 +197,7 @@ local_only/preparation/originals/press_release/build_figure.py,DO_NOT_UPLOAD,Loc
 local_only/preparation/originals/press_release/motherhood_focus/build_media_pack.py,DO_NOT_UPLOAD,Local preparation audit or original backup,37080
 local_only/preparation/prepare_github_snapshot.py,DO_NOT_UPLOAD,Local preparation audit or original backup,3605
 local_only/preparation/prepare_input_release.py,DO_NOT_UPLOAD,Local preparation audit or original backup,2553
+local_only/preparation/prepare_link_planner.py,DO_NOT_UPLOAD,Local preparation audit or original backup,12814
 local_only/preparation/prepare_repository.py,DO_NOT_UPLOAD,Local preparation audit or original backup,38592
 local_only/preparation/probe_source_reader.py,DO_NOT_UPLOAD,Local preparation audit or original backup,597
 local_only/preparation/provider.qmd.inspection.txt,DO_NOT_UPLOAD,Local preparation audit or original backup,33277
@@ -193,6 +207,7 @@ local_only/preparation/python_environment.json,DO_NOT_UPLOAD,Local preparation a
 local_only/preparation/quarto_inspect.json,DO_NOT_UPLOAD,Local preparation audit or original backup,29902
 local_only/preparation/r_direct_packages.txt,DO_NOT_UPLOAD,Local preparation audit or original backup,208
 local_only/preparation/r_session_info.txt,DO_NOT_UPLOAD,Local preparation audit or original backup,2739
+local_only/preparation/readme_link_import_20261009.json,DO_NOT_UPLOAD,Local preparation audit or original backup,609
 local_only/preparation/release_period_inspection.json,DO_NOT_UPLOAD,Local preparation audit or original backup,117172
 local_only/preparation/render_methodology.ps1,DO_NOT_UPLOAD,Local preparation audit or original backup,431
 local_only/preparation/renv_runtime/index/windows/R-4.4/x86_64-w64-mingw32/available-packages/data-4cd849d015d4.rds,DO_NOT_UPLOAD,Local preparation audit or original backup,1537264
@@ -217,6 +232,7 @@ local_only/preparation/sandwich_generation.qmd.inspection.txt,DO_NOT_UPLOAD,Loca
 local_only/preparation/summarize_input_metadata.py,DO_NOT_UPLOAD,Local preparation audit or original backup,809
 local_only/preparation/update_input_docs.py,DO_NOT_UPLOAD,Local preparation audit or original backup,12494
 local_only/preparation/update_input_provenance.py,DO_NOT_UPLOAD,Local preparation audit or original backup,14574
+local_only/preparation/update_readme_download_links.py,DO_NOT_UPLOAD,Local preparation audit or original backup,12961
 local_only/preparation/update_restoration_docs.py,DO_NOT_UPLOAD,Local preparation audit or original backup,21739
 local_only/preparation/validate_hash_reader.py,DO_NOT_UPLOAD,Local preparation audit or original backup,1603
 local_only/preparation/validate_python_chunks.py,DO_NOT_UPLOAD,Local preparation audit or original backup,1066
