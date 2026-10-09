@@ -1,0 +1,63 @@
+# Local files and generated documents
+/local_only/
+/generated/
+# Owner's Bitly import export; its public short links are incorporated in README.md.
+/bitly_link_crossover.csv
+.quarto/
+_freeze/
+*_files/
+*.knit.md
+*.utf8.md
+
+# R, Python, and editor state
+.Rhistory
+.RData
+.Ruserdata
+.Rproj.user/
+.Renviron
+.Renviron.*
+.env
+.env.*
+!.env.example
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+renv/library/
+renv/staging/
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+~$*
+*.log
+
+# Connection files may only be stored locally; the example is safe to track
+db_connect.r
+db_connect.R
+*.pem
+*.key
+*.p12
+
+# Source microdata and replication files require separate storage.
+# Track input-access documentation and six explicitly allowlisted small inputs.
+/data/*
+!/data/README.md
+!/data/input_manifest.csv
+!/data/CSV/
+/data/CSV/*
+!/data/CSV/FormalOccs_Crossover.csv
+!/data/CSV/ATUSActivityCrossover.csv
+!/data/CSV/Informal_Formal_Crosswalk.csv
+!/data/CSV/ASECSampleIDs.csv
+!/data/CSV/CPSSampleIDs.csv
+!/data/CSV/GdpByState.csv
+
+# Archives and root-level renders
+*.zip
+/*.pdf
+/*.html
+/parental_labor_monitor_social.png
+
+/.quarto/
+**/*.quarto_ipynb

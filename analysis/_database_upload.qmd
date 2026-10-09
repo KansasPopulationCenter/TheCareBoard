@@ -1,0 +1,457 @@
+---
+title: "database_upload"
+format:
+  html:
+    toc: true
+    code-overflow: wrap
+    df-print: paged
+  pdf:
+    toc: true
+execute:
+  eval: false
+  warning: false
+  message: false
+editor: visual
+---
+
+## App Notes
+
+This file is the final operational step in the local data pipeline. It reads the CSV outputs in `app_data/`, reshapes them into the raw database tables expected by the warehouse, refreshes the production materialized views, and therefore controls what appears on [thecareboard.org](https://thecareboard.org/). Because the chunks delete and reload database tables, this document is configured with `execute: eval: false` for documentation rendering. Run the chunks intentionally only when a database upload is desired.
+
+The upload structure separates three responsibilities. The statistic-generating files write app-ready CSVs into `app_data/`. This file standardizes names, IDs, and metric types for the warehouse. The database views then expose production-ready tables for the website. For broader impacts subcategories, the upload prefixes selected IDs (`a-`, `b-`, and so on) because the current warehouse view sorts by text ID rather than by the category order field.
+
+**Outputs.** This workflow does not write local CSV, Stata, or Excel files. Instead, it writes to the `raw` schema in the Care Board warehouse and refreshes production materialized views.
+
+## Introduction and Literature Context
+
+The database upload is an operational methodology document. It explains how the locally generated Care Board outputs move into the warehouse tables used by the public website. For a public statistical project, this step matters because reproducibility does not end when CSV files are created; the transformation into production tables also affects what users see.
+
+The file is deliberately configured with `execute: eval: false`. Its chunks delete and reload warehouse tables, so rendering this methodology document should never modify production data by accident. Public users can inspect the upload logic without receiving database credentials or triggering writes.
+
+## Methodological Decisions
+
+| Decision | Implementation | Rationale |
+|---|---|---|
+| Upload source | Read app-ready CSVs from `app_data/` | Uses the same outputs created by statistic QMDs. |
+| Warehouse structure | Populate `raw` schema tables before refreshing public views | Separates raw upload structure from production-facing views. |
+| Metric reshaping | Convert wide metric tables into warehouse category and datum tables | Supports app display while preserving metric metadata. |
+| Execution safety | Keep all chunks unevaluated by default | Prevents accidental destructive writes during documentation builds. |
+
+## Policy Implications
+
+Operational transparency helps users understand the route from public methodology to public website. It also supports governance: database writes should be intentional, credentialed, auditable, and separate from routine methodology rendering. That separation is important when the website is used by policymakers, advocates, and researchers who need confidence that displayed statistics correspond to documented code.
+
+-   Flow of Care & Broader Impacts cards:
+
+    -   Left-hand BAN typically total summaries. Valid types include: count, dollar, interval
+
+    -   Right hand visual typically summarizes proportions or normalized values. Valid types include: ratio, rate, percent, interval
+
+## Setup
+
+```{r setup}
+# connect to database
+source("local_only/credentials/db_connect.r")
+source("R/load_defaults.R")
+
+# read all csv files into environment
+files <- list.files(path = "./app_data", pattern = ".csv", full.names = TRUE)
+for(sel_file in files){
+  name <- sel_file |> 
+    str_replace_all("./app_data/", "") |> 
+    str_replace_all(".csv", "")
+  df <- read.csv(sel_file)
+  
+  assign(name, df)
+}
+```
+
+::: callout-note
+#### Code Explanation
+
+This chunk sources `local_only/credentials/db_connect.r`, `R/load_defaults.R` so the later code has the required functions, defaults, and shared helpers. It reads `./app_data`, `.csv`, `./app_data/` into memory and prepares those inputs for the transformations that follow. The iteration step loops across years, states, datasets, categories, or demographic groups and binds the repeated results into a single analysis table. The main objects created or updated here are `files`, `name`, `df`.
+:::
+
+
+Source
+
+```{r upload-source}
+dbGetQuery(cn, "delete from raw.source cascade;")
+
+dbWriteTable(cn, SQL("raw.source"), source, append = TRUE)
+```
+
+::: callout-note
+#### Code Explanation
+
+It performs the warehouse operation shown in the code: clearing or writing raw tables and preparing the app database objects for refresh.
+:::
+
+
+### Activity Formal
+
+```{r upload-activity-formal}
+dbGetQuery(cn, "delete from raw.activity_formal cascade;")
+
+activity_formal <- activity_formal %>%
+  filter(median_wage != "null")
+  
+
+dbWriteTable(cn, SQL("raw.activity_formal"), activity_formal, append = TRUE)
+
+activity_formal_datum <- activity_formal_datum %>%
+  filter(population != "null")
+
+dbWriteTable(cn, SQL("raw.activity_formal_datum"), activity_formal_datum, append = TRUE)
+```
+
+::: callout-note
+#### Code Explanation
+
+Technically, it uses `filter()` to restrict the analytic universe, create derived variables, reshape records, join lookup tables, and/or aggregate weighted statistics. It performs the warehouse operation shown in the code: clearing or writing raw tables and preparing the app database objects for refresh. The main objects created or updated here are `activity_formal`, `activity_formal_datum`.
+:::
+
+
+**Provider**
+
+```{r upload-provider}
+dbExecute(cn, "DELETE FROM raw.provider_category;")
+
+dbWriteTable(cn, SQL("raw.provider_category"), provider_category, append = TRUE)
+
+
+dbExecute(cn, "DELETE FROM raw.provider_datum;")
+dbExecute(cn, "DELETE FROM raw.provider;")
+
+provider <- provider %>%
+  rename(geo = geo_level)
+
+dbWriteTable(cn, SQL("raw.provider"), provider, append = TRUE)
+
+provider_datum <- provider_datum %>%
+  rename(geo = geo_level) %>%
+  select(category_id, subcategory_id, care_type, care_focus, provider_attention, geo, provision_interval, population) %>%
+  filter(care_focus != "none")
+
+dbWriteTable(cn, SQL("raw.provider_datum"), provider_datum, append = TRUE)
+```
+
+::: callout-note
+#### Code Explanation
+
+Technically, it uses `filter()`, `select()`, `rename()` to restrict the analytic universe, create derived variables, reshape records, join lookup tables, and/or aggregate weighted statistics. It performs the warehouse operation shown in the code: clearing or writing raw tables and preparing the app database objects for refresh. The main objects created or updated here are `provider`, `provider_datum`.
+:::
+
+
+### Activity Informal
+
+```{r upload-activity-informal}
+dbGetQuery(cn, "delete from raw.activity_informal cascade;")
+
+activity_informal <- activity_informal %>%
+  rename(geo = geo_level) %>%
+  mutate(across(everything(), ~na_if(.x, "NULL"))) %>%     # convert "NULL" strings to NA
+  mutate(across(everything(), ~na_if(.x, ""))) 
+
+dbWriteTable(cn, SQL("raw.activity_informal"), activity_informal, append = TRUE)
+
+activity_informal_datum <- activity_informal_datum %>%
+  rename(geo = geo_level)
+
+dbWriteTable(cn, SQL("raw.activity_informal_datum"), activity_informal_datum, append = TRUE)
+```
+
+::: callout-note
+#### Code Explanation
+
+Technically, it uses `mutate()`, `rename()` to restrict the analytic universe, create derived variables, reshape records, join lookup tables, and/or aggregate weighted statistics. It performs the warehouse operation shown in the code: clearing or writing raw tables and preparing the app database objects for refresh. The main objects created or updated here are `activity_informal`, `activity_informal_datum`.
+:::
+
+
+### Market Tables
+
+```{r upload-market}
+dbGetQuery(cn, "delete from raw.market_datum cascade;")
+dbGetQuery(cn, "delete from raw.market cascade;")
+dbWriteTable(cn, SQL("raw.market"), market, append = TRUE)
+
+collapsed_85 <- market_datum %>%
+  filter(age %in% 81:85) %>%
+  group_by(care_focus) %>%
+  summarise(
+    age = 85,
+    need_interval = mean(need_interval, na.rm = TRUE),
+    provision_interval = mean(provision_interval, na.rm = TRUE),
+    .groups = "drop"
+  )
+
+market_datum <- market_datum %>%
+  filter(!age %in% 81:85) %>%
+  bind_rows(collapsed_85) %>%
+  arrange(care_focus, age)
+
+dbWriteTable(cn, SQL("raw.market_datum"), market_datum, append = TRUE)
+```
+
+::: callout-note
+#### Code Explanation
+
+Technically, it uses `filter()`, `group_by()`, `summarise()`, `arrange()`, `bind_rows()` to restrict the analytic universe, create derived variables, reshape records, join lookup tables, and/or aggregate weighted statistics. The statistical work in this chunk calculates weighted counts, rates, rolling values, medians, changes over time, or inequality measures used in the published indicators. It performs the warehouse operation shown in the code: clearing or writing raw tables and preparing the app database objects for refresh. The main objects created or updated here are `collapsed_85`, `age`, `need_interval`, `provision_interval`, `.groups`.
+:::
+
+
+### Care Provider
+
+```{r upload-care-provider}
+dbGetQuery(cn, "delete from raw.care_provider_datum cascade;")
+dbGetQuery(cn, "delete from raw.care_provider_population cascade;")
+dbWriteTable(cn, SQL("raw.care_provider_datum"), care_provider_datum, append = TRUE)
+dbWriteTable(cn, SQL("raw.care_provider_population"), care_provider_population, append = TRUE)
+```
+
+::: callout-note
+#### Code Explanation
+
+It performs the warehouse operation shown in the code: clearing or writing raw tables and preparing the app database objects for refresh.
+:::
+
+
+### Metric Tables
+
+#### Metric & Metric Group
+
+```{r upload-metric-tables}
+metric_group <- read_excel("./app_data/metric_tables.xlsx", sheet = "metric_group")
+dbGetQuery(cn, "delete from raw.metric_group cascade;")
+dbWriteTable(cn, SQL("raw.metric_group"), metric_group, append = TRUE)
+
+metric <- read_excel("./app_data/metric_tables.xlsx", sheet = "metric")
+dbGetQuery(cn, "delete from raw.metric cascade;")
+dbWriteTable(cn, SQL("raw.metric"), metric, append = TRUE)
+
+dbGetQuery(cn, "delete from raw.metric_label cascade;")
+dbWriteTable(cn, SQL("raw.metric_label"), metric_labels, append = TRUE)
+```
+
+::: callout-note
+#### Code Explanation
+
+It reads `./app_data/metric_tables.xlsx` into memory and prepares those inputs for the transformations that follow. It performs the warehouse operation shown in the code: clearing or writing raw tables and preparing the app database objects for refresh. The main objects created or updated here are `metric_group`, `metric`.
+:::
+
+
+#### Metric Datum
+
+```{r build-metric-datum}
+metrics_state_care_gini <- metrics_state_care_gini |>
+  select(any_of(c("gini", "cares", "date", "geo_level"))) |>
+  rename(
+    "care-gini" = any_of("gini"),
+    care_ratio = any_of("cares")
+  )
+
+metrics_maternal_power <- metrics_maternal_power |>
+  rename(maternal_bargaining_power = share_of_income)
+
+metrics_priviledge <- metrics_priviledge |>
+  rename(
+    care_privilege = care_privileged_population,
+    care_privilege_proportion = care_privileged_population_proportion
+  )
+
+metric_datum <- bind_rows(
+  metrics_formal   |> select(-starts_with("non_mothers_"), -starts_with("non_fathers_")),
+  metrics_informal |> select(-starts_with("non_mothers_"), -starts_with("non_fathers_")),
+  metrics_state_care_gini,
+  metrics_sandwich_generation,
+  metrics_maternal_power,
+  metrics_priviledge
+) |>
+  pivot_longer(
+    cols = -c(date, geo_level, category_id, subcategory_id)
+  ) %>%
+  filter(!is.na(value)) %>%
+  filter(name != "total_weight")
+```
+
+::: callout-note
+#### Code Explanation
+
+This chunk standardizes metric names for Care Gini, maps CaRES into the existing `care-ratio` metric slot, drops LQ from the warehouse upload while leaving it in the source CSV, stacks all broad metric tables into one long source table, pivots metric columns into `name`/`value` pairs, and removes missing values and the internal `total_weight` field before warehouse-specific IDs are created.
+:::
+
+```{r, message=FALSE, warning=FALSE}
+metric_datum <- metric_datum |> 
+  mutate(
+    category_id = if_else(is.na(category_id), "overall", category_id),
+    subcategory_id = if_else(is.na(subcategory_id), "overall", subcategory_id),
+    metric_id = name,
+    
+    category_id = str_replace_all(
+      category_id, "[^a-zA-Z0-9]+", "-") |> 
+      str_to_lower() |> 
+      coalesce("overall"),
+    
+    subcategory_id = str_replace_all(
+      subcategory_id, 
+      "[^a-zA-Z0-9]+", "-") |>
+      str_to_lower(), 
+
+    # Prefix selected subcategory IDs so warehouse views that sort by ID
+    # display bars in the intended non-alphabetical order.
+    subcategory_id = case_when(
+      category_id == "gender-parent" & subcategory_id == "mothers" ~ "a-mothers",
+      category_id == "gender-parent" & subcategory_id == "fathers" ~ "b-fathers",
+      category_id == "gender-parent" & subcategory_id == "non-mothers" ~ "c-non-mothers",
+      category_id == "gender-parent" & subcategory_id == "non-fathers" ~ "d-non-fathers",
+      category_id == "youngest-child-age" & subcategory_id == "child-5-or-under" ~ "a-child-5-or-under",
+      category_id == "youngest-child-age" & subcategory_id == "child-6-to-12" ~ "b-child-6-to-12",
+      category_id == "youngest-child-age" & subcategory_id == "child-13-to-18" ~ "c-child-13-to-18",
+      TRUE ~ subcategory_id
+    ),
+    
+    type = case_when(
+      name %in% c("care_ratio", "care-gini", "maternal_bargaining_power") ~ "ratio",
+      name %in% c("formal_value", "informal_value") ~ "dollar",
+      name %in% c(
+        "formal_care_labor_force_proportion",
+        "formal_care_time_proportion",
+        "formal_value_proportion",
+        "informal_care_time_proportion",
+        "informal_care_labor_force_proportion",
+        "informal_value_proportion",
+        "sandwich_population_proportion",
+        "mothers_labor_force_participation_proportion",
+        "fathers_labor_force_participation_proportion",
+        "mothers_care_absence_proportion",
+        "fathers_care_absence_proportion",
+        "mothers_nilf_care_proportion",
+        "fathers_nilf_care_proportion",
+        "care_privilege_proportion"
+      ) ~ "percent",
+      name %in% c(
+        "formal_care_time",
+        "informal_care_time",
+        "sandwich_time_median"
+      ) ~ "interval",
+    TRUE ~ "count")
+    )
+```
+
+::: callout-note
+#### Code Explanation
+
+This chunk normalizes category and subcategory identifiers for database use, prefixes selected display IDs so the app can sort them in the intended order, and assigns each metric a display type such as `ratio`, `dollar`, `percent`, `interval`, or `count`.
+:::
+
+```{r, message=FALSE, warning=FALSE}
+metric_datum <- metric_datum |>
+  mutate(
+    metric_id = metric_id %>%
+      str_replace_all("_", "-") %>%
+      str_remove("-proportion$") %>%
+      str_remove("-median$") %>%
+      str_remove("-total$"),
+
+    value = case_when(
+      str_detect(name, "time") & subcategory_id == "current" ~ value/60,
+      TRUE ~ value
+    ),
+
+    category_order = case_when(
+      category_id == "overall" ~ 0L,
+      category_id == "youngest-child-age" ~ 1L,
+      category_id == "gender-parent" ~ 2L,
+      TRUE ~ 99L
+    ),
+
+    subcategory_order = case_when(
+      category_id == "gender-parent" & subcategory_id == "a-mothers" ~ 1L,
+      category_id == "gender-parent" & subcategory_id == "b-fathers" ~ 2L,
+      category_id == "gender-parent" & subcategory_id == "c-non-mothers" ~ 3L,
+      category_id == "gender-parent" & subcategory_id == "d-non-fathers" ~ 4L,
+      category_id == "youngest-child-age" & subcategory_id == "a-child-5-or-under" ~ 1L,
+      category_id == "youngest-child-age" & subcategory_id == "b-child-6-to-12" ~ 2L,
+      category_id == "youngest-child-age" & subcategory_id == "c-child-13-to-18" ~ 3L,
+      subcategory_id == "overall" ~ 0L,
+      subcategory_id == "current" ~ 0L,
+      subcategory_id == "trend" ~ 1L,
+      TRUE ~ 99L
+    )
+    ) |>
+  arrange(
+    metric_id, geo_level, category_order, category_id,
+    subcategory_order, subcategory_id, type, date
+  ) |>
+  select(-category_order, -subcategory_order) |>
+  select(metric_id, geo_level, category_id, subcategory_id, type, date, value) |>
+  filter(subcategory_id != 'other') %>%
+  rename(geo = geo_level) %>%
+  filter(metric_id != "total-weight") |>
+  filter(!is.na(value))
+
+```
+
+::: callout-note
+#### Code Explanation
+
+This chunk converts metric names into app-facing IDs, rescales current time values from minutes to hours where needed, assigns category and subcategory sort orders, orders the final rows, removes helper columns, renames `geo_level` to `geo`, and filters out records that should not be uploaded.
+:::
+
+
+#### Metric Category
+
+```{r upload-metric-category}
+metric_category <- bind_rows(
+  metric_datum |> select(category_id) |> rename(id = category_id),
+  metric_datum |> select(subcategory_id) |> rename(id = subcategory_id)
+) |> 
+  unique() |> 
+  mutate(
+    name = str_to_title(id),
+    name = case_when(
+      name == "Gender-Parent"       ~ "By Gender & Parenthood",
+      name == "Youngest-Child-Age"  ~ "By Age of Youngest Child",
+      id == "a-mothers"             ~ "Mothers",
+      id == "b-fathers"             ~ "Fathers",
+      id == "c-non-mothers"         ~ "Non-Mothers",
+      id == "d-non-fathers"         ~ "Non-Fathers",
+      id == "a-child-5-or-under"    ~ "Child 5 or Under",
+      id == "b-child-6-to-12"       ~ "Child 6 to 12",
+      id == "c-child-13-to-18"      ~ "Child 13 to 18",
+      name == "Child-5-Or-Under"    ~ "Child 5 or Under",
+      name == "Child-6-To-12"       ~ "Child 6 to 12",
+      name == "Child-13-To-18"      ~ "Child 13 to 18",
+      TRUE ~ name
+    ),
+
+    order = case_when(
+      id == "overall"            ~ 0,
+      id == "youngest-child-age" ~ 3,
+      id == "gender-parent"      ~ 3,
+      id %in% c("mothers", "a-mothers")                     ~ 1,
+      id %in% c("fathers", "b-fathers")                     ~ 2,
+      id %in% c("non-mothers", "c-non-mothers")             ~ 3,
+      id %in% c("non-fathers", "d-non-fathers")             ~ 4,
+      id %in% c("child-5-or-under", "a-child-5-or-under")   ~ 1,
+      id %in% c("child-6-to-12", "b-child-6-to-12")         ~ 2,
+      id %in% c("child-13-to-18", "c-child-13-to-18")       ~ 3,
+      id == "current"            ~ 0,
+      id == "trend"              ~ 1,
+      TRUE                       ~ 99
+    )
+  )
+
+
+
+dbGetQuery(cn, "delete from raw.metric_datum cascade;")
+dbGetQuery(cn, "delete from raw.metric_category cascade;")
+dbWriteTable(cn, SQL("raw.metric_category"), metric_category, append = TRUE)
+dbWriteTable(cn, SQL("raw.metric_datum"), metric_datum, append = TRUE)
+```
+
+::: callout-note
+#### Code Explanation
+
+Technically, it uses `mutate()`, `select()`, `rename()`, `bind_rows()` to restrict the analytic universe, create derived variables, reshape records, join lookup tables, and/or aggregate weighted statistics. It performs the warehouse operation shown in the code: clearing or writing raw tables and preparing the app database objects for refresh. The main objects created or updated here are `metric_category`, `name`, `id`, `order`.
+:::

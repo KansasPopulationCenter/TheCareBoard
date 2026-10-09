@@ -1,0 +1,379 @@
+path,decision,reason,bytes
+.Rprofile,UPLOAD,"Public repository documentation, configuration, or structural check",27
+.gitattributes,UPLOAD,"Public repository documentation, configuration, or structural check",217
+.github/pull_request_template.md,UPLOAD,"Public repository documentation, configuration, or structural check",541
+.gitignore,UPLOAD,"Public repository documentation, configuration, or structural check",1175
+.quarto/_freeze/TheCareBoard_Master/execute-results/html.json,DO_NOT_UPLOAD,"Public repository documentation, configuration, or structural check",131931
+.quarto/project-cache/c44321c6e285a7352dc006e5e7851b1e,DO_NOT_UPLOAD,"Public repository documentation, configuration, or structural check",28027
+.quarto/project-cache/deno-kv-file,DO_NOT_UPLOAD,"Public repository documentation, configuration, or structural check",36864
+.quarto/xref/INDEX,DO_NOT_UPLOAD,"Public repository documentation, configuration, or structural check",81
+.quarto/xref/d3925bcd,DO_NOT_UPLOAD,"Public repository documentation, configuration, or structural check",2004
+CITATION.cff,UPLOAD,"Public repository documentation, configuration, or structural check",800
+CONTRIBUTING.md,UPLOAD,"Public repository documentation, configuration, or structural check",1931
+LICENSE,UPLOAD,Approved standard project license text,1103
+LICENSES/CC-BY-4.0.txt,UPLOAD,Approved standard project license text,18657
+R/atus_eldercare.R,UPLOAD,Available analysis/methodology source,7148
+R/data_prep_functions.R,UPLOAD,Available analysis/methodology source,21370
+R/load_defaults.R,UPLOAD,Available analysis/methodology source,3808
+R/load_libraries.R,UPLOAD,Available analysis/methodology source,4113
+R/refresh_atus_eldercare.R,UPLOAD,Available analysis/methodology source,5627
+README.md,UPLOAD,"Public repository documentation, configuration, or structural check",13891
+TheCareBoard_Master.qmd,UPLOAD,"Public repository documentation, configuration, or structural check",12823
+_quarto.yml,UPLOAD,"Public repository documentation, configuration, or structural check",112
+analysis/IPUMS_API.qmd,UPLOAD,Available analysis/methodology source,11599
+analysis/README.md,UPLOAD,Available analysis/methodology source,1197
+analysis/_database_upload.qmd,UPLOAD,Available analysis/methodology source,19233
+analysis/activity_formal.qmd,UPLOAD,Available analysis/methodology source,18735
+analysis/activity_informal.qmd,UPLOAD,Available analysis/methodology source,27071
+analysis/bargainin_power.qmd,UPLOAD,Available analysis/methodology source,19102
+analysis/broad_impacts.qmd,UPLOAD,Available analysis/methodology source,87221
+analysis/care_provider.qmd,UPLOAD,Available analysis/methodology source,30917
+analysis/data_processing.qmd,UPLOAD,Available analysis/methodology source,14417
+analysis/gini.qmd,UPLOAD,Available analysis/methodology source,19482
+analysis/legacy/care_ratio.qmd,UPLOAD,Legacy implementation clearly separated from active pipeline,19002
+analysis/market.qmd,UPLOAD,Available analysis/methodology source,10687
+analysis/market_datum.qmd,UPLOAD,Available analysis/methodology source,31850
+analysis/parental_labor_monitor.qmd,UPLOAD,Available analysis/methodology source,21995
+analysis/provider.qmd,UPLOAD,Available analysis/methodology source,40255
+analysis/sandwich_generation.qmd,UPLOAD,Available analysis/methodology source,17427
+app_data/README.md,UPLOAD,Public aggregate data or required dashboard metadata/documentation,1976
+app_data/activity_formal.csv,UPLOAD,Public aggregate data or required dashboard metadata/documentation,130415
+app_data/activity_formal_datum.csv,UPLOAD,Public aggregate data or required dashboard metadata/documentation,104712
+app_data/activity_informal.csv,UPLOAD,Public aggregate data or required dashboard metadata/documentation,269350
+app_data/activity_informal_datum.csv,UPLOAD,Public aggregate data or required dashboard metadata/documentation,248942
+app_data/care_provider_datum.csv,UPLOAD,Public aggregate data or required dashboard metadata/documentation,304575
+app_data/care_provider_population.csv,UPLOAD,Public aggregate data or required dashboard metadata/documentation,13569
+app_data/market.csv,UPLOAD,Public aggregate data or required dashboard metadata/documentation,1231
+app_data/market_datum.csv,UPLOAD,Public aggregate data or required dashboard metadata/documentation,11788
+app_data/metric_labels.csv,UPLOAD,Public aggregate data or required dashboard metadata/documentation,2690
+app_data/metric_tables.xlsx,UPLOAD,Public aggregate data or required dashboard metadata/documentation,16202
+app_data/metrics_formal.csv,UPLOAD,Public aggregate data or required dashboard metadata/documentation,4035240
+app_data/metrics_informal.csv,UPLOAD,Public aggregate data or required dashboard metadata/documentation,3872196
+app_data/metrics_maternal_power.csv,UPLOAD,Public aggregate data or required dashboard metadata/documentation,74777
+app_data/metrics_priviledge.csv,UPLOAD,Public aggregate data or required dashboard metadata/documentation,53246
+app_data/metrics_sandwich_generation.csv,UPLOAD,Public aggregate data or required dashboard metadata/documentation,24292
+app_data/metrics_state_care_gini.csv,UPLOAD,Public aggregate data or required dashboard metadata/documentation,52751
+app_data/provider.csv,UPLOAD,Public aggregate data or required dashboard metadata/documentation,84435
+app_data/provider_category.csv,UPLOAD,Public aggregate data or required dashboard metadata/documentation,1502
+app_data/provider_category.xlsx,UPLOAD,Public aggregate data or required dashboard metadata/documentation,10155
+app_data/provider_datum.csv,UPLOAD,Public aggregate data or required dashboard metadata/documentation,1162879
+app_data/provider_group.xlsx,UPLOAD,Public aggregate data or required dashboard metadata/documentation,9764
+app_data/source.csv,UPLOAD,Public aggregate data or required dashboard metadata/documentation,2271
+bitly_link_crossover.csv,DO_NOT_UPLOAD,Local Bitly import export; public download links are incorporated in README.md,12703
+config/db_connect.example.R,UPLOAD,Credential-free connection example,1386
+config/r-packages.txt,UPLOAD,Selected R dependency list,184
+data/CSV/ASECSampleIDs.csv,UPLOAD,"Allowlisted small public crosswalk, request sample list, or aggregate GDP input",488
+data/CSV/ATUSActivityCrossover.csv,UPLOAD,"Allowlisted small public crosswalk, request sample list, or aggregate GDP input",20899
+data/CSV/CPSSampleIDs.csv,UPLOAD,"Allowlisted small public crosswalk, request sample list, or aggregate GDP input",5726
+data/CSV/FormalOccs_Crossover.csv,UPLOAD,"Allowlisted small public crosswalk, request sample list, or aggregate GDP input",53801
+data/CSV/GdpByState.csv,UPLOAD,"Allowlisted small public crosswalk, request sample list, or aggregate GDP input",14000
+data/CSV/Informal_Formal_Crosswalk.csv,UPLOAD,"Allowlisted small public crosswalk, request sample list, or aggregate GDP input",12090
+data/README.md,UPLOAD,Public source-input access documentation; no source records,2558
+data/input_manifest.csv,UPLOAD,Public source-input access documentation; no source records,28471
+docs/APP_DATA_INVENTORY.csv,UPLOAD,"Public repository documentation, configuration, or structural check",3452
+docs/ATUS_ELDERCARE.md,UPLOAD,"Public repository documentation, configuration, or structural check",6350
+docs/CROSSWALKS.md,UPLOAD,"Public repository documentation, configuration, or structural check",2967
+docs/DATA_DICTIONARY.md,UPLOAD,"Public repository documentation, configuration, or structural check",8764
+docs/ENVIRONMENT.md,UPLOAD,"Public repository documentation, configuration, or structural check",5321
+docs/FILE_MANIFEST.csv,UPLOAD,"Public repository documentation, configuration, or structural check",
+docs/GITHUB_UPLOAD_GUIDE.md,UPLOAD,"Public repository documentation, configuration, or structural check",9320
+docs/LICENSE_AND_CITATION.md,UPLOAD,"Public repository documentation, configuration, or structural check",5672
+docs/METHODOLOGY.md,UPLOAD,"Public repository documentation, configuration, or structural check",6111
+docs/PIPELINE_RESTORATION.md,UPLOAD,"Public repository documentation, configuration, or structural check",4219
+docs/README.md,UPLOAD,"Public repository documentation, configuration, or structural check",1891
+docs/REFERENCE_PERIODS.md,UPLOAD,"Public repository documentation, configuration, or structural check",13219
+docs/REPOSITORY_PREPARATION.md,UPLOAD,"Public repository documentation, configuration, or structural check",10342
+docs/REPRODUCIBILITY.md,UPLOAD,"Public repository documentation, configuration, or structural check",5870
+docs/SNAPSHOT_SYNC.md,UPLOAD,"Public repository documentation, configuration, or structural check",2588
+docs/SOURCE_INPUTS.md,UPLOAD,"Public repository documentation, configuration, or structural check",5673
+docs/app_data_schema.json,UPLOAD,"Public repository documentation, configuration, or structural check",9822
+docs/crosswalk_schema.json,UPLOAD,"Public repository documentation, configuration, or structural check",1443
+docs/releases/2.0.0/README.md,UPLOAD,"Public repository documentation, configuration, or structural check",4993
+docs/releases/2.0.0/environment.json,UPLOAD,"Public repository documentation, configuration, or structural check",2654
+docs/releases/2.0.0/file_checksums.csv,UPLOAD,"Public repository documentation, configuration, or structural check",11744
+docs/releases/2.0.0/input_provenance.json,UPLOAD,"Public repository documentation, configuration, or structural check",1109
+docs/releases/2.0.0/metric_reference_periods.csv,UPLOAD,"Public repository documentation, configuration, or structural check",34067
+docs/releases/2.0.0/provenance.json,UPLOAD,"Public repository documentation, configuration, or structural check",5787
+docs/releases/2.0.0/table_reference_periods.csv,UPLOAD,"Public repository documentation, configuration, or structural check",9258
+docs/source_extracts.json,UPLOAD,"Public repository documentation, configuration, or structural check",16505
+generated/TheCareBoard_Master.html,DO_NOT_UPLOAD,Generated/previously rendered artifact; review current render before separate release,393080
+generated/TheCareBoard_Master.pdf,DO_NOT_UPLOAD,Generated/previously rendered artifact; review current render before separate release,698335
+generated/TheCareBoard_Master_files/libs/bootstrap/bootstrap-9e3ffae467580fdb927a41352e75a2e0.min.css,DO_NOT_UPLOAD,Generated/previously rendered artifact; review current render before separate release,430683
+generated/TheCareBoard_Master_files/libs/bootstrap/bootstrap-icons.css,DO_NOT_UPLOAD,Generated/previously rendered artifact; review current render before separate release,99464
+generated/TheCareBoard_Master_files/libs/bootstrap/bootstrap-icons.woff,DO_NOT_UPLOAD,Generated/previously rendered artifact; review current render before separate release,180288
+generated/TheCareBoard_Master_files/libs/bootstrap/bootstrap.min.js,DO_NOT_UPLOAD,Generated/previously rendered artifact; review current render before separate release,80668
+generated/TheCareBoard_Master_files/libs/clipboard/clipboard.min.js,DO_NOT_UPLOAD,Generated/previously rendered artifact; review current render before separate release,9160
+generated/TheCareBoard_Master_files/libs/quarto-html/anchor.min.js,DO_NOT_UPLOAD,Generated/previously rendered artifact; review current render before separate release,5888
+generated/TheCareBoard_Master_files/libs/quarto-html/axe/axe-check.js,DO_NOT_UPLOAD,Generated/previously rendered artifact; review current render before separate release,4884
+generated/TheCareBoard_Master_files/libs/quarto-html/popper.min.js,DO_NOT_UPLOAD,Generated/previously rendered artifact; review current render before separate release,20084
+generated/TheCareBoard_Master_files/libs/quarto-html/quarto-syntax-highlighting-ed96de9b727972fe78a7b5d16c58bf87.css,DO_NOT_UPLOAD,Generated/previously rendered artifact; review current render before separate release,3678
+generated/TheCareBoard_Master_files/libs/quarto-html/quarto.js,DO_NOT_UPLOAD,Generated/previously rendered artifact; review current render before separate release,26885
+generated/TheCareBoard_Master_files/libs/quarto-html/tabsets/tabsets.js,DO_NOT_UPLOAD,Generated/previously rendered artifact; review current render before separate release,2882
+generated/TheCareBoard_Master_files/libs/quarto-html/tippy.css,DO_NOT_UPLOAD,Generated/previously rendered artifact; review current render before separate release,1409
+generated/TheCareBoard_Master_files/libs/quarto-html/tippy.umd.min.js,DO_NOT_UPLOAD,Generated/previously rendered artifact; review current render before separate release,24033
+generated/activity_formal.pdf,DO_NOT_UPLOAD,Generated/previously rendered artifact; review current render before separate release,67444
+generated/activity_informal.pdf,DO_NOT_UPLOAD,Generated/previously rendered artifact; review current render before separate release,82820
+generated/broad_impacts.pdf,DO_NOT_UPLOAD,Generated/previously rendered artifact; review current render before separate release,186620
+generated/care_provider.pdf,DO_NOT_UPLOAD,Generated/previously rendered artifact; review current render before separate release,97954
+generated/docs/ENVIRONMENT.md,DO_NOT_UPLOAD,Generated/previously rendered artifact; review current render before separate release,5321
+generated/docs/REPRODUCIBILITY.md,DO_NOT_UPLOAD,Generated/previously rendered artifact; review current render before separate release,5870
+generated/restored_pipeline/IPUMS_API.pdf,DO_NOT_UPLOAD,Generated/previously rendered artifact; review current render before separate release,69842
+generated/restored_pipeline/market.pdf,DO_NOT_UPLOAD,Generated/previously rendered artifact; review current render before separate release,60417
+generated/restored_pipeline/market_datum.pdf,DO_NOT_UPLOAD,Generated/previously rendered artifact; review current render before separate release,103747
+generated/restored_pipeline/provider.pdf,DO_NOT_UPLOAD,Generated/previously rendered artifact; review current render before separate release,105593
+local_only/credentials/db_connect.r,DO_NOT_UPLOAD,Local database connection details; never publish,203
+local_only/notes/CareBoardNotes.docx,DO_NOT_UPLOAD,Internal project notes,22898
+local_only/outputs/careboard-release-links-20261006/CareBoard_2.0.0_Link_Planner.xlsx,DO_NOT_UPLOAD,"Local publishing planner, preview, or supporting artifact",26524
+local_only/outputs/careboard-release-links-20261006/build_link_planner.mjs,DO_NOT_UPLOAD,"Local publishing planner, preview, or supporting artifact",6854
+local_only/outputs/careboard-release-links-20261006/build_link_planner.py,DO_NOT_UPLOAD,"Local publishing planner, preview, or supporting artifact",9843
+local_only/outputs/careboard-release-links-20261006/destination_urls_preview.png,DO_NOT_UPLOAD,"Local publishing planner, preview, or supporting artifact",49095
+local_only/outputs/careboard-release-links-20261006/edit_link_planner.py,DO_NOT_UPLOAD,"Local publishing planner, preview, or supporting artifact",11482
+local_only/outputs/careboard-release-links-20261006/link_records.json,DO_NOT_UPLOAD,"Local publishing planner, preview, or supporting artifact",96321
+local_only/outputs/careboard-release-links-20261006/mapping_urls_preview.png,DO_NOT_UPLOAD,"Local publishing planner, preview, or supporting artifact",28110
+local_only/outputs/careboard-release-links-20261006/new_destinations_preview.png,DO_NOT_UPLOAD,"Local publishing planner, preview, or supporting artifact",60688
+local_only/outputs/careboard-release-links-20261006/old_mapping_preview.png,DO_NOT_UPLOAD,"Local publishing planner, preview, or supporting artifact",61781
+local_only/outputs/careboard-release-links-20261006/recommended_names.json,DO_NOT_UPLOAD,"Local publishing planner, preview, or supporting artifact",3212
+local_only/outputs/careboard-release-links-20261006/recommended_names_preview.png,DO_NOT_UPLOAD,"Local publishing planner, preview, or supporting artifact",42787
+local_only/preparation/IPUMS_API.qmd.inspection.txt,DO_NOT_UPLOAD,Local preparation audit or original backup,5549
+local_only/preparation/MIT-template.txt,DO_NOT_UPLOAD,Local preparation audit or original backup,1078
+local_only/preparation/__pycache__/github_access.cpython-312.pyc,DO_NOT_UPLOAD,Local preparation audit or original backup,4627
+local_only/preparation/audit_repository.py,DO_NOT_UPLOAD,Local preparation audit or original backup,13394
+local_only/preparation/bitly_redirect_check_20261009.json,DO_NOT_UPLOAD,Local preparation audit or original backup,23089
+local_only/preparation/build_environment_record.py,DO_NOT_UPLOAD,Local preparation audit or original backup,3621
+local_only/preparation/build_release_record.py,DO_NOT_UPLOAD,Local preparation audit or original backup,19814
+local_only/preparation/capture_r_environment.R,DO_NOT_UPLOAD,Local preparation audit or original backup,1894
+local_only/preparation/check_master_guard.R,DO_NOT_UPLOAD,Local preparation audit or original backup,2148
+local_only/preparation/cleanup_ignore_check.ps1,DO_NOT_UPLOAD,Local preparation audit or original backup,599
+local_only/preparation/copy_small_pipeline_inputs.ps1,DO_NOT_UPLOAD,Local preparation audit or original backup,1760
+local_only/preparation/copy_working_sources.ps1,DO_NOT_UPLOAD,Local preparation audit or original backup,2766
+local_only/preparation/crosswalk_key_review.json,DO_NOT_UPLOAD,Local preparation audit or original backup,1148
+local_only/preparation/diagnose_r_metadata.R,DO_NOT_UPLOAD,Local preparation audit or original backup,470
+local_only/preparation/external_input_hashes.json,DO_NOT_UPLOAD,Local preparation audit or original backup,5582
+local_only/preparation/fetch_license_texts.py,DO_NOT_UPLOAD,Local preparation audit or original backup,1473
+local_only/preparation/file_moves.json,DO_NOT_UPLOAD,Local preparation audit or original backup,1100
+local_only/preparation/finalize_license.py,DO_NOT_UPLOAD,Local preparation audit or original backup,1034
+local_only/preparation/finalize_publication_metadata.py,DO_NOT_UPLOAD,Local preparation audit or original backup,15433
+local_only/preparation/finalize_restoration_records.py,DO_NOT_UPLOAD,Local preparation audit or original backup,7227
+local_only/preparation/finish_input_fingerprints.py,DO_NOT_UPLOAD,Local preparation audit or original backup,5969
+local_only/preparation/gini.qmd.inspection.txt,DO_NOT_UPLOAD,Local preparation audit or original backup,16861
+local_only/preparation/github_access.py,DO_NOT_UPLOAD,Local preparation audit or original backup,2849
+local_only/preparation/github_access_status.json,DO_NOT_UPLOAD,Local preparation audit or original backup,184
+local_only/preparation/github_pull_request.md,DO_NOT_UPLOAD,Local preparation audit or original backup,1386
+local_only/preparation/github_snapshot_status.json,DO_NOT_UPLOAD,Local preparation audit or original backup,4075
+local_only/preparation/github_whitespace_report.txt,DO_NOT_UPLOAD,Local preparation audit or original backup,17293910
+local_only/preparation/hash_release_inputs.py,DO_NOT_UPLOAD,Local preparation audit or original backup,4784
+local_only/preparation/input_fingerprint_guard.json,DO_NOT_UPLOAD,Local preparation audit or original backup,9662
+local_only/preparation/input_fingerprint_job.json,DO_NOT_UPLOAD,Local preparation audit or original backup,168
+local_only/preparation/input_fingerprint_job.log,DO_NOT_UPLOAD,Local preparation audit or original backup,102
+local_only/preparation/input_fingerprint_process.json,DO_NOT_UPLOAD,Local preparation audit or original backup,287
+local_only/preparation/input_fingerprint_source.log,DO_NOT_UPLOAD,Local preparation audit or original backup,6906
+local_only/preparation/input_metadata_inspection.json,DO_NOT_UPLOAD,Local preparation audit or original backup,100994
+local_only/preparation/inspect_environment.R,DO_NOT_UPLOAD,Local preparation audit or original backup,598
+local_only/preparation/inspect_input_summary.py,DO_NOT_UPLOAD,Local preparation audit or original backup,995
+local_only/preparation/inspect_python_environment.py,DO_NOT_UPLOAD,Local preparation audit or original backup,1787
+local_only/preparation/inspect_release_inputs.py,DO_NOT_UPLOAD,Local preparation audit or original backup,3811
+local_only/preparation/inspect_release_periods.py,DO_NOT_UPLOAD,Local preparation audit or original backup,2315
+local_only/preparation/inspect_restored_pipeline.py,DO_NOT_UPLOAD,Local preparation audit or original backup,3435
+local_only/preparation/inspect_working_environment.R,DO_NOT_UPLOAD,Local preparation audit or original backup,2238
+local_only/preparation/inspect_working_recovery.py,DO_NOT_UPLOAD,Local preparation audit or original backup,1848
+local_only/preparation/inspect_workspace.py,DO_NOT_UPLOAD,Local preparation audit or original backup,2869
+local_only/preparation/integrate_restored_sources.py,DO_NOT_UPLOAD,Local preparation audit or original backup,2321
+local_only/preparation/integrate_working_sources.py,DO_NOT_UPLOAD,Local preparation audit or original backup,1744
+local_only/preparation/license_sources.json,DO_NOT_UPLOAD,Local preparation audit or original backup,494
+local_only/preparation/market.qmd.inspection.txt,DO_NOT_UPLOAD,Local preparation audit or original backup,6246
+local_only/preparation/market_datum.qmd.inspection.txt,DO_NOT_UPLOAD,Local preparation audit or original backup,19758
+local_only/preparation/organize_restored_files.ps1,DO_NOT_UPLOAD,Local preparation audit or original backup,2540
+local_only/preparation/original_file_hashes.json,DO_NOT_UPLOAD,Local preparation audit or original backup,11826
+local_only/preparation/originals/README.md,DO_NOT_UPLOAD,Local preparation audit or original backup,8690
+local_only/preparation/originals/TheCareBoard_Master.qmd,DO_NOT_UPLOAD,Local preparation audit or original backup,11715
+local_only/preparation/originals/_database_upload.qmd,DO_NOT_UPLOAD,Local preparation audit or original backup,19636
+local_only/preparation/originals/activity_formal.qmd,DO_NOT_UPLOAD,Local preparation audit or original backup,19153
+local_only/preparation/originals/activity_informal.qmd,DO_NOT_UPLOAD,Local preparation audit or original backup,27674
+local_only/preparation/originals/bargainin_power.qmd,DO_NOT_UPLOAD,Local preparation audit or original backup,18966
+local_only/preparation/originals/broad_impacts.qmd,DO_NOT_UPLOAD,Local preparation audit or original backup,88890
+local_only/preparation/originals/care_provider.qmd,DO_NOT_UPLOAD,Local preparation audit or original backup,31634
+local_only/preparation/originals/care_ratio.qmd,DO_NOT_UPLOAD,Local preparation audit or original backup,19492
+local_only/preparation/originals/load_defaults.R,DO_NOT_UPLOAD,Local preparation audit or original backup,3808
+local_only/preparation/originals/press_release/build_figure.py,DO_NOT_UPLOAD,Local preparation audit or original backup,11525
+local_only/preparation/originals/press_release/motherhood_focus/build_media_pack.py,DO_NOT_UPLOAD,Local preparation audit or original backup,37080
+local_only/preparation/prepare_github_snapshot.py,DO_NOT_UPLOAD,Local preparation audit or original backup,3605
+local_only/preparation/prepare_input_release.py,DO_NOT_UPLOAD,Local preparation audit or original backup,2553
+local_only/preparation/prepare_link_planner.py,DO_NOT_UPLOAD,Local preparation audit or original backup,12814
+local_only/preparation/prepare_repository.py,DO_NOT_UPLOAD,Local preparation audit or original backup,38592
+local_only/preparation/probe_source_reader.py,DO_NOT_UPLOAD,Local preparation audit or original backup,597
+local_only/preparation/provider.qmd.inspection.txt,DO_NOT_UPLOAD,Local preparation audit or original backup,33277
+local_only/preparation/publish_final_release.py,DO_NOT_UPLOAD,Local preparation audit or original backup,10554
+local_only/preparation/publish_github_snapshot.py,DO_NOT_UPLOAD,Local preparation audit or original backup,3103
+local_only/preparation/python_chunk_review.json,DO_NOT_UPLOAD,Local preparation audit or original backup,302
+local_only/preparation/python_environment.json,DO_NOT_UPLOAD,Local preparation audit or original backup,1280
+local_only/preparation/quarto_inspect.json,DO_NOT_UPLOAD,Local preparation audit or original backup,29902
+local_only/preparation/r_direct_packages.txt,DO_NOT_UPLOAD,Local preparation audit or original backup,208
+local_only/preparation/r_session_info.txt,DO_NOT_UPLOAD,Local preparation audit or original backup,2739
+local_only/preparation/readme_download_preview.html,DO_NOT_UPLOAD,Local preparation audit or original backup,25292
+local_only/preparation/readme_link_import_20261009.json,DO_NOT_UPLOAD,Local preparation audit or original backup,609
+local_only/preparation/release_period_inspection.json,DO_NOT_UPLOAD,Local preparation audit or original backup,117172
+local_only/preparation/release_publication_plan.json,DO_NOT_UPLOAD,Local preparation audit or original backup,258
+local_only/preparation/render_methodology.ps1,DO_NOT_UPLOAD,Local preparation audit or original backup,431
+local_only/preparation/renv_runtime/index/windows/R-4.4/x86_64-w64-mingw32/available-packages/data-4cd849d015d4.rds,DO_NOT_UPLOAD,Local preparation audit or original backup,1537264
+local_only/preparation/renv_runtime/index/windows/R-4.4/x86_64-w64-mingw32/available-packages/data-4cd86fb77636.rds,DO_NOT_UPLOAD,Local preparation audit or original backup,956685
+local_only/preparation/renv_runtime/index/windows/R-4.4/x86_64-w64-mingw32/available-packages/index.json,DO_NOT_UPLOAD,Local preparation audit or original backup,223
+local_only/preparation/renv_runtime/p3m/packages.rds,DO_NOT_UPLOAD,Local preparation audit or original backup,1523540
+local_only/preparation/restored_file_hashes.json,DO_NOT_UPLOAD,Local preparation audit or original backup,3071
+local_only/preparation/restored_file_moves.json,DO_NOT_UPLOAD,Local preparation audit or original backup,763
+local_only/preparation/restored_originals/ATUSActivityCrossover.csv,DO_NOT_UPLOAD,Local preparation audit or original backup,20899
+local_only/preparation/restored_originals/FormalOccs_Crossover.csv,DO_NOT_UPLOAD,Local preparation audit or original backup,53801
+local_only/preparation/restored_originals/IPUMS_API.qmd,DO_NOT_UPLOAD,Local preparation audit or original backup,11595
+local_only/preparation/restored_originals/Informal_Formal_Crosswalk.csv,DO_NOT_UPLOAD,Local preparation audit or original backup,12090
+local_only/preparation/restored_originals/gini.qmd,DO_NOT_UPLOAD,Local preparation audit or original backup,19478
+local_only/preparation/restored_originals/market.qmd,DO_NOT_UPLOAD,Local preparation audit or original backup,10681
+local_only/preparation/restored_originals/market_datum.qmd,DO_NOT_UPLOAD,Local preparation audit or original backup,31846
+local_only/preparation/restored_originals/provider.qmd,DO_NOT_UPLOAD,Local preparation audit or original backup,40251
+local_only/preparation/restored_originals/sandwich_generation.qmd,DO_NOT_UPLOAD,Local preparation audit or original backup,17423
+local_only/preparation/restored_output_review.json,DO_NOT_UPLOAD,Local preparation audit or original backup,383
+local_only/preparation/review_crosswalk_keys.py,DO_NOT_UPLOAD,Local preparation audit or original backup,918
+local_only/preparation/review_restored_outputs.py,DO_NOT_UPLOAD,Local preparation audit or original backup,2875
+local_only/preparation/sandwich_generation.qmd.inspection.txt,DO_NOT_UPLOAD,Local preparation audit or original backup,11175
+local_only/preparation/summarize_input_metadata.py,DO_NOT_UPLOAD,Local preparation audit or original backup,809
+local_only/preparation/update_input_docs.py,DO_NOT_UPLOAD,Local preparation audit or original backup,12494
+local_only/preparation/update_input_provenance.py,DO_NOT_UPLOAD,Local preparation audit or original backup,14574
+local_only/preparation/update_readme_download_links.py,DO_NOT_UPLOAD,Local preparation audit or original backup,12940
+local_only/preparation/update_restoration_docs.py,DO_NOT_UPLOAD,Local preparation audit or original backup,21739
+local_only/preparation/validate_hash_reader.py,DO_NOT_UPLOAD,Local preparation audit or original backup,1603
+local_only/preparation/validate_python_chunks.py,DO_NOT_UPLOAD,Local preparation audit or original backup,1066
+local_only/preparation/validate_sources.R,DO_NOT_UPLOAD,Local preparation audit or original backup,1299
+local_only/preparation/verification_report.json,DO_NOT_UPLOAD,Local preparation audit or original backup,4487
+local_only/preparation/verify_captured_environment.R,DO_NOT_UPLOAD,Local preparation audit or original backup,1003
+local_only/preparation/verify_public_release.py,DO_NOT_UPLOAD,Local preparation audit or original backup,2859
+local_only/preparation/verify_release_record.py,DO_NOT_UPLOAD,Local preparation audit or original backup,8536
+local_only/preparation/working_originals/ATUS_ELDERCARE.md,DO_NOT_UPLOAD,Local preparation audit or original backup,6356
+local_only/preparation/working_originals/PROVIDER_WINDOW_REVIEW.md,DO_NOT_UPLOAD,Local preparation audit or original backup,7443
+local_only/preparation/working_originals/RELEASE_REVIEW.md,DO_NOT_UPLOAD,Local preparation audit or original backup,12902
+local_only/preparation/working_originals/SANDWICH_2025_REVIEW.md,DO_NOT_UPLOAD,Local preparation audit or original backup,4843
+local_only/preparation/working_originals/atus_eldercare.R,DO_NOT_UPLOAD,Local preparation audit or original backup,7148
+local_only/preparation/working_originals/data/CSV/ASECSampleIDs.csv,DO_NOT_UPLOAD,Local preparation audit or original backup,488
+local_only/preparation/working_originals/data/CSV/CPSSampleIDs.csv,DO_NOT_UPLOAD,Local preparation audit or original backup,5726
+local_only/preparation/working_originals/data/CSV/GdpByState.csv,DO_NOT_UPLOAD,Local preparation audit or original backup,14000
+local_only/preparation/working_originals/data_prep_functions.R,DO_NOT_UPLOAD,Local preparation audit or original backup,21366
+local_only/preparation/working_originals/data_processing.qmd,DO_NOT_UPLOAD,Local preparation audit or original backup,14393
+local_only/preparation/working_originals/load_libraries.R,DO_NOT_UPLOAD,Local preparation audit or original backup,4113
+local_only/preparation/working_originals/parental_labor_monitor.qmd,DO_NOT_UPLOAD,Local preparation audit or original backup,21991
+local_only/preparation/working_originals/refresh_atus_eldercare.R,DO_NOT_UPLOAD,Local preparation audit or original backup,5616
+local_only/preparation/working_originals/tests/atus_eldercare.R,DO_NOT_UPLOAD,Local preparation audit or original backup,4302
+local_only/preparation/working_originals/tests/provider_window.R,DO_NOT_UPLOAD,Local preparation audit or original backup,2067
+local_only/preparation/working_recovery_hashes.json,DO_NOT_UPLOAD,Local preparation audit or original backup,3008
+local_only/preparation/workspace_inventory.json,DO_NOT_UPLOAD,Local preparation audit or original backup,191648
+local_only/press_release/build_figure.py,DO_NOT_UPLOAD,Draft media/editorial material; review separately before any publication,11525
+local_only/press_release/care_board_2026_press_figure.png,DO_NOT_UPLOAD,Draft media/editorial material; review separately before any publication,994209
+local_only/press_release/care_board_2026_press_figure.svg,DO_NOT_UPLOAD,Draft media/editorial material; review separately before any publication,39787
+local_only/press_release/figure_data.json,DO_NOT_UPLOAD,Draft media/editorial material; review separately before any publication,1036
+local_only/press_release/figure_notes.md,DO_NOT_UPLOAD,Draft media/editorial material; review separately before any publication,4986
+local_only/press_release/figure_preview.png,DO_NOT_UPLOAD,Draft media/editorial material; review separately before any publication,288117
+local_only/press_release/motherhood_focus/alt_text_and_captions.txt,DO_NOT_UPLOAD,Draft media/editorial material; review separately before any publication,8922
+local_only/press_release/motherhood_focus/build_media_pack.py,DO_NOT_UPLOAD,Draft media/editorial material; review separately before any publication,37080
+local_only/press_release/motherhood_focus/calculations_and_editorial_notes.txt,DO_NOT_UPLOAD,Draft media/editorial material; review separately before any publication,9512
+local_only/press_release/motherhood_focus/care_board_october_2026_media_pack.zip,DO_NOT_UPLOAD,Draft media/editorial material; review separately before any publication,3252350
+local_only/press_release/motherhood_focus/mothers_earnings_share_300ppi_preview.png,DO_NOT_UPLOAD,Draft media/editorial material; review separately before any publication,131690
+local_only/press_release/motherhood_focus/mothers_primary_unpaid_care_300ppi_preview.png,DO_NOT_UPLOAD,Draft media/editorial material; review separately before any publication,148250
+local_only/press_release/motherhood_focus/parents_earnings_and_unpaid_care_300ppi_preview.png,DO_NOT_UPLOAD,Draft media/editorial material; review separately before any publication,184931
+local_only/press_release/motherhood_focus/press_graphics/mothers_earnings_share_300ppi.png,DO_NOT_UPLOAD,Draft media/editorial material; review separately before any publication,331107
+local_only/press_release/motherhood_focus/press_graphics/mothers_primary_unpaid_care_300ppi.png,DO_NOT_UPLOAD,Draft media/editorial material; review separately before any publication,368991
+local_only/press_release/motherhood_focus/press_graphics/parents_earnings_and_unpaid_care_300ppi.png,DO_NOT_UPLOAD,Draft media/editorial material; review separately before any publication,457013
+local_only/press_release/motherhood_focus/social_cards/01_paid_care_workers.png,DO_NOT_UPLOAD,Draft media/editorial material; review separately before any publication,253577
+local_only/press_release/motherhood_focus/social_cards/02_unpaid_care_providers.png,DO_NOT_UPLOAD,Draft media/editorial material; review separately before any publication,251687
+local_only/press_release/motherhood_focus/social_cards/03_sandwich_caregivers.png,DO_NOT_UPLOAD,Draft media/editorial material; review separately before any publication,237394
+local_only/press_release/motherhood_focus/social_cards/04_sandwich_care_hours.png,DO_NOT_UPLOAD,Draft media/editorial material; review separately before any publication,251963
+local_only/press_release/motherhood_focus/social_cards/05_parent_employment_gap.png,DO_NOT_UPLOAD,Draft media/editorial material; review separately before any publication,253625
+local_only/press_release/motherhood_focus/social_cards/06_young_child_employment_gap.png,DO_NOT_UPLOAD,Draft media/editorial material; review separately before any publication,258419
+local_only/press_release/motherhood_focus/social_cards/07_care_privilege.png,DO_NOT_UPLOAD,Draft media/editorial material; review separately before any publication,257435
+local_only/press_release/motherhood_focus/social_cards/08_kansas_cares.png,DO_NOT_UPLOAD,Draft media/editorial material; review separately before any publication,280839
+local_only/press_release/motherhood_focus/social_cards/09_mothers_earnings_share.png,DO_NOT_UPLOAD,Draft media/editorial material; review separately before any publication,293460
+local_only/press_release/motherhood_focus/social_cards/10_mothers_primary_unpaid_care.png,DO_NOT_UPLOAD,Draft media/editorial material; review separately before any publication,275182
+local_only/press_release/motherhood_focus/social_cards_contact_sheet.png,DO_NOT_UPLOAD,Draft media/editorial material; review separately before any publication,214131
+local_only/press_release/motherhood_focus/verified_calculations.json,DO_NOT_UPLOAD,Draft media/editorial material; review separately before any publication,9834
+local_only/recovered_reviews/PROVIDER_WINDOW_REVIEW.md,DO_NOT_UPLOAD,Internal historical release/scientific review evidence; retain locally,7443
+local_only/recovered_reviews/RELEASE_REVIEW.md,DO_NOT_UPLOAD,Internal historical release/scientific review evidence; retain locally,12902
+local_only/recovered_reviews/SANDWICH_2025_REVIEW.md,DO_NOT_UPLOAD,Internal historical release/scientific review evidence; retain locally,4843
+local_only/research/care_privilege_atus_privilege_focus.docx,DO_NOT_UPLOAD,Research draft; publication status unresolved,437346
+local_only/state/.Rhistory,DO_NOT_UPLOAD,Local session history; never publish,9951
+renv.lock,UPLOAD,"Public repository documentation, configuration, or structural check",52704
+renv/.gitignore,UPLOAD,"R environment bootstrap, settings, documentation, or upstream notice",63
+renv/LICENSE,UPLOAD,"R environment bootstrap, settings, documentation, or upstream notice",1076
+renv/README.md,UPLOAD,"R environment bootstrap, settings, documentation, or upstream notice",448
+renv/activate.R,UPLOAD,"R environment bootstrap, settings, documentation, or upstream notice",35447
+renv/library/windows/R-4.4/x86_64-w64-mingw32/renv/DESCRIPTION,DO_NOT_UPLOAD,Ignored local R library or state,1811
+renv/library/windows/R-4.4/x86_64-w64-mingw32/renv/INDEX,DO_NOT_UPLOAD,Ignored local R library or state,2157
+renv/library/windows/R-4.4/x86_64-w64-mingw32/renv/LICENSE,DO_NOT_UPLOAD,Ignored local R library or state,49
+renv/library/windows/R-4.4/x86_64-w64-mingw32/renv/MD5,DO_NOT_UPLOAD,Ignored local R library or state,3680
+renv/library/windows/R-4.4/x86_64-w64-mingw32/renv/Meta/Rd.rds,DO_NOT_UPLOAD,Ignored local R library or state,1664
+renv/library/windows/R-4.4/x86_64-w64-mingw32/renv/Meta/features.rds,DO_NOT_UPLOAD,Ignored local R library or state,123
+renv/library/windows/R-4.4/x86_64-w64-mingw32/renv/Meta/hsearch.rds,DO_NOT_UPLOAD,Ignored local R library or state,1508
+renv/library/windows/R-4.4/x86_64-w64-mingw32/renv/Meta/links.rds,DO_NOT_UPLOAD,Ignored local R library or state,670
+renv/library/windows/R-4.4/x86_64-w64-mingw32/renv/Meta/nsInfo.rds,DO_NOT_UPLOAD,Ignored local R library or state,754
+renv/library/windows/R-4.4/x86_64-w64-mingw32/renv/Meta/package.rds,DO_NOT_UPLOAD,Ignored local R library or state,1487
+renv/library/windows/R-4.4/x86_64-w64-mingw32/renv/Meta/vignette.rds,DO_NOT_UPLOAD,Ignored local R library or state,490
+renv/library/windows/R-4.4/x86_64-w64-mingw32/renv/NAMESPACE,DO_NOT_UPLOAD,Ignored local R library or state,1774
+renv/library/windows/R-4.4/x86_64-w64-mingw32/renv/NEWS.md,DO_NOT_UPLOAD,Ignored local R library or state,75184
+renv/library/windows/R-4.4/x86_64-w64-mingw32/renv/R/renv,DO_NOT_UPLOAD,Ignored local R library or state,1058
+renv/library/windows/R-4.4/x86_64-w64-mingw32/renv/R/renv.rdb,DO_NOT_UPLOAD,Ignored local R library or state,1204712
+renv/library/windows/R-4.4/x86_64-w64-mingw32/renv/R/renv.rdx,DO_NOT_UPLOAD,Ignored local R library or state,19077
+renv/library/windows/R-4.4/x86_64-w64-mingw32/renv/bin/renv,DO_NOT_UPLOAD,Ignored local R library or state,222
+renv/library/windows/R-4.4/x86_64-w64-mingw32/renv/bin/renv.bat,DO_NOT_UPLOAD,Ignored local R library or state,109
+renv/library/windows/R-4.4/x86_64-w64-mingw32/renv/config.yml,DO_NOT_UPLOAD,Ignored local R library or state,14348
+renv/library/windows/R-4.4/x86_64-w64-mingw32/renv/doc/ci.R,DO_NOT_UPLOAD,Ignored local R library or state,143
+renv/library/windows/R-4.4/x86_64-w64-mingw32/renv/doc/ci.Rmd,DO_NOT_UPLOAD,Ignored local R library or state,3588
+renv/library/windows/R-4.4/x86_64-w64-mingw32/renv/doc/ci.html,DO_NOT_UPLOAD,Ignored local R library or state,15335
+renv/library/windows/R-4.4/x86_64-w64-mingw32/renv/doc/docker.R,DO_NOT_UPLOAD,Ignored local R library or state,143
+renv/library/windows/R-4.4/x86_64-w64-mingw32/renv/doc/docker.Rmd,DO_NOT_UPLOAD,Ignored local R library or state,13019
+renv/library/windows/R-4.4/x86_64-w64-mingw32/renv/doc/docker.html,DO_NOT_UPLOAD,Ignored local R library or state,19147
+renv/library/windows/R-4.4/x86_64-w64-mingw32/renv/doc/faq.R,DO_NOT_UPLOAD,Ignored local R library or state,642
+renv/library/windows/R-4.4/x86_64-w64-mingw32/renv/doc/faq.Rmd,DO_NOT_UPLOAD,Ignored local R library or state,6268
+renv/library/windows/R-4.4/x86_64-w64-mingw32/renv/doc/faq.html,DO_NOT_UPLOAD,Ignored local R library or state,16619
+renv/library/windows/R-4.4/x86_64-w64-mingw32/renv/doc/index.html,DO_NOT_UPLOAD,Ignored local R library or state,6590
+renv/library/windows/R-4.4/x86_64-w64-mingw32/renv/doc/package-install.R,DO_NOT_UPLOAD,Ignored local R library or state,1893
+renv/library/windows/R-4.4/x86_64-w64-mingw32/renv/doc/package-install.Rmd,DO_NOT_UPLOAD,Ignored local R library or state,17873
+renv/library/windows/R-4.4/x86_64-w64-mingw32/renv/doc/package-install.html,DO_NOT_UPLOAD,Ignored local R library or state,37521
+renv/library/windows/R-4.4/x86_64-w64-mingw32/renv/doc/package-sources.R,DO_NOT_UPLOAD,Ignored local R library or state,860
+renv/library/windows/R-4.4/x86_64-w64-mingw32/renv/doc/package-sources.Rmd,DO_NOT_UPLOAD,Ignored local R library or state,9386
+renv/library/windows/R-4.4/x86_64-w64-mingw32/renv/doc/package-sources.html,DO_NOT_UPLOAD,Ignored local R library or state,20943
+renv/library/windows/R-4.4/x86_64-w64-mingw32/renv/doc/packages.R,DO_NOT_UPLOAD,Ignored local R library or state,159
+renv/library/windows/R-4.4/x86_64-w64-mingw32/renv/doc/packages.Rmd,DO_NOT_UPLOAD,Ignored local R library or state,4643
+renv/library/windows/R-4.4/x86_64-w64-mingw32/renv/doc/packages.html,DO_NOT_UPLOAD,Ignored local R library or state,9872
+renv/library/windows/R-4.4/x86_64-w64-mingw32/renv/doc/packrat.R,DO_NOT_UPLOAD,Ignored local R library or state,239
+renv/library/windows/R-4.4/x86_64-w64-mingw32/renv/doc/packrat.Rmd,DO_NOT_UPLOAD,Ignored local R library or state,2296
+renv/library/windows/R-4.4/x86_64-w64-mingw32/renv/doc/packrat.html,DO_NOT_UPLOAD,Ignored local R library or state,10744
+renv/library/windows/R-4.4/x86_64-w64-mingw32/renv/doc/profiles.R,DO_NOT_UPLOAD,Ignored local R library or state,285
+renv/library/windows/R-4.4/x86_64-w64-mingw32/renv/doc/profiles.Rmd,DO_NOT_UPLOAD,Ignored local R library or state,3649
+renv/library/windows/R-4.4/x86_64-w64-mingw32/renv/doc/profiles.html,DO_NOT_UPLOAD,Ignored local R library or state,12609
+renv/library/windows/R-4.4/x86_64-w64-mingw32/renv/doc/python.R,DO_NOT_UPLOAD,Ignored local R library or state,143
+renv/library/windows/R-4.4/x86_64-w64-mingw32/renv/doc/python.Rmd,DO_NOT_UPLOAD,Ignored local R library or state,2509
+renv/library/windows/R-4.4/x86_64-w64-mingw32/renv/doc/python.html,DO_NOT_UPLOAD,Ignored local R library or state,7506
+renv/library/windows/R-4.4/x86_64-w64-mingw32/renv/doc/renv.R,DO_NOT_UPLOAD,Ignored local R library or state,419
+renv/library/windows/R-4.4/x86_64-w64-mingw32/renv/doc/renv.Rmd,DO_NOT_UPLOAD,Ignored local R library or state,14967
+renv/library/windows/R-4.4/x86_64-w64-mingw32/renv/doc/renv.html,DO_NOT_UPLOAD,Ignored local R library or state,74706
+renv/library/windows/R-4.4/x86_64-w64-mingw32/renv/doc/rsconnect.R,DO_NOT_UPLOAD,Ignored local R library or state,143
+renv/library/windows/R-4.4/x86_64-w64-mingw32/renv/doc/rsconnect.Rmd,DO_NOT_UPLOAD,Ignored local R library or state,2850
+renv/library/windows/R-4.4/x86_64-w64-mingw32/renv/doc/rsconnect.html,DO_NOT_UPLOAD,Ignored local R library or state,25367
+renv/library/windows/R-4.4/x86_64-w64-mingw32/renv/help/AnIndex,DO_NOT_UPLOAD,Ignored local R library or state,992
+renv/library/windows/R-4.4/x86_64-w64-mingw32/renv/help/aliases.rds,DO_NOT_UPLOAD,Ignored local R library or state,445
+renv/library/windows/R-4.4/x86_64-w64-mingw32/renv/help/figures/logo.svg,DO_NOT_UPLOAD,Ignored local R library or state,72534
+renv/library/windows/R-4.4/x86_64-w64-mingw32/renv/help/paths.rds,DO_NOT_UPLOAD,Ignored local R library or state,469
+renv/library/windows/R-4.4/x86_64-w64-mingw32/renv/help/renv.rdb,DO_NOT_UPLOAD,Ignored local R library or state,177227
+renv/library/windows/R-4.4/x86_64-w64-mingw32/renv/help/renv.rdx,DO_NOT_UPLOAD,Ignored local R library or state,1099
+renv/library/windows/R-4.4/x86_64-w64-mingw32/renv/html/00Index.html,DO_NOT_UPLOAD,Ignored local R library or state,6365
+renv/library/windows/R-4.4/x86_64-w64-mingw32/renv/html/R.css,DO_NOT_UPLOAD,Ignored local R library or state,1844
+renv/library/windows/R-4.4/x86_64-w64-mingw32/renv/repos/src/contrib/PACKAGES,DO_NOT_UPLOAD,Ignored local R library or state,351
+renv/library/windows/R-4.4/x86_64-w64-mingw32/renv/repos/src/contrib/PACKAGES.gz,DO_NOT_UPLOAD,Ignored local R library or state,275
+renv/library/windows/R-4.4/x86_64-w64-mingw32/renv/repos/src/contrib/PACKAGES.rds,DO_NOT_UPLOAD,Ignored local R library or state,496
+renv/library/windows/R-4.4/x86_64-w64-mingw32/renv/repos/src/contrib/renv_1.0.7.tar.gz,DO_NOT_UPLOAD,Ignored local R library or state,522438
+renv/library/windows/R-4.4/x86_64-w64-mingw32/renv/resources/WELCOME,DO_NOT_UPLOAD,Ignored local R library or state,1038
+renv/library/windows/R-4.4/x86_64-w64-mingw32/renv/resources/activate.R,DO_NOT_UPLOAD,Ignored local R library or state,34234
+renv/library/windows/R-4.4/x86_64-w64-mingw32/renv/resources/scripts-git-askpass.cmd,DO_NOT_UPLOAD,Ignored local R library or state,373
+renv/library/windows/R-4.4/x86_64-w64-mingw32/renv/resources/scripts-git-askpass.sh,DO_NOT_UPLOAD,Ignored local R library or state,142
+renv/library/windows/R-4.4/x86_64-w64-mingw32/renv/resources/vendor/renv.R,DO_NOT_UPLOAD,Ignored local R library or state,867
+renv/library/windows/R-4.4/x86_64-w64-mingw32/renv/resources/watchdog-process.R,DO_NOT_UPLOAD,Ignored local R library or state,0
+renv/library/windows/R-4.4/x86_64-w64-mingw32/renv/rstudio/addins.dcf,DO_NOT_UPLOAD,Ignored local R library or state,135
+renv/settings.json,UPLOAD,"R environment bootstrap, settings, documentation, or upstream notice",431
+requirements.txt,UPLOAD,"Public repository documentation, configuration, or structural check",446
+scripts/check_repository.py,UPLOAD,"Public repository documentation, configuration, or structural check",12055
+tests/atus_eldercare.R,UPLOAD,Existing calculation/cleaning regression check,4311
+tests/provider_window.R,UPLOAD,Existing calculation/cleaning regression check,2090

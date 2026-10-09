@@ -1,0 +1,419 @@
+---
+title: "Paid Care Activity Methodology"
+format:
+  html:
+    toc: true
+    code-overflow: wrap
+    df-print: paged
+  pdf:
+    toc: true
+execute:
+  warning: false
+  message: false
+editor: visual
+---
+
+# Overview
+
+This file builds the paid activity tables used by The Care Board to describe the formal care economy at the occupation level. Each row represents a paid care occupation and geography, with measures of workforce size, hours, care focus, and median wages. The website uses these outputs in the activity-level visualizations, including the Voronoi-style displays that compare the scale and composition of paid care work.
+
+The estimates are built from CPS ASEC microdata processed earlier in `data_processing.qmd`. ASEC is appropriate here because it includes employment status, occupation, annual wage income, usual hours, and person-level weights. The file uses a five-year pooled window to improve state-level stability for smaller occupations while keeping the statistics anchored in recent data. Occupations are classified as care work using the project occupation crosswalk prepared during data processing.
+
+**Outputs.** This workflow writes `activity_formal` and `activity_formal_datum` to `app_data/` for the website upload. It also writes matching replication files to `data/CSV/`, `data/Dta/`, and `data/Excel/`.
+
+**Key sources.** The source microdata come from IPUMS CPS and the Census/BLS Current Population Survey Annual Social and Economic Supplement. See the [IPUMS CPS citation guidance](https://cps.ipums.org/cps/citation.shtml) and the Census Bureau's [CPS ASEC documentation](https://www.census.gov/data/datasets/time-series/demo/cps/cps-asec.html).
+
+## Introduction and Literature Context
+
+Paid care occupations are central to the care economy because they turn caregiving needs into labor demand, wages, and workforce capacity. The International Labour Organization's report on [care work and care jobs](https://www.ilo.org/publications/major-publications/care-work-and-care-jobs-future-decent-work) argues that decent care jobs and the recognition of unpaid care are linked policy questions rather than separate sectors. For The Care Board, occupation-level paid-care measures help users see where formal care work is concentrated, which occupations anchor the sector, and how wages vary across care focus areas.
+
+The ASEC is used here because it includes occupation, employment status, usual hours, earnings, and person weights in the same annual file. Those variables allow the project to estimate the size of the paid care workforce, calculate daily-equivalent care provision, and report median wages for app-facing activity categories.
+
+## Methodological Decisions
+
+| Decision | Implementation | Rationale |
+|---|---|---|
+| Paid-care universe | Adults age 18+ who are employed and whose occupation crosswalk maps to a care focus | Aligns the statistic with formal labor-market participation in care occupations. |
+| Five-year pooling | Use ASEC years 2021-2025 | Improves state-level reliability for smaller occupations while keeping results recent. |
+| Time conversion | Convert usual weekly hours to daily minutes | Places paid work on the same time scale used for unpaid ATUS activity estimates. |
+| Earnings estimate | Weighted median annual wage and salary income (`INCWAGE`) | Median earnings are less sensitive to extreme earnings than means. |
+
+## Policy Implications
+
+These statistics help policymakers evaluate whether the paid care workforce is large enough, adequately compensated, and distributed across the activities communities need. Occupation-level measures can inform workforce development, wage standards, training pipelines, and state care-infrastructure planning. They also make visible where paid care capacity is missing or fragile, which is especially important when demand for child care, elder care, disability support, health care, and daily-living assistance grows faster than the workforce.
+
+## Load & Setup Data
+
+To analyze this data, we utilize the yearly ASEC data. For this analysis, we use a 5-year average of this data to help with data limitations at the state level. The data presented on the Care Board pools ASEC survey years 2021, 2022, 2023, 2024, and 2025. Additionally, due to sample size limitations, not all occupations are present in every state in the survey. The use of 5-year averages helps solve this issue by allowing more data to be analyzed.
+
+The code below loads the ASEC data, filters only to include people aged 18 and over, and only individuals employed in the paid care economy. We then provide simple transformations of the variables to rename them to fit the standardized format needed for implementation in The Care Board.
+
+```{r formal activity setup, message=FALSE, warning=FALSE}
+source("R/load_defaults.R")
+
+# Load asec formal care activities
+asec <- read.csv("./data/CSV/ASECdata.csv") |>
+# Filter rows by conditions
+filter(AGE >= 18) |>
+# Filter rows by conditions
+filter(YEAR >= 2021 & YEAR <= 2025) |>
+# Filter rows by conditions
+filter(occ_care_focus != "none") |>
+# Filter rows by conditions
+filter(empstat == "Employed") |>
+# Select/reorder columns
+select(YEAR, OCC2010, occ_label, UHRSWORKT, 
+         EARNWT, INCWAGE, occ_care_focus, ASECWT, STATEFIP) |>
+  clean_names()
+
+# clean up names
+asec <- asec|>
+# Create or modify columns
+mutate(
+    uhrsworkt = ifelse(uhrsworkt == 999, 0, uhrsworkt), 
+    activity_id = str_replace_all(
+      occ_label, "[^a-zA-Z0-9]+", "-") |>
+      str_to_lower(),
+    asecwt = asecwt/5,
+    activity_id = gsub("-$", "", activity_id)
+  ) |> 
+  rename(
+    name = occ_label, 
+    care_focus = occ_care_focus,
+    geo_level = statefip
+    )
+```
+
+::: callout-note
+#### Code Explanation
+
+This chunk sources `R/load_defaults.R` so the later code has the required functions, defaults, and shared helpers. It reads `./data/CSV/ASECdata.csv` into memory and prepares those inputs for the transformations that follow. Technically, it uses `filter()`, `mutate()`, `select()`, `rename()`, `clean_names()` to restrict the analytic universe, create derived variables, reshape records, join lookup tables, and/or aggregate weighted statistics. The main objects created or updated here are `asec`, `uhrsworkt`, `activity_id`, `asecwt`, `name`.
+:::
+
+
+## Calculate Statistics
+
+The code below is utilized to calculate the actual statistics from the ASEC data. To calculate the population of people employed in each care job, we group by activity and geography and sum the weight variable. For each activity, we then calculate the amount of time spent in that activity by utilizing the uhrsworkt variable, which represents the respondent's answer to the question of how many hours they usually work in a week. We multiply this by 60 to get the response in minutes and divide by 7 to get a daily estimate. We then multiply this amount by asecwt to get a population-wide estimate. To calculate the estimated wage for each activity, we utilize a weighted median approach with the weight of each individual coming from the asecwt variable and the wage coming from the incwage variable.
+
+We repeat this code twice, first grouping all observations by states and then grouping all observations across the nation. For each grouping, we also calculate a variable called count, which represents the number of people in that grouping. This will be used to filter out cases where we do not have enough data to get good estimates.
+
+```{r paid activity stats, message=FALSE, warning=FALSE}
+act_formal_population <- asec |>
+# Compute summary statistics
+summarise(
+    population = sum(asecwt),
+    .by = c(activity_id, geo_level, name, care_focus)
+  )
+
+act_formal_time <- asec |> 
+# Filter rows by conditions
+filter(uhrsworkt != 997) |> 
+# Compute summary statistics
+summarise(
+    provision_interval = sum(asecwt*uhrsworkt*60/7),
+    .by = c(activity_id, geo_level, name, care_focus)
+  )
+
+
+act_formal_med_wage <- asec |>
+# Filter rows by conditions
+filter(incwage != 0 & incwage != 99999999) |> 
+# Compute summary statistics
+summarise(
+      median_wage = wtd.quantile(
+      incwage, 
+      weights = asecwt, 
+      probs = 0.5,
+      ),
+    .by = c(activity_id, geo_level, name, care_focus)
+  )
+
+act_formal_stats <- full_join(
+  act_formal_population, 
+  act_formal_time, 
+  by = c("activity_id", "geo_level", "name", "care_focus")
+  ) |>
+# Join datasets with full_join
+full_join(act_formal_med_wage, by = c("activity_id","geo_level", "name", "care_focus")) |>
+  arrange(activity_id)
+```
+
+::: callout-note
+#### Code Explanation
+
+Technically, it uses `filter()`, `summarise()`, `arrange()`, `full_join()` to restrict the analytic universe, create derived variables, reshape records, join lookup tables, and/or aggregate weighted statistics. The statistical work in this chunk calculates weighted counts, rates, rolling values, medians, changes over time, or inequality measures used in the published indicators. The main objects created or updated here are `act_formal_population`, `population`, `.by`, `act_formal_time`, `provision_interval`.
+:::
+
+```{r, message=FALSE, warning=FALSE}
+act_formal_stats$geo_level <- sprintf("%02d", as.numeric(act_formal_stats$geo_level))
+act_formal_stats$geo_level <- paste0("state", act_formal_stats$geo_level)
+
+#Fill in NULLS for too few observations
+
+formal_count <- asec |>
+# Compute summary statistics
+summarise(
+    count = n(),
+    .by = c(activity_id, geo_level, name, care_focus)
+  ) |>
+# Filter rows by conditions
+filter(count < 10)
+
+formal_count$geo_level <- sprintf("%02d", as.numeric(formal_count$geo_level))
+formal_count$geo_level <- paste0("state", formal_count$geo_level)
+  
+
+## National Stats
+
+act_formal_population <- asec |> 
+# Compute summary statistics
+summarise(
+    population = sum(asecwt),
+    .by = c(activity_id, name, care_focus)
+  )
+
+act_formal_time <- asec |> 
+# Filter rows by conditions
+filter(uhrsworkt != 997) |>
+# Compute summary statistics
+summarise(
+    provision_interval = sum(asecwt*uhrsworkt*60/7),
+    .by = c(activity_id, name, care_focus)
+  )
+
+act_formal_med_wage <- asec |>  # pipe
+# Filter rows by conditions
+filter(incwage != 0 & incwage != 99999999) |>  # pipe 
+# Compute summary statistics
+summarise(
+      median_wage = wtd.quantile(
+      incwage, 
+      weights = asecwt, 
+      probs = 0.5
+      ),
+    .by = c(activity_id, name, care_focus)
+  )
+```
+
+::: callout-note
+#### Code Explanation
+
+Technically, it uses `filter()`, `summarise()` to restrict the analytic universe, create derived variables, reshape records, join lookup tables, and/or aggregate weighted statistics. The statistical work in this chunk calculates weighted counts, rates, rolling values, medians, changes over time, or inequality measures used in the published indicators. The main objects created or updated here are `formal_count`, `count`, `.by`, `act_formal_population`, `population`.
+:::
+
+```{r, message=FALSE, warning=FALSE}
+fs <- full_join(
+  act_formal_population, 
+  act_formal_time, 
+  by = c("activity_id", "name", "care_focus")
+  ) |>  # pipe 
+# Join datasets with full_join
+full_join(act_formal_med_wage, by = c("activity_id", "name", "care_focus")) |>  # pipe
+  arrange(activity_id)
+
+fs$geo_level <- "national"
+
+## Group Together
+
+act_formal_stats <- rbind(act_formal_stats, fs)
+
+act_formal_stats <- act_formal_stats %>%  # pipe
+# Create or modify columns
+mutate(
+    match_flag = paste(activity_id, geo_level) %in% 
+                 paste(formal_count$activity_id, formal_count$geo_level),
+    population = ifelse(match_flag, "null", as.character(population)),
+    provision_interval = ifelse(match_flag, "null", as.character(provision_interval)),
+    median_wage = ifelse(match_flag, "null", as.character(median_wage))
+  ) %>%  # pipe
+# Select/reorder columns
+select(-match_flag)
+```
+
+::: callout-note
+#### Code Explanation
+
+Technically, it uses `mutate()`, `select()`, `arrange()`, `full_join()` to restrict the analytic universe, create derived variables, reshape records, join lookup tables, and/or aggregate weighted statistics. The main objects created or updated here are `fs`, `by`, `act_formal_stats`, `match_flag`, `population`.
+:::
+
+
+## Output Required Files
+
+This chunk outputs the required files. For The Care Board, we have an activity_formal file and an activity_formal_datum file. Each of these files represents different variables that are needed for the computation of the Voronoi chart.
+
+```{r paid activity output, message=FALSE, warning=FALSE}
+activity_formal <- act_formal_stats |>  # pipe 
+# Select/reorder columns
+select(activity_id, name, care_focus, median_wage, geo_level) |>  # pipe 
+  rename(id = activity_id,
+         geo = geo_level)
+
+activity_formal$median_wage[is.na(activity_formal$median_wage)] <- "null"
+
+activity_formal <- activity_formal %>%
+# Create or modify columns
+mutate(id = paste(id, geo, sep = "-"))
+
+write_careboard_outputs(
+  activity_formal,
+  "activity_formal",
+  app_path = "./app_data/activity_formal.csv"
+)
+
+act_formal_stats <- act_formal_stats |>  # pipe
+  rename(geo = geo_level)
+
+activity_formal_datum <- act_formal_stats |>  # pipe 
+# Select/reorder columns
+select(activity_id, provision_interval, population, geo)
+
+activity_formal_datum <- activity_formal_datum %>%  # pipe
+# Create or modify columns
+mutate(activity_id = paste(activity_id, geo, sep = "-"))
+
+activity_formal_datum$population[is.na(activity_formal_datum$population)] <- "null"
+activity_formal_datum$provision_interval[is.na(activity_formal_datum$provision_interval)] <- "null"
+
+write_careboard_outputs(
+  activity_formal_datum,
+  "activity_formal_datum",
+  app_path = "./app_data/activity_formal_datum.csv"
+)
+```
+
+::: callout-note
+#### Code Explanation
+
+Technically, it uses `mutate()`, `select()`, `rename()` to restrict the analytic universe, create derived variables, reshape records, join lookup tables, and/or aggregate weighted statistics. It writes the resulting table through the shared export helper, producing app-facing files and/or replication copies in CSV, Stata, and Excel formats. The main objects created or updated here are `activity_formal`, `geo`, `app_path`, `act_formal_stats`, `activity_formal_datum`.
+:::
+
+
+# View Datasets
+
+## Activity Formal Data
+
+The first dataset that we view is the activity_formal dataset which provides the median wage data for each group.
+
+```{r view activity_formal, eval=knitr::is_html_output()}
+# Prep display data: rename + coerce wage to numeric
+activity_disp <- activity_formal |>
+  rename(
+    ID = id,
+    Name = name,
+    `Care Focus` = care_focus,
+    `Median Annual Earnings ($)` = median_wage,
+    Geo = geo
+  ) |>
+  mutate(
+    `Median Annual Earnings ($)` = parse_number(`Median Annual Earnings ($)`)
+  )
+
+# Numeric columns for right-align & formatting
+num_cols <- c("Median Annual Earnings ($)")
+
+# Build the datatable
+DT::datatable(
+  activity_disp,
+  rownames = FALSE,
+  filter = "top",  # per-column search
+  extensions = c("Buttons", "FixedHeader", "ColReorder", "Responsive"),
+  options = list(
+    pageLength = 25,
+    lengthMenu = c(10, 25, 50, 100),
+    dom = "Bfrtip",
+    buttons = list(
+      list(extend = "copy",  title = "activity_formal"),
+      list(extend = "csv",   title = "activity_formal"),
+      list(extend = "excel", title = "activity_formal"),
+      list(extend = "print")
+    ),
+    fixedHeader = TRUE,
+    colReorder = TRUE,
+    autoWidth = TRUE,
+    columnDefs = list(
+      # Right-align numeric columns (0-based indices)
+      list(
+        className = "dt-right",
+        targets = which(names(activity_disp) %in% num_cols) - 1
+      )
+    )
+  ),
+  caption = htmltools::tags$caption(
+    style = "caption-side: top; text-align:left; font-weight:600; font-size:1.05em; margin-bottom:8px;",
+    "Formal Activity Summary (interactive: filter columns, reorder, and export)"
+  )
+) |>
+  # Format wage with thousands separators and 2 decimals
+  formatCurrency(num_cols, currency = "", interval = 3, mark = ",", digits = 2)
+
+```
+
+::: callout-note
+#### Code Explanation
+
+Technically, it uses `mutate()`, `rename()` to restrict the analytic universe, create derived variables, reshape records, join lookup tables, and/or aggregate weighted statistics. The display code builds a diagnostic plot, publication figure, static table, or interactive HTML table from the objects created earlier. The main objects created or updated here are `activity_disp`, `ID`, `Name`, `Geo`, `num_cols`.
+:::
+
+
+## Activity Formal Datum
+
+The second dataset that we view is the activity_formal_datum dataset, which provides information on the population of people in each activity, as well as the amount of time spent working in each activity.
+
+```{r View Activity Formal Datum, eval=knitr::is_html_output()}
+
+# Prep display data: rename + coerce numerics
+activity_datum_disp <- activity_formal_datum |>
+  rename(
+    `Activity ID` = activity_id,
+    `Provision Interval` = provision_interval,
+    Population = population,
+    Geo = geo
+  ) |>
+  mutate(
+    `Provision Interval` = parse_number(`Provision Interval`),
+    Population = parse_number(Population)
+  )
+
+# Numeric columns for right-align & formatting
+num_cols <- c("Provision Interval", "Population")
+
+# Build the datatable
+DT::datatable(
+  activity_datum_disp,
+  rownames = FALSE,
+  filter = "top",
+  extensions = c("Buttons", "FixedHeader", "ColReorder", "Responsive"),
+  options = list(
+    pageLength = 25,
+    lengthMenu = c(10, 25, 50, 100),
+    dom = "Bfrtip",
+    buttons = list(
+      list(extend = "copy",  title = "activity_formal_datum"),
+      list(extend = "csv",   title = "activity_formal_datum"),
+      list(extend = "excel", title = "activity_formal_datum"),
+      list(extend = "print")
+    ),
+    fixedHeader = TRUE,
+    colReorder = TRUE,
+    autoWidth = TRUE,
+    columnDefs = list(
+      list(
+        className = "dt-right",
+        targets = which(names(activity_datum_disp) %in% num_cols) - 1  # 0-based indices
+      )
+    )
+  ),
+  caption = htmltools::tags$caption(
+    style = "caption-side: top; text-align:left; font-weight:600; font-size:1.05em; margin-bottom:8px;",
+    "Formal Activity (Datum) - interactive: filter columns, reorder, and export"
+  )
+) |>
+  # Comma separators; integers by default for these fields
+  formatCurrency(num_cols, currency = "", interval = 3, mark = ",", digits = 0)
+```
+
+::: callout-note
+#### Code Explanation
+
+Technically, it uses `mutate()`, `rename()` to restrict the analytic universe, create derived variables, reshape records, join lookup tables, and/or aggregate weighted statistics. The display code builds a diagnostic plot, publication figure, static table, or interactive HTML table from the objects created earlier. The main objects created or updated here are `activity_datum_disp`, `Population`, `Geo`, `num_cols`, `rownames`.
+:::

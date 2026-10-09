@@ -1,0 +1,121 @@
+{
+  "record_format_version": 1,
+  "version": "2.0.0",
+  "status": "published",
+  "record_prepared": "2026-10-05",
+  "planned_public_date": "2026-10-12",
+  "actual_public_date": "2026-10-09",
+  "repository_code": "https://github.com/KansasPopulationCenter/TheCareBoard",
+  "website": "https://thecareboard.org/",
+  "repository_action": "update_existing",
+  "authors": [
+    {
+      "given_names": "Misty",
+      "family_names": "Heggeness"
+    },
+    {
+      "given_names": "Joseph",
+      "family_names": "Bommarito"
+    },
+    {
+      "given_names": "Lucie",
+      "family_names": "Prewitt"
+    }
+  ],
+  "copyright_holder": "Kansas Population Center, University of Kansas",
+  "dataset_documentation_license": "CC-BY-4.0",
+  "code_license": "MIT",
+  "intended_tag": "v2.0.0",
+  "tag_created_in_preparation": false,
+  "git_commit": null,
+  "doi": null,
+  "payload_files": 22,
+  "payload_csv_files": 19,
+  "payload_xlsx_files": 3,
+  "payloads_byte_identical_to_supplied_originals": true,
+  "file_checksums": "file_checksums.csv",
+  "checksummed_file_count": 88,
+  "metric_reference_periods": "metric_reference_periods.csv",
+  "dated_numeric_fields": 34,
+  "table_reference_periods": "table_reference_periods.csv",
+  "statistical_regeneration_performed": false,
+  "original_generation_date": null,
+  "original_generation_run_identifier": null,
+  "source_payloads_supplied": false,
+  "original_source_versions_verified": false,
+  "source_payloads_available_in_owner_working_folder": true,
+  "owner_confirmed_inputs_produced_supplied_app_data": true,
+  "owner_confirmation_date": "2026-10-05",
+  "source_input_provenance": "input_provenance.json",
+  "preparation_environment_record": "environment.json",
+  "preparation_environment_capture_date": "2026-10-06",
+  "preparation_dependency_versions_captured": true,
+  "clean_dependency_restore_verified": false,
+  "historical_generation_environment_verified": false,
+  "methodological_review_status": "deferred_by_owner_until_after_snapshot_sync",
+  "methodological_review_deferral_date": "2026-10-06",
+  "snapshot_sync_scope": "Current code, source notes, and supplied app_data; no methodological corrections or recalculation",
+  "snapshot_branch": "careboard-2.0.0-snapshot",
+  "snapshot_branch_url": "https://github.com/KansasPopulationCenter/TheCareBoard/tree/careboard-2.0.0-snapshot",
+  "snapshot_uploaded_date": "2026-10-06",
+  "snapshot_pull_request_url": "https://github.com/KansasPopulationCenter/TheCareBoard/pull/2",
+  "snapshot_pull_request_draft": false,
+  "snapshot_pull_request_merged": true,
+  "source_snapshot_file_count": 23,
+  "verified_source_fingerprint_count": 18,
+  "pending_source_checksums": [
+    "data/CSV/CPSdata.csv",
+    "data/CSV/ASECdata.csv",
+    "data/CSV/ATUSdata.csv",
+    "data/CSV/workforce_area_characteristics.csv",
+    "data/CSV/resident_area_characteristics.csv"
+  ],
+  "accompanying_code_proven_to_generate_supplied_exports": false,
+  "missing_pipeline_documents": [],
+  "master_pipeline_documents_present": 14,
+  "recovered_pipeline_documents": [
+    "IPUMS_API.qmd",
+    "data_processing.qmd",
+    "market.qmd",
+    "market_datum.qmd",
+    "provider.qmd",
+    "gini.qmd",
+    "sandwich_generation.qmd",
+    "parental_labor_monitor.qmd"
+  ],
+  "restoration_record": "docs/PIPELINE_RESTORATION.md",
+  "crosswalks_present": [
+    "data/CSV/FormalOccs_Crossover.csv",
+    "data/CSV/ATUSActivityCrossover.csv",
+    "data/CSV/Informal_Formal_Crosswalk.csv"
+  ],
+  "source_extract_identifiers_referenced_by_code": [
+    "cps_00453",
+    "cps_00452",
+    "atus_00035",
+    "atus_00036",
+    "atus_00029"
+  ],
+  "evidence": {
+    "observed": "Nonmissing date/field coverage and hashes computed from supplied exports; zero counts as present",
+    "documented": "Rules read from accompanying code and chart notes in app_data/source.csv; analyses not evaluated",
+    "owner_confirmed": "The working-folder input set produced the supplied app_data; no other input locations were reported",
+    "source_metadata": "DDI requested sample dates/variables, NHGIS/GDP column periods, observed sizes, and completed source fingerprints; see input_provenance.json",
+    "unverified": "Historical BEA/LODES/NHGIS publisher editions, acquisition dates, original generation run/code revision, observed cleaned-record coverage, and full rebuild"
+  },
+  "unresolved_period_details": [
+    "Monthly CPS DDI requests through August 2026; June-August 2026 is conditional on the cleaned endpoint; observed coverage and completeness of early windows remain unverified",
+    "Circle of Care pooled ASEC note versus latest-year unpaid-activity replacement-wage code",
+    "Historical BEA/LODES/NHGIS publisher release editions and LODES assembly selections are not recorded",
+    "ATUS relationship extract lacks 2025 while main activity extract includes 2025; review recipient-specific periods",
+    "Observed cleaned ATUS coverage and full care-privilege baseline input-year range remain unverified",
+    "Owner-confirmed generation inputs; original run/code revision not independently reproduced; preprocessing preserves CPS survey YEAR",
+    "Consistent sandwich own-child age cutoff wording (10 or younger) and national summary convention"
+  ],
+  "official_launch_date": "2026-10-12",
+  "publication_metadata_finalized": "2026-10-09",
+  "release_tag": "v2.0.0",
+  "release_url": "https://github.com/KansasPopulationCenter/TheCareBoard/releases/tag/v2.0.0",
+  "git_commit_reference": "https://github.com/KansasPopulationCenter/TheCareBoard/releases/tag/v2.0.0",
+  "git_commit_record_location": "Full tagged commit SHA in the GitHub release description; omitted here to avoid a self-referential commit hash"
+}

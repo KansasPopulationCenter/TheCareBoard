@@ -1,0 +1,55 @@
+{
+  "files": {
+    "ATUSActivityCrossover.csv": {
+      "path": "data/CSV/ATUSActivityCrossover.csv",
+      "encoding": "utf-8-sig",
+      "columns": [
+        "Code",
+        "Activity",
+        "developmental",
+        "health",
+        "daily_living",
+        "PaidWork",
+        "FormalWork",
+        "ChildCare",
+        "ElderCare",
+        "Householdcare",
+        "Selfcare",
+        "Leisure",
+        "Sleeping",
+        "Volunteering",
+        "Education"
+      ],
+      "observed_rows": 461,
+      "sha256": "e8efe3e6e2fc1a8013f3981eaebdb31d52a4fd0b305b9a817598e9fcd5aca9c2",
+      "bytes": 20899
+    },
+    "FormalOccs_Crossover.csv": {
+      "path": "data/CSV/FormalOccs_Crossover.csv",
+      "encoding": "utf-8-sig",
+      "columns": [
+        "code",
+        "occ_category",
+        "occ_name",
+        "occ_label",
+        "occ_care_focus"
+      ],
+      "observed_rows": 518,
+      "sha256": "df89e13cfdcaeb3a19926148cbf4e7f328dcb17a84ce8b8297bccd533a514063",
+      "bytes": 53801
+    },
+    "Informal_Formal_Crosswalk.csv": {
+      "path": "data/CSV/Informal_Formal_Crosswalk.csv",
+      "encoding": "utf-8-sig",
+      "columns": [
+        "Code_Informal",
+        "Type",
+        "Activity",
+        "Code_Formal"
+      ],
+      "observed_rows": 258,
+      "sha256": "2e25b634866fe77c30ada068680a813a612a45bec80e9b48c55b6299ad200f32",
+      "bytes": 12090
+    }
+  }
+}

@@ -1,0 +1,13 @@
+id,text,url
+CE_CareNeedCategorizing,"Data-informed estimates derived from 2025 CPS ASEC & 5-year pooled ATUS (2021-2025), US Census Bureau via IPUMS",NULL
+CE_CareNeedDefining,"Data-informed estimates derived from 2025 CPS ASEC &  pooled ATUS (2021-2025), US Census Bureau via IPUMS; Note: See Methodology & Data for details.",NULL
+CE_CareProvisionBar,"Data from 2025 CPS ASEC & 5-year pooled ATUS (2021-2025), US Census Bureau via IPUMS; Note: See Methodology & Data for details.",NULL
+CE_CareProvisionSankey,"Notes: Care-providing population includes individuals aged 18 and older. Daily care hours include related travel time. Adults without own children is defined as adults living in a household with no own children. They may have children who live in a different household. For more care provider group definitions and information on daily care hours, see Methodology & Data.",NULL
+CE_CircleOfCare,"5-year pooled CPS ASEC (2021-2025) & 5-year pooled ATUS (2021-2025), US Census Bureau via IPUMS. 
+Notes: The total paid care hours in this diagram use 5-year averages, which allow for more granular analysis of specific occupations. This causes the results to differ slightly from other diagrams. See the Care Providers page for details on expected annual earnings.",NULL
+CE_StageOfLife,"Data-informed estimates derived from 2025 CPS ASEC & 5-year pooled ATUS (2021-2025), US Census Bureau via IPUMS; 
+Note: See Methodology & Data for details.",NULL
+CoC_CareProviders,"2025 CPS ASEC & 5-year pooled ATUS (2021-2025), US Census Bureau via IPUMS. 
+Notes: Estimated time represents median time spent in caregiving for adults 18+. For definitions of care provider groups and more information on daily care hours, see Methodology & Data.",NULL
+CoC_CircleOfCare,"5-year pooled CPS ASEC (2021-2025) & 5-year pooled ATUS (2021-2025), US Census Bureau via IPUMS;
+Note: The expected annual earnings for unpaid activities are an estimate of the value of the activity if done in the paid economy. To estimate this, we created a crosswalk of similar activities from care jobs in the paid sector and assumed the median wage value based on the crosswalk. Some state/group combinations lack sufficient responses for accurate estimates and are excluded from the chart.",NULL

@@ -1,0 +1,518 @@
+---
+title: "Household Bargaining Power Methodology"
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    code-overflow: wrap
+    df-print: paged
+  pdf:
+    toc: true
+    toc-depth: 3
+execute:
+  warning: false
+  message: false
+  echo: true
+editor: visual
+date: 2026-07-22
+---
+
+# Overview
+
+This file builds two Household Bargaining Power metrics for The Care Board's Distribution of Care page.
+
+The first metric, **Maternal Bargaining Power**, uses CPS ASEC household records to estimate the share of married-parent household wage income earned by mothers. The analytic sample is limited to households with children where a child is linked to both a mother and a father in the same household. Both parents must be coded as married. If a future ASEC extract includes `SPLOC`, the code also verifies that the mother and father are linked to each other as spouses. The current cleaned ASEC extract does not include `SPLOC`, so the strongest available match is a shared child link plus married status for both parents.
+
+The second metric, **Care Privileged**, uses ATUS time-diary data and the care privilege methodology in `local_only/research/care_privilege_atus_privilege_focus.docx` (local research reference, excluded from Git). Adult care time is measured as daily-living and health activity time, excluding child care and elder care. Solo-dwelling adults define sex-by-age adult-care thresholds, and non-solo adults whose adult care time falls below the matching solo-dweller median are classified as care-privileged. State estimates use the same five-year rolling ATUS approach used elsewhere in The Care Board to improve stability.
+
+**Outputs.** This workflow writes `metrics_maternal_power` and `metrics_priviledge` to `app_data/` for the website and to `data/CSV/`, `data/Dta/`, and `data/Excel/` for replication.
+
+**Key sources.** The maternal bargaining measure uses CPS ASEC via IPUMS CPS. The care privilege measure uses ATUS via IPUMS ATUS and follows the solo-dweller baseline strategy described in `local_only/research/care_privilege_atus_privilege_focus.docx` (local research reference, excluded from Git).
+
+## Methodological Decisions
+
+| Decision | Implementation | Rationale |
+|---|---|---|
+| Married-parent household universe | Identify children with both `MOMLOC` and `POPLOC`, join to linked adults, and require both parents to be married | Keeps the statistic focused on households with married mothers and fathers who share a child in the same household. |
+| Income contribution | Use the best available personal income field, preferring `INCTOT` if present and otherwise using `INCWAGE` | The current cleaned ASEC file contains `INCWAGE`, so the measure currently reflects wage and salary income shares. |
+| Maternal statistic | Calculate the person-weighted mean of the mother's share of the linked parents' combined income | Interprets bargaining power as an average household-level income contribution among eligible couples. |
+| Adult care time | Sum daily-living and health activities, excluding child care and elder care | Matches the care privilege methodology's focus on adult self-care and household maintenance. |
+| Care privilege threshold | Use weighted solo-dweller medians by sex and broad age group | Provides a transparent benchmark for below-baseline adult care time. |
+| ATUS state estimates | Use five survey-year rolling windows and exclude 2020 | Mirrors other ATUS-based Care Board state metrics and avoids the disrupted 2020 survey year. |
+
+## Policy Implications
+
+Household bargaining power helps make visible the relationship between income, care, and protected time. A mother's income share can signal whether earnings power inside married-parent households is changing across states and over time. Care privilege captures the recipient side of care: people whose daily care and household maintenance time falls below a benchmark for comparable adults living independently. Together, the metrics help describe not only who provides care, but who has income and time advantages within the household care economy.
+
+# Setup
+
+The first chunk loads the shared Care Board defaults, defines small helper functions, and sets file paths for the cleaned ASEC and ATUS data.
+
+```{r bargaining setup, message=FALSE, warning=FALSE}
+source("R/load_defaults.R")
+
+asec_path <- "./data/CSV/ASECdata.csv"
+atus_path <- "./data/CSV/ATUSdata.csv"
+
+format_state_geo <- function(statefip) {
+  paste0("state", sprintf("%02d", as.integer(statefip)))
+}
+
+weighted_mean_safe <- function(x, w) {
+  ok <- !is.na(x) & !is.na(w) & w > 0
+  if (!any(ok)) return(NA_real_)
+  stats::weighted.mean(x[ok], w[ok])
+}
+
+weighted_quantile <- function(x, w, prob = 0.5) {
+  ok <- !is.na(x) & !is.na(w) & w > 0
+  if (!any(ok)) return(NA_real_)
+
+  x <- x[ok]
+  w <- w[ok]
+  ord <- order(x)
+  x <- x[ord]
+  w <- w[ord]
+  cutoff <- prob * sum(w)
+
+  x[which(cumsum(w) >= cutoff)[1]]
+}
+```
+
+::: callout-note
+#### Code Explanation
+
+This chunk sources `R/load_defaults.R` so the later code has the required packages and shared export helper. It also defines small helper functions for geography formatting, weighted means, and weighted quantiles used by the two statistics.
+:::
+
+# Maternal Bargaining Power
+
+## Load ASEC Data
+
+The maternal bargaining statistic is calculated from the cleaned ASEC microdata. The code reads only the fields needed to identify household members, link children to parents, retain married mothers and fathers, and calculate income shares. If a broader total-income variable is later added to the extract, the code will use it; otherwise it uses `INCWAGE`, the wage and salary income variable currently available in the cleaned file.
+
+```{r maternal load asec, message=FALSE, warning=FALSE}
+asec_available <- names(data.table::fread(asec_path, nrows = 0))
+
+income_var <- dplyr::case_when(
+  "INCTOT" %in% asec_available ~ "INCTOT",
+  "INCWAGE" %in% asec_available ~ "INCWAGE",
+  TRUE ~ NA_character_
+)
+
+if (is.na(income_var)) {
+  stop("ASECdata.csv must include INCTOT or INCWAGE to calculate maternal bargaining power.")
+}
+
+asec_required <- c(
+  "YEAR", "SERIAL", "PERNUM", "ASECWT", "STATEFIP",
+  "AGE", "SEX", "MARST", "MOMLOC", "POPLOC", income_var
+)
+asec_optional <- intersect("SPLOC", asec_available)
+missing_asec <- setdiff(asec_required, asec_available)
+
+if (length(missing_asec) > 0) {
+  stop(
+    "ASECdata.csv is missing required maternal bargaining columns: ",
+    paste(missing_asec, collapse = ", ")
+  )
+}
+
+asec <- data.table::fread(
+  asec_path,
+  select = c(asec_required, asec_optional)
+) |>
+  as_tibble() |>
+  clean_names()
+
+if (!"sploc" %in% names(asec)) {
+  asec <- asec |>
+    mutate(sploc = NA_real_)
+}
+
+income_col <- janitor::make_clean_names(income_var)
+income_missing_cutoff <- if (income_var == "INCTOT") 999999998 else 99999998
+
+asec <- asec |>
+  mutate(
+    year = as.integer(year),
+    date = as.Date(paste0(year, "-01-01")),
+    serial = as.integer(serial),
+    pernum = as.integer(pernum),
+    statefip = as.integer(statefip),
+    geo_level = format_state_geo(statefip),
+    asecwt = as.numeric(asecwt),
+    income = as.numeric(.data[[income_col]]),
+    income = if_else(income >= income_missing_cutoff, NA_real_, pmax(income, 0)),
+    momloc = as.integer(momloc),
+    poploc = as.integer(poploc),
+    sploc = as.integer(sploc)
+  )
+```
+
+::: callout-note
+#### Code Explanation
+
+It reads `./data/CSV/ASECdata.csv` into memory and keeps the variables required for parent-child matching, marital-status filtering, weighting, geography, and income contribution. The code checks for required columns before continuing and creates app geography labels in the `stateXX` format.
+:::
+
+## Identify Married Mother-Father Households
+
+Children with both a linked mother and a linked father identify eligible parent pairs. The parent records are then joined back onto those child links. Both linked adults must have the expected sex code and be coded as married. If spouse locators are available in a future extract, the code also requires the mother and father to point to each other through `SPLOC`.
+
+```{r maternal parent pairs, message=FALSE, warning=FALSE}
+children_with_parents <- asec |>
+  filter(age < 18, momloc > 0, poploc > 0) |>
+  distinct(year, date, serial, statefip, geo_level, momloc, poploc)
+
+mothers <- asec |>
+  transmute(
+    year,
+    serial,
+    momloc = pernum,
+    mother_income = income,
+    mother_weight = asecwt,
+    mother_sex = sex,
+    mother_married = marst %in% c(1, 2),
+    mother_sploc = sploc
+  )
+
+fathers <- asec |>
+  transmute(
+    year,
+    serial,
+    poploc = pernum,
+    father_income = income,
+    father_weight = asecwt,
+    father_sex = sex,
+    father_married = marst %in% c(1, 2),
+    father_sploc = sploc
+  )
+
+parent_pairs <- children_with_parents |>
+  inner_join(mothers, by = c("year", "serial", "momloc")) |>
+  inner_join(fathers, by = c("year", "serial", "poploc")) |>
+  filter(
+    mother_sex == 2,
+    father_sex == 1,
+    mother_married,
+    father_married
+  )
+
+if ("SPLOC" %in% asec_available) {
+  parent_pairs <- parent_pairs |>
+    filter(mother_sploc == poploc, father_sploc == momloc)
+}
+
+parent_pairs <- parent_pairs |>
+  mutate(
+    pair_weight = (mother_weight + father_weight) / 2,
+    total_parent_income = mother_income + father_income,
+    maternal_income_share = mother_income / total_parent_income
+  ) |>
+  filter(
+    pair_weight > 0,
+    total_parent_income > 0,
+    !is.na(maternal_income_share)
+  )
+```
+
+::: callout-note
+#### Code Explanation
+
+This chunk constructs the maternal bargaining analysis universe. It starts from children linked to both parents, joins the linked adult records, filters to married mother-father pairs, removes pairs with missing or zero combined income, and calculates the mother's share of the linked parents' combined income.
+:::
+
+## Calculate State and National Maternal Power
+
+The statistic reported to the app is the weighted mean of household-level maternal income share. State rows are calculated within each ASEC year and state. National rows are calculated from the same parent-pair records without state grouping.
+
+```{r maternal stats, message=FALSE, warning=FALSE}
+maternal_power_state <- parent_pairs |>
+  group_by(year, date, geo_level) |>
+  summarise(
+    share_of_income = weighted_mean_safe(maternal_income_share, pair_weight),
+    .groups = "drop"
+  )
+
+maternal_power_national <- parent_pairs |>
+  group_by(year, date) |>
+  summarise(
+    share_of_income = weighted_mean_safe(maternal_income_share, pair_weight),
+    .groups = "drop"
+  ) |>
+  mutate(geo_level = "national")
+
+metrics_maternal_power <- bind_rows(
+  maternal_power_state,
+  maternal_power_national
+) |>
+  select(share_of_income, date, geo_level) |>
+  arrange(date, geo_level)
+```
+
+::: callout-note
+#### Code Explanation
+
+Technically, it uses `group_by()`, `summarise()`, `mutate()`, `bind_rows()`, `select()`, and `arrange()` to calculate state and national maternal income-share estimates. The resulting table matches the Care Gini shape with one value column, `date`, and `geo_level`.
+:::
+
+## Export Maternal Power
+
+The completed maternal bargaining table is written for the website and for replication.
+
+```{r maternal write outputs, message=FALSE, warning=FALSE}
+write_careboard_outputs(
+  metrics_maternal_power,
+  "metrics_maternal_power",
+  app_path = "./app_data/metrics_maternal_power.csv"
+)
+```
+
+::: callout-note
+#### Code Explanation
+
+It writes the resulting table through the shared export helper, producing the app-facing CSV and replication copies in CSV, Stata, and Excel formats.
+:::
+
+# Care Privileged
+
+## Load ATUS Data
+
+The care privilege statistic uses ATUS activity records. The code keeps the fields needed to calculate adult care time, classify solo and non-solo adults, assign sex-by-age thresholds, and aggregate weighted state and national estimates. ATUS 2020 is excluded to match the project's existing treatment of the disrupted pandemic survey year.
+
+```{r privilege load atus, message=FALSE, warning=FALSE}
+atus_required <- c(
+  "YEAR", "date", "CASEID", "WT06", "STATEFIP",
+  "AGE", "sex", "HH_SIZE", "HH_NUMADULTS",
+  "daily_living", "health", "child_care", "elder_care", "DURATION"
+)
+atus_available <- names(data.table::fread(atus_path, nrows = 0))
+missing_atus <- setdiff(atus_required, atus_available)
+
+if (length(missing_atus) > 0) {
+  stop(
+    "ATUSdata.csv is missing required care privilege columns: ",
+    paste(missing_atus, collapse = ", ")
+  )
+}
+
+atus <- data.table::fread(
+  atus_path,
+  select = atus_required
+) |>
+  as_tibble() |>
+  clean_names() |>
+  mutate(
+    year = as.integer(year),
+    date = as.Date(date),
+    wt06 = as.numeric(wt06),
+    statefip = as.integer(statefip),
+    geo_level = format_state_geo(statefip),
+    age = as.numeric(age),
+    duration = replace_na(as.numeric(duration), 0),
+    across(
+      c(daily_living, health, child_care, elder_care),
+      \(x) replace_na(as.numeric(x), 0)
+    ),
+    adult_care_minutes = if_else(
+      (daily_living == 1 | health == 1) &
+        child_care != 1 &
+        elder_care != 1,
+      duration,
+      0
+    ),
+    age_group = case_when(
+      age >= 18 & age <= 34 ~ "18-34",
+      age >= 35 & age <= 54 ~ "35-54",
+      age >= 55 & age <= 64 ~ "55-64",
+      age >= 65 ~ "65+",
+      TRUE ~ NA_character_
+    )
+  ) |>
+  filter(
+    year != 2020,
+    age >= 18,
+    wt06 > 0,
+    !is.na(sex),
+    !is.na(age_group),
+    !is.na(hh_size),
+    !is.na(hh_numadults)
+  )
+```
+
+::: callout-note
+#### Code Explanation
+
+It reads `./data/CSV/ATUSdata.csv` and prepares the activity-level inputs for care privilege measurement. The code creates `adult_care_minutes` from daily-living and health activities while excluding child care and elder care, assigns broad age groups, formats state geography, and removes invalid adult records.
+:::
+
+## Build Adult Care Time and Solo-Dweller Thresholds
+
+ATUS is activity-level data, so adult care time must be collapsed to the respondent-day level. Solo-dwelling adults are then used to calculate weighted median adult care time by sex and broad age group.
+
+```{r privilege thresholds, message=FALSE, warning=FALSE}
+adult_cases <- atus |>
+  group_by(
+    year, date, geo_level, caseid, wt06, sex, age, age_group,
+    hh_size, hh_numadults
+  ) |>
+  summarise(
+    adult_care_time = sum(adult_care_minutes, na.rm = TRUE),
+    .groups = "drop"
+  ) |>
+  mutate(
+    solo_dweller = hh_size == 1 & hh_numadults == 1,
+    non_solo_adult = !solo_dweller
+  )
+
+care_privilege_thresholds <- adult_cases |>
+  filter(solo_dweller) |>
+  group_by(sex, age_group) |>
+  summarise(
+    solo_care_median = weighted_quantile(adult_care_time, wt06, prob = 0.5),
+    solo_care_p25 = weighted_quantile(adult_care_time, wt06, prob = 0.25),
+    solo_count = n(),
+    .groups = "drop"
+  )
+
+adult_cases <- adult_cases |>
+  left_join(care_privilege_thresholds, by = c("sex", "age_group")) |>
+  mutate(
+    care_privileged = non_solo_adult &
+      !is.na(solo_care_median) &
+      adult_care_time < solo_care_median
+  )
+```
+
+::: callout-note
+#### Code Explanation
+
+This chunk collapses ATUS activities to one respondent-day row, identifies solo dwellers and non-solo adults, calculates weighted solo-dweller adult-care medians by sex and age group, and flags non-solo adults below the matching median as care-privileged.
+:::
+
+## Calculate State and National Care Privilege
+
+Care privilege population estimates are calculated in five survey-year rolling windows. The population is the weighted count of care-privileged non-solo adults. The proportion is the care-privileged population divided by all non-solo adults in the same geography and rolling window.
+
+```{r privilege stats, message=FALSE, warning=FALSE}
+privilege_year_windows <- tibble(
+  year = sort(unique(adult_cases$year))
+) |>
+  mutate(yr_start = lag(year, 4)) |>
+  filter(!is.na(yr_start))
+
+care_privilege_window <- function(sel_year, year_min, geo_group = TRUE) {
+  window_cases <- adult_cases |>
+    filter(year >= year_min, year <= sel_year)
+
+  if (isTRUE(geo_group)) {
+    out <- window_cases |>
+      group_by(geo_level) |>
+      summarise(
+        care_privileged_population = sum(
+          if_else(care_privileged, wt06 / 365, 0),
+          na.rm = TRUE
+        ) / 5,
+        non_solo_adult_population = sum(
+          if_else(non_solo_adult, wt06 / 365, 0),
+          na.rm = TRUE
+        ) / 5,
+        .groups = "drop"
+      )
+  } else {
+    out <- window_cases |>
+      summarise(
+        care_privileged_population = sum(
+          if_else(care_privileged, wt06 / 365, 0),
+          na.rm = TRUE
+        ) / 5,
+        non_solo_adult_population = sum(
+          if_else(non_solo_adult, wt06 / 365, 0),
+          na.rm = TRUE
+        ) / 5,
+        .groups = "drop"
+      ) |>
+      mutate(geo_level = "national")
+  }
+
+  out |>
+    mutate(
+      date = as.Date(paste0(sel_year, "-01-01")),
+      care_privileged_population_proportion =
+        care_privileged_population / non_solo_adult_population
+    )
+}
+
+privilege_stats_state <- purrr::map2_dfr(
+  privilege_year_windows$year,
+  privilege_year_windows$yr_start,
+  \(sel_year, year_min) care_privilege_window(sel_year, year_min, geo_group = TRUE)
+)
+
+privilege_stats_national <- purrr::map2_dfr(
+  privilege_year_windows$year,
+  privilege_year_windows$yr_start,
+  \(sel_year, year_min) care_privilege_window(sel_year, year_min, geo_group = FALSE)
+)
+
+metrics_priviledge <- bind_rows(
+  privilege_stats_state,
+  privilege_stats_national
+) |>
+  select(
+    date,
+    geo_level,
+    care_privileged_population,
+    care_privileged_population_proportion
+  ) |>
+  arrange(date, geo_level)
+```
+
+::: callout-note
+#### Code Explanation
+
+Technically, it uses `mutate()`, `filter()`, `group_by()`, `summarise()`, `map2_dfr()`, `bind_rows()`, `select()`, and `arrange()` to estimate rolling care-privileged populations and rates by state and nationally. The population denominator for the rate is non-solo adults, matching the care privilege methodology.
+:::
+
+## Export Care Privileged
+
+The completed care privilege table is written for the website and for replication. The file stem keeps the requested spelling, `metrics_priviledge`.
+
+```{r privilege write outputs, message=FALSE, warning=FALSE}
+write_careboard_outputs(
+  metrics_priviledge,
+  "metrics_priviledge",
+  app_path = "./app_data/metrics_priviledge.csv"
+)
+```
+
+::: callout-note
+#### Code Explanation
+
+It writes the resulting table through the shared export helper, producing the app-facing CSV and replication copies in CSV, Stata, and Excel formats.
+:::
+
+# Data Views
+
+The final chunks provide small previews that make it easier to inspect the exported structures after rendering the file.
+
+```{r maternal preview, message=FALSE, warning=FALSE}
+head(metrics_maternal_power)
+```
+
+::: callout-note
+#### Code Explanation
+
+This chunk displays the first rows of the maternal bargaining output so the table shape can be checked after rendering.
+:::
+
+```{r privilege preview, message=FALSE, warning=FALSE}
+head(metrics_priviledge)
+```
+
+::: callout-note
+#### Code Explanation
+
+This chunk displays the first rows of the care privilege output so the table shape can be checked after rendering.
+:::

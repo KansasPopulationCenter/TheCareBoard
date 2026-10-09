@@ -1,0 +1,919 @@
+﻿---
+title: "Provider Demographics and Care Provision Methodology"
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    code-overflow: wrap
+    df-print: paged
+  pdf:
+    toc: true
+    toc-depth: 3
+execute:
+  warning: false
+  message: false
+  echo: true
+editor: visual
+date: 2025-08-07
+---
+
+# Overview
+
+This file builds the provider diversity tables used by The Care Board to compare caregiving across demographic groups. The purpose is to show how much time different groups spend providing care, how that work differs between paid and unpaid settings, and how caregiving varies by gender, parenthood, race and ethnicity, age group, employment status, and poverty status.
+
+The workflow combines CPS ASEC data for paid care occupations with ATUS data for unpaid care activities. The resulting `provider_datum` table contains care-time estimates by geography, demographic category, care type, care focus, and attention type. The `provider` table contains population denominators and summary counts used by the website to build provider comparison cards and charts.
+
+**Outputs.** This workflow writes `provider`, `provider_datum`, and `provider_category` to `app_data/` for upload and to `data/CSV/`, `data/Dta/`, and `data/Excel/` for replication.
+
+**Key sources.** The demographic and occupation measures come from CPS ASEC, while unpaid time measures come from ATUS. The broader framing follows care-economy research emphasizing that paid and unpaid care should be measured together when evaluating labor-market and family well-being.
+
+## Introduction and Literature Context
+
+The provider tables answer an equity question: which demographic groups provide care, and how does that differ between paid and unpaid settings? Care responsibilities are shaped by gender, parenthood, race and ethnicity, age, employment, and poverty. Measuring those dimensions helps connect care work to broader questions about labor-market inequality and family economic security.
+
+This file uses ASEC to measure paid care provision and ATUS to measure unpaid care time. The resulting tables let the website compare providers by demographic group while keeping the care focus and attention type consistent across the formal and informal care economies.
+
+## Methodological Decisions
+
+| Decision | Implementation | Rationale |
+|---|---|---|
+| Demographic groups | Gender-parenthood, race/ethnicity, poverty, employment, and age categories | Captures major equity dimensions used across the Care Board. |
+| Minimum-cell protections | Track respondent counts and suppress unstable groups where needed | Avoids overinterpreting very small survey cells. |
+| Paid/unpaid structure | Estimate both sectors and bind to a common schema | Makes comparison possible without hiding source differences. |
+| Category metadata | Use app-facing provider category workbooks | Keeps public labels and display order consistent with the website. |
+
+## Policy Implications
+
+Provider-demographic statistics can reveal whether care systems rely disproportionately on particular groups and whether those burdens are paid, unpaid, or both. That evidence is relevant for wage policy, caregiver credits, paid leave, anti-poverty programs, and targeted workforce investments. It also helps agencies evaluate whether new care policies reduce or reproduce existing inequities.
+
+## Setup
+
+Like other chunks the first step is to load the libraries and default functions and the data. We will start with understanding time spent in paid caregiving. As such, we start by loading in the ASEC data, filter it to only include the most recent year observations of people aged 18 and above, and limit it to the variables we might require.
+
+```{r provider setup, message=FALSE, warning=FALSE}
+source("R/load_defaults.R")
+
+asec <- read.csv("./data/CSV/ASECdata.csv") |>
+# Filter rows by conditions
+filter(YEAR == max(YEAR)) |> 
+# Filter rows by conditions
+filter(AGE >= 18) |>
+# Select/reorder columns
+select(YEAR, OCC2010, empstat, occ_label, UHRSWORKT, EARNWT, INCWAGE, 
+         occ_care_focus, ASECWT, sex, gender_parent, poverty, empstat, race_ethnicity, prime_age, STATEFIP) |> 
+  clean_names()
+```
+
+::: callout-note
+#### Code Explanation
+
+This chunk sources `R/load_defaults.R` so the later code has the required functions, defaults, and shared helpers. It reads `./data/CSV/ASECdata.csv` into memory and prepares those inputs for the transformations that follow. Technically, it uses `filter()`, `select()`, `clean_names()` to restrict the analytic universe, create derived variables, reshape records, join lookup tables, and/or aggregate weighted statistics. The main objects created or updated here are `asec`.
+:::
+
+
+# Paid State Data
+
+To create the data on the amount of time spent in paid caregiving within each stsate we take the asec data, filter it to only include employed people, and change certain variable names to fit the standards that we require. We then load in a seperate asec generated dataframe called cp_pop which will be used to calculate the population of each subgroup within the analysis. This cp_pop dataframe won't have filters applied to it and so will be able to generate estimates of the total population of different demographics.
+
+```{r provider paid state, message=FALSE, warning=FALSE}
+
+cp_formal_state <- asec |>
+# Filter rows by conditions
+filter(empstat == "Employed") |>
+# Create or modify columns
+mutate(
+    gender = str_to_lower(sex), 
+    provider_status = case_when(
+      gender_parent %in% c("Mothers", "Fathers") ~ "with_children",
+      gender_parent %in% c("Non-Mothers", "Non-Fathers") ~ "without_children",
+      TRUE ~ "other"
+    ), 
+    time_use = ifelse(occ_care_focus == "none", "non_care", "care"),
+    care_focus = occ_care_focus,
+    care_type	= "formal", 
+    provider_attention = "active",
+    geo_level = statefip,
+    race = race_ethnicity
+  ) 
+
+
+cp_pop <- asec |>  # pipe 
+# Create or modify columns
+mutate(
+    gender = str_to_lower(sex), 
+    provider_status = case_when(
+      gender_parent %in% c("Mothers", "Fathers") ~ "with_children",
+      gender_parent %in% c("Non-Mothers", "Non-Fathers") ~ "without_children",
+      TRUE ~ "other"
+    ), 
+    time_use = ifelse(occ_care_focus == "none", "non_care", "care"),
+    care_focus = occ_care_focus,
+    care_type	= "formal", 
+    provider_attention = "active",
+    geo_level = statefip,
+    race = race_ethnicity
+  )
+```
+
+::: callout-note
+#### Code Explanation
+
+Technically, it uses `filter()`, `mutate()` to restrict the analytic universe, create derived variables, reshape records, join lookup tables, and/or aggregate weighted statistics. The main objects created or updated here are `cp_formal_state`, `gender`, `provider_status`, `time_use`, `care_focus`.
+:::
+
+
+## Summarise Paid State Data
+
+The statistic of importance for each group is called provision_interval and represents the amount of time spent working in the paid care sector for each group. We get this information from using the uhrsworkt asec variable which represents the usual amount of hours worked by an individual in a week. We use usual hours worked as opposed to the question that asks how many hours the respondent worked in the previous week, with the goal to limit the variation that might occur during a given week. We then filter out all cases where the respondent reported that their usual hours worked varies and changed all cases where the person is not in the universe (i.e. unemployed) to zero. Although these should have all been filtered out in the previous step where we removed those who are employed.
+
+To calulate the provision_interval variable, we sum the amount of hours spent working in the paid care economy for each state, gender, race, parenthood status, and care type (i.e. developmental, health, or daily living). We also count how many people are in each grouping and call this the count variable. This will be important because we will in a later step drop cases where there are too few respondents. We divide the uhrsworkt variable by 7 to get a daily estimate for the seven days in the week, and then multiply by 60 to get the estimate in minutes. We then multiply the value by the value of asecwt with the purpose of creating the population-wide estimate.
+
+We then calculate the population of each demographic subgroup lby summing the asecwt variable, which represents their population weight across each group. We only sum the population by the demographic variables.
+
+```{r provider summarise paid state, message=FALSE, warning=FALSE}
+# summarise formal stats
+cp_summary <- cp_formal_state %>%
+# Filter rows by conditions
+filter(uhrsworkt != 997) |> 
+# Create or modify columns
+mutate(uhrsworkt = ifelse(uhrsworkt == 999, 0, uhrsworkt)) |>
+# Compute summary statistics
+summarise(
+    provision_interval = sum(uhrsworkt/7*60*asecwt),
+    count = n(),
+    .by = c(geo_level, gender, race, provider_status, time_use, care_type, 
+            care_focus, provider_attention)
+  )
+
+cp_summary$geo_level <- sprintf("%02d", as.numeric(cp_summary$geo_level))
+cp_summary$geo_level <- paste0("state", cp_summary$geo_level)
+
+population_df <- cp_pop |>
+# Compute summary statistics
+summarise(
+    population = sum(asecwt),
+    .by = c(geo_level, gender, race, provider_status)
+  )
+
+population_df$geo_level <- sprintf("%02d", as.numeric(population_df$geo_level))
+population_df$geo_level <- paste0("state", population_df$geo_level)
+
+cp_formal_state <- cp_summary |> 
+  left_join(population_df, by = c("geo_level", "gender", "race", "provider_status"))
+```
+
+::: callout-note
+#### Code Explanation
+
+Technically, it uses `filter()`, `mutate()`, `summarise()`, `left_join()` to restrict the analytic universe, create derived variables, reshape records, join lookup tables, and/or aggregate weighted statistics. The statistical work in this chunk calculates weighted counts, rates, rolling values, medians, changes over time, or inequality measures used in the published indicators. The main objects created or updated here are `cp_summary`, `provision_interval`, `count`, `.by`, `population_df`.
+:::
+
+
+## create columns required by the app
+
+```{r provider create_columns_required_by_the_app_04, message=FALSE, warning=FALSE}
+# create columns required by the app
+cp_formal_nation <- asec |>  # pipe 
+# Filter rows by conditions
+filter(empstat == "Employed") |>  # pipe
+# Create or modify columns
+mutate(
+    gender = str_to_lower(sex), 
+    provider_status = case_when(
+      gender_parent %in% c("Mothers", "Fathers") ~ "with_children",
+      gender_parent %in% c("Non-Mothers", "Non-Fathers") ~ "without_children",
+      TRUE ~ "other"
+    ), 
+    time_use = ifelse(occ_care_focus == "none", "non_care", "care"),
+    care_focus = occ_care_focus,
+    care_type	= "formal", 
+    provider_attention = "active",
+    geo_level = "national",
+    race = race_ethnicity
+  ) 
+
+cp_pop <- asec |>  # pipe 
+# Create or modify columns
+mutate(
+    gender = str_to_lower(sex), 
+    provider_status = case_when(
+      gender_parent %in% c("Mothers", "Fathers") ~ "with_children",
+      gender_parent %in% c("Non-Mothers", "Non-Fathers") ~ "without_children",
+      TRUE ~ "other"
+    ), 
+    time_use = ifelse(occ_care_focus == "none", "non_care", "care"),
+    care_focus = occ_care_focus,
+    care_type	= "formal", 
+    provider_attention = "active",
+    geo_level = "national",
+    race = race_ethnicity
+  )
+```
+
+::: callout-note
+#### Code Explanation
+
+Technically, it uses `filter()`, `mutate()` to restrict the analytic universe, create derived variables, reshape records, join lookup tables, and/or aggregate weighted statistics. The main objects created or updated here are `cp_formal_nation`, `gender`, `provider_status`, `time_use`, `care_focus`.
+:::
+
+
+## summarise formal stats
+
+```{r provider summarise_formal_stats_05, message=FALSE, warning=FALSE}
+# summarise formal stats
+cp_summary <- cp_formal_nation %>%  # pipe
+# Filter rows by conditions
+filter(uhrsworkt != 997) |>  # pipe 
+# Create or modify columns
+mutate(uhrsworkt = ifelse(uhrsworkt == 999, 0, uhrsworkt)) |>  # pipe 
+# Compute summary statistics
+summarise(
+    provision_interval = sum(uhrsworkt/7*60*asecwt),
+    count = n(),
+    .by = c(geo_level, gender, race, provider_status, time_use, care_type, 
+            care_focus, provider_attention)
+  )
+
+population_df <- cp_pop |>  # pipe 
+# Compute summary statistics
+summarise(
+    population = sum(asecwt),
+    .by = c(gender, race, provider_status)
+  )
+
+cp_formal_nation <- cp_summary |> 
+  left_join(population_df, by = c("gender", "race", "provider_status"))
+
+cp_formal <- rbind(cp_formal_state, cp_formal_nation)
+```
+
+::: callout-note
+#### Code Explanation
+
+Technically, it uses `filter()`, `mutate()`, `summarise()`, `left_join()` to restrict the analytic universe, create derived variables, reshape records, join lookup tables, and/or aggregate weighted statistics. The statistical work in this chunk calculates weighted counts, rates, rolling values, medians, changes over time, or inequality measures used in the published indicators. The main objects created or updated here are `cp_summary`, `provision_interval`, `count`, `.by`, `population_df`.
+:::
+
+
+## load data
+
+```{r provider load_data_06, message=FALSE, warning=FALSE}
+# load data
+atus <- read.csv("./data/CSV/ATUSdata.csv") |>  # pipe 
+# Filter rows by conditions
+filter(activity != "Formal Work") |>  # pipe 
+# Filter rows by conditions
+filter(AGE >= 18) |>  # pipe
+# Filter rows by conditions
+filter(YEAR != 2020) |>  # select the latest five eligible years below
+# Select/reorder columns
+select(YEAR, CASEID, WT06, sex, gender_parent, race_ethnicity, act_care_focus, 
+         DURATION, SCC_ALL_LN, SEC_ALL_LN, STATEFIP) |>  # pipe 
+  clean_names()
+```
+
+::: callout-note
+#### Code Explanation
+
+It reads `./data/CSV/ATUSdata.csv` into memory and prepares those inputs for the transformations that follow. Technically, it uses `filter()`, `select()`, `clean_names()` to restrict the analytic universe, create derived variables, reshape records, join lookup tables, and/or aggregate weighted statistics. The main objects created or updated here are `atus`.
+:::
+
+
+## get most recent 5 year and clean up columns
+
+```{r provider get_most_recent_5_year_and_clean_up_columns_07, message=FALSE, warning=FALSE}
+# Select five distinct survey years, independent of the input row order.
+atus_years <- tail(sort(unique(
+  atus$year[!is.na(atus$year) & atus$year != 2020]
+)), 5L)
+if (length(atus_years) != 5L) {
+  stop("Provider estimates require five eligible ATUS survey years (excluding 2020).")
+}
+# Keep exactly those years before applying the five-year weights below.
+atus <- atus[atus$year %in% atus_years, , drop = FALSE]
+```
+
+::: callout-note
+#### Code Explanation
+
+It selects the latest five distinct eligible ATUS survey years, independent of row order, and stops if fewer than five are available. The data is restricted to those years before the five-year weights are applied. The main objects created or updated here are `atus`, `atus_years`.
+:::
+
+
+## prep secondary care time
+
+```{r provider prep_secondary_care_time_08, message=FALSE, warning=FALSE}
+# prep secondary care time
+cp_informal <- atus |>  # pipe 
+  pivot_longer(
+    cols = c(duration, scc_all_ln, sec_all_ln), 
+    names_to = "metric", 
+    values_to = "duration"
+  ) |>  # pipe 
+# Filter rows by conditions
+filter(!is.na(duration))
+```
+
+::: callout-note
+#### Code Explanation
+
+Technically, it uses `filter()`, `pivot_longer()` to restrict the analytic universe, create derived variables, reshape records, join lookup tables, and/or aggregate weighted statistics. The main objects created or updated here are `cp_informal`, `cols`, `names_to`, `values_to`.
+:::
+
+
+## create columns required by the app
+
+```{r provider create_columns_required_by_the_app_09, message=FALSE, warning=FALSE}
+# create columns required by the app
+cp_informal_state <- cp_informal |>  # pipe 
+# Create or modify columns
+mutate(
+    gender = str_to_lower(sex), 
+    provider_status = case_when(
+      gender_parent %in% c("Mothers", "Fathers") ~ "with_children",
+      gender_parent %in% c("Non-Mothers", "Non-Fathers") ~ "without_children",
+      TRUE ~ "other"
+    ), 
+    care_type	= "informal", 
+    provider_attention = case_when(
+      metric == "scc_all_ln" ~ "passive_child", 
+      metric == "sec_all_ln" ~ "passive_elder",
+      TRUE ~ "active"
+    ), 
+    care_focus = case_when(
+      metric == "scc_all_ln" ~ "developmental", 
+      metric == "sec_all_ln" ~ "health",
+      act_care_focus == "non-care" ~ "none", 
+      TRUE ~ act_care_focus
+    ), 
+    time_use = ifelse(care_focus == "none", "non_care", "care"),
+    weight = wt06/365/5,
+    geo_level = statefip,
+    race = race_ethnicity
+  ) 
+
+cp_informal_state <- cp_informal_state %>%  # pipe
+# Filter rows by conditions
+filter(duration != 0)
+```
+
+::: callout-note
+#### Code Explanation
+
+Technically, it uses `filter()`, `mutate()` to restrict the analytic universe, create derived variables, reshape records, join lookup tables, and/or aggregate weighted statistics. The main objects created or updated here are `cp_informal_state`, `gender`, `provider_status`, `care_type`, `provider_attention`.
+:::
+
+
+## summarise informal stats
+
+```{r provider summarise_informal_stats_10, message=FALSE, warning=FALSE}
+# summarise informal stats
+cp_summary <- cp_informal_state |>  # pipe 
+# Compute summary statistics
+summarise(
+    total_time = sum(duration),
+    weight = median(weight),
+    count = n(),
+    .by = c(year, caseid, geo_level, gender, race, provider_status, time_use, 
+            care_type, care_focus, provider_attention)
+  ) |>  # pipe 
+# Compute summary statistics
+summarise(
+    provision_interval = sum(total_time*weight),
+    count = sum(count),
+    .by = c(geo_level, gender, race, provider_status, time_use, 
+            care_type, care_focus, provider_attention)
+  )
+
+cp_summary$geo_level <- sprintf("%02d", as.numeric(cp_summary$geo_level))
+cp_summary$geo_level <- paste0("state", cp_summary$geo_level)
+
+cp_pop <- cp_informal_state %>%  # pipe
+# Group rows for downstream summaries
+group_by(caseid) %>%  # pipe
+# Compute summary statistics
+summarise(
+    weight = median(weight),
+    geo_level = first(geo_level),
+    gender = first(gender),
+    provider_status = first(provider_status),
+    race = first(race)
+  )
+
+population_df <- cp_pop |>  # pipe 
+# Compute summary statistics
+summarise(
+    population = sum(weight),
+    .by = c(geo_level, gender, race, provider_status)
+  )
+```
+
+::: callout-note
+#### Code Explanation
+
+Technically, it uses `group_by()`, `summarise()` to restrict the analytic universe, create derived variables, reshape records, join lookup tables, and/or aggregate weighted statistics. The statistical work in this chunk calculates weighted counts, rates, rolling values, medians, changes over time, or inequality measures used in the published indicators. The main objects created or updated here are `cp_summary`, `total_time`, `weight`, `count`, `.by`.
+:::
+
+```{r, message=FALSE, warning=FALSE}
+population_df$geo_level <- sprintf("%02d", as.numeric(population_df$geo_level))
+population_df$geo_level <- paste0("state", population_df$geo_level)
+
+cp_informal_state <- cp_summary |> 
+  left_join(population_df, by = c("geo_level", "gender", "race", "provider_status"))
+
+cp_save <- cp_informal_state
+# NATAIONAL
+```
+
+::: callout-note
+#### Code Explanation
+
+Technically, it uses `left_join()` to restrict the analytic universe, create derived variables, reshape records, join lookup tables, and/or aggregate weighted statistics. The main objects created or updated here are `cp_informal_state`, `cp_save`.
+:::
+
+
+## create columns required by the app
+
+```{r provider create_columns_required_by_the_app_11, message=FALSE, warning=FALSE}
+# create columns required by the app
+cp_informal_nation <- cp_informal |>  # pipe 
+# Create or modify columns
+mutate(
+    gender = str_to_lower(sex), 
+    provider_status = case_when(
+      gender_parent %in% c("Mothers", "Fathers") ~ "with_children",
+      gender_parent %in% c("Non-Mothers", "Non-Fathers") ~ "without_children",
+      TRUE ~ "other"
+    ), 
+    care_type	= "informal", 
+    provider_attention = case_when(
+      metric == "scc_all_ln" ~ "passive_child", 
+      metric == "sec_all_ln" ~ "passive_elder",
+      TRUE ~ "active"
+    ), 
+    care_focus = case_when(
+      metric == "scc_all_ln" ~ "developmental", 
+      metric == "sec_all_ln" ~ "health",
+      act_care_focus == "non-care" ~ "none", 
+      TRUE ~ act_care_focus
+    ), 
+    time_use = ifelse(care_focus == "none", "non_care", "care"),
+    weight = wt06/365/5,
+    geo_level = "national",
+    race = race_ethnicity
+  ) 
+
+cp_informal_nation <- cp_informal_nation %>%  # pipe
+# Filter rows by conditions
+filter(duration != 0)
+```
+
+::: callout-note
+#### Code Explanation
+
+Technically, it uses `filter()`, `mutate()` to restrict the analytic universe, create derived variables, reshape records, join lookup tables, and/or aggregate weighted statistics. The main objects created or updated here are `cp_informal_nation`, `gender`, `provider_status`, `care_type`, `provider_attention`.
+:::
+
+
+## summarise formal stats
+
+```{r provider summarise_formal_stats_12, message=FALSE, warning=FALSE}
+# summarise formal stats
+cp_summary <- cp_informal_nation |>  # pipe 
+# Compute summary statistics
+summarise(
+    total_time = sum(duration),
+    count = n(),
+    weight = median(weight),
+    .by = c(year, caseid, weight, geo_level, gender, race, provider_status, time_use, 
+            care_type, care_focus, provider_attention)
+  ) |>  # pipe 
+# Compute summary statistics
+summarise(
+    provision_interval = sum(total_time*weight),
+    count = sum(count),
+    .by = c(geo_level, gender, race, provider_status, time_use, 
+            care_type, care_focus, provider_attention)
+  )
+
+cp_pop <- cp_informal_nation %>%  # pipe
+# Group rows for downstream summaries
+group_by(caseid) %>%  # pipe
+# Compute summary statistics
+summarise(
+    weight = median(weight),
+    geo_level = first(geo_level),
+    gender = first(gender),
+    provider_status = first(provider_status),
+    race = first(race)
+  )
+
+
+population_df <- cp_pop |>  # pipe 
+# Compute summary statistics
+summarise(
+    population = sum(weight),
+    .by = c(gender, race, provider_status)
+  )
+```
+
+::: callout-note
+#### Code Explanation
+
+Technically, it uses `group_by()`, `summarise()` to restrict the analytic universe, create derived variables, reshape records, join lookup tables, and/or aggregate weighted statistics. The statistical work in this chunk calculates weighted counts, rates, rolling values, medians, changes over time, or inequality measures used in the published indicators. The main objects created or updated here are `cp_summary`, `total_time`, `count`, `weight`, `.by`.
+:::
+
+```{r, message=FALSE, warning=FALSE}
+cp_informal_nation <- cp_summary |> 
+  left_join(population_df, by = c("gender", "race", "provider_status"))
+
+
+
+cp_informal <- rbind(cp_informal_state, cp_informal_nation)
+
+
+cp_combined <- bind_rows(
+  cp_formal, 
+  cp_informal
+) |>  # pipe 
+  arrange(care_type, time_use, gender, provider_status, care_focus) %>%  # pipe
+# Select/reorder columns
+select(geo_level, gender, race, provider_status, time_use, care_type,
+         care_focus, provider_attention, provision_interval, population, count)
+
+cp_combined <- cp_combined |>  # pipe 
+# Create or modify columns
+mutate(
+    race = case_when(
+      race == "White" ~ "white",
+      race == "Black" ~ "black",
+      race == "Hispanic" ~ "hispanic",
+      race == "Asian/Pacific Island" ~ "asian",
+      race == "American Indian" ~ "native",
+      race == "Two or More Races" ~ "two_or_more",
+      TRUE ~ "other"  # catch-all
+    )
+  )
+
+
+provider_category <- read_excel("./app_data/provider_group.xlsx")
+
+cp_combined <- cp_combined %>%  # pipe
+# Create or modify columns
+mutate(race = if_else(count < 5 & geo_level != "national", "other", race))
+```
+
+::: callout-note
+#### Code Explanation
+
+It reads `./app_data/provider_group.xlsx` into memory and prepares those inputs for the transformations that follow. Technically, it uses `mutate()`, `select()`, `arrange()`, `left_join()`, `bind_rows()` to restrict the analytic universe, create derived variables, reshape records, join lookup tables, and/or aggregate weighted statistics. The main objects created or updated here are `cp_informal_nation`, `cp_informal`, `cp_combined`, `race`, `provider_category`.
+:::
+
+
+## Define Criteria
+
+```{r provider define_criteria_13, message=FALSE, warning=FALSE}
+## Define Criteria
+
+criteria_black <-'race == "black"'
+criteria_white <- 'race == "white"'
+criteria_hispan <- 'race == "hispanic"'
+criteria_asian <- 'race == "asian"'
+criteria_native <- 'race == "native"'
+criteria_multi <- 'race == "two_or_more"'
+criteria_other <- 'race == "other"'
+
+criteria_female <- 'gender == "female"'
+criteria_male <- 'gender == "male"'
+
+criteria_w_child <- 'provider_status == "with_children"'
+criteria_wo_child <- 'provider_status == "without_children"'
+
+group_list = list(
+  "male" = criteria_male,
+  "female" = criteria_female,
+  "male-parent" = paste(criteria_male, criteria_w_child, sep = " & "),
+  "male-non-parent" = paste(criteria_male, criteria_wo_child, sep = " & "),
+  "female-parent" = paste(criteria_female, criteria_w_child, sep = " & "),
+  "female-non-parent" = paste(criteria_female, criteria_wo_child, sep = " & "),
+  "male-white" = paste(criteria_male, criteria_white, sep = " & "),
+  "male-black" = paste(criteria_male, criteria_black, sep = " & "),
+  "male-hispan" = paste(criteria_male, criteria_hispan, sep = " & "),
+  "male-asian" = paste(criteria_male, criteria_asian, sep = " & "),
+  "male-native" = paste(criteria_male, criteria_native, sep = " & "),
+  "male-multi" = paste(criteria_male, criteria_multi, sep = " & "),
+  "male-other" = paste(criteria_male, criteria_other, sep = " & "),
+  "female-white" = paste(criteria_female, criteria_white, sep = " & "),
+  "female-black" = paste(criteria_female, criteria_black, sep = " & "),
+  "female-hispan" = paste(criteria_female, criteria_hispan, sep = " & "),
+  "female-asian" = paste(criteria_female, criteria_asian, sep = " & "),
+  "female-native" = paste(criteria_female, criteria_native, sep = " & "),
+  "female-multi" = paste(criteria_female, criteria_multi, sep = " & "),
+  "female-other" = paste(criteria_female, criteria_other, sep = " & "),
+  "white-parent" = paste(criteria_w_child, criteria_white, sep = " & "),
+  "black-parent" = paste(criteria_w_child, criteria_black, sep = " & "),
+  "hispan-parent" = paste(criteria_w_child, criteria_hispan, sep = " & "),
+  "asian-parent" = paste(criteria_w_child, criteria_asian, sep = " & "),
+  "native-parent" = paste(criteria_w_child, criteria_native, sep = " & "),
+  "multi-parent" = paste(criteria_w_child, criteria_multi, sep = " & "),
+  "other-parent" = paste(criteria_w_child, criteria_other, sep = " & "),
+  "white-non-parent" = paste(criteria_wo_child, criteria_white, sep = " & "),
+  "black-non-parent" = paste(criteria_wo_child, criteria_black, sep = " & "),
+  "hispan-non-parent" = paste(criteria_wo_child, criteria_hispan, sep = " & "),
+  "asian-non-parent" = paste(criteria_wo_child, criteria_asian, sep = " & "),
+  "native-non-parent" = paste(criteria_wo_child, criteria_native, sep = " & "),
+  "multi-non-parent" = paste(criteria_wo_child, criteria_multi, sep = " & "),
+  "other-non-parent" = paste(criteria_wo_child, criteria_other, sep = " & ")
+)
+```
+
+::: callout-note
+#### Code Explanation
+
+The main objects created or updated here are `criteria_black`, `criteria_white`, `criteria_hispan`, `criteria_asian`, `criteria_native`.
+:::
+
+```{r, message=FALSE, warning=FALSE}
+results_list <- list()
+
+for (group_name in names(group_list)) {
+  # Get the filter expression as a string
+  filter_expr <- group_list[[group_name]]
+  
+  # Filter the cp_informal data based on the current group's criteria
+  filtered_data <- cp_combined |> 
+    filter(eval(parse(text = filter_expr)))
+  
+  # Summarize the filtered data
+  summarized_data <- filtered_data |>
+    group_by(geo_level, time_use, care_type, care_focus, provider_attention) |>
+    summarise(
+      population = sum(population, na.rm = TRUE),
+      provision_interval = sum(provision_interval, na.rm = TRUE),
+      .groups = "drop"
+    ) |>
+    mutate(group_by_value = group_name)
+  
+  # Store each summarized result in the list
+  results_list[[group_name]] <- summarized_data
+}
+```
+
+::: callout-note
+#### Code Explanation
+
+Technically, it uses `filter()`, `mutate()`, `group_by()`, `summarise()` to restrict the analytic universe, create derived variables, reshape records, join lookup tables, and/or aggregate weighted statistics. The iteration step loops across years, states, datasets, categories, or demographic groups and binds the repeated results into a single analysis table. The statistical work in this chunk calculates weighted counts, rates, rolling values, medians, changes over time, or inequality measures used in the published indicators. The main objects created or updated here are `results_list`, `filter_expr`, `filtered_data`, `summarized_data`, `population`.
+:::
+
+
+## Store each summarized result in the list
+
+```{r provider store_each_summarized_result_in_the_list_16, message=FALSE, warning=FALSE}
+final_summary_table <- bind_rows(results_list)
+
+provider_datum <- final_summary_table |>
+  left_join(provider_category, by = c("group_by_value" = "name")) |>
+  rename(category_id = id) |>
+  rename(subcategory_id = group_by_value) |>
+  select(-c("order")) |>
+  select(geo_level, category_id, subcategory_id, care_type, care_focus, provider_attention, provision_interval, population)
+
+provider_datum <- provider_datum %>%
+  group_by(
+    geo_level,
+    category_id,
+    subcategory_id,
+    care_type,
+    care_focus,
+    provider_attention
+  ) %>%
+  summarise(
+    provision_interval = sum(provision_interval, na.rm = TRUE),
+    population = sum(population, na.rm = TRUE),
+    .groups = "drop"
+  )
+
+write_careboard_outputs(
+  provider_datum,
+  "provider_datum",
+  app_path = "./app_data/provider_datum.csv"
+)
+```
+
+::: callout-note
+#### Code Explanation
+
+Technically, it uses `select()`, `rename()`, `group_by()`, `summarise()`, `left_join()`, `bind_rows()` to restrict the analytic universe, create derived variables, reshape records, join lookup tables, and/or aggregate weighted statistics. The statistical work in this chunk calculates weighted counts, rates, rolling values, medians, changes over time, or inequality measures used in the published indicators. It writes the resulting table through the shared export helper, producing app-facing files and/or replication copies in CSV, Stata, and Excel formats. The main objects created or updated here are `final_summary_table`, `provider_datum`, `provision_interval`, `population`, `.groups`.
+:::
+
+
+## Provider
+
+```{r provider provider_17, message=FALSE, warning=FALSE}
+## Provider
+
+asec <- read.csv("./data/CSV/ASECdata.csv") |>  # pipe
+# Filter rows by conditions
+filter(YEAR == max(YEAR)) |>  # pipe  
+# Filter rows by conditions
+filter(AGE >= 18) |>  # pipe 
+# Select/reorder columns
+select(YEAR, OCC2010, empstat, occ_label, UHRSWORKT, EARNWT, INCWAGE, 
+         occ_care_focus, ASECWT, sex, gender_parent, poverty, empstat, race_ethnicity, prime_age, STATEFIP) |>  # pipe 
+  clean_names() 
+
+
+asec <- asec |>  # pipe 
+# Create or modify columns
+mutate(
+    gender = str_to_lower(sex), 
+    provider_status = case_when(
+      gender_parent %in% c("Mothers", "Fathers") ~ "with_children",
+      gender_parent %in% c("Non-Mothers", "Non-Fathers") ~ "without_children",
+      TRUE ~ "other"
+    ), 
+    time_use = ifelse(occ_care_focus == "none", "non_care", "care"),
+    care_focus = occ_care_focus,
+    care_type	= "formal", 
+    provider_attention = "active",
+    geo_level = statefip,
+    race = tolower(race_ethnicity),
+    race = case_when(
+      race == "white" ~ "white",
+      race == "black" ~ "black",
+      race == "hispanic" ~ "hispanic",
+      race == "asian/pacific island" ~ "asian",
+      race == "american indian" ~ "native",
+      race == "two or more races" ~ "two_or_more",
+      TRUE ~ "other"  # catch-all
+    )
+  ) 
+```
+
+::: callout-note
+#### Code Explanation
+
+It reads `./data/CSV/ASECdata.csv` into memory and prepares those inputs for the transformations that follow. Technically, it uses `filter()`, `mutate()`, `select()`, `clean_names()` to restrict the analytic universe, create derived variables, reshape records, join lookup tables, and/or aggregate weighted statistics. The main objects created or updated here are `asec`, `gender`, `provider_status`, `time_use`, `care_focus`.
+:::
+
+```{r, message=FALSE, warning=FALSE}
+asec$geo_level <- sprintf("%02d", as.numeric(asec$geo_level))
+asec$geo_level <- paste0("state", asec$geo_level)
+
+
+for (group_name in names(group_list)) {
+  # Get the filter expression as a string
+  filter_expr <- group_list[[group_name]]
+  
+  # Filter the cp_informal data based on the current group's criteria
+  filtered_data <- asec |> 
+    filter(eval(parse(text = filter_expr)))
+  
+  # Summarize the filtered data
+  summarized_data <- filtered_data |>
+    group_by(geo_level) |>
+    summarise(
+      population = sum(asecwt, na.rm = TRUE),
+    ) |>
+    mutate(group_by_value = group_name)
+  
+  # Store each summarized result in the list
+  results_list[[group_name]] <- summarized_data
+}
+
+final_summary_table <- bind_rows(results_list)
+```
+
+::: callout-note
+#### Code Explanation
+
+Technically, it uses `filter()`, `mutate()`, `group_by()`, `summarise()`, `bind_rows()` to restrict the analytic universe, create derived variables, reshape records, join lookup tables, and/or aggregate weighted statistics. The iteration step loops across years, states, datasets, categories, or demographic groups and binds the repeated results into a single analysis table. The statistical work in this chunk calculates weighted counts, rates, rolling values, medians, changes over time, or inequality measures used in the published indicators. The main objects created or updated here are `filter_expr`, `filtered_data`, `summarized_data`, `population`, `final_summary_table`.
+:::
+
+
+## Store each summarized result in the list
+
+```{r provider store_each_summarized_result_in_the_list_20, message=FALSE, warning=FALSE}
+
+asec <- read.csv("./data/CSV/ASECdata.csv") |>  # pipe
+# Filter rows by conditions
+filter(YEAR == max(YEAR)) |>  # pipe  
+# Filter rows by conditions
+filter(AGE >= 18) |>  # pipe 
+# Select/reorder columns
+select(YEAR, OCC2010, empstat, occ_label, UHRSWORKT, EARNWT, INCWAGE, 
+         occ_care_focus, ASECWT, sex, gender_parent, poverty, empstat, race_ethnicity, prime_age, STATEFIP) |>  # pipe 
+  clean_names() 
+
+
+asec <- asec |>  # pipe 
+# Create or modify columns
+mutate(
+    gender = str_to_lower(sex), 
+    provider_status = case_when(
+      gender_parent %in% c("Mothers", "Fathers") ~ "with_children",
+      gender_parent %in% c("Non-Mothers", "Non-Fathers") ~ "without_children",
+      TRUE ~ "other"
+    ), 
+    time_use = ifelse(occ_care_focus == "none", "non_care", "care"),
+    care_focus = occ_care_focus,
+    care_type	= "formal", 
+    provider_attention = "active",
+    race = tolower(race_ethnicity),
+    race = case_when(
+      race == "white" ~ "white",
+      race == "black" ~ "black",
+      race == "hispanic" ~ "hispanic",
+      race == "asian/pacific island" ~ "asian",
+      race == "american indian" ~ "native",
+      race == "two or more races" ~ "two_or_more",
+      TRUE ~ "other"  # catch-all
+    )
+  ) 
+
+results_list <- list()
+```
+
+::: callout-note
+#### Code Explanation
+
+It reads `./data/CSV/ASECdata.csv` into memory and prepares those inputs for the transformations that follow. Technically, it uses `filter()`, `mutate()`, `select()`, `clean_names()` to restrict the analytic universe, create derived variables, reshape records, join lookup tables, and/or aggregate weighted statistics. The main objects created or updated here are `asec`, `gender`, `provider_status`, `time_use`, `care_focus`.
+:::
+
+```{r, message=FALSE, warning=FALSE}
+for (group_name in names(group_list)) {
+  # Get the filter expression as a string
+  filter_expr <- group_list[[group_name]]
+  
+  # Filter the cp_informal data based on the current group's criteria
+  filtered_data <- asec |> 
+    filter(eval(parse(text = filter_expr)))
+  
+  # Summarize the filtered data
+  summarized_data <- filtered_data |>
+    summarise(
+      population = sum(asecwt, na.rm = TRUE),
+    ) |>
+    mutate(group_by_value = group_name)
+  
+  # Store each summarized result in the list
+  results_list[[group_name]] <- summarized_data
+}
+
+final_summary_table_nation <- bind_rows(results_list)
+final_summary_table_nation$geo_level <- "national"
+final_summary_table <- rbind(final_summary_table, final_summary_table_nation)
+```
+
+::: callout-note
+#### Code Explanation
+
+Technically, it uses `filter()`, `mutate()`, `summarise()`, `bind_rows()` to restrict the analytic universe, create derived variables, reshape records, join lookup tables, and/or aggregate weighted statistics. The iteration step loops across years, states, datasets, categories, or demographic groups and binds the repeated results into a single analysis table. The statistical work in this chunk calculates weighted counts, rates, rolling values, medians, changes over time, or inequality measures used in the published indicators. The main objects created or updated here are `filter_expr`, `filtered_data`, `summarized_data`, `population`, `final_summary_table_nation`.
+:::
+
+
+## Store each summarized result in the list
+
+```{r provider store_each_summarized_result_in_the_list_23, message=FALSE, warning=FALSE}
+provider <- final_summary_table |>
+  left_join(provider_category, by = c("group_by_value" = "name")) |>
+  rename(category_id = id) |>
+  rename(subcategory_id = group_by_value) |>
+  select(-c("order")) |>
+  select(geo_level, category_id, subcategory_id, population)
+
+provider <- provider %>%
+  semi_join(provider_datum, by = c("geo_level", "category_id", "subcategory_id"))
+
+new_rows <- anti_join(provider_datum, provider, 
+                      by = c("geo_level", "category_id", "subcategory_id"))
+new_rows <- new_rows %>%
+  select(geo_level, category_id, subcategory_id, population)
+
+new_rows <- new_rows %>%
+  group_by(geo_level, category_id, subcategory_id) %>%
+  summarise(
+    population = max(population)
+  )
+
+provider <- bind_rows(provider, new_rows)
+
+write_careboard_outputs(
+  provider,
+  "provider",
+  app_path = "./app_data/provider.csv"
+)
+
+
+provider_category <- read_excel("./app_data/provider_category.xlsx")
+write_careboard_outputs(
+  provider_category,
+  "provider_category",
+  app_path = "./app_data/provider_category.csv"
+)
+```
+
+::: callout-note
+#### Code Explanation
+
+It reads `./app_data/provider.csv`, `./app_data/provider_category.xlsx`, `./app_data/provider_category.csv` into memory and prepares those inputs for the transformations that follow. Technically, it uses `select()`, `rename()`, `group_by()`, `summarise()`, `left_join()`, `bind_rows()` to restrict the analytic universe, create derived variables, reshape records, join lookup tables, and/or aggregate weighted statistics. It writes the resulting table through the shared export helper, producing app-facing files and/or replication copies in CSV, Stata, and Excel formats. The main objects created or updated here are `provider`, `new_rows`, `by`, `population`, `app_path`.
+:::

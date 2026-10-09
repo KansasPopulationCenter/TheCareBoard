@@ -1,0 +1,8 @@
+# Preserve snapshot bytes, including source/documentation line endings, so
+# committed files match the release record's SHA-256 fingerprints.
+* -text
+*.xlsx binary
+*.docx binary
+*.pdf binary
+*.png binary
+*.zip binary

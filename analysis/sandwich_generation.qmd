@@ -1,0 +1,286 @@
+﻿---
+title: "Sandwich Generation Methodology"
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    code-overflow: wrap
+    df-print: paged
+  pdf:
+    toc: true
+    toc-depth: 3
+execute:
+  warning: false
+  message: false
+  echo: true
+editor: visual
+date: 2025-08-07
+---
+
+# Overview
+
+## Introduction and Literature Context
+
+The **Sandwich Generation** refers to a group of adults who are simultaneously caring for their own children while also providing care or support to aging parents. This dual responsibility places unique emotional, financial, and time burdens on caregivers, often leading to stress, work-life conflict, and economic strain. In the economics of care, the sandwich generation exemplifies how unpaid and invisible care labor supports the functioning of both the family and broader society. Understanding this is crucial as demographic shifts, such as increased life expectancy and delayed childbearing, intensify these care demands.
+
+Measuring the size and characteristics of the sandwich generation is essential for informing public policy, labor protections, and social support systems. Capturing accurate numbers and understanding the demographic profile of this group, such as gender, income, employment status, and race/ethnicity, can help reveal the hidden costs of informal care and shape interventions that better support multigenerational caregivers. Recognizing their role is vital, not just for their well-being, but also for sustaining the broader care economy.
+
+In The Care Board pipeline, this file produces the metrics used by the Broad Indicators page to show how many adults are simultaneously connected to child care and elder care and how much time that care requires. The estimates use ATUS because it records both primary activities and secondary care responsibilities. The analysis begins in 2015 because that is the first year in this project window with the eldercare measures needed for the combined definition.
+
+**Outputs.** This workflow writes `metrics_sandwich_generation` to `app_data/` for the website and to `data/CSV/`, `data/Dta/`, and `data/Excel/` for replication.
+
+**Key sources.** The source microdata come from ATUS via IPUMS ATUS. The BLS has documented ATUS eldercare measures beginning in the 2010s, including reporting on [unpaid eldercare in 2015-16](https://www.bls.gov/news.release/archives/elcare_09202017.pdf).
+
+## Methodological Decisions
+
+| Decision | Implementation | Rationale |
+|---|---|---|
+| Sandwich-generation definition | Adults with children and eldercare responsibilities identified in ATUS | Captures simultaneous child and elder care responsibilities. |
+| Start year | Use 2015 forward | Aligns with the availability of eldercare measures needed for the combined definition. |
+| Pandemic treatment | Exclude 2020 | Avoids the major ATUS collection disruption. |
+| State estimates | Use rolling pooled estimates | Improves stability for a relatively uncommon caregiving status. |
+
+## Policy Implications
+
+Sandwich-generation measures are useful for policies that sit at the intersection of child care, eldercare, paid leave, and workplace flexibility. These caregivers may face simultaneous financial and time pressures, and their needs often fall between program categories. Measuring them helps policy audiences design supports that recognize multigenerational care rather than treating child care and eldercare as separate household problems.
+
+This section provides the code and outcomes used to give the statistics related to the care economy. To understand the sandwich generation, we use ATUS data. We only use years after 2014 because the year 2015 is the first year to ask questions about secondary elder care activities. The chunk below loads the data and selects the requested variables.
+
+The first chunk of code loads the standard default packages for loading in the data.
+
+```{r sandgen defaults, message=FALSE, warning=FALSE}
+source("R/load_defaults.R")
+```
+
+::: callout-note
+#### Code Explanation
+
+This chunk sources `R/load_defaults.R` so the later code has the required functions, defaults, and shared helpers.
+:::
+
+
+We then load in the *ATUS* data, applying a few necessary transformations as annotated in the code below. For this analysis, we exclude the year 2020 due to the significant impacts the COVID-19 pandemic had on the implementation of the ATUS yearly survey. We also utilize a 5-year rolling average methodology to calculate any statistics. The usage of a 5-year rolling average helps to account for the relatively smaller sample size of the ATUS survey. To accurately calculate statistics at the State Level, we utilize the five-year rolling average to gather enough variables.
+
+```{r sandgen data load, message=FALSE, warning=FALSE}
+atus <- read.csv("./data/CSV/ATUSdata.csv") |> 
+  filter(activity != "Formal Work") |> #Filter for Formal Work
+  filter(YEAR >= 2015 & YEAR != 2020) |> # Filter to include 2011 and above
+  select(YEAR, date, CASEID, WT06, YNGCH, AGE, # Select Variables
+           child_care, elder_care, DURATION,
+           SCC_ALL_LN, SEC_ALL_LN, STATEFIP) |> 
+  data.frame() |> #Convert to data.frame object
+  clean_names() |> #Standardize variable names
+  rename(geo_level = statefip) #rename variables 
+
+yr_range <- atus_yr_range(atus) #calculate the five year intervals
+```
+
+::: callout-note
+#### Code Explanation
+
+It reads `./data/CSV/ATUSdata.csv` into memory and prepares those inputs for the transformations that follow. Technically, it uses `filter()`, `select()`, `rename()`, `clean_names()` to restrict the analytic universe, create derived variables, reshape records, join lookup tables, and/or aggregate weighted statistics. The main objects created or updated here are `atus`, `yr_range`.
+:::
+
+
+# Statistic Creation
+
+The code chunks below calculate the needed statistics for each US state and then nationally.
+
+## State Level Statistics
+
+The code below creates the statistics for the sandwich generation for each US state. For each year in the data (2015 and up), we calculate the total amount of time the respondent spent in child care, elder care, and both child and elder care. For primary activities of child and elder care, we used ATUS activities that specifically refer to either caring directly for a child or another household adult. For secondary activities, we utilize the variables scc_all_ln for child care and sec_all_ln for eldercare, each of which represents the amount of time spent on secondary caregiving activities.
+
+**Defining Sandwiched.** To calculate the number of people who are sandwiched, we utilize the following logic. First, we find people who spend at least 1 minute in their day taking care of an elderly household member. Sec. To calculate the number of people who are sandwiched, we filter only to include individuals with a child aged 10 or below, we only consider people aged 18 and above to be part of the sandwich. Finally we only consider people aged 18 and above to be part of the sandwhich generation.
+
+```{r sandgen state stats, message=FALSE, warning=FALSE}
+case_time <- atus |>
+  group_by(year, geo_level, date, caseid, wt06, yngch, age) |> 
+  summarise(
+      time_child_care = sum(child_care*duration + scc_all_ln), #total time spent onf childcare
+      time_elder_care = sum(elder_care*duration + sec_all_ln), #total time spent on elder care
+      time_child_elder = sum(time_child_care + time_elder_care) #total time spent on both elder and child care
+    ) |>
+  ungroup() 
+
+#Labeling sandwiched individuals  
+case_time <- case_time |> 
+  mutate(
+      sandwich_all = ifelse(
+        time_elder_care > 0 & yngch <= 10 & age >= 18,
+        "sandwich", "other")
+    )
+```
+
+::: callout-note
+#### Code Explanation
+
+Technically, it uses `mutate()`, `group_by()`, `summarise()` to restrict the analytic universe, create derived variables, reshape records, join lookup tables, and/or aggregate weighted statistics. The statistical work in this chunk calculates weighted counts, rates, rolling values, medians, changes over time, or inequality measures used in the published indicators. The main objects created or updated here are `case_time`, `time_child_care`, `time_elder_care`, `time_child_elder`, `sandwich_all`.
+:::
+
+
+For each year in the data, utilizing our five year rolling average functions, we calculatate **sandwich_population** by summing the *WT06* variable for people who are identified as sandwhiched within each state, dividing it by 365 to get daily estimates because *WT06* provides yearly weighting, and then divide by 5 to get the average of the five years for a single year estimate. We calculate the **sandwich_time_total** variable by summing the total time spent on both elder and child care activities for the individuals identified as sandwiched, multiplying this amount by the *WT06* variable to get weighted population numbers for the year for five years, dividing this number by 365 to get daily estimates, dividing this number by 5 to get a single year average, and dividing this number by 60 to convert our results from minutes into hours. We then calculate the **sandwich_time_median** by utilizing a weighted median approach using the *WT06* survey weight to get the median amount of time a person who was flagged as sandwiched spends on caregiving. Finally, to calculate the **sandwich_population_proportion** variable, we take the total population that we identified as sandwiched from the sandwich_population variable and divide it by the total number of people in that state.
+
+```{r}
+sandwich_stats_5yr <- list() #Create a blank data list
+i = 1 #Set a preliminary loop key
+
+for(sel_year in yr_range$year) {
+  year_min <- yr_range$yr_start[i]
+  sandwich_stats_5yr[[sel_year]] <- case_time |>
+  filter(year >= year_min & year <= sel_year) |>
+  group_by(sandwich_all, geo_level) |>
+  summarise(
+      sandwich_population = sum(wt06/365)/5, # Calculate sandwiched population
+      sandwich_time_total = sum(wt06/365*time_child_elder)/5/60, #calculate sandwhiched care time
+      sandwich_time_median = wtd.quantile( #calculate median time spent by sandwhiched individuals
+        time_child_elder, 
+        weights = wt06, 
+        probs = 0.5
+          )
+    ) |>
+    ungroup() |> 
+  group_by(geo_level) |>
+  mutate(
+        sandwich_population_proportion = sandwich_population / #Calculate proportion of a population who are sandwiched.
+          sum(sandwich_population), 
+        date = as.Date(paste0(as.character(sel_year), "-01-01"))
+        ) |>
+  filter(sandwich_all == "sandwich")
+  i = i + 1
+}
+```
+
+::: callout-note
+#### Code Explanation
+
+This chunk loops over each output year, applies the five-year rolling ATUS window, estimates weighted sandwich-generation population, total care time, median care time, and population share by state, and stores each year's state-level result in `sandwich_stats_5yr`.
+:::
+
+```{r, message=FALSE, warning=FALSE}
+#Clean the resulting dataframe to meet proper formating for export.
+sandwich_stats_5yr <- bind_rows(sandwich_stats_5yr) |>
+  select(date, geo_level, sandwich_population, sandwich_population_proportion,
+           sandwich_time_total, sandwich_time_median)
+
+sandwich_stats_5yr$geo_level <- sprintf("%02d", as.numeric(sandwich_stats_5yr$geo_level))
+sandwich_stats_5yr$geo_level <- paste0("state", sandwich_stats_5yr$geo_level)
+```
+
+::: callout-note
+#### Code Explanation
+
+This chunk binds the yearly list into one data frame, keeps only the fields required by the app metric table, converts state FIPS codes into the `stateXX` geography format, and leaves the cleaned state-level metric table ready for national aggregation.
+:::
+
+
+## National Level Statistics
+
+To create the national-level statistics, we sum the population of sandwiched individuals across the various states to get the total population and take the sum of the time across all states to get the total amount of time spent on sandwich caregiving. For **sandwich_population,** we take the sum of the **sandwich_population** variable for each of the 50 states to get a national estimate. We take the sum of sandwich_time_total across all 50 states to get a national estimate. For **sandwich_time_total** we take the sum of **sandwich_time_total** across all 50 states to get a neational estimate. For the proportion of people sandwiched nationally for the **sandwich_population_proportion** variable, we use the mean value across all 50 states. Finally, to calculate the national measure of **sandwich_time_median** we take the mean value of all 50 states value for **sandwich_time_median**.
+
+```{r sandgen natinoal stats, message=FALSE, warning=FALSE}
+sw <- sandwich_stats_5yr |>  # pipe
+# Group rows for downstream summaries
+group_by(date) |>  # pipe
+# Compute summary statistics
+summarise(sandwich_population = sum(sandwich_population),
+            sandwich_population_proportion = mean(sandwich_population_proportion, na.rm = TRUE),
+            sandwich_time_total = sum(sandwich_time_total),
+            sandwich_time_median = mean(sandwich_time_median, na.rm = TRUE)) |>  # pipe
+# Create or modify columns
+mutate(geo_level = "national")
+
+sandwich_stats_5yr <- rbind(sandwich_stats_5yr,sw)
+```
+
+::: callout-note
+#### Code Explanation
+
+Technically, it uses `mutate()`, `group_by()`, `summarise()` to restrict the analytic universe, create derived variables, reshape records, join lookup tables, and/or aggregate weighted statistics. The statistical work in this chunk calculates weighted counts, rates, rolling values, medians, changes over time, or inequality measures used in the published indicators. The main objects created or updated here are `sw`, `sandwich_population_proportion`, `sandwich_time_total`, `sandwich_time_median`, `sandwich_stats_5yr`.
+:::
+
+
+# Sandwich Generation Data View
+
+We export the data as a CSV file to be used in the application. Following this we create a few visualizations and tables that can be used to explore the data and analyze trends.
+
+```{r sandgen write outputs, message=FALSE, warning=FALSE}
+write_careboard_outputs(
+  sandwich_stats_5yr,
+  "metrics_sandwich_generation",
+  app_path = "./app_data/metrics_sandwich_generation.csv"
+)
+```
+
+::: callout-note
+#### Code Explanation
+
+It writes the resulting table through the shared export helper, producing app-facing files and/or replication copies in CSV, Stata, and Excel formats. The main objects created or updated here are `app_path`.
+:::
+
+
+```{r sandgen data view, message=FALSE, warning=FALSE, eval=knitr::is_html_output()}
+# Prep display data: rename + coerce types safely
+sandwich_disp <- sandwich_stats_5yr |>
+  rename(
+    Date                        = date,
+    `Geo Level`                 = geo_level,
+    `Sandwich Population`       = sandwich_population,
+    `Sandwich Pop. %`           = sandwich_population_proportion,
+    `Sandwich Time Total`       = sandwich_time_total,
+    `Sandwich Time Median`      = sandwich_time_median
+  ) |>
+  mutate(
+    # Ensure Date is Date (handles character input gracefully)
+    Date = if (inherits(Date, "Date")) Date else suppressWarnings(ymd(Date)),
+    across(
+      c(`Sandwich Population`, `Sandwich Pop. %`, `Sandwich Time Total`, `Sandwich Time Median`),
+      \(x) if (is.numeric(x)) x else parse_number(x)
+    )
+  )
+
+# Numeric columns for right-align
+num_cols <- c("Sandwich Population", "Sandwich Pop. %", "Sandwich Time Total", "Sandwich Time Median")
+
+DT::datatable(
+  sandwich_disp,
+  rownames = FALSE,
+  filter   = "top",
+  extensions = c("Buttons", "FixedHeader", "ColReorder", "Responsive"),
+  options = list(
+    pageLength = 25,
+    lengthMenu = c(10, 25, 50, 100),
+    dom = "Bfrtip",
+    buttons = list(
+      list(extend = "copy",  title = "sandwich_stats_5yr"),
+      list(extend = "csv",   title = "sandwich_stats_5yr"),
+      list(extend = "excel", title = "sandwich_stats_5yr"),
+      list(extend = "print")
+    ),
+    fixedHeader = TRUE,
+    colReorder  = TRUE,
+    autoWidth   = TRUE,
+    columnDefs  = list(
+      list(
+        className = "dt-right",
+        targets = which(names(sandwich_disp) %in% num_cols) - 1  # 0-based indices
+      )
+    )
+  ),
+  caption = htmltools::tags$caption(
+    style = "caption-side: top; text-align:left; font-weight:600; font-size:1.05em; margin-bottom:8px;",
+    "Sandwich Stats (5-Year) - interactive: filter columns, reorder, and export"
+  )
+) |>
+  # Format big counts (no decimals)
+  formatCurrency(c("Sandwich Population", "Sandwich Time Total"), currency = "", interval = 3, mark = ",", digits = 0) |>
+  # Percent with 1 decimal
+  formatPercentage("Sandwich Pop. %", digits = 1) |>
+  # Median time as integer (no decimals) with commas if large
+  formatCurrency("Sandwich Time Median", currency = "", interval = 3, mark = ",", digits = 0)
+```
+
+::: callout-note
+#### Code Explanation
+
+Technically, it uses `mutate()`, `rename()` to restrict the analytic universe, create derived variables, reshape records, join lookup tables, and/or aggregate weighted statistics. The display code builds a diagnostic plot, publication figure, static table, or interactive HTML table from the objects created earlier. The main objects created or updated here are `sandwich_disp`, `Date`, `num_cols`, `rownames`, `filter`.
+:::

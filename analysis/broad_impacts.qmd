@@ -1,0 +1,1674 @@
+---
+title: "Broad Impacts Methodology"
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    code-overflow: wrap
+    df-print: paged
+  pdf:
+    toc: true
+    toc-depth: 3
+execute:
+  warning: false
+  message: false
+  echo: true
+editor: visual
+date: 2025-08-08
+---
+
+# Overview
+
+This file builds the broad impacts metrics shown on The Care Board's Broad Indicators page. These measures summarize the scale, time burden, economic value, and labor-market effects of care work across paid and unpaid sectors. The design intentionally mirrors measures across formal and informal care where possible so users can compare the paid care economy with unpaid care work using similar units.
+
+The file combines three data sources. CPS ASEC supports annual paid-care workforce, hours, wage, and value estimates. ATUS supports unpaid care force, time-use, and replacement-cost estimates. Monthly CPS supports labor force participation, care-related work absences, and not-in-labor-force-for-care measures by parenthood and child age. BEA GDP by state is used to express care value as a share of the broader economy.
+
+**Outputs.** This workflow writes `metrics_formal`, `metrics_informal`, and `informal_value_replacement` to the replication folders under `data/`. The formal and informal metric tables are also written to `app_data/` and later reshaped by `_database_upload.qmd` into the warehouse metric tables that feed the website.
+
+**Key sources.** These measures rely on IPUMS CPS, IPUMS ATUS, BLS ATUS documentation, and BEA state GDP. The care-economy framing follows the broader literature on measuring paid and unpaid care work, including the ILO's work on [the care economy](https://www.ilo.org/topics-and-sectors/care-economy), [unpaid domestic and care work measurement](https://ilostat.ilo.org/topics/unpaid-work/measuring-unpaid-domestic-and-care-work/), and BEA [GDP by state](https://www.bea.gov/data/gdp/gdp-state).
+
+## Introduction and Literature Context
+
+Broad impacts metrics translate care work into quantities that policymakers already use: workforce counts, time, wages, economic value, labor-force participation, absences, and not-in-labor-force status. The goal is not to reduce care to dollars alone, but to show that care systems affect employment, state economies, families, and public budgets. The National Academies' work on the [economic impact of family caregiving](https://www.nationalacademies.org/read/23606/chapter/6) highlights how unpaid caregiving can affect work, income, and financial security. The ILO similarly frames care as both a labor-market sector and a social infrastructure issue.
+
+This file is organized in two parallel blocks. The paid-care block uses ASEC and CPS records to estimate formal workforce, hours, valuation, and labor-market indicators. The unpaid-care block uses ATUS and CPS records to estimate informal workforce, time, replacement value, care-related absences, and care-related labor-force exits.
+
+## Methodological Decisions
+
+| Decision | Implementation | Rationale |
+|---|---|---|
+| Parallel paid/unpaid structure | Build formal and informal metric tables with comparable fields | Supports direct interpretation on the Broad Indicators page. |
+| Economic valuation | Compare care value with BEA state GDP and use wage-based replacement estimates | Places care work in familiar economic units while documenting assumptions. |
+| Labor-market indicators | Use monthly CPS for LFP, absences, and NILF-for-care measures | Captures care-related constraints on work participation. |
+| Rolling windows | Use pooled or rolling windows where survey cells are sparse | Improves stability for state and subgroup estimates. |
+
+## Policy Implications
+
+Broad impacts metrics can support decisions about child care subsidies, long-term care, workforce development, paid leave, caregiver supports, and state economic planning. By reporting both paid and unpaid care, the Care Board helps policy audiences see when public systems rely on unpaid household labor and when formal care workforce shortages may constrain economic participation.
+
+The first step is to load in the defaults, which will be used to create packages and libraries.
+
+```{r BI setup, message=FALSE, warning=FALSE}
+source("R/load_defaults.R")
+min_year <- 1994
+```
+
+::: callout-note
+#### Code Explanation
+
+This chunk sources `R/load_defaults.R` so the later code has the required functions, defaults, and shared helpers. The main objects created or updated here are `min_year`.
+:::
+
+
+As a part of these statistics, we will compute statistics relative to the US economy as measured by the GDP. We first load in data that we receive from the Bureau of Economic Analysis, which estimates yearly estimates of the GDP by state. We transform this dataframe by adjusting various column names and dropping unused columns. We then multiply the value by 1,000,000 to get the GDP in dollars as opposed to in billions of dollars.
+
+```{r}
+us_gdp <- read.csv("./data/CSV/GdpByState.csv") %>%  # pipe
+  pivot_longer(
+    cols = starts_with("X"),
+    names_to = "year",
+    names_prefix = "X",
+    values_to = "gdp"
+  ) %>%
+# Select/reorder columns
+select(GeoFips, year, gdp)
+
+us_gdp$geo_level <- ifelse(
+  us_gdp$GeoFips == 0,
+  "national",
+  sprintf("state%02d", us_gdp$GeoFips / 1000)
+)
+
+us_gdp <- us_gdp %>%
+# Change from billions of dollars
+  mutate(gdp = gdp*1000000)
+```
+
+::: callout-note
+#### Code Explanation
+
+It reads `./data/CSV/GdpByState.csv` into memory and prepares those inputs for the transformations that follow. Technically, it uses `mutate()`, `select()`, `pivot_longer()` to restrict the analytic universe, create derived variables, reshape records, join lookup tables, and/or aggregate weighted statistics. The main objects created or updated here are `us_gdp`, `cols`, `names_to`, `names_prefix`, `values_to`.
+:::
+
+
+To express care value estimates in the same chained 2017 dollars used by the BEA GDP series, we construct a price deflator from the BLS CPI-U annual averages (Series CUUR0000SA0, All Items). The deflator for each year equals the 2017 average (245.1) divided by that year's average, so multiplying a nominal dollar value by the deflator converts it to 2017 dollars.
+
+```{r cpi deflator, message=FALSE, warning=FALSE}
+cpi_deflator <- tibble(
+  year = 1994:2025,
+  cpi  = c(148.2, 152.4, 156.9, 160.5, 163.0, 166.6, 172.2, 177.1, 179.9,
+            184.0, 188.9, 195.3, 201.6, 207.3, 215.3, 214.5, 218.1, 224.9,
+            229.6, 233.0, 236.7, 237.0, 240.0, 245.1, 251.1, 255.7, 258.8,
+            271.0, 292.7, 304.7, 314.2, 322.0)
+) |>
+  mutate(deflator = 245.1 / cpi)
+```
+
+::: callout-note
+#### Code Explanation
+
+Technically, it uses `mutate()` to restrict the analytic universe, create derived variables, reshape records, join lookup tables, and/or aggregate weighted statistics. The main objects created or updated here are `cpi_deflator`, `year`, `cpi`.
+:::
+
+
+# Paid Care Economy Statistics
+
+The first series of statistics that we develop as part of the Broad Impacts page relates to half of the broad indicators page on the paid care economy. We use the same dataset, the ASEC data, to calculate these statistics, and as such, we compute these statistics altogether. This section will calculate three unique vlaues: the size of the paid care force, the amount of hours worked by the paid care force, and the estimated value of the paid care force.
+
+## Paid Care Force
+
+To calculate the statistics about the size of the paid care economy, we utilize the yearly American Social and Economic Supplement of the Current Population Survey (ASEC). This survey includes detailed information on the jobs worked by people throughout the population. We could utillize the monthly CPS file as well to get these results, but we utilize the yearly file so that our statistics match the outcome of the unpaid annual survey.
+
+The code chunk below starts by loading in the asec data, provides the necessary filters to ensure that we only include rows with valid data and rows with people aged 18 and over. We then filter to include only the required columns, clean the names to standardize them, and provide some small transformations to the names or values of the variables to make them fit with the standardized structure of the care board.
+
+```{r BI asec load PLF}
+asec <- read.csv("./data/CSV/ASECdata.csv") |>
+  # incorporate HFLAG clause due to survey redesign in 2014
+  # https://blog.popdata.org/2014sample/
+  filter(HFLAG == 1 | is.na(HFLAG)) |>
+  # Filter to only includ 18+
+  filter(AGE >= 18) |>
+  # Filter to only include years 1994+
+  filter(YEAR >= min_year) |>
+  #Select needed variables
+  select(YEAR,
+           ASECWT,
+           UHRSWORKT,
+           INCWAGE,
+           empstat,
+           statefip,
+           occ_care_focus,
+           gender_parent,
+           STATEFIP,
+           occ_label) |>
+  #Clean variable names
+  clean_names() |>
+  #Variable Mutations
+  mutate(
+      date = as.Date(paste0(year, "-01-01")), # Change date format
+      uhrsworkt = ifelse(uhrsworkt == 999, 0, uhrsworkt), #Adjust NIU hours worked
+      occ_type = ifelse(occ_care_focus == "none", "non-care", "care"), #Create Occupation type variable
+      overall = "overall",
+      geo_level = statefip_2 #Rename geography variable.
+    )
+```
+
+::: callout-note
+#### Code Explanation
+
+It reads `./data/CSV/ASECdata.csv` into memory and prepares those inputs for the transformations that follow. Technically, it uses `filter()`, `mutate()`, `select()`, `clean_names()` to restrict the analytic universe, create derived variables, reshape records, join lookup tables, and/or aggregate weighted statistics. The main objects created or updated here are `asec`, `date`, `uhrsworkt`, `occ_type`, `overall`.
+:::
+
+
+Once the data is loaded, we create a custom function called *get_formal_lfp* that will be utilized to get the needed information for all the different geographies. This function takes a dataframe and a demographics group as inputs. Then it exports the number of people in the formal care labor force and the proportion of the paid labor force that is employed in the formal care economy.
+
+```{r BI Paid CF Function}
+get_formal_lfp <- function(df, demo_group) {
+  df |> 
+  mutate(
+        category_id = demo_group,
+        subcategory_id = get(demo_group)
+      ) |>
+  group_by(date, geo_level, category_id, subcategory_id) |>
+# Compute summary statistics
+  summarise(
+        formal_care_labor_force = sum(
+          ifelse(
+            occ_type == "care" & empstat == "Employed",
+            asecwt, 0),
+          na.rm = TRUE
+        ),
+        total_weight = sum(asecwt, na.rm = TRUE),
+        formal_care_labor_force_proportion = formal_care_labor_force / total_weight,
+        .groups = "drop"
+      )
+}
+```
+
+::: callout-note
+#### Code Explanation
+
+Technically, it uses `mutate()`, `group_by()`, `summarise()` to restrict the analytic universe, create derived variables, reshape records, join lookup tables, and/or aggregate weighted statistics. It defines `get_formal_lfp()`, which encapsulates repeated logic used by later chunks. The statistical work in this chunk calculates weighted counts, rates, rolling values, medians, changes over time, or inequality measures used in the published indicators. The main objects created or updated here are `get_formal_lfp`, `category_id`, `subcategory_id`, `formal_care_labor_force`, `occ_type`.
+:::
+
+
+We next apply this function to two groups: first, the overall group represents the entire workforce and creates a general care force labor number. Second, we determine the employment in the paid care economy for the four different categories of gender_parent. These categories include mothers, fathers, non-mothers, and non-fathers. We separate the data to see differences in paid care force employment for each of these groups.
+
+```{r BI Paid Function Apply}
+formal_lfp <- bind_rows(
+  get_formal_lfp(asec, "overall"),
+  get_formal_lfp(asec, "gender_parent"),
+  )
+```
+
+::: callout-note
+#### Code Explanation
+
+Technically, it uses `bind_rows()` to restrict the analytic universe, create derived variables, reshape records, join lookup tables, and/or aggregate weighted statistics. The main objects created or updated here are `formal_lfp`.
+:::
+
+
+We end the creation of this measure by doing some general transformations. First, we reformat the geographic variable to ensure it is in the correct standardized format used for the care board application. Next, we calculate national-level statistics by summing across different state-level details. To create the national variable for **formal_care_labor_force**, we take the sum of the care labor force value for each state. To make the **formal_care_labor_force_proportion** measure, we take the mean value of the care force proportion across different states. This gives us the necessary column at the national level. We then bind this national dataframe with the state level dataframe to create our data for paid care force size.
+
+```{r BI Paid CF state, message=FALSE, warning=FALSE}
+#Reformat the geography variable
+formal_lfp$geo_level <- sprintf("%02d", as.numeric(formal_lfp$geo_level))
+formal_lfp$geo_level <- paste0("state", formal_lfp$geo_level)
+
+
+lfp <- formal_lfp |>
+  group_by(date, category_id, subcategory_id) |>
+  summarise(formal_care_labor_force = sum(formal_care_labor_force),
+              total_weight = sum(total_weight),
+              formal_care_labor_force_proportion = mean(formal_care_labor_force_proportion, na.rm = TRUE)) |>
+# Create or modify columns
+  mutate(geo_level = "national")
+
+formal_lfp <- rbind(formal_lfp, lfp)
+```
+
+::: callout-note
+#### Code Explanation
+
+Technically, it uses `mutate()`, `group_by()`, `summarise()` to restrict the analytic universe, create derived variables, reshape records, join lookup tables, and/or aggregate weighted statistics. The statistical work in this chunk calculates weighted counts, rates, rolling values, medians, changes over time, or inequality measures used in the published indicators. The main objects created or updated here are `lfp`, `total_weight`, `formal_care_labor_force_proportion`, `formal_lfp`.
+:::
+
+
+## Paid Hours Worked
+
+The next statistic that we calculate for the paid care economy is the number of hours worked across the entire US and within each state. The code below calculates population-wide estimates of the total time worked as opposed to individual estimates. This number though can be compared to the number calculated in the previous section on the size of the care force within each geography in order to get an estimate for the time spent on average by each person.
+
+The chunk of code below starts by creating a function similar to above that takes in a dataset, and a demographic group and exports out the amount of time spent working in the paid care economy for that group.
+
+```{r paid hours work function, message=FALSE, warning=FALSE}
+get_formal_time <- function(df, demo_group) {
+df <- asec %>%
+  filter(uhrsworkt != 997, empstat == "Employed") %>%
+  mutate(
+    # demo_group should be a single string like "sex", "agegrp", etc.
+    category_id    = demo_group,
+    subcategory_id = .data[[demo_group]],     # <- instead of get()
+    # precompute minutes worked per person; keep NA as NA
+    minutes_worked = asecwt * uhrsworkt * 60 / 7
+  ) %>%
+  group_by(date, geo_level, category_id, subcategory_id) %>%
+  summarise(
+    # Count only care occupations; treat missing occ_type as NOT care
+    formal_care_time = sum(
+      if_else(occ_type == "care", minutes_worked, 0, missing = 0),
+      na.rm = TRUE
+    ),
+    total_minutes = sum(minutes_worked, na.rm = TRUE),
+    formal_care_time_proportion = if_else(
+      total_minutes > 0,
+      formal_care_time / total_minutes,
+      NA_real_
+    ),
+    .groups = "drop"
+  ) %>%
+  select(-total_minutes)
+  return(df)
+}
+```
+
+::: callout-note
+#### Code Explanation
+
+Technically, it uses `filter()`, `mutate()`, `select()`, `group_by()`, `summarise()` to restrict the analytic universe, create derived variables, reshape records, join lookup tables, and/or aggregate weighted statistics. It defines `get_formal_time()`, which encapsulates repeated logic used by later chunks. The statistical work in this chunk calculates weighted counts, rates, rolling values, medians, changes over time, or inequality measures used in the published indicators. The main objects created or updated here are `get_formal_time`, `df`, `category_id`, `subcategory_id`, `minutes_worked`.
+:::
+
+
+We then apply this function to the overall demographic, which calculates the statistic for everyone throughout society, and the gender_parent grouping which calculates the statistic spread out by parents and gender interactives.
+
+```{r paid time run function, message=FALSE, warning=FALSE}
+formal_time <- bind_rows(
+  get_formal_time(asec, "overall"),
+  get_formal_time(asec, "gender_parent")
+)
+```
+
+::: callout-note
+#### Code Explanation
+
+Technically, it uses `bind_rows()` to restrict the analytic universe, create derived variables, reshape records, join lookup tables, and/or aggregate weighted statistics. The main objects created or updated here are `formal_time`.
+:::
+
+
+Once we have the state level data, we combine it to create national level estimates. The chunk below first puts the state data into the correct format of a string needed for the standardized application and then calculates national formal care time by summing across all states and proportion by taking the mean time of each state.
+
+```{r formal time national compile, message=FALSE, warning=FALSE}
+formal_time$geo_level <- sprintf("%02d", as.numeric(formal_time$geo_level))
+formal_time$geo_level <- paste0("state", formal_time$geo_level)
+
+
+time <- formal_time |>
+  group_by(date, category_id, subcategory_id) |>
+  summarise(formal_care_time = sum(formal_care_time),
+              formal_care_time_proportion = mean(formal_care_time_proportion, na.rm = TRUE)) |>
+  mutate(geo_level = "national")
+
+formal_time_save <- rbind(formal_time, time)
+```
+
+::: callout-note
+#### Code Explanation
+
+Technically, it uses `mutate()`, `group_by()`, `summarise()` to restrict the analytic universe, create derived variables, reshape records, join lookup tables, and/or aggregate weighted statistics. The statistical work in this chunk calculates weighted counts, rates, rolling values, medians, changes over time, or inequality measures used in the published indicators. The main objects created or updated here are `time`, `formal_care_time_proportion`, `formal_time_save`.
+:::
+
+
+## Paid Care Valuation
+
+The next code chunk below repeats the above process to create a duplicate dataset for time spent working in the care economy. This will be needed in order to calculate the paid value statistics in the following section. The one difference between the code chunk below and the code chunks above is that the chunks below keep the data seperated by the different occupations. This allows us to apply different wages to different occupations and compute the time spent.
+
+```{r paid hours value function, message=FALSE, warning=FALSE}
+get_formal_time <- function(df, demo_group) {
+  df <- asec |>
+  filter(uhrsworkt != 997) |>
+  filter(empstat == "Employed") |> 
+  mutate(
+        category_id = demo_group,
+        subcategory_id = get(demo_group)
+        ) |>
+  group_by(date,geo_level, occ_label,category_id, subcategory_id) |>
+  summarise(
+        formal_care_time = sum(
+          ifelse(
+            occ_type == "care" & empstat == "Employed",
+            asecwt * uhrsworkt * 60 / 7,
+            0
+          )
+        ),
+        formal_care_time_proportion = formal_care_time /
+          sum(asecwt * uhrsworkt * 60 / 7)
+      )
+  
+  return(df)
+}
+
+formal_time <- bind_rows(
+  get_formal_time(asec, "overall"),
+  get_formal_time(asec, "gender_parent")
+)
+
+formal_time$geo_level <- sprintf("%02d", as.numeric(formal_time$geo_level))
+formal_time$geo_level <- paste0("state", formal_time$geo_level)
+
+
+time <- formal_time |>
+  group_by(date, occ_label, category_id, subcategory_id) |>
+  summarise(formal_care_time = sum(formal_care_time),
+              formal_care_time_proportion = mean(formal_care_time_proportion, na.rm = TRUE)) |>
+  mutate(geo_level = "national")
+
+occ_time <- rbind(formal_time, time) %>%
+  filter(formal_care_time != 0) %>%
+  select(-formal_care_time_proportion)
+```
+
+::: callout-note
+#### Code Explanation
+
+Technically, it uses `filter()`, `mutate()`, `select()`, `group_by()`, `summarise()`, `bind_rows()` to restrict the analytic universe, create derived variables, reshape records, join lookup tables, and/or aggregate weighted statistics. It defines `get_formal_time()`, which encapsulates repeated logic used by later chunks. The statistical work in this chunk calculates weighted counts, rates, rolling values, medians, changes over time, or inequality measures used in the published indicators. The main objects created or updated here are `get_formal_time`, `df`, `category_id`, `subcategory_id`, `formal_care_time`.
+:::
+
+
+The next code chunk reloads the ASEC data and cleans up some of the variables. We reload the data because in the previous chunks we've transformed it and filtered it and now we need to bring in some data that has previously been filtered out. The chunk below gives us a clean version of the ASEC data to play with. Generally the code below is identical to the code at the top of this section which loads in the asec code, except this code keeps in the occupation specific data and variables.
+
+```{r reload asec, message=FALSE, warning=FALSE}
+asec <- read.csv("./data/CSV/ASECdata.csv") |>
+  filter(AGE >= 18) |>
+  filter(YEAR >= 1994) |>
+  filter(occ_care_focus != "none") |> 
+  filter(empstat == "Employed") |> 
+  select(YEAR, OCC2010, occ_label, UHRSWORKT, 
+           EARNWT, INCWAGE, occ_care_focus, ASECWT, STATEFIP) |>
+  clean_names()
+
+asec <- asec|>
+  filter(uhrsworkt != 997) %>%
+  filter(uhrsworkt > 0) %>%
+  filter(uhrsworkt != 999) %>%
+  mutate(
+      activity_id = str_replace_all(
+        occ_label, "[^a-zA-Z0-9]+", "-") |> 
+        str_to_lower(),
+      asecwt = asecwt/5,
+      activity_id = gsub("-$", "", activity_id)
+    ) |>
+    rename(
+      name = occ_label, 
+      care_focus = occ_care_focus,
+      geo_level = statefip
+      ) %>%
+  mutate(uhrsworkt = uhrsworkt*52,
+           hourly_rate = incwage/uhrsworkt) |>
+  left_join(cpi_deflator, by = "year") |>
+  filter(!is.na(deflator)) |>
+  mutate(hourly_rate = hourly_rate * deflator) |>
+  select(-cpi, -deflator)
+```
+
+::: callout-note
+#### Code Explanation
+
+It reads `./data/CSV/ASECdata.csv` into memory and prepares those inputs for the transformations that follow. Technically, it uses `filter()`, `mutate()`, `select()`, `rename()`, `clean_names()`, `left_join()` to restrict the analytic universe, create derived variables, reshape records, join lookup tables, and/or aggregate weighted statistics. The main objects created or updated here are `asec`, `activity_id`, `asecwt`, `name`, `care_focus`.
+:::
+
+
+Using this newly cleaned ASEC dataset, we calculate the median wage for each paid care job for each state throughout the United States. We use a weighted median wage approach to calculate the median. We do this for both each state in the US and for the nation as a whole.
+
+```{r median wage, message=FALSE, warning=FALSE}
+med_wage <- asec |>  # pipe
+# Filter rows by conditions
+filter(incwage != 0 & incwage != 99999999) |>  # pipe 
+# Compute summary statistics
+summarise(
+      median_wage = wtd.quantile(
+      hourly_rate, 
+      weights = asecwt, 
+      probs = 0.5,
+      ),
+    .by = c(activity_id, year, geo_level, name, care_focus)
+  )
+
+
+med_wage$geo_level <- sprintf("%02d", as.numeric(med_wage$geo_level))
+med_wage$geo_level <- paste0("state", med_wage$geo_level)
+
+med_wage_n <- asec |>  # pipe
+# Filter rows by conditions
+filter(incwage != 0 & incwage != 99999999) |>  # pipe 
+# Compute summary statistics
+summarise(
+      median_wage = wtd.quantile(
+      hourly_rate, 
+      weights = asecwt, 
+      probs = 0.5
+      ),
+    .by = c(activity_id, year, name, care_focus)
+  )
+
+med_wage_n$geo_level <- "national"
+
+med_wage <- rbind(med_wage, med_wage_n)
+```
+
+::: callout-note
+#### Code Explanation
+
+Technically, it uses `filter()`, `summarise()` to restrict the analytic universe, create derived variables, reshape records, join lookup tables, and/or aggregate weighted statistics. The statistical work in this chunk calculates weighted counts, rates, rolling values, medians, changes over time, or inequality measures used in the published indicators. The main objects created or updated here are `med_wage`, `median_wage`, `weights`, `probs`, `.by`.
+:::
+
+
+The next step to calculate the value of the paid care economy is to merge this median wage data with our saved occupation time data. This merger will allow us to compute that for each individual occupation, the total value of it within a geography based on the amount of time worked and the average hourly wage for that job.
+
+```{r paid wage and time merge, message=FALSE, warning=FALSE}
+occ_time <- occ_time %>%
+  mutate(year = year(date))
+
+merged_data <- occ_time %>%
+  left_join(med_wage, by = c("occ_label" = "name", 
+                               "year" = "year", 
+                               "geo_level" = "geo_level"))
+```
+
+::: callout-note
+#### Code Explanation
+
+Technically, it uses `mutate()`, `left_join()` to restrict the analytic universe, create derived variables, reshape records, join lookup tables, and/or aggregate weighted statistics. The main objects created or updated here are `occ_time`, `merged_data`.
+:::
+
+
+Following the merger of the different datasets, we can finally calculate the actual value of the paid economy in each state. The code chunks below calculate the formal value for each year and geography by multiplying the amount of time spent working in each care occupation by the calculated hourly wage from above, and then dividing this by 60 to obtain the value in hours. We then sum for each geography across all different occupations to create a value for the entire care economy.
+
+```{r Paid Value Calculate, message=FALSE, warning=FALSE}
+formal_value <- merged_data %>%
+  group_by(date, geo_level, category_id, subcategory_id) %>%
+  summarise(
+      formal_value = sum(formal_care_time/60*median_wage)
+    ) %>%
+  mutate(year = as.integer(format(as.Date(date), "%Y")))
+```
+
+::: callout-note
+#### Code Explanation
+
+Technically, it uses `mutate()`, `group_by()`, `summarise()` to restrict the analytic universe, create derived variables, reshape records, join lookup tables, and/or aggregate weighted statistics. The statistical work in this chunk calculates weighted counts, rates, rolling values, medians, changes over time, or inequality measures used in the published indicators. The main objects created or updated here are `formal_value`.
+:::
+
+
+Following this we merge this dataset with the US GDP dataset which we brought in earlier in this section. We merge between both both year and state allowing us to directly compare the value of the paid care economy in a state for a given year with the GDP for that state and year. We then calculate the variable **Formal_Value_Proportion** by taking the total formal value of the care economy in that state, multiplying this by 365 to get a yearly estimate and dividing this by the gdp value to get a proportion. The chunk then drops the unused variables to create a clean dataset.
+
+```{r GDP merge, message=FALSE, warning=FALSE}
+# Make a Date column in us_gdp that matches formal_value$date
+us_gdp <- us_gdp %>%
+  mutate(
+    # ensure year is numeric/integer first, then build a proper Date
+    date = as.Date(sprintf("%d-01-01", as.integer(year)))
+  )
+
+# (Optional but often helpful) make sure geo_level types match too
+formal_value <- formal_value %>% mutate(geo_level = as.character(geo_level))
+us_gdp       <- us_gdp       %>% mutate(geo_level = as.character(geo_level))
+
+# Join on date + geo_level
+merged_df <- formal_value %>%
+  left_join(us_gdp, by = c("date", "geo_level")) %>%
+  select(date, geo_level, category_id, subcategory_id, formal_value, gdp)
+
+formal_value <- merged_df %>%
+  mutate(formal_value_proportion = formal_value*365 / gdp)
+
+formal_value <- formal_value %>%
+  select(-gdp) %>%
+  filter(!is.na(formal_value_proportion))
+```
+
+::: callout-note
+#### Code Explanation
+
+Technically, it uses `filter()`, `mutate()`, `select()`, `left_join()` to restrict the analytic universe, create derived variables, reshape records, join lookup tables, and/or aggregate weighted statistics. The main objects created or updated here are `us_gdp`, `date`, `formal_value`, `merged_df`.
+:::
+
+
+## CPS Labor Force Participation
+
+The next statistic for the paid care economy is the monthly labor force participation rate calculated directly from the Current Population Survey (CPS) basic monthly file. Unlike the ASEC-based statistics above which are annual, these estimates are monthly and mirror the methodology used by the Bureau of Labor Statistics (BLS) to produce its official labor force participation figures. We use the person-level final weight (`WTFINL`) and restrict to the civilian non-institutional population aged 16 and older - defined in the CPS as respondents whose `labforce` value is either "In the Labor Force" or "Not in the Labor Force" (i.e., excluding military and NIU observations). The participation rate is the share of that civilian population counted as in the labor force.
+
+The chunk below loads only the columns needed from the large CPS file, using `fread` for efficiency, and constructs indicator variables for labor force membership.
+
+```{r cps load, message=FALSE, warning=FALSE}
+cps <- fread(
+    "./data/CSV/CPSdata.csv",
+    select = c("date", "WTFINL", "labforce", "STATEFIP",
+               "gender_parent", "AGE", "empstat", "whyabsnt", "race_ethnicity",
+               "Why_Parttime", "wkstat", "nilf_activity", "YNGCH")
+  ) |>
+  as.data.frame() |>
+  filter(STATEFIP > 0, STATEFIP <= 56) |>   # 50 states + DC
+  mutate(
+    date     = as.Date(date),
+    overall  = "overall",
+    geo_level = STATEFIP,
+    # Collapse race/ethnicity into four groups; Hispanic takes priority per f_race_ethnicity()
+    race_eth_4 = case_when(
+      race_ethnicity == "Hispanic" ~ "Hispanic",
+      race_ethnicity == "White"    ~ "White",
+      race_ethnicity == "Black"    ~ "Black",
+      TRUE                         ~ "Other"
+    )
+  )
+```
+
+::: callout-note
+#### Code Explanation
+
+It reads `./data/CSV/CPSdata.csv` into memory and prepares those inputs for the transformations that follow. Technically, it uses `filter()`, `mutate()` to restrict the analytic universe, create derived variables, reshape records, join lookup tables, and/or aggregate weighted statistics. The main objects created or updated here are `cps`, `select`, `date`, `overall`, `geo_level`.
+:::
+
+
+The function below mirrors the structure of `get_formal_lfp` above. For each date-geography-demographic combination it computes the weighted count in the labor force and the weighted count in the civilian non-institutional population (the BLS denominator), then derives the participation rate.
+
+```{r cps lfp function, message=FALSE, warning=FALSE}
+get_cps_lfp <- function(df, demo_group) {
+  df |>
+    filter(AGE >= 25, AGE <= 54) |>
+    filter(labforce %in% c("In the Labor Force", "Not in the Labor Force")) |>
+    mutate(
+      category_id    = demo_group,
+      subcategory_id = get(demo_group),
+      in_lf          = (labforce == "In the Labor Force")
+    ) |>
+    group_by(date, geo_level, category_id, subcategory_id) |>
+    summarise(
+      labor_force_participation            = sum(WTFINL * in_lf,  na.rm = TRUE),
+      total_civilian_population            = sum(WTFINL,           na.rm = TRUE),
+      labor_force_participation_proportion = labor_force_participation / total_civilian_population,
+      .groups = "drop"
+    )
+}
+```
+
+::: callout-note
+#### Code Explanation
+
+Technically, it uses `filter()`, `mutate()`, `group_by()`, `summarise()` to restrict the analytic universe, create derived variables, reshape records, join lookup tables, and/or aggregate weighted statistics. It defines `get_cps_lfp()`, which encapsulates repeated logic used by later chunks. The statistical work in this chunk calculates weighted counts, rates, rolling values, medians, changes over time, or inequality measures used in the published indicators. The main objects created or updated here are `get_cps_lfp`, `category_id`, `subcategory_id`, `in_lf`, `labor_force_participation`.
+:::
+
+
+We apply the function to the overall population and to the four gender-parent groups.
+
+```{r cps lfp apply, message=FALSE, warning=FALSE}
+cps_lfp <- get_cps_lfp(cps, "gender_parent")
+```
+
+::: callout-note
+#### Code Explanation
+
+The main objects created or updated here are `cps_lfp`.
+:::
+
+
+We then reformat the geographic variable and compute national totals by summing the state-level labor force counts and civilian population counts, then recalculating the national participation rate from those sums.
+
+```{r cps lfp national, message=FALSE, warning=FALSE}
+cps_lfp$geo_level <- sprintf("%02d", as.numeric(cps_lfp$geo_level))
+cps_lfp$geo_level <- paste0("state", cps_lfp$geo_level)
+
+cps_lfp_national <- cps_lfp |>
+  group_by(date, category_id, subcategory_id) |>
+  summarise(
+    labor_force_participation = sum(labor_force_participation),
+    total_civilian_population = sum(total_civilian_population),
+    .groups = "drop"
+  ) |>
+  mutate(
+    labor_force_participation_proportion = labor_force_participation / total_civilian_population,
+    geo_level = "national"
+  )
+
+cps_lfp <- bind_rows(cps_lfp, cps_lfp_national) |>
+  select(-total_civilian_population)
+```
+
+::: callout-note
+#### Code Explanation
+
+Technically, it uses `mutate()`, `select()`, `group_by()`, `summarise()`, `bind_rows()` to restrict the analytic universe, create derived variables, reshape records, join lookup tables, and/or aggregate weighted statistics. The statistical work in this chunk calculates weighted counts, rates, rolling values, medians, changes over time, or inequality measures used in the published indicators. The main objects created or updated here are `cps_lfp_national`, `labor_force_participation`, `total_civilian_population`, `.groups`, `labor_force_participation_proportion`.
+:::
+
+
+Because the application only supports yearly data, we collapse the monthly CPS series to one observation per year. We identify the most recent month available in the data and retain only that same calendar month for every prior year, making each year's value directly comparable. The date is then overwritten to `YEAR-01-01` so the application can parse it as an annual data point.
+
+```{r cps lfp yearly, message=FALSE, warning=FALSE}
+# Identify the most recent month present in the data
+latest_month <- month(max(cps_lfp$date))
+
+# Keep only that calendar month for every year, then relabel dates as Jan 1
+cps_lfp <- cps_lfp |>
+  filter(month(date) == latest_month) |>
+  mutate(date = as.Date(paste0(year(date), "-01-01")))
+```
+
+::: callout-note
+#### Code Explanation
+
+Technically, it uses `filter()`, `mutate()` to restrict the analytic universe, create derived variables, reshape records, join lookup tables, and/or aggregate weighted statistics. The main objects created or updated here are `latest_month`, `cps_lfp`.
+:::
+
+
+We also compute labor force participation broken down by age of youngest child within each parental group. Because splitting a single month of CPS data by parental group and child age simultaneously can produce unstable estimates in smaller states, we pool a 3-month rolling window (the three calendar months ending at the most recent month in the data) before aggregating. Mothers and fathers are each split into three age-of-youngest-child groups: child 5 or under, child 6 to 12, and child 13 to 17. `YNGCH` (age of youngest own household child) is used to construct these groups; only parents with a youngest child under 18 are included, consistent with the `gender_parent` definition.
+
+```{r cps lfp child age function, message=FALSE, warning=FALSE}
+# Define the 3-month rolling window ending at the most recent month in the data.
+# The modular arithmetic handles wrap-around (e.g. latest_mo=2 gives window c(12,1,2)).
+latest_mo_lfp  <- month(max(cps$date))
+win_months_lfp <- (seq(latest_mo_lfp - 2, latest_mo_lfp) - 1) %% 12 + 1
+
+lfp_child_age_group <- function(df, gp_group, prefix) {
+  df |>
+    filter(AGE >= 25, AGE <= 54,
+           labforce %in% c("In the Labor Force", "Not in the Labor Force"),
+           gender_parent == gp_group,
+           month(date) %in% win_months_lfp) |>
+    mutate(
+      in_lf = (labforce == "In the Labor Force"),
+      child_age_grp = case_when(
+        YNGCH <= 5               ~ "Child 5 or Under",
+        YNGCH >= 6 & YNGCH <= 12 ~ "Child 6 to 12",
+        YNGCH >= 13              ~ "Child 13 to 17"
+      ),
+      report_year = if_else(month(date) > latest_mo_lfp, year(date) + 1L, year(date))
+    ) |>
+    group_by(report_year, geo_level, child_age_grp) |>
+    summarise(
+      !!paste0(prefix, "_labor_force_participation") := sum(WTFINL * in_lf, na.rm = TRUE),
+      !!paste0("total_pop_", prefix)                 := sum(WTFINL,          na.rm = TRUE),
+      .groups = "drop"
+    ) |>
+    mutate(date = as.Date(paste0(report_year, "-01-01"))) |>
+    select(-report_year)
+}
+```
+
+::: callout-note
+#### Code Explanation
+
+Technically, it uses `filter()`, `mutate()`, `select()`, `group_by()`, `summarise()` to restrict the analytic universe, create derived variables, reshape records, join lookup tables, and/or aggregate weighted statistics. It defines `lfp_child_age_group()`, which encapsulates repeated logic used by later chunks. The statistical work in this chunk calculates weighted counts, rates, rolling values, medians, changes over time, or inequality measures used in the published indicators. The main objects created or updated here are `latest_mo_lfp`, `win_months_lfp`, `lfp_child_age_group`, `gender_parent`, `in_lf`.
+:::
+
+
+```{r cps lfp child age apply, message=FALSE, warning=FALSE}
+cps_lfp_child_age_state <- lfp_child_age_group(cps, "Mothers", "mothers") |>
+  left_join(lfp_child_age_group(cps, "Fathers", "fathers"), by = c("date", "geo_level", "child_age_grp"))
+
+cps_lfp_child_age_state$geo_level <- sprintf("%02d", as.numeric(cps_lfp_child_age_state$geo_level))
+cps_lfp_child_age_state$geo_level <- paste0("state", cps_lfp_child_age_state$geo_level)
+```
+
+::: callout-note
+#### Code Explanation
+
+Technically, it uses `left_join()` to restrict the analytic universe, create derived variables, reshape records, join lookup tables, and/or aggregate weighted statistics. The main objects created or updated here are `cps_lfp_child_age_state`.
+:::
+
+
+```{r cps lfp child age national, message=FALSE, warning=FALSE}
+cps_lfp_child_age_national <- cps_lfp_child_age_state |>
+  group_by(date, child_age_grp) |>
+  summarise(across(where(is.numeric), sum, na.rm = TRUE), .groups = "drop") |>
+  mutate(geo_level = "national")
+
+cps_lfp_child_age_all <- bind_rows(cps_lfp_child_age_state, cps_lfp_child_age_national)
+
+cps_lfp_child_age_overall <- cps_lfp_child_age_all |>
+  group_by(date, geo_level) |>
+  summarise(across(where(is.numeric), sum, na.rm = TRUE), .groups = "drop") |>
+  mutate(
+    mothers_labor_force_participation_proportion = mothers_labor_force_participation / total_pop_mothers,
+    fathers_labor_force_participation_proportion = fathers_labor_force_participation / total_pop_fathers
+  ) |>
+  select(-starts_with("total_pop_")) |>
+  mutate(
+    category_id    = "overall",
+    subcategory_id = "overall"
+  )
+
+cps_lfp_child_age <- cps_lfp_child_age_all |>
+  mutate(
+    mothers_labor_force_participation_proportion = mothers_labor_force_participation / total_pop_mothers,
+    fathers_labor_force_participation_proportion = fathers_labor_force_participation / total_pop_fathers
+  ) |>
+  select(-starts_with("total_pop_")) |>
+  mutate(
+    category_id    = "youngest_child_age",
+    subcategory_id = child_age_grp
+  ) |>
+  select(-child_age_grp) |>
+  bind_rows(cps_lfp_child_age_overall)
+```
+
+::: callout-note
+#### Code Explanation
+
+Technically, it uses `mutate()`, `select()`, `group_by()`, `summarise()`, `bind_rows()` to restrict the analytic universe, create derived variables, reshape records, join lookup tables, and/or aggregate weighted statistics. The main objects created or updated here are `cps_lfp_child_age_national`, `cps_lfp_child_age_all`, `cps_lfp_child_age_overall`, `mothers_labor_force_participation_proportion`, `fathers_labor_force_participation_proportion`.
+:::
+
+
+The code chunk below ends this section by combining the three separate paid care economy metrics together with the new CPS labor force participation metric and exporting them to the app_data folder to be utilized on the care board application.
+
+```{r write paid metrics, message=FALSE, warning=FALSE}
+metrics_formal <- bind_rows(
+  formal_lfp,
+  formal_time_save,
+  formal_value,
+  cps_lfp_child_age
+  ) %>%
+  select(-c(total_weight))
+
+write_careboard_outputs(
+  metrics_formal,
+  "metrics_formal",
+  app_path = "./app_data/metrics_formal.csv"
+)
+```
+
+::: callout-note
+#### Code Explanation
+
+Technically, it uses `select()`, `bind_rows()` to restrict the analytic universe, create derived variables, reshape records, join lookup tables, and/or aggregate weighted statistics. It writes the resulting table through the shared export helper, producing app-facing files and/or replication copies in CSV, Stata, and Excel formats. The main objects created or updated here are `metrics_formal`, `app_path`.
+:::
+
+
+# Unpaid Care Economy Statistics
+
+Now that the paid care economy statistics have been calculated, the next step is to calculate the mirrored statistics for the unpaid care economy. These represent the number of people working in the unpaid care labor force, the total amount of time spent across society working in this sector, and the value of this sector compared to the state's GDP.
+
+The first step below loads in the defaults, and then loads that *ATUS* data, which is the data used to compute all unpaid care economy statistics. Like with other statistics, we utilize 5 year rolling averages when dealing with ATUS data in order to account for limited data availability in the samples.
+
+```{r unpaid setup, message=FALSE, warning=FALSE}
+source("R/load_defaults.R")
+
+atus <- read.csv("./data/CSV/ATUSdata.csv") |> 
+  filter(activity != "Formal Work") |>
+  filter(AGE >= 18) |>
+  filter(YEAR != 2020) |>
+  select(YEAR, CASEID, WT06, ACTIVITY, DURATION, SCC_ALL_LN, SEC_ALL_LN,
+           act_care_focus, activity, gender_parent, STATEFIP) |>  # pipe 
+    clean_names() |>
+    pivot_longer(
+      cols = c(duration, scc_all_ln, sec_all_ln),
+      names_to = "metric", 
+      values_to = "duration"
+    ) |>
+  mutate(
+      duration = coalesce(duration, 0),
+      care_flag = case_when(
+        metric %in% c("scc_all_ln", "sec_all_ln") | 
+          act_care_focus != "non-care" ~ "care", 
+        TRUE ~ "non-care" 
+      ), 
+      overall = "overall",
+      geo_level = statefip
+    )
+
+case_year <- atus |>
+  mutate(weight = wt06 / 365) |>
+  summarise(
+      total_time = sum(duration),
+      .by = c(year, caseid, geo_level, gender_parent, weight, care_flag)
+      ) |>
+  mutate(overall = "overall")
+
+yr_range <- atus_yr_range(atus)
+```
+
+::: callout-note
+#### Code Explanation
+
+This chunk sources `R/load_defaults.R` so the later code has the required functions, defaults, and shared helpers. It reads `./data/CSV/ATUSdata.csv` into memory and prepares those inputs for the transformations that follow. Technically, it uses `filter()`, `mutate()`, `select()`, `clean_names()`, `summarise()`, `pivot_longer()` to restrict the analytic universe, create derived variables, reshape records, join lookup tables, and/or aggregate weighted statistics. The statistical work in this chunk calculates weighted counts, rates, rolling values, medians, changes over time, or inequality measures used in the published indicators.
+:::
+
+
+## Unpaid Care Force
+
+The code chunk below creates a function in order to calculate the number of people working in the unpaid care labor force. However, before calculating this number, we need to determine what it means to be in the unpaid care force. This could mean anyone who spent any time in the day working on caregiving, however, that number would likely be the entire population of the United States. We use the cutoff of 3 hours or more worked on caregiving in a day for determination into the unpaid care force. The decision to use 3 hours comes from the Bureau of Labor statistics definition of unpaid farm labor. The issue of classifying unpaid labor was important for farm workers, many of who work on a family farm and don't receive a direct wage. The BLS has decided that if a person works 3 hours or more a day in that industry, they should be considered employed in that industry even if they are unpaid. We copy this definition for the unpaid caregiving industry.
+
+```{r unpaid careforce function, message=FALSE, warning=FALSE}
+get_informal_lfp <- function(demo_group) {
+  informal_lfp <- list()
+  i <- 1
+  
+  for (sel_year in yr_range$year) {
+    year_min <- yr_range$yr_start[i]
+    
+    # calculate total population for the selected demo group, by state
+    tot_pop <- atus |>
+      filter(year >= year_min & year <= sel_year) |>
+      mutate(category_id = demo_group,
+             subcategory_id = get(demo_group)) |>
+      distinct(year, caseid, wt06, geo_level, category_id, subcategory_id) |>
+      group_by(geo_level, category_id, subcategory_id) |>
+      summarise(
+        total_population = sum(wt06 / 365 / 5), 
+        .groups = "drop"
+      )
+    
+    # calculate population doing minimum 3 hours care work, by state
+    informal_lfp[[sel_year]] <- case_year |>
+      filter(year >= year_min & year <= sel_year) |>
+      filter(care_flag == "care" & total_time >= 3 * 60) |>
+      mutate(category_id = demo_group,
+             subcategory_id = get(demo_group)) |>
+      group_by(geo_level, category_id, subcategory_id) |>
+      summarise(
+        informal_care_labor_force = sum(weight / 5),
+        .groups = "drop"
+      ) |>
+      left_join(tot_pop, by = c("geo_level", "category_id", "subcategory_id")) |>
+      mutate(
+        date = as.Date(paste0(as.character(sel_year), "-01-01")),
+        informal_care_labor_force_proportion = 
+          informal_care_labor_force / total_population
+      ) |>
+      relocate(date)
+    
+    i <- i + 1
+  }
+  
+  df <- bind_rows(informal_lfp)
+  return(df)
+}
+```
+
+::: callout-note
+#### Code Explanation
+
+Technically, it uses `filter()`, `mutate()`, `group_by()`, `summarise()`, `left_join()`, `bind_rows()`, `relocate()`, `distinct()` to restrict the analytic universe, create derived variables, reshape records, join lookup tables, and/or aggregate weighted statistics. It defines `get_informal_lfp()`, which encapsulates repeated logic used by later chunks. The iteration step loops across years, states, datasets, categories, or demographic groups and binds the repeated results into a single analysis table. The statistical work in this chunk calculates weighted counts, rates, rolling values, medians, changes over time, or inequality measures used in the published indicators.
+:::
+
+
+The chunk below applies the function for calculating the size of the unpaid care labor force for the population as a whole and for each unique catagory of gender_parent. The chunk below does this for both each state and then calculates the national statistics by summing the size of the care labor force across states.
+
+```{r calculate unpaid care force, message=FALSE, warning=FALSE}
+# Now calculate informal_lfp both overall and by gender_parent
+informal_lfp <- bind_rows(
+  get_informal_lfp("overall"),
+  get_informal_lfp("gender_parent")
+)
+
+
+informal_lfp$geo_level <- sprintf("%02d", as.numeric(informal_lfp$geo_level))
+informal_lfp$geo_level <- paste0("state", informal_lfp$geo_level)
+
+
+lfp <- informal_lfp |>
+group_by(date, category_id, subcategory_id) |>
+summarise(informal_care_labor_force = sum(informal_care_labor_force),
+            total_population = sum(total_population),
+            informal_care_labor_force_proportion = mean(informal_care_labor_force_proportion, na.rm = TRUE)) |>
+mutate(geo_level = "national")
+
+informal_lfp <- rbind(informal_lfp, lfp)
+```
+
+::: callout-note
+#### Code Explanation
+
+Technically, it uses `mutate()`, `group_by()`, `summarise()`, `bind_rows()` to restrict the analytic universe, create derived variables, reshape records, join lookup tables, and/or aggregate weighted statistics. The statistical work in this chunk calculates weighted counts, rates, rolling values, medians, changes over time, or inequality measures used in the published indicators. The main objects created or updated here are `informal_lfp`, `lfp`, `total_population`, `informal_care_labor_force_proportion`.
+:::
+
+
+## Unpaid Hours Worked
+
+The chunk below calculates the total amount of time worked across the entire US economy throughout the unpaid care force. The function uses ATUS data to calculate the total amount of time worked in unpaid caregiving by people identifies as part of the care economy.
+
+```{r unpaid caretime function, message=FALSE, warning=FALSE}
+get_informal_time <- function(demo_group) {
+  informal_time <- list()
+  i <- 1
+  for (sel_year in yr_range$year) {
+    year_min <- yr_range$yr_start[i]
+    informal_time[[sel_year]] <- case_year |>
+  filter(year >= year_min & year <= sel_year) |>
+  mutate(category_id = demo_group,
+               subcategory_id = get(demo_group)) |>
+  group_by(geo_level, care_flag, category_id, subcategory_id) |> 
+  summarise(
+          informal_care_time = sum(total_time * weight / 5),
+          .groups = "drop"
+        ) |>
+  group_by(geo_level, category_id, subcategory_id) |>
+  mutate(
+          date = as.Date(paste0(as.character(sel_year), "-01-01")),
+          informal_care_time_proportion = informal_care_time / sum(informal_care_time)
+        ) |>  # pipe
+        relocate(date)
+      
+      i <- i + 1
+    }
+  
+  df <- bind_rows(informal_time)
+  return(df)
+}
+```
+
+::: callout-note
+#### Code Explanation
+
+Technically, it uses `filter()`, `mutate()`, `group_by()`, `summarise()`, `bind_rows()`, `relocate()` to restrict the analytic universe, create derived variables, reshape records, join lookup tables, and/or aggregate weighted statistics. It defines `get_informal_time()`, which encapsulates repeated logic used by later chunks. The iteration step loops across years, states, datasets, categories, or demographic groups and binds the repeated results into a single analysis table. The statistical work in this chunk calculates weighted counts, rates, rolling values, medians, changes over time, or inequality measures used in the published indicators.
+:::
+
+
+The chunk below utilizes the function to calculate state-level estimates of the amount of time spent working in unpaid caregiving throughout the US. This chunk does this for both the overall population and each category of gender_parent value.
+
+```{r state unpaid hours calculate, message=FALSE, warning=FALSE}
+# Now calculate informal_time both overall and by gender_parent
+informal_time_state <- bind_rows(
+  get_informal_time("overall"),
+  get_informal_time("gender_parent")
+)
+
+
+informal_time_state$geo_level <- sprintf("%02d", as.numeric(informal_time_state$geo_level))
+informal_time_state$geo_level <- paste0("state", informal_time_state$geo_level)
+```
+
+::: callout-note
+#### Code Explanation
+
+Technically, it uses `bind_rows()` to restrict the analytic universe, create derived variables, reshape records, join lookup tables, and/or aggregate weighted statistics. The main objects created or updated here are `informal_time_state`.
+:::
+
+
+We then duplicate the code above to generate the national level statistics by replicating the methods but applying it to the entire United States as opposed to any specific state.
+
+```{r national unpaid, message=FALSE, warning=FALSE}
+get_informal_time <- function(demo_group) {
+  informal_time <- list()
+  i <- 1
+  for (sel_year in yr_range$year) {
+    year_min <- yr_range$yr_start[i]
+    informal_time[[sel_year]] <- case_year |>
+  filter(year >= year_min & year <= sel_year) |>
+  mutate(category_id = demo_group,
+               subcategory_id = get(demo_group)) |>
+  group_by(care_flag, category_id, subcategory_id) |>
+  summarise(
+          informal_care_time = sum(total_time * weight / 5),
+          .groups = "drop"
+        ) |>
+  group_by(category_id, subcategory_id) |>
+  mutate(
+          date = as.Date(paste0(as.character(sel_year), "-01-01")),
+          informal_care_time_proportion = informal_care_time / sum(informal_care_time)
+        ) |>  # pipe
+        relocate(date)
+    i <- i + 1
+  }
+  df <- bind_rows(informal_time)
+  return(df)
+}
+
+informal_time <- bind_rows(
+  get_informal_time("overall"),
+  get_informal_time("gender_parent")
+)
+
+informal_time$geo_level <- "national"
+
+informal_time <- rbind(informal_time_state, informal_time)
+```
+
+::: callout-note
+#### Code Explanation
+
+Technically, it uses `filter()`, `mutate()`, `group_by()`, `summarise()`, `bind_rows()`, `relocate()` to restrict the analytic universe, create derived variables, reshape records, join lookup tables, and/or aggregate weighted statistics. It defines `get_informal_time()`, which encapsulates repeated logic used by later chunks. The iteration step loops across years, states, datasets, categories, or demographic groups and binds the repeated results into a single analysis table. The statistical work in this chunk calculates weighted counts, rates, rolling values, medians, changes over time, or inequality measures used in the published indicators.
+:::
+
+
+## Unpaid Care Valuation
+
+Finally, we compute the valuation of the unppaid care economy by taking the total amount of time spent working in each state, and multiplying it by 7.25. The number of 7.25 is chosen because it represents the federal minimum wage. When attempting to put a value on unpaid caregiving there are multiple options. We could attempt to match these activities to a job in the paid care economy and look at the wage of that job, or we could look at the individual and try to determine how much money they might make in the paid economy if they had decided to work. Each of these might even be more accurate than using the simple 7.25 number. We utilize 7.25 because it is the most conservative estimate of what might happen. The value of 7.25 represents the federal minimum wage which is the lowest possible amount of money that these people might make if they were paid for their hours worked. As such, using this number provides a conservative estimation of the value of the paid care economy.
+
+```{r unpaid value, message=FALSE, warning=FALSE}
+informal_value <- informal_time %>%
+  filter(care_flag == "care") %>%
+  mutate(
+    year_int = as.integer(format(as.Date(date), "%Y"))
+  ) %>%
+  left_join(cpi_deflator, by = c("year_int" = "year")) %>%
+  mutate(informal_value = informal_care_time / 60 * 7.25 * deflator) %>%
+  select(-informal_care_time, -informal_care_time_proportion, -cpi, -deflator, -year_int)
+
+informal_value <- informal_value %>%
+  mutate(year = as.character(format(as.Date(date), "%Y")))
+
+informal_value <- informal_value %>%
+  left_join(us_gdp, by = c("year", "geo_level")) %>%
+  select(date.x, geo_level, category_id, subcategory_id, informal_value, gdp) %>%
+  rename(date = date.x)
+
+informal_value <- informal_value %>%
+  mutate(informal_value_proportion = informal_value*365 / gdp)
+
+informal_value <- informal_value %>%
+  select(-gdp) %>%
+  filter(!is.na(informal_value_proportion))
+```
+
+::: callout-note
+#### Code Explanation
+
+Technically, it uses `filter()`, `mutate()`, `select()`, `rename()`, `left_join()` to restrict the analytic universe, create derived variables, reshape records, join lookup tables, and/or aggregate weighted statistics. The main objects created or updated here are `informal_value`, `year_int`.
+:::
+
+
+## Unpaid Care Valuation - Market Replacement Method
+
+This section computes an alternative valuation of the unpaid care economy using a market replacement approach. Rather than applying the federal minimum wage uniformly, each informal care activity is matched to its formal occupational equivalent via a crosswalk, and the value of that activity is estimated using the median hourly wage for the matched occupation(s) from the ASEC data. `INCWAGE` in the ASEC records annual wage and salary income; dividing by usual weekly hours times 52 yields the hourly rate. A three-year rolling average of ASEC wages is used to smooth year-to-year volatility, while the ATUS time estimates continue to use the five-year rolling window from `yr_range`. Only primary care activities (those with `act_care_focus != "non-care"`) are included so that each activity code can be cleanly matched to a formal occupation.
+
+```{r mrm crosswalk, message=FALSE, warning=FALSE}
+# Load crosswalk and parse Code_Formal into integer min/max range bounds
+crosswalk_mrm <- read.csv("./data/CSV/Informal_Formal_Crosswalk.csv") |>
+  mutate(
+    Code_Formal = as.character(Code_Formal),
+    occ_min     = as.integer(str_extract(Code_Formal, "^\\d+")),
+    occ_max     = as.integer(str_extract(Code_Formal, "\\d+$"))
+  )
+```
+
+::: callout-note
+#### Code Explanation
+
+It reads `./data/CSV/Informal_Formal_Crosswalk.csv` into memory and prepares those inputs for the transformations that follow. Technically, it uses `mutate()` to restrict the analytic universe, create derived variables, reshape records, join lookup tables, and/or aggregate weighted statistics. The main objects created or updated here are `crosswalk_mrm`, `Code_Formal`, `occ_min`, `occ_max`.
+:::
+
+
+```{r mrm asec wages, message=FALSE, warning=FALSE}
+# INCWAGE is annual income; hourly_rate = INCWAGE / (UHRSWORKT * 52)
+asec_mrm <- read.csv("./data/CSV/ASECdata.csv") |>
+  filter(AGE >= 18, YEAR >= 1994, empstat == "Employed") |>
+  select(YEAR, OCC2010, UHRSWORKT, INCWAGE, ASECWT) |>
+  clean_names() |>
+  filter(uhrsworkt > 0, uhrsworkt != 997, uhrsworkt != 999,
+         incwage > 0, incwage != 99999999) |>
+  mutate(hourly_rate = incwage / (uhrsworkt * 52)) |>
+  left_join(cpi_deflator, by = "year") |>
+  filter(!is.na(deflator)) |>
+  mutate(hourly_rate = hourly_rate * deflator) |>
+  select(-cpi, -deflator)
+
+# Range-join: map each OCC2010 code in ASEC to its Code_Informal via crosswalk bounds
+occ_to_informal_code <- crosswalk_mrm |>
+  select(Code_Informal, occ_min, occ_max) |>
+  cross_join(distinct(asec_mrm, occ2010)) |>
+  filter(occ2010 >= occ_min, occ2010 <= occ_max) |>
+  select(Code_Informal, occ2010)
+
+asec_wages_mrm <- asec_mrm |>
+  inner_join(occ_to_informal_code, by = "occ2010", relationship = "many-to-many")
+```
+
+::: callout-note
+#### Code Explanation
+
+It reads `./data/CSV/ASECdata.csv` into memory and prepares those inputs for the transformations that follow. Technically, it uses `filter()`, `mutate()`, `select()`, `clean_names()`, `left_join()`, `inner_join()`, `cross_join()`, `distinct()` to restrict the analytic universe, create derived variables, reshape records, join lookup tables, and/or aggregate weighted statistics. The main objects created or updated here are `asec_mrm`, `occ_to_informal_code`, `asec_wages_mrm`.
+:::
+
+
+```{r mrm rolling wages, message=FALSE, warning=FALSE}
+# 3-year rolling national median hourly wage per Code_Informal x output year
+activity_wages_mrm <- list()
+for (i in seq_along(yr_range$year)) {
+  sel_year <- yr_range$year[i]
+  activity_wages_mrm[[i]] <- asec_wages_mrm |>
+    filter(year >= sel_year - 2, year <= sel_year) |>
+    group_by(Code_Informal) |>
+    summarise(
+      median_wage = wtd.quantile(hourly_rate, weights = asecwt, probs = 0.5),
+      .groups = "drop"
+    ) |>
+    mutate(output_year = sel_year)
+}
+activity_wages_mrm <- bind_rows(activity_wages_mrm)
+```
+
+::: callout-note
+#### Code Explanation
+
+Technically, it uses `filter()`, `mutate()`, `group_by()`, `summarise()`, `bind_rows()` to restrict the analytic universe, create derived variables, reshape records, join lookup tables, and/or aggregate weighted statistics. The iteration step loops across years, states, datasets, categories, or demographic groups and binds the repeated results into a single analysis table. The statistical work in this chunk calculates weighted counts, rates, rolling values, medians, changes over time, or inequality measures used in the published indicators. The main objects created or updated here are `activity_wages_mrm`, `sel_year`, `median_wage`, `.groups`.
+:::
+
+
+```{r mrm atus load, message=FALSE, warning=FALSE}
+# Reload ATUS with ACTIVITY renamed before clean_names() to avoid column name conflict
+atus_mrm <- read.csv("./data/CSV/ATUSdata.csv") |>
+  filter(activity != "Formal Work") |>
+  filter(AGE >= 18, YEAR != 2020) |>
+  rename(activity_code = ACTIVITY) |>
+  select(YEAR, CASEID, WT06, activity_code, DURATION, act_care_focus,
+         gender_parent, STATEFIP) |>
+  clean_names() |>
+  filter(act_care_focus != "non-care", duration > 0) |>
+  mutate(
+    overall   = "overall",
+    geo_level = statefip,
+    weight    = wt06 / 365
+  )
+```
+
+::: callout-note
+#### Code Explanation
+
+It reads `./data/CSV/ATUSdata.csv` into memory and prepares those inputs for the transformations that follow. Technically, it uses `filter()`, `mutate()`, `select()`, `rename()`, `clean_names()` to restrict the analytic universe, create derived variables, reshape records, join lookup tables, and/or aggregate weighted statistics. The main objects created or updated here are `atus_mrm`, `overall`, `geo_level`, `weight`.
+:::
+
+
+```{r mrm value function, message=FALSE, warning=FALSE}
+get_informal_value_mrm <- function(demo_group) {
+  result <- list()
+
+  for (i in seq_along(yr_range$year)) {
+    sel_year <- yr_range$year[i]
+    year_min <- yr_range$yr_start[i]
+
+    wages <- activity_wages_mrm |> filter(output_year == sel_year)
+
+    result[[i]] <- atus_mrm |>
+      filter(year >= year_min, year <= sel_year) |>
+      mutate(
+        category_id    = demo_group,
+        subcategory_id = get(demo_group)
+      ) |>
+      left_join(wages, by = c("activity_code" = "Code_Informal")) |>
+      filter(!is.na(median_wage)) |>
+      mutate(value_per_min = duration * median_wage / 60) |>
+      group_by(year, caseid, geo_level, category_id, subcategory_id, weight) |>
+      summarise(person_value = sum(value_per_min), .groups = "drop") |>
+      group_by(geo_level, category_id, subcategory_id) |>
+      summarise(
+        informal_value_replacement = sum(person_value * weight / 5),
+        .groups = "drop"
+      ) |>
+      mutate(date = as.Date(paste0(sel_year, "-01-01")))
+  }
+
+  bind_rows(result)
+}
+```
+
+::: callout-note
+#### Code Explanation
+
+Technically, it uses `filter()`, `mutate()`, `group_by()`, `summarise()`, `left_join()`, `bind_rows()` to restrict the analytic universe, create derived variables, reshape records, join lookup tables, and/or aggregate weighted statistics. It defines `get_informal_value_mrm()`, which encapsulates repeated logic used by later chunks. The iteration step loops across years, states, datasets, categories, or demographic groups and binds the repeated results into a single analysis table. The statistical work in this chunk calculates weighted counts, rates, rolling values, medians, changes over time, or inequality measures used in the published indicators.
+:::
+
+
+```{r mrm value apply, message=FALSE, warning=FALSE}
+informal_value_mrm_state <- bind_rows(
+  get_informal_value_mrm("overall"),
+  get_informal_value_mrm("gender_parent")
+)
+
+informal_value_mrm_state$geo_level <- sprintf("%02d", as.numeric(informal_value_mrm_state$geo_level))
+informal_value_mrm_state$geo_level <- paste0("state", informal_value_mrm_state$geo_level)
+
+# National: sum state-level values
+informal_value_mrm_national <- informal_value_mrm_state |>
+  group_by(date, category_id, subcategory_id) |>
+  summarise(informal_value_replacement = sum(informal_value_replacement), .groups = "drop") |>
+  mutate(geo_level = "national")
+
+informal_value_mrm <- bind_rows(informal_value_mrm_state, informal_value_mrm_national) |>
+  mutate(year = as.character(format(date, "%Y"))) |>
+  left_join(us_gdp, by = c("year", "geo_level")) |>
+  mutate(informal_value_replacement_proportion = informal_value_replacement * 365 / gdp) |>
+  select(-gdp, -year) |>
+  filter(!is.na(informal_value_replacement_proportion))
+
+write_careboard_outputs(
+  informal_value_mrm,
+  "informal_value_replacement"
+)
+```
+
+::: callout-note
+#### Code Explanation
+
+Technically, it uses `filter()`, `mutate()`, `select()`, `group_by()`, `summarise()`, `left_join()`, `bind_rows()` to restrict the analytic universe, create derived variables, reshape records, join lookup tables, and/or aggregate weighted statistics. The statistical work in this chunk calculates weighted counts, rates, rolling values, medians, changes over time, or inequality measures used in the published indicators. It writes the resulting table through the shared export helper, producing app-facing files and/or replication copies in CSV, Stata, and Excel formats. The main objects created or updated here are `informal_value_mrm_state`, `informal_value_mrm_national`, `informal_value_mrm`.
+:::
+
+
+## CPS Care Absence
+
+The final statistic in the unpaid care economy section measures the number of employed adults who were absent from work during the reference week specifically for care-related reasons, as captured in the monthly CPS. The CPS asks employed respondents who were absent from their job why they were not at work. The project team recoded the original IPUMS `WHYABSNT` variable so that codes representing childcare or other family caregiving obligations are grouped under the label `"Care Reason"` (original codes 7, 8, and 9). We use this label directly.
+
+The universe for this metric is adults aged 18 and older whose employment status is `"Employed"` - people who have a job but may or may not have been at work during the reference week. The numerator is the weighted count of those employed adults who were absent for a Care Reason. The denominator is the total weighted count of employed adults, yielding a monthly care-absence rate. The CPS data loaded earlier in the `cps load` chunk is reused here.
+
+```{r cps care absence function, message=FALSE, warning=FALSE}
+get_cps_care_absence <- function(df, demo_group) {
+  df |>
+    filter(AGE >= 25, AGE <= 54) |>
+    filter(empstat == "Employed") |>
+    mutate(
+      category_id    = demo_group,
+      subcategory_id = get(demo_group),
+      # Absent for care reasons OR reduced to part-time for care reasons (usually full-time workers only)
+      care_absent    = (whyabsnt == "Care Reason") |
+                       (Why_Parttime == "Care Responsibilities" & wkstat == "Full Time")
+    ) |>
+    group_by(date, geo_level, category_id, subcategory_id) |>
+    summarise(
+      care_absence            = sum(WTFINL * care_absent, na.rm = TRUE),
+      total_employed          = sum(WTFINL,               na.rm = TRUE),
+      care_absence_proportion = care_absence / total_employed,
+      .groups = "drop"
+    )
+}
+```
+
+::: callout-note
+#### Code Explanation
+
+Technically, it uses `filter()`, `mutate()`, `group_by()`, `summarise()` to restrict the analytic universe, create derived variables, reshape records, join lookup tables, and/or aggregate weighted statistics. It defines `get_cps_care_absence()`, which encapsulates repeated logic used by later chunks. The statistical work in this chunk calculates weighted counts, rates, rolling values, medians, changes over time, or inequality measures used in the published indicators. The main objects created or updated here are `get_cps_care_absence`, `category_id`, `subcategory_id`, `care_absent`, `care_absence`.
+:::
+
+
+We apply the function to the overall population and to the gender-parent groups, then reformat the geography variable and compute national totals.
+
+```{r cps care absence apply, message=FALSE, warning=FALSE}
+cps_care_absence <- get_cps_care_absence(cps, "gender_parent")
+
+cps_care_absence$geo_level <- sprintf("%02d", as.numeric(cps_care_absence$geo_level))
+cps_care_absence$geo_level <- paste0("state", cps_care_absence$geo_level)
+
+cps_care_absence_national <- cps_care_absence |>
+  group_by(date, category_id, subcategory_id) |>
+  summarise(
+    care_absence   = sum(care_absence),
+    total_employed = sum(total_employed),
+    .groups = "drop"
+  ) |>
+  mutate(
+    care_absence_proportion = care_absence / total_employed,
+    geo_level = "national"
+  )
+
+cps_care_absence <- bind_rows(cps_care_absence, cps_care_absence_national) |>
+  select(-total_employed)
+```
+
+::: callout-note
+#### Code Explanation
+
+Technically, it uses `mutate()`, `select()`, `group_by()`, `summarise()`, `bind_rows()` to restrict the analytic universe, create derived variables, reshape records, join lookup tables, and/or aggregate weighted statistics. The statistical work in this chunk calculates weighted counts, rates, rolling values, medians, changes over time, or inequality measures used in the published indicators. The main objects created or updated here are `cps_care_absence`, `cps_care_absence_national`, `care_absence`, `total_employed`, `.groups`.
+:::
+
+
+As with the CPS labor force participation metric, the application only supports yearly data. We apply the same approach: identify the most recent calendar month, retain only that month for each year, and relabel dates as `YEAR-01-01`.
+
+```{r cps care absence yearly, message=FALSE, warning=FALSE}
+# Identify the most recent month present in the data
+latest_month_absence <- month(max(cps_care_absence$date))
+
+# Find the first year that contains actual (non-NA, non-zero) care absence values
+first_year_absence <- cps_care_absence |>
+  filter(!is.na(care_absence_proportion), care_absence > 0) |>
+  summarise(first_year = min(year(date))) |>
+  pull(first_year)
+
+# Keep only that calendar month for every year starting from the first valid year,
+# then relabel dates as Jan 1
+cps_care_absence <- cps_care_absence |>
+  filter(month(date) == latest_month_absence) |>
+  filter(year(date) >= first_year_absence) |>
+  mutate(date = as.Date(paste0(year(date), "-01-01")))
+```
+
+::: callout-note
+#### Code Explanation
+
+Technically, it uses `filter()`, `mutate()`, `summarise()` to restrict the analytic universe, create derived variables, reshape records, join lookup tables, and/or aggregate weighted statistics. The main objects created or updated here are `latest_month_absence`, `first_year_absence`, `cps_care_absence`.
+:::
+
+
+We also compute care absence broken down by age of youngest child within each parental group, mirroring the wide-format approach used for LFP above. Mothers and fathers are each split by the same three child-age groups. `win_months_lfp` and `latest_mo_lfp` from the LFP child age section are reused here.
+
+```{r cps care absence child age function, message=FALSE, warning=FALSE}
+care_absence_child_age_group <- function(df, gp_group, prefix) {
+  df |>
+    filter(AGE >= 25, AGE <= 54,
+           empstat == "Employed",
+           gender_parent == gp_group,
+           month(date) %in% win_months_lfp) |>
+    mutate(
+      care_absent = (whyabsnt == "Care Reason") |
+                    (Why_Parttime == "Care Responsibilities" & wkstat == "Full Time"),
+      child_age_grp = case_when(
+        YNGCH <= 5               ~ "Child 5 or Under",
+        YNGCH >= 6 & YNGCH <= 12 ~ "Child 6 to 12",
+        YNGCH >= 13              ~ "Child 13 to 17"
+      ),
+      report_year = if_else(month(date) > latest_mo_lfp, year(date) + 1L, year(date))
+    ) |>
+    group_by(report_year, geo_level, child_age_grp) |>
+    summarise(
+      !!paste0(prefix, "_care_absence") := sum(WTFINL * care_absent, na.rm = TRUE),
+      !!paste0("total_emp_", prefix)    := sum(WTFINL,               na.rm = TRUE),
+      .groups = "drop"
+    ) |>
+    mutate(date = as.Date(paste0(report_year, "-01-01"))) |>
+    select(-report_year)
+}
+```
+
+::: callout-note
+#### Code Explanation
+
+Technically, it uses `filter()`, `mutate()`, `select()`, `group_by()`, `summarise()` to restrict the analytic universe, create derived variables, reshape records, join lookup tables, and/or aggregate weighted statistics. It defines `care_absence_child_age_group()`, which encapsulates repeated logic used by later chunks. The statistical work in this chunk calculates weighted counts, rates, rolling values, medians, changes over time, or inequality measures used in the published indicators. The main objects created or updated here are `care_absence_child_age_group`, `empstat`, `gender_parent`, `care_absent`, `child_age_grp`.
+:::
+
+
+```{r cps care absence child age apply, message=FALSE, warning=FALSE}
+cps_care_absence_child_age_state <- care_absence_child_age_group(cps, "Mothers", "mothers") |>
+  left_join(care_absence_child_age_group(cps, "Fathers", "fathers"), by = c("date", "geo_level", "child_age_grp"))
+
+cps_care_absence_child_age_state$geo_level <- sprintf("%02d", as.numeric(cps_care_absence_child_age_state$geo_level))
+cps_care_absence_child_age_state$geo_level <- paste0("state", cps_care_absence_child_age_state$geo_level)
+```
+
+::: callout-note
+#### Code Explanation
+
+Technically, it uses `left_join()` to restrict the analytic universe, create derived variables, reshape records, join lookup tables, and/or aggregate weighted statistics. The main objects created or updated here are `cps_care_absence_child_age_state`.
+:::
+
+
+```{r cps care absence child age national, message=FALSE, warning=FALSE}
+cps_care_absence_child_age_national <- cps_care_absence_child_age_state |>
+  group_by(date, child_age_grp) |>
+  summarise(across(where(is.numeric), sum, na.rm = TRUE), .groups = "drop") |>
+  mutate(geo_level = "national")
+
+cps_care_absence_child_age_all <- bind_rows(cps_care_absence_child_age_state, cps_care_absence_child_age_national)
+
+cps_care_absence_child_age_overall <- cps_care_absence_child_age_all |>
+  group_by(date, geo_level) |>
+  summarise(across(where(is.numeric), sum, na.rm = TRUE), .groups = "drop") |>
+  mutate(
+    mothers_care_absence_proportion = mothers_care_absence / total_emp_mothers,
+    fathers_care_absence_proportion = fathers_care_absence / total_emp_fathers
+  ) |>
+  select(-starts_with("total_emp_")) |>
+  mutate(
+    category_id    = "overall",
+    subcategory_id = "overall"
+  )
+
+cps_care_absence_child_age <- cps_care_absence_child_age_all |>
+  mutate(
+    mothers_care_absence_proportion = mothers_care_absence / total_emp_mothers,
+    fathers_care_absence_proportion = fathers_care_absence / total_emp_fathers
+  ) |>
+  select(-starts_with("total_emp_")) |>
+  mutate(
+    category_id    = "youngest_child_age",
+    subcategory_id = child_age_grp
+  ) |>
+  select(-child_age_grp) |>
+  bind_rows(cps_care_absence_child_age_overall)
+```
+
+::: callout-note
+#### Code Explanation
+
+Technically, it uses `mutate()`, `select()`, `group_by()`, `summarise()`, `bind_rows()` to restrict the analytic universe, create derived variables, reshape records, join lookup tables, and/or aggregate weighted statistics. The main objects created or updated here are `cps_care_absence_child_age_national`, `cps_care_absence_child_age_all`, `cps_care_absence_child_age_overall`, `mothers_care_absence_proportion`, `fathers_care_absence_proportion`.
+:::
+
+
+```{r cps care absence child age yearly, message=FALSE, warning=FALSE}
+first_year_absence_child_age <- cps_care_absence_child_age |>
+  filter(if_any(ends_with("_care_absence"), ~ !is.na(.) & . > 0)) |>
+  summarise(first_year = min(year(date))) |>
+  pull(first_year)
+
+cps_care_absence_child_age <- cps_care_absence_child_age |>
+  filter(year(date) >= first_year_absence_child_age)
+```
+
+::: callout-note
+#### Code Explanation
+
+Technically, it uses `filter()`, `summarise()` to restrict the analytic universe, create derived variables, reshape records, join lookup tables, and/or aggregate weighted statistics. The main objects created or updated here are `first_year_absence_child_age`, `cps_care_absence_child_age`.
+:::
+
+
+## NILF for Care
+
+This section measures the number of adults who are not in the labor force specifically for care-related reasons, as captured in the monthly CPS. The CPS asks respondents not in the labor force why they are not working or looking for work. We use the `nilf_activity` variable (derived from IPUMS `NILFACT`) and classify a person as NILF for care when their response is `"Homemaker"` - indicating they are out of the labor force primarily to provide unpaid care for family members. The universe for this metric is adults aged 18 and older whose `labforce` value is `"Not in the Labor Force"`. The numerator is the weighted count of those individuals recorded as homemakers. The denominator is the total weighted count of adults not in the labor force, yielding a monthly NILF-for-care rate. The CPS data loaded earlier in the `cps load` chunk is reused here.
+
+```{r cps nilf care function, message=FALSE, warning=FALSE}
+get_cps_nilf_care <- function(df, demo_group) {
+  df |>
+    filter(AGE >= 25, AGE <= 54) |>
+    filter(labforce == "Not in the Labor Force") |>
+    mutate(
+      category_id    = demo_group,
+      subcategory_id = get(demo_group),
+      is_nilf_care   = (nilf_activity == "Homemaker")
+    ) |>
+    group_by(date, geo_level, category_id, subcategory_id) |>
+    summarise(
+      nilf_care            = sum(WTFINL * is_nilf_care, na.rm = TRUE),
+      total_nilf           = sum(WTFINL,                na.rm = TRUE),
+      nilf_care_proportion = nilf_care / total_nilf,
+      .groups = "drop"
+    )
+}
+```
+
+::: callout-note
+#### Code Explanation
+
+Technically, it uses `filter()`, `mutate()`, `group_by()`, `summarise()` to restrict the analytic universe, create derived variables, reshape records, join lookup tables, and/or aggregate weighted statistics. It defines `get_cps_nilf_care()`, which encapsulates repeated logic used by later chunks. The statistical work in this chunk calculates weighted counts, rates, rolling values, medians, changes over time, or inequality measures used in the published indicators. The main objects created or updated here are `get_cps_nilf_care`, `category_id`, `subcategory_id`, `is_nilf_care`, `nilf_care`.
+:::
+
+
+We apply the function to the gender-parent groups, then reformat the geographic variable and compute national totals by summing state-level counts and recalculating the national rate from those sums.
+
+```{r cps nilf care apply, message=FALSE, warning=FALSE}
+cps_nilf_care <- get_cps_nilf_care(cps, "gender_parent")
+
+cps_nilf_care$geo_level <- sprintf("%02d", as.numeric(cps_nilf_care$geo_level))
+cps_nilf_care$geo_level <- paste0("state", cps_nilf_care$geo_level)
+
+cps_nilf_care_national <- cps_nilf_care |>
+  group_by(date, category_id, subcategory_id) |>
+  summarise(
+    nilf_care  = sum(nilf_care),
+    total_nilf = sum(total_nilf),
+    .groups = "drop"
+  ) |>
+  mutate(
+    nilf_care_proportion = nilf_care / total_nilf,
+    geo_level = "national"
+  )
+
+cps_nilf_care <- bind_rows(cps_nilf_care, cps_nilf_care_national) |>
+  select(-total_nilf)
+```
+
+::: callout-note
+#### Code Explanation
+
+Technically, it uses `mutate()`, `select()`, `group_by()`, `summarise()`, `bind_rows()` to restrict the analytic universe, create derived variables, reshape records, join lookup tables, and/or aggregate weighted statistics. The statistical work in this chunk calculates weighted counts, rates, rolling values, medians, changes over time, or inequality measures used in the published indicators. The main objects created or updated here are `cps_nilf_care`, `cps_nilf_care_national`, `nilf_care`, `total_nilf`, `.groups`.
+:::
+
+
+As with the CPS labor force participation and care absence metrics, the application only supports yearly data. We identify the most recent month available and retain only that calendar month for each year, then relabel dates as `YEAR-01-01`. We also find the first year with valid data to trim the series.
+
+```{r cps nilf care yearly, message=FALSE, warning=FALSE}
+latest_month_nilf <- month(max(cps_nilf_care$date))
+
+first_year_nilf <- cps_nilf_care |>
+  filter(!is.na(nilf_care_proportion), nilf_care > 0) |>
+  summarise(first_year = min(year(date))) |>
+  pull(first_year)
+
+cps_nilf_care <- cps_nilf_care |>
+  filter(month(date) == latest_month_nilf) |>
+  filter(year(date) >= first_year_nilf) |>
+  mutate(date = as.Date(paste0(year(date), "-01-01")))
+```
+
+::: callout-note
+#### Code Explanation
+
+Technically, it uses `filter()`, `mutate()`, `summarise()` to restrict the analytic universe, create derived variables, reshape records, join lookup tables, and/or aggregate weighted statistics. The main objects created or updated here are `latest_month_nilf`, `first_year_nilf`, `cps_nilf_care`.
+:::
+
+
+We also compute NILF-for-care broken down by age of youngest child within each parental group, mirroring the wide-format approach used for LFP and care absence above. `win_months_lfp` and `latest_mo_lfp` from the LFP child age section are reused here.
+
+```{r cps nilf care child age function, message=FALSE, warning=FALSE}
+nilf_care_child_age_group <- function(df, gp_group, prefix) {
+  df |>
+    filter(AGE >= 25, AGE <= 54,
+           labforce == "Not in the Labor Force",
+           gender_parent == gp_group,
+           month(date) %in% win_months_lfp) |>
+    mutate(
+      is_nilf_care  = (nilf_activity == "Homemaker"),
+      child_age_grp = case_when(
+        YNGCH <= 5               ~ "Child 5 or Under",
+        YNGCH >= 6 & YNGCH <= 12 ~ "Child 6 to 12",
+        YNGCH >= 13              ~ "Child 13 to 17"
+      ),
+      report_year = if_else(month(date) > latest_mo_lfp, year(date) + 1L, year(date))
+    ) |>
+    group_by(report_year, geo_level, child_age_grp) |>
+    summarise(
+      !!paste0(prefix, "_nilf_care")  := sum(WTFINL * is_nilf_care, na.rm = TRUE),
+      !!paste0("total_nilf_", prefix) := sum(WTFINL,                na.rm = TRUE),
+      .groups = "drop"
+    ) |>
+    mutate(date = as.Date(paste0(report_year, "-01-01"))) |>
+    select(-report_year)
+}
+```
+
+::: callout-note
+#### Code Explanation
+
+Technically, it uses `filter()`, `mutate()`, `select()`, `group_by()`, `summarise()` to restrict the analytic universe, create derived variables, reshape records, join lookup tables, and/or aggregate weighted statistics. It defines `nilf_care_child_age_group()`, which encapsulates repeated logic used by later chunks. The statistical work in this chunk calculates weighted counts, rates, rolling values, medians, changes over time, or inequality measures used in the published indicators. The main objects created or updated here are `nilf_care_child_age_group`, `labforce`, `gender_parent`, `is_nilf_care`, `child_age_grp`.
+:::
+
+
+```{r cps nilf care child age apply, message=FALSE, warning=FALSE}
+cps_nilf_care_child_age_state <- nilf_care_child_age_group(cps, "Mothers", "mothers") |>
+  left_join(nilf_care_child_age_group(cps, "Fathers", "fathers"), by = c("date", "geo_level", "child_age_grp"))
+
+cps_nilf_care_child_age_state$geo_level <- sprintf("%02d", as.numeric(cps_nilf_care_child_age_state$geo_level))
+cps_nilf_care_child_age_state$geo_level <- paste0("state", cps_nilf_care_child_age_state$geo_level)
+```
+
+::: callout-note
+#### Code Explanation
+
+Technically, it uses `left_join()` to restrict the analytic universe, create derived variables, reshape records, join lookup tables, and/or aggregate weighted statistics. The main objects created or updated here are `cps_nilf_care_child_age_state`.
+:::
+
+
+```{r cps nilf care child age national, message=FALSE, warning=FALSE}
+cps_nilf_care_child_age_national <- cps_nilf_care_child_age_state |>
+  group_by(date, child_age_grp) |>
+  summarise(across(where(is.numeric), sum, na.rm = TRUE), .groups = "drop") |>
+  mutate(geo_level = "national")
+
+cps_nilf_care_child_age_all <- bind_rows(cps_nilf_care_child_age_state, cps_nilf_care_child_age_national)
+
+cps_nilf_care_child_age_overall <- cps_nilf_care_child_age_all |>
+  group_by(date, geo_level) |>
+  summarise(across(where(is.numeric), sum, na.rm = TRUE), .groups = "drop") |>
+  mutate(
+    mothers_nilf_care_proportion = mothers_nilf_care / total_nilf_mothers,
+    fathers_nilf_care_proportion = fathers_nilf_care / total_nilf_fathers
+  ) |>
+  select(-starts_with("total_nilf_")) |>
+  mutate(
+    category_id    = "overall",
+    subcategory_id = "overall"
+  )
+
+cps_nilf_care_child_age <- cps_nilf_care_child_age_all |>
+  mutate(
+    mothers_nilf_care_proportion = mothers_nilf_care / total_nilf_mothers,
+    fathers_nilf_care_proportion = fathers_nilf_care / total_nilf_fathers
+  ) |>
+  select(-starts_with("total_nilf_")) |>
+  mutate(
+    category_id    = "youngest_child_age",
+    subcategory_id = child_age_grp
+  ) |>
+  select(-child_age_grp) |>
+  bind_rows(cps_nilf_care_child_age_overall)
+```
+
+::: callout-note
+#### Code Explanation
+
+Technically, it uses `mutate()`, `select()`, `group_by()`, `summarise()`, `bind_rows()` to restrict the analytic universe, create derived variables, reshape records, join lookup tables, and/or aggregate weighted statistics. The main objects created or updated here are `cps_nilf_care_child_age_national`, `cps_nilf_care_child_age_all`, `cps_nilf_care_child_age_overall`, `mothers_nilf_care_proportion`, `fathers_nilf_care_proportion`.
+:::
+
+
+```{r cps nilf care child age yearly, message=FALSE, warning=FALSE}
+first_year_nilf_child_age <- cps_nilf_care_child_age |>
+  filter(if_any(ends_with("_nilf_care"), ~ !is.na(.) & . > 0)) |>
+  summarise(first_year = min(year(date))) |>
+  pull(first_year)
+
+cps_nilf_care_child_age <- cps_nilf_care_child_age |>
+  filter(year(date) >= first_year_nilf_child_age)
+```
+
+::: callout-note
+#### Code Explanation
+
+Technically, it uses `filter()`, `summarise()` to restrict the analytic universe, create derived variables, reshape records, join lookup tables, and/or aggregate weighted statistics. The main objects created or updated here are `first_year_nilf_child_age`, `cps_nilf_care_child_age`.
+:::
+
+
+## Write the informal data
+
+Finally, we end this section by combining the five separate datasets for the unpaid care economy - the care force, time, valuation, the CPS care absence metric, and the new NILF for Care metric - and writing them as a CSV file into the app directory, which feeds into the care board.
+
+```{r drop_the_unnecessary_columns_if_desired_14, message=FALSE, warning=FALSE}
+metrics_informal <- bind_rows(
+    informal_lfp,
+    informal_time,
+    informal_value,
+    cps_care_absence_child_age,
+    cps_nilf_care_child_age) %>%
+  filter(care_flag == "care" | is.na(care_flag)) |>
+  select(-care_flag, -total_population)
+
+
+write_careboard_outputs(
+  metrics_informal,
+  "metrics_informal",
+  app_path = "./app_data/metrics_informal.csv"
+)
+```
+
+::: callout-note
+#### Code Explanation
+
+Technically, it uses `filter()`, `select()`, `bind_rows()` to restrict the analytic universe, create derived variables, reshape records, join lookup tables, and/or aggregate weighted statistics. It writes the resulting table through the shared export helper, producing app-facing files and/or replication copies in CSV, Stata, and Excel formats. The main objects created or updated here are `metrics_informal`, `app_path`.
+:::
+
+
+# Sources
+
+U.S. Bureau of Economic Analysis, "SAGDP9 Real GDP by state" (accessed Thursday, July 31, 2025).
