@@ -36,11 +36,11 @@ The full license texts govern reuse: [MIT](../LICENSE) and [CC BY 4.0](../LICENS
 
 ## Research citation
 
-Academic citation is requested in addition to the applicable license notices. The owner approved the existing repository address, author order, Version **2.0.0**, and planned publication date **October 12, 2026**. The following citation is prepared for that release:
+Academic citation is requested in addition to the applicable license notices. The owner approved the existing repository address, author order, and Version **2.0.0**. The release was published on GitHub on **October 9, 2026**, ahead of the official **October 12, 2026** launch. Use the following citation for that release:
 
 Misty Heggeness, Joseph Bommarito, and Lucie Prewitt. The Care Board: Version 2.0.0 [dataset]. Lawrence, KS: Kansas Population Center, University of Kansas, 2026. [The Care Board repository](https://github.com/KansasPopulationCenter/TheCareBoard).
 
-Version 2.0.0 is scheduled as of the October 5 preparation record. Its release tag and commit have not yet been assigned. When citing the published version, also record the actual tag/commit, access date, and tables used. [CITATION.cff](../CITATION.cff) contains the approved authors in order and the planned version/date. If the actual publication date changes, update both the CFF and [release record](releases/2.0.0/README.md). No DOI has been assigned in the supplied materials.
+The published version is identified by [`v2.0.0`](https://github.com/KansasPopulationCenter/TheCareBoard/releases/tag/v2.0.0); its GitHub release description records the full tagged commit hash. When citing this version, also record the tag/commit, access date, and tables used. [CITATION.cff](../CITATION.cff) contains the approved authors in order and the actual October 9 publication date. The [release record](releases/2.0.0/README.md) preserves the separate October 12 official launch date. No DOI has been assigned.
 
 The existing public repository supplies this historical citation for its published Version 1.0 dataset:
 

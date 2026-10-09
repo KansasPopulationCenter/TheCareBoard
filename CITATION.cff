@@ -1,10 +1,10 @@
 cff-version: 1.2.0
-message: "Version 2.0.0 is scheduled for public release on October 12, 2026. Please cite the version used and record its release tag or commit. See docs/LICENSE_AND_CITATION.md and docs/releases/2.0.0/README.md."
+message: "Version 2.0.0 was published on GitHub on October 9, 2026, ahead of the official October 12, 2026 launch. Please cite the version used and record its release tag or commit. See docs/LICENSE_AND_CITATION.md and docs/releases/2.0.0/README.md."
 title: "The Care Board"
 type: dataset
 version: "2.0.0"
-# Planned publication date; confirm against the actual release when published.
-date-released: "2026-10-12"
+# Actual GitHub publication date; the official launch is October 12, 2026.
+date-released: "2026-10-09"
 license: CC-BY-4.0
 authors:
   - family-names: Heggeness

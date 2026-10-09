@@ -1,6 +1,6 @@
 # Reference periods for Version 2.0.0
 
-Compiled October 5, 2026 for the planned public release on **October 12, 2026**. These periods describe the supplied files; preparing this record did not recalculate estimates. The release date is separate from the years measured by the data.
+Compiled October 5, 2026 for Version 2.0.0, published on GitHub **October 9, 2026** ahead of the official **October 12, 2026** launch. These periods describe the supplied files; preparing this record did not recalculate estimates. The release date is separate from the years measured by the data.
 
 On October 6, 2026, the owner deferred methodological review and corrections until after syncing the current snapshot to GitHub. The discrepancies and verification limits below are retained for that later review; this preparation does not resolve them or change the supplied estimates.
 

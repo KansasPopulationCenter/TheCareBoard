@@ -1,6 +1,6 @@
 # Data dictionary and table catalog
 
-This catalog records the supplied aggregate snapshot as inspected on October 5, 2026, for the planned Version 2.0.0 release on October 12, 2026. Schemas, rows, and date ranges are observed; they do not establish statistical validity. No table values were changed. See [reference periods](REFERENCE_PERIODS.md) for field-specific coverage and source windows, and the [release record](releases/2.0.0/README.md) for provenance.
+This catalog records the supplied aggregate snapshot as inspected on October 5, 2026, for Version 2.0.0, published on GitHub October 9, 2026 with an official launch on October 12, 2026. Schemas, rows, and date ranges are observed; they do not establish statistical validity. No table values were changed. See [reference periods](REFERENCE_PERIODS.md) for field-specific coverage and source windows, and the [release record](releases/2.0.0/README.md) for provenance.
 
 ## Shared fields and units
 

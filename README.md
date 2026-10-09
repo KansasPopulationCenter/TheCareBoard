@@ -10,7 +10,7 @@ The Care Board measures paid and unpaid care across households, labor markets, a
 
 This snapshot contains **22 aggregate data and metadata files**, **14 current pipeline documents**, and one legacy analysis. All eight previously missing scripts, their supporting helpers, three crosswalks, request sample lists, and the GDP input have been restored. Installed R/Python dependencies are captured; external source payloads, a clean dependency restore, and a verified full build remain necessary for complete replication. The supplied tables can be used directly; full regeneration requires the additions listed in [Reproducibility](docs/REPRODUCIBILITY.md).
 
-**Version 2.0.0 is scheduled for public release on October 12, 2026** in the [existing repository](https://github.com/KansasPopulationCenter/TheCareBoard). The folder was organized on October 5, 2026; the supplied estimates were not recalculated. See the [release record](docs/releases/2.0.0/README.md) for status and file checksums, and [reference periods](docs/REFERENCE_PERIODS.md) for indicator coverage and source windows. This repository contains the data pipeline; website frontend source is maintained separately.
+**Version 2.0.0 was published on GitHub on October 9, 2026, ahead of the official launch on October 12, 2026.** The [published release](https://github.com/KansasPopulationCenter/TheCareBoard/releases/tag/v2.0.0) identifies the fixed snapshot in this repository. The folder was organized on October 5, 2026; the supplied estimates were not recalculated. See the [release record](docs/releases/2.0.0/README.md) for status and file checksums, and [reference periods](docs/REFERENCE_PERIODS.md) for indicator coverage and source windows. This repository contains the data pipeline; website frontend source is maintained separately.
 
 The owner selected a sync of the current snapshot on October 6, 2026, with methodological review and corrections deferred. Known discrepancies remain documented. Existing historical material under `Previous Versions/` and `zzz_lib/` is retained at its original repository paths. See [Snapshot sync scope](docs/SNAPSHOT_SYNC.md).
 
@@ -18,7 +18,7 @@ The owner selected a sync of the current snapshot on October 6, 2026, with metho
 
 [Browse the version 2.0.0 data library](https://bit.ly/CareBoard2DataLibrary) · [View the version 2.0.0 release](https://bit.ly/CareBoard2Release)
 
-The named links below target the fixed **Version 2.0.0** snapshot. They become available when the `v2.0.0` tag and GitHub release are published.
+The named links below open or download files from the published **Version 2.0.0** snapshot, identified by the `v2.0.0` tag.
 
 ### Statistical data
 

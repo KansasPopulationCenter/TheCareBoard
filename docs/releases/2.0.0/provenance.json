@@ -1,10 +1,10 @@
 {
   "record_format_version": 1,
   "version": "2.0.0",
-  "status": "scheduled",
+  "status": "published",
   "record_prepared": "2026-10-05",
   "planned_public_date": "2026-10-12",
-  "actual_public_date": null,
+  "actual_public_date": "2026-10-09",
   "repository_code": "https://github.com/KansasPopulationCenter/TheCareBoard",
   "website": "https://thecareboard.org/",
   "repository_action": "update_existing",
@@ -59,8 +59,8 @@
   "snapshot_branch_url": "https://github.com/KansasPopulationCenter/TheCareBoard/tree/careboard-2.0.0-snapshot",
   "snapshot_uploaded_date": "2026-10-06",
   "snapshot_pull_request_url": "https://github.com/KansasPopulationCenter/TheCareBoard/pull/2",
-  "snapshot_pull_request_draft": true,
-  "snapshot_pull_request_merged": false,
+  "snapshot_pull_request_draft": false,
+  "snapshot_pull_request_merged": true,
   "source_snapshot_file_count": 23,
   "verified_source_fingerprint_count": 18,
   "pending_source_checksums": [
@@ -111,5 +111,11 @@
     "Observed cleaned ATUS coverage and full care-privilege baseline input-year range remain unverified",
     "Owner-confirmed generation inputs; original run/code revision not independently reproduced; preprocessing preserves CPS survey YEAR",
     "Consistent sandwich own-child age cutoff wording (10 or younger) and national summary convention"
-  ]
+  ],
+  "official_launch_date": "2026-10-12",
+  "publication_metadata_finalized": "2026-10-09",
+  "release_tag": "v2.0.0",
+  "release_url": "https://github.com/KansasPopulationCenter/TheCareBoard/releases/tag/v2.0.0",
+  "git_commit_reference": "https://github.com/KansasPopulationCenter/TheCareBoard/releases/tag/v2.0.0",
+  "git_commit_record_location": "Full tagged commit SHA in the GitHub release description; omitted here to avoid a self-referential commit hash"
 }
